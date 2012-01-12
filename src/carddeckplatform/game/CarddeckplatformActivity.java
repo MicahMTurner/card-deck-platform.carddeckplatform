@@ -9,6 +9,7 @@ import communication.link.Sender;
 import communication.link.TcpReceiver;
 import communication.link.TcpSender;
 import communication.messages.Message;
+import communication.messages.MessageDictionary;
 import communication.messages.SampleMessage;
 
 import android.app.Activity;
@@ -42,6 +43,8 @@ public class CarddeckplatformActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        MessageDictionary.addValue(new SampleMessage());
+        
         SampleObserver so = new SampleObserver();
         so.setCntxt(getBaseContext());
         Receiver rc = new TcpReceiver(9999);
@@ -56,18 +59,18 @@ public class CarddeckplatformActivity extends Activity {
 
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
-//        try {
-//			Thread.sleep(2000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//        System.out.println("Creating message");
-//        Sender se = new TcpSender("localhost" , 9999);
-//        SampleMessage msg = new SampleMessage();
-//        msg.name = "Michael";
-//        msg.messageType = "SampleMessage";
-//        se.send(msg.messageType , msg);
+        try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        System.out.println("Creating message");
+        Sender se = new TcpSender("localhost" , 9999);
+        SampleMessage msg = new SampleMessage();
+        msg.name = "Michael";
+        msg.messageType = "SampleMessage";
+        se.send(msg.messageType , msg);
         
     }
 }
