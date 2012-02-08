@@ -84,4 +84,28 @@ public class ClientMessageSender {
 	public boolean resign(){
 		return true;
 	}
+	
+	/** 
+	 * cardMotion - sends card notion message.
+	 * @param card
+	 * @param xCoordinate
+	 * @param yCoordinate
+	 * @return
+	 */
+	public boolean cardMotion(int card , int xCoordinate , int yCoordinate){
+		CardMotionMessage msg = new CardMotionMessage();
+		msg.cardId = card;
+		msg.X = xCoordinate;
+		msg.Y = yCoordinate;
+		sender.send(msg.messageType, msg);
+		return true;
+	}
+	
+	public boolean clientRegistration(){
+		RegistrationMessage msg = new RegistrationMessage();
+		msg.clientName = client.getName();
+		msg.id = client.getId();
+		sender.send(msg.messageType, msg);
+		return true;
+	}
 }

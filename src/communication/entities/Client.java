@@ -1,6 +1,6 @@
 package communication.entities;
 
 public interface Client {
-	public Object getId();
+	public String getId();
 	public String getName();
 }

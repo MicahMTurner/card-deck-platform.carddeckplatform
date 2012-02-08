@@ -6,6 +6,9 @@ import communication.messages.*;
 
 public abstract class Sender {
 	public abstract void send(String className , Message msg);
+
+	public abstract boolean openConnection();
+	public abstract boolean closeConnection();
 	
 	public String parseMessage(String className, Message msg){
 		// TODO Auto-generated method stub
@@ -17,6 +20,6 @@ public abstract class Sender {
 	}
 	
 	
-	
+	 
 	
 }

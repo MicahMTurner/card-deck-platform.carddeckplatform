@@ -2,6 +2,7 @@ package communication.server;
 
 import communication.entities.Client;
 import communication.link.Sender;
+import communication.messages.CardMotionMessage;
 
 public class ServerMessageSender {
 	private Sender sender;
@@ -63,6 +64,25 @@ public class ServerMessageSender {
 	 * @return
 	 */
 	public boolean declareWinner(Client client){
+		return true;
+	}
+	
+	/** 
+	 * cardMotion - sends card notion message.
+	 * @param card
+	 * @param xCoordinate
+	 * @param yCoordinate
+	 * @return
+	 */
+	public boolean cardMotion(Client c , int card , int xCoordinate , int yCoordinate){
+		CardMotionMessage msg = new CardMotionMessage();
+		msg.cardId = card;
+		msg.X = xCoordinate;
+		msg.Y = yCoordinate;
+		
+		
+		
+		//sender.sendTo((String)c.getId() , msg.messageType, msg);
 		return true;
 	}
 }

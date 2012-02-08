@@ -14,7 +14,7 @@ public class TcpClient implements Client {
 	
 	
 	@Override
-	public Object getId() {
+	public String getId() {
 		// TODO Auto-generated method stub
 		return ip;
 	}

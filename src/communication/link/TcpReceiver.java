@@ -8,15 +8,21 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Observer;
 
+import communication.messages.CardMotionMessage;
 import communication.messages.Message;
 import communication.messages.SampleMessage;
 
 public class TcpReceiver extends Receiver{
 	private int port;
+	private BufferedReader in;
 	
 	public TcpReceiver(){}
-	public TcpReceiver(int port){
-		this.port = port;
+//	public TcpReceiver(int port){
+//		this.port = port;
+//	}
+	
+	public TcpReceiver(BufferedReader in){
+		this.in = in;
 	}
 	
 	@Override
@@ -28,23 +34,12 @@ public class TcpReceiver extends Receiver{
 			new Thread(new Runnable(){
 				public void run(){
 					while(!stop){
-						try {
-							StringBuilder sb = new StringBuilder();
+						try {							
 							String stringMessage;
-							String tmpStr = "";
-							Socket clientSocket;
-							
-							clientSocket = serverSocket.accept();
-							System.out.println("Message Accepted");
-						
-							PrintWriter out=new PrintWriter(clientSocket.getOutputStream(),true);
-							BufferedReader in=new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-//						    while((tmpStr = in.readLine())!=null)
-//						    	sb.append(tmpStr);
-//							stringMessage = sb.toString();
 						    stringMessage = in.readLine();
 							System.out.println("the message is: " + stringMessage);
 							Message message = unParseMessage(stringMessage);
+							// adds the ip address of the sender to the message.
 							setChanged();
 							notifyObservers(message);
 							System.out.println("Message delivared");

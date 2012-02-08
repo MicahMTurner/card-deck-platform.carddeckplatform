@@ -1,5 +1,7 @@
 package communication.server;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import communication.entities.Client;
@@ -28,14 +30,13 @@ public class ClientMapping {
 	 * getAllClients - gets all clients.
 	 * @return Client[]
 	 */
-	public static Client[] getAllClients(){
+	public static ArrayList<Client> getAllClients(){
 		int size = clients.size();
-		Client[] clientArray = new Client[size];
-		int i=0;
+		ArrayList<Client> clientArray = new ArrayList<Client>();
 		for(Client c : clients.values()){
-			clientArray[i] = c;
-			i++;
+			clientArray.add(c);
 		}
+		
 		return clientArray;
 	}
 	

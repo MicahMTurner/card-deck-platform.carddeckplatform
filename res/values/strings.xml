@@ -3,5 +3,8 @@
 
     <string name="hello">Hello World, CarddeckplatformActivity!</string>
     <string name="app_name">Carddeckplatform</string>
+    <string name="StartNewGame">Start new game</string>
+    <string name="StartANewGame">Start a new game</string>
+    <string name="JoinAGame">Join a game</string>
 
 </resources>
