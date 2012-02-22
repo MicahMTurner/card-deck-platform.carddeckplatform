@@ -1,5 +1,6 @@
 package communication.link;
 
+import java.io.BufferedReader;
 import java.util.Observable;
 import java.util.Observer;
 

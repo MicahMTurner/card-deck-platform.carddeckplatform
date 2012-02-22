@@ -47,7 +47,7 @@ public class GameActivity extends Activity {
 //        setContentView(R.layout.main);
         
         if(GameStatus.isServer)
-        	new SampleServer();
+//        	new SampleServer();
         
         MessageDictionary.addValue(new SampleMessage());
         MessageDictionary.addValue(new RegistrationMessage());

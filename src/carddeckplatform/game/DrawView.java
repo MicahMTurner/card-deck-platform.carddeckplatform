@@ -49,72 +49,7 @@ public class DrawView extends View implements  Observer {
 		invalidate(); 
    }
    
-   
-   private class MoveCardTask extends AsyncTask<Integer, Message, Long> {
-	   
-	   public BufferedReader in;
-	
-	   public Message unParseMessage(String str){
-			Gson gson = new Gson();
-			MessageContainer mc = gson.fromJson(str , MessageContainer.class);
-			return MessageDictionary.getMessage(mc.className, mc.classJson);
-	   }
-	   
-		@Override
-		protected Long doInBackground(Integer... arg0) {
-			while(true){
-				try {		
-					String stringMessage;
-					System.out.println("Message Accepted");
-					stringMessage = in.readLine();
-					if(stringMessage==null)
-						continue;
-					System.out.println("the message is: " + stringMessage);
-					Message message = unParseMessage(stringMessage);
-					// adds the ip address of the sender to the message.
-					if(message!=null)
-						System.out.println("Message unparsed");
-					onProgressUpdate(message);
-					System.out.println("Message delivared");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					System.out.println(e.getMessage());
-				} 
-			}
-		}
-	
-	protected void onProgressUpdate(Message... progress) {
-		System.out.println("Entered update");
-		Message message = progress[0];
-		System.out.println("Got message");
-		if(message.messageType.equals("CardMotionMessage")){
-			System.out.println("CardMotionMessage");
-			final CardMotionMessage cmm = (CardMotionMessage)message;
-			System.out.println("Casting completed");
-			
-			
-			h.post(new Runnable(){
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					moveCard(cmm.cardId , cmm.X , cmm.Y);
-				}
-				
-			});
-			
-			System.out.println("finnished");
-		}
-//		else if(message.messageType.equals("Something else...")){
-//			// do some other thing...
-//		}
-	}
-	   
-	protected void onPostExecute(Long result) {
-		
-    }
-
-   }
+  
    
    public DrawView(Context context) {
 	    super(context);        
@@ -128,16 +63,10 @@ public class DrawView extends View implements  Observer {
 	    s.openConnection();
 	    clientMessageSender = new ClientMessageSender();
 	    clientMessageSender.setSender(s, c);
-	    
-	    MoveCardTask moveCardTask = new MoveCardTask();
-	    moveCardTask.in = s.getIn();
 	    // gets messages from the host.
-//	    Receiver rc = new TcpReceiver(9999);
-//	    rc.reg(moveCardTask);
-	    moveCardTask.execute(0);
-	    
+	    Receiver rc = new TcpReceiver(s.getIn());
+	    rc.reg(this);
 //	    clientMessageSender.clientRegistration();
-	    
 	    cont = context;
 	    setFocusable(true); //necessary for getting the touch events
 	    
