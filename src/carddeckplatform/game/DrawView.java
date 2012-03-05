@@ -17,6 +17,7 @@ import communication.entities.Client;
 import communication.entities.TcpClient;
 import communication.link.Receiver;
 import communication.link.Sender;
+import communication.link.ServerConnection;
 import communication.link.TcpReceiver;
 import communication.link.TcpSender;
 import communication.messages.CardMotionMessage;
@@ -37,8 +38,9 @@ public class DrawView extends View implements  Observer {
    private int balID = 0; // variable to know what ball is being dragged
    private Context cont; 
    private Handler h = new Handler();
+   private ServerConnection serverConnection;
    
-   private ClientMessageSender clientMessageSender;
+//   private ClientMessageSender clientMessageSender;
    
    
    public void moveCard(int card , int x , int y){
@@ -54,18 +56,18 @@ public class DrawView extends View implements  Observer {
    public DrawView(Context context) {
 	    super(context);        
 	    
+	    serverConnection = new ServerConnection(new TcpClient(GameStatus.localIp , "jojo"), new TcpSender(GameStatus.hostIp , 9998), this);
+	    serverConnection.openConnection();
 	    
 	    
-	    
-	    
-	    Client c = new TcpClient(GameStatus.localIp , "jojo");
-	    TcpSender s = new TcpSender(GameStatus.hostIp , 9998);
-	    s.openConnection();
-	    clientMessageSender = new ClientMessageSender();
-	    clientMessageSender.setSender(s, c);
-	    // gets messages from the host.
-	    Receiver rc = new TcpReceiver(s.getIn());
-	    rc.reg(this);
+//	    Client c = new TcpClient(GameStatus.localIp , "jojo");
+//	    TcpSender s = new TcpSender(GameStatus.hostIp , 9998);
+//	    s.openConnection();
+//	    clientMessageSender = new ClientMessageSender();
+//	    clientMessageSender.setSender(s, c);
+//	    // gets messages from the host.
+//	    Receiver rc = new TcpReceiver(s.getIn());
+//	    rc.reg(this);
 //	    clientMessageSender.clientRegistration();
 	    cont = context;
 	    setFocusable(true); //necessary for getting the touch events
@@ -166,7 +168,7 @@ public class DrawView extends View implements  Observer {
             	colorballs.get(balID-1).setX(X-25);
             	colorballs.get(balID-1).setY(Y-25);
             	
-            	clientMessageSender.cardMotion(balID-1, X-25, Y-25);
+            	serverConnection.getMessageSender().cardMotion(balID-1, X-25, Y-25);
             }
         	
             break; 
@@ -178,7 +180,7 @@ public class DrawView extends View implements  Observer {
         	System.out.println("UP!!!");
         	System.out.println(balID-1);
         	if(balID>0)
-        		clientMessageSender.cardMotion(balID-1, X-25, Y-25);
+        		serverConnection.getMessageSender().cardMotion(balID-1, X-25, Y-25);
         	
 //        	if(balID > 0 && balID <= colorballs.size()){
 //	        	if(Math.sqrt( (double) (((163-X)*(163-X)) + (228-Y)*(228-Y)))<100){
