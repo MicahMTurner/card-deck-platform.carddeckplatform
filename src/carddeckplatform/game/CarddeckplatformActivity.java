@@ -3,6 +3,8 @@ package carddeckplatform.game;
 
 
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.wifi.WifiInfo;
@@ -13,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import communication.server.Server;
 
 public class CarddeckplatformActivity extends Activity {
 	
@@ -50,6 +54,27 @@ public class CarddeckplatformActivity extends Activity {
             	GameStatus.isServer = true;
             	GameStatus.hostIp = "localhost";
                 Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
+                new Thread(new Runnable(){
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						Server s = new Server();
+						try {
+							s.start();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+                	
+                });
+                try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 startActivity(i);
                 } 
              });

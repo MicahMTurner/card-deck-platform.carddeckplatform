@@ -39,7 +39,12 @@ public class DrawView extends View implements  Observer {
    private Context cont; 
    private Handler h = new Handler();
    private ServerConnection serverConnection;
+   private Canvas canv;
    
+   
+   private float scaleFactor=1;
+   private float lastX=Integer.MAX_VALUE;
+   private float lastY=Integer.MAX_VALUE;
 //   private ClientMessageSender clientMessageSender;
    
    
@@ -58,34 +63,24 @@ public class DrawView extends View implements  Observer {
 	    
 	    serverConnection = new ServerConnection(new TcpClient(GameStatus.localIp , "jojo"), new TcpSender(GameStatus.hostIp , 9998), this);
 	    serverConnection.openConnection();
-	    
-	    
-//	    Client c = new TcpClient(GameStatus.localIp , "jojo");
-//	    TcpSender s = new TcpSender(GameStatus.hostIp , 9998);
-//	    s.openConnection();
-//	    clientMessageSender = new ClientMessageSender();
-//	    clientMessageSender.setSender(s, c);
-//	    // gets messages from the host.
-//	    Receiver rc = new TcpReceiver(s.getIn());
-//	    rc.reg(this);
-//	    clientMessageSender.clientRegistration();
+
 	    cont = context;
 	    setFocusable(true); //necessary for getting the touch events
 	    
 	    // setting the start point for the balls
 	    Point point1 = new Point();
-	    point1.x = 50;
-	    point1.y = 20;
+	    point1.x = 300;
+	    point1.y = 328;
 	    Point point2 = new Point();
-	    point2.x = 100;
-	    point2.y = 20;
+	    point2.x = 350;
+	    point2.y = 328;
 	    Point point3 = new Point();
-	    point3.x = 150;
-	    point3.y = 20;
+	    point3.x = 400;
+	    point3.y = 328;
 	    
 	    Point point4 = new Point();
-	    point4.x = 200;
-	    point4.y = 350;
+	    point4.x = 450;
+	    point4.y = 328;
 	    
 	                   
 	    // declare each ball with the ColorBall class
@@ -99,7 +94,9 @@ public class DrawView extends View implements  Observer {
 
     // the method that draws the balls
     @Override protected void onDraw(Canvas canvas) {
-        canvas.drawColor(0xFFCCCCCC);     //if you want another background color       
+    	canv = canvas;
+    	canv.drawColor(0xFFCCCCCC);     //if you want another background color  
+        canv.scale(1, 1);
         
     	//draw the balls on the canvas
     	for (ColorBall ball : colorballs) {
@@ -128,6 +125,8 @@ public class DrawView extends View implements  Observer {
         switch (eventaction ) { 
 
         case MotionEvent.ACTION_DOWN: // touch down so check if the finger is on a ball
+        	lastX = X;
+        	lastY = Y;
         	balID = 0;
         	for (ColorBall ball : colorballs) {
         		// check if inside the bounds of the ball (circle)
@@ -155,6 +154,8 @@ public class DrawView extends View implements  Observer {
                 //	balID = ball.getID();
                 //	break;
                 //}
+        		
+        		
               }
              
              break; 
@@ -170,13 +171,33 @@ public class DrawView extends View implements  Observer {
             	
             	serverConnection.getMessageSender().cardMotion(balID-1, X-25, Y-25);
             }
-        	
+            
+            if(balID==0){
+            	System.out.println("Canvas sizes: h=" +canv.getHeight() + " w=" + canv.getWidth());
+            	if(lastY<=Y && scaleFactor<2.6){
+            		float tmp = (float)11/(float)10;
+            		scaleFactor*=tmp;
+            		System.out.println("UP " + scaleFactor);
+            		canv.scale(tmp, tmp , 374, 460);
+            		
+            	}
+            	if(lastY>Y && scaleFactor>1.001){
+            		float tmp = (float)10/(float)11;
+            		scaleFactor= scaleFactor * tmp;
+            		System.out.println("DOWN " + scaleFactor);
+            		canv.scale(tmp, tmp , 374, 460);
+            	}
+            	;
+    		}
+            lastY=Y;
             break; 
 
         case MotionEvent.ACTION_UP: 
        		// touch drop - just do things here after dropping
 //        	colorballs.get(balID-1).setX(tmpX);
 //        	colorballs.get(balID-1).setY(tmpY);
+        	lastY=Integer.MAX_VALUE;
+        	lastX=Integer.MAX_VALUE;
         	System.out.println("UP!!!");
         	System.out.println(balID-1);
         	if(balID>0)
