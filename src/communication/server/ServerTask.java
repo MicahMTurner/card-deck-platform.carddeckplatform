@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import communication.link.Receiver;
+import communication.messages.Message;
+
 
 public class ServerTask implements Runnable {
 	private ServerMessageSender serverMessageSender = new ServerMessageSender();
@@ -20,12 +23,13 @@ public class ServerTask implements Runnable {
 		while(true){
 			try {
 				// gets messages.
-				String msg = in.readLine();
+				String str = in.readLine();
 				
-				System.out.println("Message: " + msg);
-				if(msg==null)
+				System.out.println("Message: " + str);
+				if(str==null)
 					return;
 				
+				Message msg = Receiver.unParseMessage(str);
 				
 				serverMessageSender.sendToAll(msg, id);
 				

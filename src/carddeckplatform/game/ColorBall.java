@@ -1,19 +1,38 @@
 package carddeckplatform.game;
 
+import java.util.Random;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 
 public class ColorBall  {
- private Bitmap img; // the image of the ball
- private int coordX = 0; // the x coordinate at the canvas
- private int coordY = 0; // the y coordinate at the canvas
- private int id; // gives every ball his own id, for now not necessary
- private static int count = 1;
- private boolean goRight = true;
- private boolean goDown = true;
+	private Bitmap img; // the image of the ball
+	private int coordX = 0; // the x coordinate at the canvas
+	private int coordY = 0; // the y coordinate at the canvas
+	private int id; // gives every ball his own id, for now not necessary
+	private static int count = 1;
+	private boolean goRight = true;
+	private boolean goDown = true;
+	private float angle = 0;
  
+	public float getAngle(){
+		return angle;
+	}
+ 
+	
+	public void randomizeAngle(){
+		Random generator = new Random();
+		float randomIndex = generator.nextInt(20);
+		randomIndex -= 10;
+		angle = randomIndex;
+	}
+	
+	public void setAngle(float angle){
+		this.angle = angle;
+	}
+ 	
 	public ColorBall(Context context, int drawable) {
 
 		BitmapFactory.Options opts = new BitmapFactory.Options();
@@ -23,6 +42,9 @@ public class ColorBall  {
 		count++;
 
 	}
+	
+	
+	
 	
 	public ColorBall(Context context, int drawable, Point point) {
 
@@ -35,6 +57,8 @@ public class ColorBall  {
 		coordY = point.y;
 
 	}
+	
+	
 	
 	public static int getCount() {
 		return count;

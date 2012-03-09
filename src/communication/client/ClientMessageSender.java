@@ -97,7 +97,7 @@ public class ClientMessageSender {
 		msg.cardId = card;
 		msg.X = xCoordinate;
 		msg.Y = yCoordinate;
-		sender.send(msg.messageType, msg);
+		sender.send(msg);
 		return true;
 	}
 	
@@ -105,7 +105,7 @@ public class ClientMessageSender {
 		RegistrationMessage msg = new RegistrationMessage();
 		msg.clientName = client.getName();
 		msg.id = client.getId();
-		sender.send(msg.messageType, msg);
+		sender.send(msg);
 		return true;
 	}
 }

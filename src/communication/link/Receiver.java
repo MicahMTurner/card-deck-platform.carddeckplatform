@@ -20,7 +20,7 @@ public abstract class Receiver extends Observable {
 	
 	protected abstract void startListen();
 	
-	public Message unParseMessage(String str){
+	public static Message unParseMessage(String str){
 		Gson gson = new Gson();
 		MessageContainer mc = gson.fromJson(str , MessageContainer.class);
 		return MessageDictionary.getMessage(mc.className, mc.classJson);

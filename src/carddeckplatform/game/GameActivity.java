@@ -46,12 +46,10 @@ public class GameActivity extends Activity {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.main);
         
-        if(GameStatus.isServer)
-//        	new SampleServer();
+//        if(GameStatus.isServer)
+////        	new SampleServer();
         
-        MessageDictionary.addValue(new SampleMessage());
-        MessageDictionary.addValue(new RegistrationMessage());
-        MessageDictionary.addValue(new CardMotionMessage());
+        
         
         
         

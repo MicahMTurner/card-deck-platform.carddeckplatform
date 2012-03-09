@@ -33,9 +33,9 @@ public class TcpSender extends Sender {
 	}
 
 	@Override
-	public void send(String className , Message msg) {
+	public void send(Message msg) {
 		// TODO Auto-generated method stub
-		String stringMessage = parseMessage(className , msg);
+		String stringMessage = parseMessage(msg);
 		System.out.println("Sending to: " + serverIp + " " + port);
 		// sends the message.
 		System.out.println("Sending message");

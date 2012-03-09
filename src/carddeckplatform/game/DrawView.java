@@ -7,8 +7,10 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Stack;
 
 import com.google.gson.Gson;
 
@@ -26,7 +28,10 @@ import communication.messages.MessageContainer;
 import communication.messages.MessageDictionary;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -34,13 +39,14 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class DrawView extends View implements  Observer {
-   private ArrayList<ColorBall> colorballs = new ArrayList<ColorBall>(); // array that holds the balls
+	
+   private Stack<ColorBall> colorballs = new Stack<ColorBall>(); // array that holds the balls
    private int balID = 0; // variable to know what ball is being dragged
    private Context cont; 
    private Handler h = new Handler();
    private ServerConnection serverConnection;
    private Canvas canv;
-   
+   private ColorBall ballInHand;
    
    private float scaleFactor=1;
    private float lastX=Integer.MAX_VALUE;
@@ -50,8 +56,32 @@ public class DrawView extends View implements  Observer {
    
    public void moveCard(int card , int x , int y){
 	   System.out.println("moving card " + card + " to (" + x + "," + y + ")");
-		colorballs.get(card).setX(x);
-		colorballs.get(card).setY(y);
+	   
+	   
+		   try{
+			   for(ColorBall cb : colorballs){
+				   if(cb.getID()==card){
+					   cb.setX(x);
+					   cb.setY(y);
+					   cb.randomizeAngle();
+					   //System.out.println(i);
+	//				   if(i!=0){
+					   ColorBall tmp = cb;   
+					   colorballs.remove(cb);
+					   colorballs.push(tmp);
+	//				   }
+				   }
+			   }
+		   }
+		   catch(Exception e){
+			   
+		   }
+		   
+	   
+	   
+	   
+		
+		
 		
 		invalidate(); 
    }
@@ -100,8 +130,16 @@ public class DrawView extends View implements  Observer {
         
     	//draw the balls on the canvas
     	for (ColorBall ball : colorballs) {
-            canvas.drawBitmap(ball.getBitmap(), ball.getX(), ball.getY(), null);
-          }
+    		Matrix matrix = new Matrix();
+    		matrix.postRotate(ball.getAngle());
+    		
+    		
+    		Bitmap resizedBitmap = Bitmap.createBitmap(ball.getBitmap(), 0, 0, ball.getBitmap().getScaledWidth(canv) , ball.getBitmap().getScaledHeight(canv), matrix, true);
+    		
+    		
+            canvas.drawBitmap(resizedBitmap, ball.getX(), ball.getY(), new Paint());
+            
+        }
 
     }
     
@@ -128,7 +166,9 @@ public class DrawView extends View implements  Observer {
         	lastX = X;
         	lastY = Y;
         	balID = 0;
-        	for (ColorBall ball : colorballs) {
+        	for (int i=colorballs.size()-1 ; i>=0 ; i--) {
+        		
+        		ColorBall ball = colorballs.get(i);
         		// check if inside the bounds of the ball (circle)
         		// get the center for the ball
         		int centerX = ball.getX() + 25;
@@ -140,6 +180,10 @@ public class DrawView extends View implements  Observer {
         		// if the radius is smaller then 23 (radius of a ball is 22), then it must be on the ball
         		if (radCircle < 23){
         			balID = ball.getID();
+        			ColorBall tmp = ball;
+        			colorballs.remove(ball);
+        			colorballs.push(tmp);
+        			ballInHand = tmp;
         			if(!inHand){
 	        			tmpX = colorballs.get(balID-1).getX();
 	        			tmpY = colorballs.get(balID-1).getY();
@@ -166,10 +210,10 @@ public class DrawView extends View implements  Observer {
         	System.out.println(X + " " + Y);
         	inHand = true;
             if (balID > 0 && balID <= colorballs.size()) {
-            	colorballs.get(balID-1).setX(X-25);
-            	colorballs.get(balID-1).setY(Y-25);
+            	ballInHand.setX(X-25);
+            	ballInHand.setY(Y-25);
             	
-            	serverConnection.getMessageSender().cardMotion(balID-1, X-25, Y-25);
+            	serverConnection.getMessageSender().cardMotion(ballInHand.getID(), X-25, Y-25);
             }
             
             if(balID==0){
@@ -200,9 +244,10 @@ public class DrawView extends View implements  Observer {
         	lastX=Integer.MAX_VALUE;
         	System.out.println("UP!!!");
         	System.out.println(balID-1);
-        	if(balID>0)
-        		serverConnection.getMessageSender().cardMotion(balID-1, X-25, Y-25);
-        	
+        	if(balID>0){
+        		serverConnection.getMessageSender().cardMotion(ballInHand.getID(), X-25, Y-25);
+        		ballInHand.randomizeAngle();
+        	}
 //        	if(balID > 0 && balID <= colorballs.size()){
 //	        	if(Math.sqrt( (double) (((163-X)*(163-X)) + (228-Y)*(228-Y)))<100){
 //	        		System.out.println(Math.sqrt( (double) (((587-X)*(587-X)) + (259-Y)*(259-Y))));
