@@ -23,6 +23,7 @@ import communication.link.ServerConnection;
 import communication.link.TcpReceiver;
 import communication.link.TcpSender;
 import communication.messages.CardMotionMessage;
+import communication.messages.EndCardMotionMessage;
 import communication.messages.Message;
 import communication.messages.MessageContainer;
 import communication.messages.MessageDictionary;
@@ -30,8 +31,10 @@ import communication.messages.MessageDictionary;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -54,7 +57,22 @@ public class DrawView extends View implements  Observer {
 //   private ClientMessageSender clientMessageSender;
    
    
-   public void moveCard(int card , int x , int y){
+   public void endMotion(int card){
+	   try{
+		   for(ColorBall cb : colorballs){
+			   if(cb.getID()==card){
+				   cb.setUncarry();
+				   cb.randomizeAngle();
+			   }
+		   }
+	   }
+	   catch(Exception e){
+		   
+	   }
+	   invalidate(); 
+   }
+   
+   public void moveCard(String username, int card , int x , int y){
 	   System.out.println("moving card " + card + " to (" + x + "," + y + ")");
 	   
 	   
@@ -63,13 +81,12 @@ public class DrawView extends View implements  Observer {
 				   if(cb.getID()==card){
 					   cb.setX(x);
 					   cb.setY(y);
-					   cb.randomizeAngle();
+					   
+					   cb.setCarry(username);
 					   //System.out.println(i);
-	//				   if(i!=0){
 					   ColorBall tmp = cb;   
 					   colorballs.remove(cb);
 					   colorballs.push(tmp);
-	//				   }
 				   }
 			   }
 		   }
@@ -91,7 +108,9 @@ public class DrawView extends View implements  Observer {
    public DrawView(Context context) {
 	    super(context);        
 	    
-	    serverConnection = new ServerConnection(new TcpClient(GameStatus.localIp , "jojo"), new TcpSender(GameStatus.hostIp , 9998), this);
+	    
+	    
+	    serverConnection = new ServerConnection(new TcpClient(GameStatus.localIp , "jojo"), new TcpSender(GameStatus.hostIp , GameStatus.hostPort), this);
 	    serverConnection.openConnection();
 
 	    cont = context;
@@ -130,14 +149,9 @@ public class DrawView extends View implements  Observer {
         
     	//draw the balls on the canvas
     	for (ColorBall ball : colorballs) {
-    		Matrix matrix = new Matrix();
-    		matrix.postRotate(ball.getAngle());
-    		
-    		
-    		Bitmap resizedBitmap = Bitmap.createBitmap(ball.getBitmap(), 0, 0, ball.getBitmap().getScaledWidth(canv) , ball.getBitmap().getScaledHeight(canv), matrix, true);
-    		
-    		
-            canvas.drawBitmap(resizedBitmap, ball.getX(), ball.getY(), new Paint());
+    		ball.draw(canvas);
+            
+            
             
         }
 
@@ -213,7 +227,8 @@ public class DrawView extends View implements  Observer {
             	ballInHand.setX(X-25);
             	ballInHand.setY(Y-25);
             	
-            	serverConnection.getMessageSender().cardMotion(ballInHand.getID(), X-25, Y-25);
+            	//serverConnection.getMessageSender().cardMotion(ballInHand.getID(), X-25, Y-25);
+            	serverConnection.getMessageSender().sendMessage(new CardMotionMessage(GameStatus.username,ballInHand.getID(), X-25, Y-25));
             }
             
             if(balID==0){
@@ -245,7 +260,9 @@ public class DrawView extends View implements  Observer {
         	System.out.println("UP!!!");
         	System.out.println(balID-1);
         	if(balID>0){
-        		serverConnection.getMessageSender().cardMotion(ballInHand.getID(), X-25, Y-25);
+        		//serverConnection.getMessageSender().cardMotion(ballInHand.getID(), X-25, Y-25);
+        		serverConnection.getMessageSender().sendMessage(new CardMotionMessage(GameStatus.username,ballInHand.getID(), X-25, Y-25));
+        		serverConnection.getMessageSender().sendMessage(new EndCardMotionMessage(ballInHand.getID()));
         		ballInHand.randomizeAngle();
         	}
 //        	if(balID > 0 && balID <= colorballs.size()){
@@ -282,7 +299,11 @@ public class DrawView extends View implements  Observer {
 		Message message = (Message) data;
 		if(message.messageType.equals("CardMotionMessage")){
 			CardMotionMessage cmm = (CardMotionMessage)message;
-			moveCard(cmm.cardId , cmm.X , cmm.Y);
+			moveCard(cmm.username , cmm.cardId , cmm.X , cmm.Y);
+		}
+		if(message.messageType.equals("EndCardMotionMessage")){
+			EndCardMotionMessage ecmm = (EndCardMotionMessage)message;
+			endMotion(ecmm.cardId);
 		}
 		else if(message.messageType.equals("Something else...")){
 			// do some other thing...

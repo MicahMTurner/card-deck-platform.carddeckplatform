@@ -54,8 +54,9 @@ public class TcpReceiver extends Receiver{
 				while(true){
 					try {		
 						String stringMessage;
-						System.out.println("Message Accepted");
+						System.out.println("Wait for message");
 						stringMessage = in.readLine();
+						System.out.println("message received");
 						if(stringMessage==null)
 							continue;
 						System.out.println("the message is: " + stringMessage);

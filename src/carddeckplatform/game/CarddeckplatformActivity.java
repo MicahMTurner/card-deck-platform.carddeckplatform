@@ -43,7 +43,12 @@ public class CarddeckplatformActivity extends Activity {
         TextView tv = (TextView) findViewById(R.id.textView1);
         tv.setText("Your ip address is: " + ipStr);
         
+        final EditText username = (EditText) findViewById(R.id.editText2);
+        
+        username.setText("user1");
+        
         final EditText ip = (EditText) findViewById(R.id.editText1);
+        
         
         Button hostBtn = (Button) findViewById(R.id.button1);
         Button joinBtn = (Button) findViewById(R.id.button2);
@@ -52,7 +57,8 @@ public class CarddeckplatformActivity extends Activity {
         hostBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
             	GameStatus.isServer = true;
-            	GameStatus.hostIp = "localhost";
+            	GameStatus.hostIp = "127.0.0.1";
+            	GameStatus.username = username.getText().toString();
                 Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
                 new Thread(new Runnable(){
 
@@ -68,13 +74,13 @@ public class CarddeckplatformActivity extends Activity {
 						}
 					}
                 	
-                });
-//                try {
-//					Thread.sleep(2000);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
+                }).start();
+                try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 startActivity(i);
                 } 
              });
@@ -83,6 +89,7 @@ public class CarddeckplatformActivity extends Activity {
             public void onClick(View arg0) {
             	GameStatus.isServer = false;
             	GameStatus.hostIp = ip.getText().toString();
+            	GameStatus.username = username.getText().toString();
                 Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
                 startActivity(i);
                 } 

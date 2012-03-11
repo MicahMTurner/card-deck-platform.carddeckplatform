@@ -7,6 +7,19 @@ public class CardMotionMessage extends Message {
 		messageType = "CardMotionMessage";
 	}
 	
+	public CardMotionMessage(String username , int cardId , int X , int Y){
+		messageType = "CardMotionMessage";
+		
+		this.username = username;
+		this.cardId = cardId;
+		this.X = X;
+		this.Y = Y;
+		
+	}
+	
+	@SerializedName("username")
+	public String username;
+	
 	@SerializedName("cardId")
 	public int cardId;
 	

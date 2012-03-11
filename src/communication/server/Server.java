@@ -9,9 +9,11 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import carddeckplatform.game.GameStatus;
+
 public class Server {
 	public void start() throws IOException{
-		ServerSocket serverSocket = new ServerSocket(9998);
+		ServerSocket serverSocket = new ServerSocket(GameStatus.hostPort);
 		while(true){
 			
 			Socket clientSocket;

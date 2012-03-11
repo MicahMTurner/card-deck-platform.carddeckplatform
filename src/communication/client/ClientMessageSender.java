@@ -108,4 +108,9 @@ public class ClientMessageSender {
 		sender.send(msg);
 		return true;
 	}
+	
+	public boolean sendMessage(Message msg){
+		sender.send(msg);
+		return true;
+	}
 }
