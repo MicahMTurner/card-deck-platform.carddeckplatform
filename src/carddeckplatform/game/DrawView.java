@@ -27,6 +27,7 @@ import communication.messages.EndCardMotionMessage;
 import communication.messages.Message;
 import communication.messages.MessageContainer;
 import communication.messages.MessageDictionary;
+import communication.messages.MessageHandler;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -74,32 +75,23 @@ public class DrawView extends View implements  Observer {
    
    public void moveCard(String username, int card , int x , int y){
 	   System.out.println("moving card " + card + " to (" + x + "," + y + ")");
-	   
-	   
-		   try{
-			   for(ColorBall cb : colorballs){
-				   if(cb.getID()==card){
-					   cb.setX(x);
-					   cb.setY(y);
-					   
-					   cb.setCarry(username);
-					   //System.out.println(i);
-					   ColorBall tmp = cb;   
-					   colorballs.remove(cb);
-					   colorballs.push(tmp);
-				   }
+	   try{
+		   for(ColorBall cb : colorballs){
+			   if(cb.getID()==card){
+				   cb.setX(x);
+				   cb.setY(y);
+				   
+				   cb.setCarry(username);
+				   //System.out.println(i);
+				   ColorBall tmp = cb;   
+				   colorballs.remove(cb);
+				   colorballs.push(tmp);
 			   }
 		   }
-		   catch(Exception e){
-			   
-		   }
+	   }
+	   catch(Exception e){
 		   
-	   
-	   
-	   
-		
-		
-		
+	   }
 		invalidate(); 
    }
    
@@ -297,6 +289,8 @@ public class DrawView extends View implements  Observer {
 	public void update(Observable observabe, Object data) {
 		// TODO Auto-generated method stub
 		Message message = (Message) data;
+		MessageHandler mh = (MessageHandler) message;
+		mh.execute(null);
 		if(message.messageType.equals("CardMotionMessage")){
 			CardMotionMessage cmm = (CardMotionMessage)message;
 			moveCard(cmm.username , cmm.cardId , cmm.X , cmm.Y);

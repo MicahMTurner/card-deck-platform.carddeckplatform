@@ -19,6 +19,9 @@ import android.content.Context;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.view.Display;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 public class GameActivity extends Activity {
@@ -49,11 +52,15 @@ public class GameActivity extends Activity {
 //        if(GameStatus.isServer)
 ////        	new SampleServer();
         
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
+                                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Display display = getWindowManager().getDefaultDisplay(); 
+        int width = display.getWidth();  // deprecated
+        int height = display.getHeight();  // deprecated
         
         
-        
-        
-        DrawView dv = new DrawView(this);
+        TableView dv = new TableView(this,width, height);
         
         // draw the view
         setContentView(dv);
