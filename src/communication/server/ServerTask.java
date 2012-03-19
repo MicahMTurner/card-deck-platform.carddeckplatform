@@ -31,7 +31,9 @@ public class ServerTask implements Runnable {
 				
 				Message msg = Receiver.unParseMessage(str);
 				
-				serverMessageSender.sendToAll(msg, id);
+				
+				
+				serverMessageSender.sendToAllExcptMe(msg, id);
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

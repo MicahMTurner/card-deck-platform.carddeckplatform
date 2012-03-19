@@ -14,6 +14,8 @@ public class MessageDictionary {
         MessageDictionary.addValue(new RegistrationMessage());
         MessageDictionary.addValue(new CardMotionMessage());
         MessageDictionary.addValue(new EndCardMotionMessage());
+        
+        //
 	}
 	
 	public static void addValue(Message message){

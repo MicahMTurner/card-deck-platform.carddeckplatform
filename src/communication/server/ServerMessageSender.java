@@ -17,11 +17,11 @@ public class ServerMessageSender {
 	}
 	
 	/**
-	 * sendToAll - sends the message to every user except for the user 'id'.
+	 * sendToAllExcptMe - sends the message to every user except for the user 'id'.
 	 * @param msg
 	 * @param id
 	 */
-	public void sendToAll(Message msg , String id){
+	public void sendToAllExcptMe(Message msg , String id){
 		String str = Sender.parseMessage(msg);
 		for(ConnObj co : ServerConnections.getAllConections()){
 			if(!co.id.equals(id))
