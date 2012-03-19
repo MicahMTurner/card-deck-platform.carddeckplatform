@@ -167,7 +167,7 @@ public class DrawView extends View implements  Observer {
         boolean inHand = false;
 
         switch (eventaction ) { 
-
+        
         case MotionEvent.ACTION_DOWN: // touch down so check if the finger is on a ball
         	lastX = X;
         	lastY = Y;
@@ -286,7 +286,7 @@ public class DrawView extends View implements  Observer {
 
     // the receiver notifies by activating this method. 
 	@Override
-	public void update(Observable observabe, Object data) {
+	public void update(Observable observabe, Object data){
 		// TODO Auto-generated method stub
 		Message message = (Message) data;
 		MessageHandler mh = (MessageHandler) message;
