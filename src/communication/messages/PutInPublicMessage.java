@@ -15,6 +15,7 @@ public class PutInPublicMessage extends Message {
 	@Override
 	public void clientAction(TableView tableView) {
 		// TODO Auto-generated method stub
+		tableView.getLogic().
 		
 	}
 
