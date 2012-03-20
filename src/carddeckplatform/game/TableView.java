@@ -38,7 +38,11 @@ public class TableView extends View  implements Observer {
 	private Draggable draggableInHand=null;
 	private int xDimention;
 	private int yDimention;
+	private Logic logic;
 	
+	public Logic getLogic(){
+		
+	}
 	
 	public void draggableMotion(String username, int id , int x , int y){
 		Draggable draggable = table.getDraggableById(id, true);
