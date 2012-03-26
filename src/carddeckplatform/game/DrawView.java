@@ -43,13 +43,13 @@ import android.view.View;
 
 public class DrawView extends View implements  Observer {
 	
-   private Stack<ColorBall> colorballs = new Stack<ColorBall>(); // array that holds the balls
+   private Stack<Card> colorballs = new Stack<Card>(); // array that holds the balls
    private int balID = 0; // variable to know what ball is being dragged
    private Context cont; 
    private Handler h = new Handler();
    private ServerConnection serverConnection;
    private Canvas canv;
-   private ColorBall ballInHand;
+   private Card ballInHand;
    
    private float scaleFactor=1;
    private float lastX=Integer.MAX_VALUE;
@@ -59,7 +59,7 @@ public class DrawView extends View implements  Observer {
    
    public void endMotion(int card){
 	   try{
-		   for(ColorBall cb : colorballs){
+		   for(Card cb : colorballs){
 			   if(cb.getID()==card){
 				   cb.setUncarry();
 				   cb.randomizeAngle();
@@ -77,14 +77,14 @@ public class DrawView extends View implements  Observer {
 	   
 	   
 		   try{
-			   for(ColorBall cb : colorballs){
+			   for(Card cb : colorballs){
 				   if(cb.getID()==card){
 					   cb.setX(x);
 					   cb.setY(y);
 					   
 					   cb.setCarry(username);
 					   //System.out.println(i);
-					   ColorBall tmp = cb;   
+					   Card tmp = cb;   
 					   colorballs.remove(cb);
 					   colorballs.push(tmp);
 				   }
@@ -133,10 +133,10 @@ public class DrawView extends View implements  Observer {
 	    
 	                   
 	    // declare each ball with the ColorBall class
-	    colorballs.add(new ColorBall(context,R.drawable.c8, point1));
-	    colorballs.add(new ColorBall(context,R.drawable.d2, point2));
-	    colorballs.add(new ColorBall(context,R.drawable.s10, point3));
-	    colorballs.add(new ColorBall(context,R.drawable.hj, point4));
+	    colorballs.add(new Card(context,R.drawable.c8, point1));
+	    colorballs.add(new Card(context,R.drawable.d2, point2));
+	    colorballs.add(new Card(context,R.drawable.s10, point3));
+	    colorballs.add(new Card(context,R.drawable.hj, point4));
 	
 	    
 	}
@@ -148,7 +148,7 @@ public class DrawView extends View implements  Observer {
         canv.scale(1, 1);
         
     	//draw the balls on the canvas
-    	for (ColorBall ball : colorballs) {
+    	for (Card ball : colorballs) {
     		ball.draw(canvas);
             
             
@@ -182,7 +182,7 @@ public class DrawView extends View implements  Observer {
         	balID = 0;
         	for (int i=colorballs.size()-1 ; i>=0 ; i--) {
         		
-        		ColorBall ball = colorballs.get(i);
+        		Card ball = colorballs.get(i);
         		// check if inside the bounds of the ball (circle)
         		// get the center for the ball
         		int centerX = ball.getX() + 25;
@@ -194,7 +194,7 @@ public class DrawView extends View implements  Observer {
         		// if the radius is smaller then 23 (radius of a ball is 22), then it must be on the ball
         		if (radCircle < 23){
         			balID = ball.getID();
-        			ColorBall tmp = ball;
+        			Card tmp = ball;
         			colorballs.remove(ball);
         			colorballs.push(tmp);
         			ballInHand = tmp;
