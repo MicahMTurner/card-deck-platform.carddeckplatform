@@ -1,6 +1,5 @@
 package communication.messages;
 
-import carddeckplatform.game.DrawView;
 import carddeckplatform.game.GameStatus;
 
 import carddeckplatform.game.TableView;

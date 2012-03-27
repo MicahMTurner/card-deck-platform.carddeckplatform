@@ -19,7 +19,7 @@ public class GiveCardMessage extends Message{
 
 	@Override
 	public void clientAction(TableView tableView) {
-		tableView.addDraggable(card,isRevealed,cardId);
+//		tableView.addDraggable(card,isRevealed,cardId);
 		
 	}
 
