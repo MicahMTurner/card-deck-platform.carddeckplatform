@@ -3,7 +3,9 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:background="@drawable/woodtexture"
+    android:orientation="vertical"
+    android:stretchColumns="1" >
 
     <ViewFlipper
         android:id="@+id/welcomeFlipper"
@@ -45,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nickname:  "
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:textAppearance="?android:attr/textAppearanceLarge" android:textColor="@color/TransparentGrey"/>
 
             <EditText
                 android:id="@+id/nickText"
@@ -56,25 +58,27 @@
                 <requestFocus />
             </EditText>
         </LinearLayout>
-
-        <Button
-            android:id="@+id/joingamebutton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/JoinAGame" />
-
-        <Button
-            android:id="@+id/creategameButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/StartANewGame" />
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="host ip"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/joingamebutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="1dip"
+        android:text="@string/JoinAGame" android:textColor="@color/TransparentGrey"/>
+
+    <Button
+        android:id="@+id/creategameButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:text="@string/StartANewGame" android:textColor="@color/TransparentGrey"/>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="host ip"
+        android:textAppearance="?android:attr/textAppearanceLarge" android:textColor="@color/TransparentGrey"/>
 
 </LinearLayout>
