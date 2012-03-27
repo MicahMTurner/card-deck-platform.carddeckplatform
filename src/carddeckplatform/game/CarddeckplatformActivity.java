@@ -125,8 +125,8 @@ public class CarddeckplatformActivity extends Activity {
             	
             	GameStatus.hostIp = ip.getText().toString();
             	GameStatus.username = username.getText().toString();
-//                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
-//                startActivity(i);
+                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
+                startActivity(i);
                 } 
              });
     }

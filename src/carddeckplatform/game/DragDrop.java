@@ -9,10 +9,10 @@ public class  DragDrop extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        DrawView dv = new DrawView(this);
+//        DrawView dv = new DrawView(this);
         
         // draw the view
-        setContentView(dv);
+//        setContentView(dv);
 
     }
     
