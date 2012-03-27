@@ -11,7 +11,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 
-public class ColorBall  {
+public class Card  {
 	private Bitmap img; // the image of the ball
 	private int coordX = 0; // the x coordinate at the canvas
 	private int coordY = 0; // the y coordinate at the canvas
@@ -75,7 +75,7 @@ public class ColorBall  {
 		this.angle = angle;
 	}
  	
-	public ColorBall(Context context, int drawable) {
+	public Card(Context context, int drawable) {
 
 		BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inJustDecodeBounds = true;
@@ -88,7 +88,7 @@ public class ColorBall  {
 	
 	
 	
-	public ColorBall(Context context, int drawable, Point point) {
+	public Card(Context context, int drawable, Point point) {
 		this.context = context;
 		BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inJustDecodeBounds = true;
