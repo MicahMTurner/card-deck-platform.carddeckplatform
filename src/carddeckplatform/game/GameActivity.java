@@ -15,18 +15,24 @@ import communication.messages.RegistrationMessage;
 import communication.messages.SampleMessage;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class GameActivity extends Activity {
+	boolean ipshown;//if ip dialog was shown at the beggining
 	public static String getLocalHostAddress() { 
-        InetAddress ipAddress=null; 
+        InetAddress ipAddress=null;
+        
 /** Detects the default IP address of this host. */ 
         try { 
                 Socket conn = new Socket("www.google.com", 80); 
@@ -51,7 +57,7 @@ public class GameActivity extends Activity {
         
 //        if(GameStatus.isServer)
 ////        	new SampleServer();
-        
+        ipshown=false;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
                                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -64,7 +70,7 @@ public class GameActivity extends Activity {
         
         // draw the view
         setContentView(dv);
-        
+        System.out.println("1");
         
 //        SampleObserver so = new SampleObserver();
 //        so.setCntxt(getBaseContext());
@@ -94,5 +100,30 @@ public class GameActivity extends Activity {
 //        se.send(msg.messageType , msg);
         
     }
+    @Override
+	public void onWindowFocusChanged(boolean hasWindowFocus){
+    	if(ipshown)
+    		return;
+    	//making the ip dialog in case its the first time that we entered
+    	final Dialog dialog = new Dialog(GameActivity.this);
+    	dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
+                WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+    	dialog.setContentView(R.layout.showmyip);
+    	dialog.setTitle("Host IP Dialog");
+    	TextView myIP=(TextView)dialog.findViewById(R.id.myipnumbertext);
+    	Button contin= (Button) dialog.findViewById(R.id.myipbutton);
+    	System.out.println("Your ip address is:\n "+GameStatus.localIp);
+		myIP.setText(GameStatus.localIp);
+		contin.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				ipshown=true;
+				dialog.dismiss();
+			}
+		});
+    	dialog.show();
+	}
 }
 

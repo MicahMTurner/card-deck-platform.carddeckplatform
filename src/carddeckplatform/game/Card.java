@@ -41,8 +41,6 @@ public class Card  {
 	public void draw(Canvas canvas){
 		Matrix matrix = new Matrix();
 		matrix.postRotate(getAngle());
-		
-		
 		Bitmap resizedBitmap = Bitmap.createBitmap(getBitmap(), 0, 0, getBitmap().getScaledWidth(canvas) , getBitmap().getScaledHeight(canvas), matrix, true);
 		
 		

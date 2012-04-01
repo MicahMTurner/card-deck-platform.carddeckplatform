@@ -8,6 +8,7 @@ import communication.link.ServerConnection;
 import communication.link.TcpSender;
 import communication.messages.Message;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
@@ -28,6 +29,7 @@ import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.view.MotionEvent;
+import android.widget.Toast;
 import carddeckplatform.game.R;
 
 public class TableView extends View  implements Observer {
@@ -120,9 +122,10 @@ public class TableView extends View  implements Observer {
 			System.out.println(e.getMessage());
 		}
     	invalidate();
+    	
 		return true;
     }
-	
+    
 	
 	
 	@Override
