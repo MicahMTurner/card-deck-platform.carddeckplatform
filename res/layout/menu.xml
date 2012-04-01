@@ -5,8 +5,9 @@
     android:layout_height="fill_parent"
     android:background="@drawable/woodtexture"
     android:orientation="vertical"
-    android:stretchColumns="1" >
-
+    android:stretchColumns="1" 
+    >
+	
     <ViewFlipper
         android:id="@+id/welcomeFlipper"
         android:layout_width="match_parent"
@@ -17,18 +18,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Welcome to :"
-            android:textColor="#FF4400"
-            android:textSize="30sp"
-            android:textStyle="bold|italic" />
+            style="@style/WelcomeFont"/>"
 
         <TextView
             android:id="@+id/CardDeckText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Card-Deck-Platform"
-            android:textColor="#FF4400"
-            android:textSize="30sp"
-            android:textStyle="bold|italic" />
+            style="@style/WelcomeFont" />
     </ViewFlipper>
 
     <LinearLayout
@@ -73,12 +70,5 @@
         android:layout_height="wrap_content"
         android:padding="3dip"
         android:text="@string/StartANewGame" android:textColor="@color/TransparentGrey"/>
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="host ip"
-        android:textAppearance="?android:attr/textAppearanceLarge" android:textColor="@color/TransparentGrey"/>
 
 </LinearLayout>

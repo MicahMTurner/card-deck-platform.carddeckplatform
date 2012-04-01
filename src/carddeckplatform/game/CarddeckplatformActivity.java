@@ -58,8 +58,6 @@ public class CarddeckplatformActivity extends Activity {
         
         
         
-        TextView tv = (TextView) findViewById(R.id.textView1);
-        tv.setText("Your ip address is: " + ipStr);
         
         final EditText username = (EditText) findViewById(R.id.nickText);
         
@@ -108,7 +106,6 @@ public class CarddeckplatformActivity extends Activity {
             	dialog.setTitle("Host Ip Dialog");
             	TextView ip = (TextView) dialog.findViewById(R.id.getIpText);
             	Button connect= (Button) dialog.findViewById(R.id.connectButton);
-            	if(connect!=null)
             	connect.setOnClickListener(new OnClickListener() {
 					
 					@Override
@@ -122,13 +119,25 @@ public class CarddeckplatformActivity extends Activity {
             	dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
                         WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
             	dialog.show();
-            	
+            	Button retur= (Button) dialog.findViewById(R.id.returnButtonIP);
+            	retur.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						System.out.println("finish");
+						dialog.dismiss();
+					}
+				});
             	GameStatus.hostIp = ip.getText().toString();
             	GameStatus.username = username.getText().toString();
-                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
-                startActivity(i);
+//                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
+//                startActivity(i);
                 } 
              });
+    }
+    public void onWindowFocusChanged(boolean hasWindowFocus){
+    	
     }
 }
 
