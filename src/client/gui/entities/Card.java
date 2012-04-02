@@ -65,7 +65,6 @@ public class Card implements Draggable {
 
 	public void onClick() {
 		// TODO Auto-generated method stub
-		
 	}
 
 

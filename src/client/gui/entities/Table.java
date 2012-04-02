@@ -19,12 +19,14 @@ public class Table {
 	private int yDimention;
 	
 	
-	public Table(Context context, int xDimention, int yDimention){
-		this.xDimention = xDimention;
-		this.yDimention = yDimention;
+//	public Table(Context context, int xDimention, int yDimention){
+//		this.xDimention = xDimention;
+//		this.yDimention = yDimention;
+//		this.context = context;
+//	}
+	public Table(Context context){
 		this.context = context;
 	}
-	
 	public void addDraggable(Draggable draggable){
 		draggables.add(draggable);
 	}
@@ -100,5 +102,18 @@ public class Table {
 			d.draw(canvas);
 		}
 	}
+	public int getxDimention() {
+		return xDimention;
+	}
+	public void setxDimention(int xDimention) {
+		this.xDimention = xDimention;
+	}
+	public int getyDimention() {
+		return yDimention;
+	}
+	public void setyDimention(int yDimention) {
+		this.yDimention = yDimention;
+	}
+	
 	
 }
