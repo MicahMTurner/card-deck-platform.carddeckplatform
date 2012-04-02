@@ -11,7 +11,9 @@ import communication.messages.Message;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.SurfaceView;
 import android.view.View;
 import carddeckplatform.game.GameStatus;
 import client.gui.entities.Card;
@@ -52,31 +54,54 @@ public class TableView extends View  implements Observer {
 		draggable.setLocation(x, y);
 		invalidate(); 
 	}
-	
 	public void endDraggableMotion(int id){
 		Draggable draggable = table.getDraggableById(id, true);
 		draggable.clearAnimation();
 		invalidate(); 
 	}
-	
-	public TableView(Context context, int xDimention, int yDimention) {
-		super(context);
-		this.xDimention = xDimention;
-		this.yDimention = yDimention;
+	public TableView(Context context,AttributeSet attrs) {
+		// TODO Auto-generated constructor stub
+		super(context, attrs);
+		
+		this.xDimention =  getMeasuredWidth();
+		this.yDimention = getMeasuredHeight();
 		// TODO Auto-generated constructor stub
 		cont = context;
-		table = new Table(context, xDimention, yDimention);
-		table.setTableImage(R.drawable.table);
+		table = new Table(context);
+		table.setTableImage(R.drawable.boardtest);
 		// connects with the server.
 		serverConnection = new ServerConnection(new TcpClient(GameStatus.localIp , "jojo"), new TcpSender(GameStatus.hostIp , GameStatus.hostPort), this);
 	    serverConnection.openConnection();
 		
 	    table.addDraggable(new Card(context,R.drawable.ca,50,50,serverConnection));
 	    setFocusable(true); //necessary for getting the touch events.
-	    
+	}
+//	public TableView(Context context, int xDimention, int yDimention) {
+//		super(context);
+//		this.xDimention = getMeasuredWidth();
+//		this.yDimention = getMeasuredHeight();
+//		// TODO Auto-generated constructor stub
+//		cont = context;
+//		table = new Table(context, xDimention, yDimention);
+//		table.setTableImage(R.drawable.table);
+//		// connects with the server.
+//		serverConnection = new ServerConnection(new TcpClient(GameStatus.localIp , "jojo"), new TcpSender(GameStatus.hostIp , GameStatus.hostPort), this);
+//	    serverConnection.openConnection();
+//		
+//	    table.addDraggable(new Card(context,R.drawable.ca,50,50,serverConnection));
+//	    setFocusable(true); //necessary for getting the touch events.
+//	    
+//	    
+//	}
+	@Override
+	  protected void onMeasure(int widthMeasureSpec,
+	     int heightMeasureSpec) {
+	    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+	    setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight());
+	    table.setxDimention(getMeasuredWidth());
+	    table.setyDimention(getMeasuredHeight());
 	    
 	}
-	
 	// the method that draws the balls
     @Override protected void onDraw(Canvas canvas) {
     	canv = canvas;
@@ -135,4 +160,20 @@ public class TableView extends View  implements Observer {
 		message.clientAction(this);
 	}
 
+	public int getxDimention() {
+		return xDimention;
+	}
+
+	public void setxDimention(int xDimention) {
+		this.xDimention = xDimention;
+	}
+
+	public int getyDimention() {
+		return yDimention;
+	}
+
+	public void setyDimention(int yDimention) {
+		this.yDimention = yDimention;
+	}
+	
 }

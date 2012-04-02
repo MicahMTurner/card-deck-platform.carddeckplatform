@@ -61,17 +61,12 @@ public class GameActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
                                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        Display display = getWindowManager().getDefaultDisplay(); 
-        int width = display.getWidth();  // deprecated
-        int height = display.getHeight();  // deprecated
         
-        
-        TableView dv = new TableView(this,width, height);
+//        TableView dv = new TableView(this,null);
         
         // draw the view
-        setContentView(dv);
-        System.out.println("1");
-        
+        setContentView(R.layout.game);
+        TableView dv = (TableView)findViewById(R.id.TableView1);
 //        SampleObserver so = new SampleObserver();
 //        so.setCntxt(getBaseContext());
 //        Receiver rc = new TcpReceiver(9999);
