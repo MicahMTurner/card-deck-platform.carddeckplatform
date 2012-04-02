@@ -104,13 +104,19 @@ public class CarddeckplatformActivity extends Activity {
             	final Dialog dialog = new Dialog(CarddeckplatformActivity.this);
             	dialog.setContentView(R.layout.getipdialog);
             	dialog.setTitle("Host Ip Dialog");
-            	TextView ip = (TextView) dialog.findViewById(R.id.getIpText);
+            	final TextView ip = (TextView) dialog.findViewById(R.id.getIpText);
             	Button connect= (Button) dialog.findViewById(R.id.connectButton);
             	connect.setOnClickListener(new OnClickListener() {
 					
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
+						
+						GameStatus.isServer = false;
+		            	GameStatus.hostIp = ip.getText().toString();
+		            	GameStatus.username = username.getText().toString();
+		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
+		                startActivity(i);
 						System.out.println("finish");
 						dialog.dismiss();
 					}
