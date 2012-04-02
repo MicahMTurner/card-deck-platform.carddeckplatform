@@ -54,11 +54,13 @@ public class TableView extends View  implements Observer {
 		draggable.setLocation(x, y);
 		invalidate(); 
 	}
+	
 	public void endDraggableMotion(int id){
 		Draggable draggable = table.getDraggableById(id, true);
 		draggable.clearAnimation();
 		invalidate(); 
 	}
+	
 	public TableView(Context context,AttributeSet attrs) {
 		// TODO Auto-generated constructor stub
 		super(context, attrs);
@@ -76,6 +78,7 @@ public class TableView extends View  implements Observer {
 	    table.addDraggable(new Card(context,R.drawable.ca,50,50,serverConnection));
 	    setFocusable(true); //necessary for getting the touch events.
 	}
+	
 //	public TableView(Context context, int xDimention, int yDimention) {
 //		super(context);
 //		this.xDimention = getMeasuredWidth();
@@ -94,16 +97,16 @@ public class TableView extends View  implements Observer {
 //	    
 //	}
 	@Override
-	  protected void onMeasure(int widthMeasureSpec,
+	protected void onMeasure(int widthMeasureSpec,
 	     int heightMeasureSpec) {
 	    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	    setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight());
 	    table.setxDimention(getMeasuredWidth());
 	    table.setyDimention(getMeasuredHeight());
-	    
 	}
 	// the method that draws the balls
-    @Override protected void onDraw(Canvas canvas) {
+    @Override
+    protected void onDraw(Canvas canvas) {
     	canv = canvas;
     	canv.drawColor(0xFFCCCCCC);     //if you want another background color  
         canv.scale(1, 1);

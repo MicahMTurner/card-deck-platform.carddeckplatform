@@ -17,7 +17,7 @@ public class Server {
 		while(true){
 			
 			Socket clientSocket;
-			System.out.println("Waiting for messages...");
+			System.out.println("Listening to port " + GameStatus.hostPort + " Waiting for messages...");
 			clientSocket = serverSocket.accept();
 			System.out.println("connection request from from " + clientSocket.getRemoteSocketAddress().toString());
 			
