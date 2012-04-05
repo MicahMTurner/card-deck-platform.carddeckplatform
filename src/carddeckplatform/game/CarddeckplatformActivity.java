@@ -72,21 +72,21 @@ public class CarddeckplatformActivity extends Activity {
             	GameStatus.hostIp = "127.0.0.1";
             	GameStatus.username = username.getText().toString();
                 Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
-                new Thread(new Runnable(){
+//                new Thread(new Runnable(){
 
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						Server s = new Server();
-						try {
-							s.start();
-						} catch (IOException e) {
-							// TODO Auto-generated catch blockbb
-							e.printStackTrace();
-						}
-					}
+//					@Override
+//					public void run() {
+//						// TODO Auto-generated method stub
+//						Server s = new Server();
+//						try {
+//							s.start();
+//						} catch (IOException e) {
+//							// TODO Auto-generated catch blockbb
+//							e.printStackTrace();
+//						}
+//					}
                 	
-                }).start();
+//                }).start();
                 try {
 					Thread.sleep(2000);
 				} catch (InterruptedException e) {

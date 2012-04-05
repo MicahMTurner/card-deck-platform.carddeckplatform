@@ -2,8 +2,11 @@ package communication.link;
 
 import java.util.Observer;
 
+import carddeckplatform.game.GameStatus;
+
 import communication.client.ClientMessageSender;
 import communication.entities.Client;
+import communication.entities.TcpClient;
 
 public class ServerConnection {
 	
@@ -13,18 +16,28 @@ public class ServerConnection {
 	private Observer observer;
 	private Receiver rc;
 	
-	public ServerConnection(){}
+	private static ServerConnection serverConnection=null;
+	public static ServerConnection getConnection(){
+		if(serverConnection==null){
+			serverConnection = new ServerConnection(new TcpClient(GameStatus.localIp , "jojo"), new TcpSender(GameStatus.hostIp , GameStatus.hostPort));
+		}
+		return serverConnection;
+	}
 	
-	public ServerConnection(Client c, TcpSender s, Observer observer){
+	
+	private ServerConnection(){}
+	
+	private ServerConnection(Client c, TcpSender s){
 		this.c = c;
 		this.s = s;
-		this.observer = observer;
+		//this.observer = observer;
 		
 		clientMessageSender = new ClientMessageSender();
 	    clientMessageSender.setSender(s, c);
 	}
 	
-	public void openConnection(){
+	public void openConnection(Observer observer){
+		this.observer = observer;
 		s.openConnection();
 		rc = new TcpReceiver(s.getIn());
 	    rc.reg(observer);

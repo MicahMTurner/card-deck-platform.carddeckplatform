@@ -7,6 +7,7 @@ import communication.entities.TcpClient;
 import communication.link.ServerConnection;
 import communication.link.TcpSender;
 import communication.messages.Message;
+import communication.messages.PlayerInfoMessage;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -16,6 +17,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import carddeckplatform.game.GameStatus;
+import logic.client.Game;
+import client.controller.ClientController;
 import client.gui.entities.Card;
 import client.gui.entities.Draggable;
 import client.gui.entities.Table;
@@ -34,7 +37,7 @@ import android.view.MotionEvent;
 import android.widget.Toast;
 import carddeckplatform.game.R;
 
-public class TableView extends View  implements Observer {
+public class TableView extends View {
 	private ServerConnection serverConnection;
 	private Table table;
 	private Context cont; 
@@ -42,11 +45,16 @@ public class TableView extends View  implements Observer {
 	private Draggable draggableInHand=null;
 	private int xDimention;
 	private int yDimention;
+	private Game game;
 //	private Logic logic;
 	
 //	public Logic getLogic(){
 		
 //	}
+	
+	public Game getGame(){
+		return game;
+	}
 	
 	public void draggableMotion(String username, int id , int x , int y){
 		Draggable draggable = table.getDraggableById(id, true);
@@ -61,6 +69,10 @@ public class TableView extends View  implements Observer {
 		invalidate(); 
 	}
 	
+	public void sendInfo(){
+		serverConnection.getMessageSender().sendMessage(new PlayerInfoMessage(GameStatus.username));
+	}
+	
 	public TableView(Context context,AttributeSet attrs) {
 		// TODO Auto-generated constructor stub
 		super(context, attrs);
@@ -72,8 +84,8 @@ public class TableView extends View  implements Observer {
 		table = new Table(context);
 		table.setTableImage(R.drawable.boardtest);
 		// connects with the server.
-		serverConnection = new ServerConnection(new TcpClient(GameStatus.localIp , "jojo"), new TcpSender(GameStatus.hostIp , GameStatus.hostPort), this);
-	    serverConnection.openConnection();
+//		serverConnection = new ServerConnection(new TcpClient(GameStatus.localIp , "jojo"), new TcpSender(GameStatus.hostIp , GameStatus.hostPort), this);
+//	    serverConnection.openConnection();
 		
 	    table.addDraggable(new Card(context,R.drawable.ca,50,50,serverConnection));
 	    setFocusable(true); //necessary for getting the touch events.
@@ -153,15 +165,6 @@ public class TableView extends View  implements Observer {
     	
 		return true;
     }
-    
-	
-	
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
-		Message message = (Message) arg1;
-		message.clientAction(this);
-	}
 
 	public int getxDimention() {
 		return xDimention;

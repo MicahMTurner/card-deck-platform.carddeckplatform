@@ -1,10 +1,14 @@
 package communication.messages;
 
+import logic.host.Host;
 import carddeckplatform.game.TableView;
+
+import client.controller.ClientController;
 
 import com.google.gson.annotations.SerializedName;
 import communication.client.ClientMessageHandler;
 import communication.server.ServerMessageHandler;
+import communication.server.ServerTask;
 
 public class CardMotionMessage extends Message {
 	public CardMotionMessage(){
@@ -34,15 +38,15 @@ public class CardMotionMessage extends Message {
 	public int Y;
 
 	@Override
-	public void serverAction(ServerMessageHandler serverMessageHandler) {
+	public void serverAction(ServerMessageHandler serverMessageHandler, Host host, ServerTask serverTask) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void clientAction(TableView tableView) {
+	public void clientAction(ClientController controller) {
 		// TODO Auto-generated method stub
-		tableView.draggableMotion(username, cardId, X, Y);
+		controller.draggableMotion(username, cardId, X, Y);
 	}
 	
 }
