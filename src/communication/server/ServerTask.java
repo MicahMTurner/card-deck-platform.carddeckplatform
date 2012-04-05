@@ -2,9 +2,11 @@ package communication.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import communication.link.Receiver;
+import communication.link.Sender;
 import communication.messages.AskInfoMessage;
 import communication.messages.Message;
 
@@ -12,10 +14,21 @@ import communication.messages.Message;
 public class ServerTask implements Runnable {
 	private ServerMessageSender serverMessageSender = new ServerMessageSender();
 	private String id;
-	BufferedReader in;	
-	public ServerTask(String id, BufferedReader in){
+	private BufferedReader in;
+	private PrintWriter out;
+	
+	
+	
+	public ServerTask(String id, BufferedReader in, PrintWriter out){
 		this.id = id;
 		this.in = in;
+		this.out = out;
+	}
+	
+	
+	public void send(Message msg){
+		String str = Sender.parseMessage(msg);
+		out.println(str);
 	}
 	
 	public String getId(){
@@ -27,7 +40,7 @@ public class ServerTask implements Runnable {
 		// TODO Auto-generated method stub
 		
 		// sends AskInfoMessage to the player in order to get its name and etc...
-		serverMessageSender.sendTo(new AskInfoMessage(), id);
+		send(new AskInfoMessage());
 		while(true){
 			try {
 				// gets messages.

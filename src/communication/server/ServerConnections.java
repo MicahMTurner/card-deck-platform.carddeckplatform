@@ -6,13 +6,13 @@ import java.util.ArrayList;
 
 public class ServerConnections {
 	
-	private static ArrayList<ConnObj> connections = new ArrayList<ConnObj>();
+	private static ArrayList<ServerTask> connections = new ArrayList<ServerTask>();
 	
-	public static void addConnection(ConnObj connObj){
-		connections.add(connObj);
+	public static void addConnection(ServerTask serverTask){
+		connections.add(serverTask);
 	}
 	
-	public static ArrayList<ConnObj> getAllConections(){
+	public static ArrayList<ServerTask> getAllConections(){
 		return connections;
 	}
 	
