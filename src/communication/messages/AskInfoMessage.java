@@ -1,26 +1,26 @@
 package communication.messages;
 
 import logic.host.Host;
-import carddeckplatform.game.TableView;
 
 import client.controller.ClientController;
 
 import com.google.gson.annotations.SerializedName;
-import communication.client.ClientMessageHandler;
+
+import carddeckplatform.game.TableView;
+
 import communication.server.ServerMessageHandler;
 import communication.server.ServerTask;
 
-public class SampleMessage extends Message {
+public class AskInfoMessage extends Message  {
 	
-	public SampleMessage(){
-		messageType = "SampleMessage";
+	
+	
+	public AskInfoMessage(){
+		messageType = "PlayerInfoMessage";
 	}
 	
-	@SerializedName("name")
-	public String name;
-
 	@Override
-	public void serverAction(ServerMessageHandler serverMessageHandler, Host host, ServerTask serverTask) {
+	public void serverAction(ServerMessageHandler serverMessageHandler, Host host,  ServerTask serverTask) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -28,8 +28,7 @@ public class SampleMessage extends Message {
 	@Override
 	public void clientAction(ClientController controller) {
 		// TODO Auto-generated method stub
-		
+		controller.sendInfo();
 	}
 
-	
 }

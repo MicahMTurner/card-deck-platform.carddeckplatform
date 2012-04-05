@@ -57,7 +57,6 @@ public class GameActivity extends Activity {
         
 //        if(GameStatus.isServer)
 ////        	new SampleServer();
-        getWindow().getAttributes().format = android.graphics.PixelFormat.RGBA_8888;
         ipshown=false;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 

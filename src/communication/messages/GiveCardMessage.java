@@ -1,8 +1,11 @@
 package communication.messages;
 
+import client.controller.ClientController;
+import logic.host.Host;
 import carddeckplatform.game.TableView;
 
 import communication.server.ServerMessageHandler;
+import communication.server.ServerTask;
 
 public class GiveCardMessage extends Message{
 
@@ -12,13 +15,13 @@ public class GiveCardMessage extends Message{
 	public boolean isRevealed;
 	
 	@Override
-	public void serverAction(ServerMessageHandler serverMessageHandler) {
+	public void serverAction(ServerMessageHandler serverMessageHandler, Host host, ServerTask serverTask) {
 		// TODO send only to 'to'.
 		
 	}
 
 	@Override
-	public void clientAction(TableView tableView) {
+	public void clientAction(ClientController controller) {
 //		tableView.addDraggable(card,isRevealed,cardId);
 		
 	}

@@ -14,7 +14,8 @@ public class MessageDictionary {
         MessageDictionary.addValue(new RegistrationMessage());
         MessageDictionary.addValue(new CardMotionMessage());
         MessageDictionary.addValue(new EndCardMotionMessage());
-        
+        MessageDictionary.addValue(new AskInfoMessage());
+        MessageDictionary.addValue(new PlayerInfoMessage());
         //
 	}
 	

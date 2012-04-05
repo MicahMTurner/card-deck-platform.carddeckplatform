@@ -12,13 +12,16 @@ import java.net.Socket;
 import carddeckplatform.game.GameStatus;
 
 public class Server {
-	public void start() throws IOException{
-		ServerSocket serverSocket = new ServerSocket(GameStatus.hostPort);
-		while(true){
+	static public void connectAPlayer(){
+		try {	
+			ServerSocket serverSocket = new ServerSocket(GameStatus.hostPort);
+		
 			
 			Socket clientSocket;
 			System.out.println("Listening to port " + GameStatus.hostPort + " Waiting for messages...");
+			
 			clientSocket = serverSocket.accept();
+
 			System.out.println("connection request from from " + clientSocket.getRemoteSocketAddress().toString());
 			
 			final PrintWriter out=new PrintWriter(clientSocket.getOutputStream(),true);
@@ -27,6 +30,14 @@ public class Server {
 			ServerConnections.addConnection(new ConnObj(out, in, clientSocket.getRemoteSocketAddress().toString()));
 			
 		    new Thread(new ServerTask(clientSocket.getRemoteSocketAddress().toString(),in)).start();
-	    }
+		    
+		    
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// init game.
+		// start game.
 	}
 }
