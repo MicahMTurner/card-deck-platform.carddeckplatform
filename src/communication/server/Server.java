@@ -27,9 +27,10 @@ public class Server {
 			final PrintWriter out=new PrintWriter(clientSocket.getOutputStream(),true);
 			BufferedReader in=new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			
-			ServerConnections.addConnection(new ConnObj(out, in, clientSocket.getRemoteSocketAddress().toString()));
+			ServerTask serverTask = new ServerTask(clientSocket.getRemoteSocketAddress().toString(),in, out);
+			ServerConnections.addConnection(serverTask);
 			
-		    new Thread(new ServerTask(clientSocket.getRemoteSocketAddress().toString(),in)).start();
+		    new Thread(serverTask).start();
 		    
 		    
 		} catch (IOException e) {
