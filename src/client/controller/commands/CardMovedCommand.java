@@ -1,13 +1,12 @@
-package client.controller;
+package client.controller.commands;
 
-public class CardMotionExecutor implements Executor {
-
+public class CardMovedCommand {
 	private String username; 
 	private int id;
 	private int x;
 	private int y;
 	
-	public CardMotionExecutor(String username, int id , int x , int y){
+	public CardMovedCommand(String username, int id , int x , int y){
 		this.username = username;
 		this.id = id;
 		this.x = x;
@@ -18,5 +17,4 @@ public class CardMotionExecutor implements Executor {
 		// TODO Auto-generated method stub
 		
 	}
-
 }
