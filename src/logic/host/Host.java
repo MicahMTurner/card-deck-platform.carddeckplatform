@@ -3,17 +3,20 @@ package logic.host;
 
 import java.util.ArrayList;
 
+
+
 import communication.server.Server;
 
 import logic.client.Game;
 import logic.client.Player;
-import war.War;
-import war.WarPrefs;
+import logic.publicArea.PublicArea;
+
 
 public class Host implements Runnable{
 	private final int maxPlayers=4;
 	private ArrayList<Player> players;
 	private Game game;
+	private PublicArea publicArea;
 	//synchronized private boolean startGameFlag=false;
 	int playersRdy=0;
 	
@@ -36,11 +39,12 @@ public class Host implements Runnable{
 		//}
 		
 	}
-
+	
 	@Override
 	public void run() {
 		waitForPlayers();
 		game.initiate();
+		//if all players are "lose" then we got a winner
 		
 	}
 	
