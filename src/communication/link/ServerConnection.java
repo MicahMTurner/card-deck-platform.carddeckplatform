@@ -16,11 +16,8 @@ public class ServerConnection {
 	private Observer observer;
 	private Receiver rc;
 	
-	private static ServerConnection serverConnection=null;
+	private static ServerConnection serverConnection=new ServerConnection(new TcpClient(GameStatus.localIp , "jojo"), new TcpSender(GameStatus.hostIp , GameStatus.hostPort));
 	public static ServerConnection getConnection(){
-		if(serverConnection==null){
-			serverConnection = new ServerConnection(new TcpClient(GameStatus.localIp , "jojo"), new TcpSender(GameStatus.hostIp , GameStatus.hostPort));
-		}
 		return serverConnection;
 	}
 	

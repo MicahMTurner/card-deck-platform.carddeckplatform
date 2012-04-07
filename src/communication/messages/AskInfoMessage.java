@@ -1,8 +1,7 @@
 package communication.messages;
 
 import logic.host.Host;
-
-import client.controller.ClientController;
+import client.controller.Controller;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -26,9 +25,9 @@ public class AskInfoMessage extends Message  {
 	}
 
 	@Override
-	public void clientAction(ClientController controller) {
+	public void clientAction() {
 		// TODO Auto-generated method stub
-		controller.sendInfo();
+		//Controller.getController().incomingAPI().sendInfo();
 	}
 
 }

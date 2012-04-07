@@ -95,8 +95,8 @@ public class ClientMessageSender {
 	public boolean cardMotion(int card , int xCoordinate , int yCoordinate){
 		CardMotionMessage msg = new CardMotionMessage();
 		msg.cardId = card;
-		msg.X = xCoordinate;
-		msg.Y = yCoordinate;
+		msg.x = xCoordinate;
+		msg.y = yCoordinate;
 		sender.send(msg);
 		return true;
 	}

@@ -4,8 +4,11 @@ package carddeckplatform.game;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import client.controller.Controller;
+
 import communication.link.Receiver;
 import communication.link.Sender;
+import communication.link.ServerConnection;
 import communication.link.TcpReceiver;
 import communication.link.TcpSender;
 import communication.messages.CardMotionMessage;
@@ -66,7 +69,9 @@ public class GameActivity extends Activity {
         
         // draw the view
         setContentView(R.layout.game);
-        TableView dv = (TableView)findViewById(R.id.TableView1);
+        TableView tv = (TableView)findViewById(R.id.TableView1);
+        Controller.getController().setTv(tv);
+        ServerConnection.getConnection().openConnection(Controller.getController());
 //        SampleObserver so = new SampleObserver();
 //        so.setCntxt(getBaseContext());
 //        Receiver rc = new TcpReceiver(9999);

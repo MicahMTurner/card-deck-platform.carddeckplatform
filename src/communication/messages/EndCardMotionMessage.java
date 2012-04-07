@@ -2,7 +2,7 @@ package communication.messages;
 
 import logic.host.Host;
 import carddeckplatform.game.TableView;
-import client.controller.ClientController;
+import client.controller.Controller;
 
 import com.google.gson.annotations.SerializedName;
 import communication.client.ClientMessageHandler;
@@ -33,9 +33,10 @@ public class EndCardMotionMessage extends Message {
 	}
 
 	@Override
-	public void clientAction(ClientController controller) {
+	public void clientAction() {
 		// TODO Auto-generated method stub
-		controller.endDraggableMotion(cardId);
+		//controller.endDraggableMotion(cardId);
+		Controller.getController().incomingAPI().endCardMotion(cardId);
 	}
 
 

@@ -35,13 +35,6 @@ public class TcpReceiver extends Receiver{
 		this.in = in;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
 	private class Notifier extends AsyncTask<Integer, Message, Long> {
 		   
 		   public Message unParseMessage(String str){
@@ -80,6 +73,7 @@ public class TcpReceiver extends Receiver{
 				public void run() {
 					// TODO Auto-generated method stub
 					//moveCard(cmm.cardId , cmm.X , cmm.Y);
+					//message.clientAction();
 					TcpReceiver.this.setChanged();
 					TcpReceiver.this.notifyObservers(message);
 					

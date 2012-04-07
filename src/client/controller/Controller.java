@@ -1,9 +1,16 @@
 package client.controller;
 
+import java.util.Observer;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import communication.messages.Message;
+
+import android.database.Observable;
 import logic.card.Card;
 import logic.client.GameLogic;
 import logic.client.Player;
+import client.controller.actions.DraggableMotionAction;
+import client.controller.actions.EndDraggableMotionAction;
 import client.controller.actions.GiveCardAction;
 import client.controller.actions.HideCardAction;
 import client.controller.actions.PutInPublicAction;
@@ -13,10 +20,11 @@ import client.controller.actions.TurnAction;
 import client.controller.commands.Command;
 import client.controller.commands.IncomingCommand;
 import client.controller.commands.OutgoingCommand;
+import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;
 
 //maybe not creating new action and commands all the time?
-public class Controller implements Runnable {
+public class Controller implements Runnable, Observer {
 	
 	
 	private TableView gui=null;
@@ -122,6 +130,14 @@ public class Controller implements Runnable {
 			commandsQueue.add(new OutgoingCommand(new GiveCardAction(gui, logic,from,to,card)));			
 		}
 		
+		public void cardMotion(String username, int cardId, int x, int y){
+			commandsQueue.add(new OutgoingCommand(new DraggableMotionAction(gui, logic, username, cardId, x, y)));
+		}
+		
+		public void endCardMotion(int cardId){
+			commandsQueue.add(new OutgoingCommand(new EndDraggableMotionAction(gui, logic, cardId)));
+		}
+		
 	}
 
 	
@@ -160,6 +176,14 @@ public class Controller implements Runnable {
 			commandsQueue.add(new IncomingCommand(new GiveCardAction(gui, logic,from,to,card)));			
 		}
 		
+		public void cardMotion(String username, int cardId, int x, int y){
+			commandsQueue.add(new IncomingCommand(new DraggableMotionAction(gui, logic, username, cardId, x, y)));
+		}
+		
+		public void endCardMotion(int cardId){
+			commandsQueue.add(new IncomingCommand(new EndDraggableMotionAction(gui, logic, cardId)));
+		}
+		
 	}
 	
 	//---Actions on Controller---//
@@ -191,14 +215,10 @@ public class Controller implements Runnable {
 		
 	}
 	
-	/*
-	  
-	 @Override
-	public void update(Observable arg0, Object arg1) {
-		Message message = (Message) arg1;
-		//message.clientAction(this);
-	}
 	
+	  
+
+	/*
 	public void draggableMotion(String username, int id , int x , int y){
 		gui.draggableMotion(username, id, x, y);
 	}
@@ -224,6 +244,14 @@ public class Controller implements Runnable {
 		ServerConnection.getConnection().getMessageSender().sendMessage(new EndCardMotionMessage(cardId));
 	}
 	*/
+
+
+	@Override
+	public void update(java.util.Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub
+		Message message = (Message) arg1;
+		message.clientAction();
+	}
 	
 	
 	

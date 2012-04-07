@@ -1,6 +1,5 @@
 package communication.messages;
 
-import client.controller.ClientController;
 import logic.host.Host;
 import carddeckplatform.game.TableView;
 
@@ -16,7 +15,7 @@ public class PutInPublicMessage extends Message {
 	}
 
 	@Override
-	public void clientAction(ClientController controller) {
+	public void clientAction() {
 		// TODO Auto-generated method stub
 //		tableView.getLogic().
 		

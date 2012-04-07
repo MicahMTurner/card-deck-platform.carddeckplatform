@@ -1,11 +1,7 @@
 package communication.messages;
 
 import logic.builtIn.defaultCards.Heart;
-
-import client.controller.ClientController;
-
 import com.google.gson.annotations.SerializedName;
-
 import logic.host.Host;
 import carddeckplatform.game.TableView;
 
@@ -34,7 +30,7 @@ public class SendCardMessage extends Message {
 	
 
 	@Override
-	public void clientAction(ClientController controller) {
+	public void clientAction() {
 		// TODO Auto-generated method stub
 		//tableView.getGame().getLogic().cardGiven(new Heart(5));
 	}
