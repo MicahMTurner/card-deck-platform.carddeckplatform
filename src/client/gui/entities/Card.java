@@ -2,6 +2,8 @@ package client.gui.entities;
 
 import java.util.Random;
 
+import client.controller.Controller;
+
 import communication.link.ServerConnection;
 import communication.messages.CardMotionMessage;
 import communication.messages.EndCardMotionMessage;
@@ -70,14 +72,15 @@ public class Card implements Draggable {
 
 	public void onDrag() {
 		// TODO Auto-generated method stub
-		serverConnection.getMessageSender().sendMessage(new CardMotionMessage(GameStatus.username,getId(), coordX, coordY));
+		//serverConnection.getMessageSender().sendMessage(new CardMotionMessage(GameStatus.username,getId(), coordX, coordY));
+		Controller.getController().outgoingAPI().cardMotion(GameStatus.username,getId(), coordX, coordY);
 	}
 
 
 	public void onRelease() {
 		// TODO Auto-generated method stub
-		serverConnection.getMessageSender().sendMessage(new CardMotionMessage(GameStatus.username,getId(), coordX, coordY));
-		serverConnection.getMessageSender().sendMessage(new EndCardMotionMessage(getId()));
+		Controller.getController().outgoingAPI().cardMotion(GameStatus.username,getId(), coordX, coordY);
+		Controller.getController().outgoingAPI().endCardMotion(getId());
 		
 	}
 

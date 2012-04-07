@@ -1,6 +1,6 @@
 package communication.messages;
 
-import logic.host.Host;
+//import logic.host.Host;
 import carddeckplatform.game.TableView;
 import client.controller.Controller;
 
@@ -37,7 +37,7 @@ public class CardMotionMessage extends Message {
 	public int y;
 
 	@Override
-	public void serverAction(ServerMessageHandler serverMessageHandler, Host host, ServerTask serverTask) {
+	public void serverAction() {
 		// TODO Auto-generated method stub
 		
 	}
