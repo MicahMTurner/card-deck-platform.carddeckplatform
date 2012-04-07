@@ -1,6 +1,6 @@
 package communication.messages;
 
-import logic.host.Host;
+//import logic.host.Host;
 import com.google.gson.annotations.SerializedName;
 
 import carddeckplatform.game.TableView;
@@ -25,9 +25,9 @@ public class PlayerInfoMessage extends Message {
 	}
 	
 	@Override
-	public void serverAction(ServerMessageHandler serverMessageHandler, Host host, ServerTask serverTask) {
+	public void serverAction() {
 		// TODO Auto-generated method stub
-		host.addPlayer(username, serverTask.getId());
+		//host.addPlayer(username, serverTask.getId());
 	}
 
 	@Override

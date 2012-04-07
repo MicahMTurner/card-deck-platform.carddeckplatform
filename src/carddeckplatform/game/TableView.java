@@ -17,7 +17,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import carddeckplatform.game.GameStatus;
-import logic.client.Game;
+//import logic.client.Game;
 import client.gui.entities.Card;
 import client.gui.entities.Draggable;
 import client.gui.entities.Table;
@@ -44,16 +44,16 @@ public class TableView extends View {
 	private Draggable draggableInHand=null;
 	private int xDimention;
 	private int yDimention;
-	private Game game;
+	//private Game game;
 //	private Logic logic;
 	
 //	public Logic getLogic(){
 		
 //	}
 	
-	public Game getGame(){
-		return game;
-	}
+//	public Game getGame(){
+//		return game;
+//	}
 	
 	public void draggableMotion(String username, int id , int x , int y){
 		Draggable draggable = table.getDraggableById(id, true);

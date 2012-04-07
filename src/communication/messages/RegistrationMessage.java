@@ -1,6 +1,6 @@
 package communication.messages;
 
-import logic.host.Host;
+//import logic.host.Host;
 import carddeckplatform.game.TableView;
 import com.google.gson.annotations.SerializedName;
 import communication.client.ClientMessageHandler;
@@ -19,7 +19,7 @@ public class RegistrationMessage extends Message {
 	public String id;
 
 	@Override
-	public void serverAction(ServerMessageHandler serverMessageHandler, Host host, ServerTask serverTask) {
+	public void serverAction() {
 		// TODO Auto-generated method stub
 		
 	}

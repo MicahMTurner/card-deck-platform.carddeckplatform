@@ -1,6 +1,6 @@
 package communication.messages;
 
-import logic.host.Host;
+//import logic.host.Host;
 import client.controller.Controller;
 
 import com.google.gson.annotations.SerializedName;
@@ -19,7 +19,7 @@ public class AskInfoMessage extends Message  {
 	}
 	
 	@Override
-	public void serverAction(ServerMessageHandler serverMessageHandler, Host host,  ServerTask serverTask) {
+	public void serverAction() {
 		// TODO Auto-generated method stub
 		
 	}

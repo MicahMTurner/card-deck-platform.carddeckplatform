@@ -1,5 +1,5 @@
 package communication.messages;
-import logic.host.Host;
+//import logic.host.Host;
 import carddeckplatform.game.TableView;
 
 import communication.server.ServerMessageHandler;
@@ -13,7 +13,7 @@ public class GiveCardMessage extends Message{
 	public boolean isRevealed;
 	
 	@Override
-	public void serverAction(ServerMessageHandler serverMessageHandler, Host host, ServerTask serverTask) {
+	public void serverAction() {
 		// TODO send only to 'to'.
 		
 	}

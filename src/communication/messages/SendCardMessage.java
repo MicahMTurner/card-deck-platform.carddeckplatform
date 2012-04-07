@@ -2,7 +2,7 @@ package communication.messages;
 
 import logic.builtIn.defaultCards.Heart;
 import com.google.gson.annotations.SerializedName;
-import logic.host.Host;
+//import logic.host.Host;
 import carddeckplatform.game.TableView;
 
 import communication.server.ServerMessageHandler;
@@ -23,8 +23,7 @@ public class SendCardMessage extends Message {
 	public int cardId;
 	
 	@Override
-	public void serverAction(ServerMessageHandler serverMessageHandler,
-			Host host, ServerTask serverTask) {
+	public void serverAction() {
 		// TODO Auto-generated method stub
 	}
 	

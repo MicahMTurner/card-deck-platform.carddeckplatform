@@ -5,7 +5,7 @@ package carddeckplatform.game;
 
 import java.io.IOException;
 
-import logic.host.Host;
+//import logic.host.Host;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import communication.server.Server;
+import communication.server.TmpServer;
 
 public class CarddeckplatformActivity extends Activity {
 	private ViewFlipper mFlipper;
@@ -90,7 +91,7 @@ public class CarddeckplatformActivity extends Activity {
                 	
                 }).start(); 
 */                
-                //new Thread(new Host(new Game())).start();
+                new Thread(new TmpServer()).start();
                 startActivity(i);
                 
                 } 
