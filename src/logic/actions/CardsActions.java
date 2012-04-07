@@ -9,6 +9,6 @@ import logic.client.Deck;
 
 public interface CardsActions {
 	public void dealCards(Deck deck,ArrayList<Player> players); 
-	public void cardGiven(Card card);
-	public void giveCard();
+	public void cardGiven(Player player,Card card);
+	public void giveCard(Player from,Player to,Card card);
 }
