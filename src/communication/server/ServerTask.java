@@ -2,6 +2,8 @@ package communication.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -14,12 +16,12 @@ import communication.messages.Message;
 public class ServerTask implements Runnable {
 	private ServerMessageSender serverMessageSender = new ServerMessageSender();
 	private String id;
-	private BufferedReader in;
-	private PrintWriter out;
+	private ObjectInputStream in;
+	private ObjectOutputStream out;
 	
 	
 	
-	public ServerTask(String id, BufferedReader in, PrintWriter out){
+	public ServerTask(String id, ObjectInputStream in, ObjectOutputStream out){
 		this.id = id;
 		this.in = in;
 		this.out = out;
@@ -27,8 +29,12 @@ public class ServerTask implements Runnable {
 	
 	
 	public void send(Message msg){
-		String str = Sender.parseMessage(msg);
-		out.println(str);
+		try {
+			out.writeObject(msg);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public String getId(){
@@ -44,15 +50,17 @@ public class ServerTask implements Runnable {
 		while(true){
 			try {
 				// gets messages.
-				String str = in.readLine();
+				Message msg;
+				try {
+					msg = (Message)in.readObject();
+					serverMessageSender.sendToAllExcptMe(msg, id);
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
-				System.out.println("Message: " + str);
-				if(str==null)
-					return;
 				
-				Message msg = Receiver.unParseMessage(str);
-				//msg.serverAction(serverMessageHandler);
-				serverMessageSender.sendToAllExcptMe(msg, id);
+				
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

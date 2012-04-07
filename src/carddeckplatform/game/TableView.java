@@ -18,7 +18,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import carddeckplatform.game.GameStatus;
 import logic.client.Game;
-import client.controller.ClientController;
 import client.gui.entities.Card;
 import client.gui.entities.Draggable;
 import client.gui.entities.Table;

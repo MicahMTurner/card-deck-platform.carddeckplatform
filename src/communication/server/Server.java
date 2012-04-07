@@ -5,6 +5,8 @@ package communication.server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -24,8 +26,8 @@ public class Server {
 
 			System.out.println("connection request from from " + clientSocket.getRemoteSocketAddress().toString());
 			
-			final PrintWriter out=new PrintWriter(clientSocket.getOutputStream(),true);
-			BufferedReader in=new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			final ObjectOutputStream out=new ObjectOutputStream(clientSocket.getOutputStream());
+			ObjectInputStream in=new ObjectInputStream(clientSocket.getInputStream());
 			
 			ServerTask serverTask = new ServerTask(clientSocket.getRemoteSocketAddress().toString(),in, out);
 			ServerConnections.addConnection(serverTask);

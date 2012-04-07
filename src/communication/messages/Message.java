@@ -1,5 +1,7 @@
 package communication.messages;
 
+import java.io.Serializable;
+
 import logic.host.Host;
 import carddeckplatform.game.GameStatus;
 
@@ -10,7 +12,7 @@ import com.google.gson.annotations.SerializedName;
 import communication.server.ServerMessageHandler;
 import communication.server.ServerTask;
 
-public abstract class Message {
+public abstract class Message implements Serializable {
 	@SerializedName("messageType")
 	public String messageType;
 	
