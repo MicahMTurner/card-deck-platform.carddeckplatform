@@ -3,6 +3,8 @@ package war;
 
 import java.util.ArrayList;
 
+import client.controller.Controller;
+
 import logic.card.Card;
 import logic.client.Deck;
 import logic.client.Player;
@@ -71,9 +73,8 @@ public class WarLogic extends GameLogic implements CardsActions,PublicActions{
 	}
 
 	@Override
-	public Card putInPublic(Player player, Card card) {
-		// TODO Auto-generated method stub
-		return null;
+	public Card putInPublic(Player player, Card card) {		
+		Controller.outgoingAPI().endTurn();
 	}
 
 	@Override
