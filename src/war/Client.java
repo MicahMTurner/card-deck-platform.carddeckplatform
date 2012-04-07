@@ -21,7 +21,9 @@ public class Client extends GameLogic implements CardsActions,PublicActions{
 
 	@Override
 	public void myTurn() {		
-		;
+		if (client.getClient().cardsInHand()==0){
+			Controller.outgoingAPI().lose();
+		}
 		
 	}
 
@@ -42,47 +44,33 @@ public class Client extends GameLogic implements CardsActions,PublicActions{
 	@Override
 	public void showCard(Player player,Card card) {
 		
-		Controller.getCommands().revealCard(player,card);
+		//nothing to do when card is revealed
 	}
 
 	@Override
 	public void hideCard(Player player,Card card) {
-		Controller.getCommands().hideCard(player,card);
-		
+		//nothing to do when card i showed
 	}
 
 	@Override
 	public void putInPublic(Player player,Card card) {
-		Controller.getCommands().putInPublic(player,card,true);		
+		//nothing to do
 		
 	}
 
 	@Override
 	public void removeFromPublic(Player player,Card card) {
-		Controller.getCommands().removeFromPublic(player,card);
+		//nothing to do
 	}
 
 	@Override
-	public void placedInPublic(Player player,Card card) {
-		
-		
-	}
-
-	@Override
-	public void dealCards(Deck deck, ArrayList<Player> players) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void cardGiven(Player player,Card card) {
-		
-		
+	public void cardGiven(Player player,Card card) {		
+		client.getClient().addCard(card);
 	}
 
 	@Override
 	public void giveCard(Player from,Player to,Card card) {
-		Controller.getCommands().giveCard(from,to,card);
+		client.getClient().removeCard(card);
 		
 	}
 
