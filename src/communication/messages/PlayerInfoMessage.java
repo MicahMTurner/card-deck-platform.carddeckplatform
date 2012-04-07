@@ -1,9 +1,6 @@
 package communication.messages;
 
 import logic.host.Host;
-
-import client.controller.ClientController;
-
 import com.google.gson.annotations.SerializedName;
 
 import carddeckplatform.game.TableView;
@@ -34,7 +31,7 @@ public class PlayerInfoMessage extends Message {
 	}
 
 	@Override
-	public void clientAction(ClientController controller) {
+	public void clientAction() {
 		// TODO Auto-generated method stub
 		
 	}

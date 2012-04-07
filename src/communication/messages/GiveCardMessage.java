@@ -1,6 +1,4 @@
 package communication.messages;
-
-import client.controller.ClientController;
 import logic.host.Host;
 import carddeckplatform.game.TableView;
 
@@ -21,7 +19,7 @@ public class GiveCardMessage extends Message{
 	}
 
 	@Override
-	public void clientAction(ClientController controller) {
+	public void clientAction() {
 //		tableView.addDraggable(card,isRevealed,cardId);
 		
 	}
