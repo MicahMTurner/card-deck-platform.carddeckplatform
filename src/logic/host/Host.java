@@ -1,28 +1,19 @@
 package logic.host;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
+
 import java.util.ArrayList;
 
-import carddeckplatform.game.GameStatus;
-
-import communication.server.ConnObj;
 import communication.server.Server;
-import communication.server.ServerConnections;
-import communication.server.ServerTask;
 
 import logic.client.Game;
 import logic.client.Player;
-
 import war.War;
 import war.WarPrefs;
 
 public class Host implements Runnable{
 	private final int maxPlayers=4;
 	private ArrayList<Player> players;
-	private Game game=new War();
+	private Game game;
 	//synchronized private boolean startGameFlag=false;
 	int playersRdy=0;
 	

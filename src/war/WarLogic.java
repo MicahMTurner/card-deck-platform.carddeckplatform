@@ -22,7 +22,7 @@ public class WarLogic extends GameLogic implements CardsActions,PublicActions{
 
 	@Override
 	public String lost() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
@@ -43,37 +43,6 @@ public class WarLogic extends GameLogic implements CardsActions,PublicActions{
 		
 	}
 
-	@Override
-	public void cardGiven(Card card) {
-		 
-		
-	}
-
-	@Override
-	public void giveCard() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public void removeFromPublic(Card card) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void placedInPublic(Card card) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Card putInPublic(Player player) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public Card drawCard() {
@@ -87,14 +56,46 @@ public class WarLogic extends GameLogic implements CardsActions,PublicActions{
 		return null;
 	}
 
+
+
 	@Override
-	public void showCard() {
+	public void showCard(Player player, Card card) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void hideCard() {
+	public void hideCard(Player player, Card card) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Card putInPublic(Player player, Card card) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void removeFromPublic(Player player, Card card) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void placedInPublic(Player player, Card card) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cardGiven(Player player, Card card) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void giveCard(Player from, Player to, Card card) {
 		// TODO Auto-generated method stub
 		
 	}
