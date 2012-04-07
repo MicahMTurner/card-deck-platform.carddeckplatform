@@ -1,0 +1,42 @@
+package communication.messages;
+
+import logic.host.Host;
+
+import client.controller.ClientController;
+
+import com.google.gson.annotations.SerializedName;
+
+import carddeckplatform.game.TableView;
+
+import communication.server.ServerMessageHandler;
+import communication.server.ServerTask;
+
+public class PlayerInfoMessage extends Message {
+	
+	
+	
+	@SerializedName("username")
+	public String username;
+	
+	public PlayerInfoMessage(){
+		messageType = "PlayerInfoMessage";
+	}
+	
+	public PlayerInfoMessage(String username){
+		messageType = "PlayerInfoMessage";
+		this.username = username;
+	}
+	
+	@Override
+	public void serverAction(ServerMessageHandler serverMessageHandler, Host host, ServerTask serverTask) {
+		// TODO Auto-generated method stub
+		host.addPlayer(username, serverTask.getId());
+	}
+
+	@Override
+	public void clientAction(ClientController controller) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
