@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 import client.controller.Controller;
+import client.gui.entities.PublicPlace;
 
 import communication.link.Receiver;
 import communication.link.Sender;
@@ -72,6 +73,10 @@ public class GameActivity extends Activity {
         final TableView tv = (TableView)findViewById(R.id.TableView1);
         Controller.getController().setTv(tv);
         ServerConnection.getConnection().openConnection(Controller.getController());
+        tv.addDroppable(new PublicPlace(getApplicationContext(), 200,200));
+        
+        
+        
         
         Button btn = (Button) findViewById(R.id.restartButton);
         

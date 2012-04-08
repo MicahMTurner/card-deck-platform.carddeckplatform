@@ -20,6 +20,7 @@ import carddeckplatform.game.GameStatus;
 //import logic.client.Game;
 import client.gui.entities.Card;
 import client.gui.entities.Draggable;
+import client.gui.entities.Droppable;
 import client.gui.entities.Table;
 
 import android.content.Context;
@@ -85,6 +86,11 @@ public class TableView extends View {
 		invalidate(); 
 		//while
 	}
+	
+	public void addDroppable(Droppable droppable){
+		table.addDroppable(droppable);
+	}
+	
 	
 	public void sendInfo(){
 		serverConnection.getMessageSender().sendMessage(new PlayerInfoMessage(GameStatus.username));
@@ -169,7 +175,12 @@ public class TableView extends View {
 	    		case MotionEvent.ACTION_UP:
 	    			if(draggableInHand!=null){
 	    				draggableInHand.onRelease();
-	    				//table.getNearestDroppable(X, Y).onDrop(draggableInHand);
+	    				try {
+							table.getNearestDroppable(X, Y).onDrop(draggableInHand);
+						} catch (Exception e) {
+							// TODO: handle exception
+						}
+	    				
 	    				draggableInHand = null;
 	    			}
 	    			break;
