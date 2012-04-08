@@ -4,7 +4,7 @@ package logic.card;
 
 
 
-public abstract class Card implements Comparable<Card>{
+public abstract class CardLogic implements Comparable<CardLogic>{
 	protected String type;
 	protected int value;
 	protected int id;
@@ -19,7 +19,7 @@ public abstract class Card implements Comparable<Card>{
 	protected void setType(String type){}
 	protected abstract void getType(String type);
 	@Override
-	public int compareTo(Card oCard) {
+	public int compareTo(CardLogic oCard) {
 	 int answer=0;
 	 if (this.value<oCard.getValue()){
 	  answer=-1;

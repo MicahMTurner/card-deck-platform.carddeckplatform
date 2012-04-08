@@ -1,8 +1,8 @@
 package logic.builtIn.defaultCards;
 
-import logic.card.Card;
+import logic.card.CardLogic;
 
-public class Heart extends Card{
+public class Heart extends CardLogic{
 	private final String myType="heart";
 	
 	public Heart(int value) {		

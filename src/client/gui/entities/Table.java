@@ -31,7 +31,7 @@ public class Table {
 		draggables.add(draggable);
 	}
 	
-	public void addDropable(Droppable dropable){
+	public void addDroppable(Droppable dropable){
 		droppables.add(dropable);
 	}
 	

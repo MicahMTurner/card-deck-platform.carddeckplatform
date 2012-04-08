@@ -2,6 +2,8 @@ package client.gui.entities;
 
 import java.util.Random;
 
+import logic.card.CardLogic;
+
 import client.controller.Controller;
 
 import communication.link.ServerConnection;
@@ -152,6 +154,12 @@ public class Card extends Draggable {
 		// TODO Auto-generated method stub
 		isCarried = false;
 		carrier = "";
+	}
+
+	@Override
+	public CardLogic getCardLogic() {
+		// TODO Auto-generated method stub
+		return cardLogic;
 	}
 
 	

@@ -2,14 +2,14 @@ package logic.client;
 
 import java.util.ArrayList;
 
-import logic.card.Card;
+import logic.card.CardLogic;
 
 public class Player implements Comparable<Player>{
 	
 	private String username;
 	private String id;
 	private boolean ready;
-	private ArrayList<Card> hand;
+	private ArrayList<CardLogic> hand;
 	private boolean playing=true; //still playing or lost.
 	
 	/**
@@ -32,7 +32,7 @@ public class Player implements Comparable<Player>{
 		return playing;
 	}
 	
-	public ArrayList<Card> getHand() {
+	public ArrayList<CardLogic> getHand() {
 		return hand;
 	}
 	
@@ -53,7 +53,7 @@ public class Player implements Comparable<Player>{
 	public Player(String username, String id){
 		this.username = username;
 		this.id=id;
-		hand=new ArrayList<Card>();
+		hand=new ArrayList<CardLogic>();
 	}
 	
 	@Override
