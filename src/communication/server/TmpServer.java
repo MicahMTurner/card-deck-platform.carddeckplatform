@@ -23,7 +23,7 @@ public class TmpServer implements Runnable {
 				System.out.println("Listening to port " + GameStatus.hostPort + " Waiting for messages...");
 				
 				clientSocket = serverSocket.accept();
-	
+				
 				System.out.println("connection request from from " + clientSocket.getRemoteSocketAddress().toString());
 				
 				final ObjectOutputStream out=new ObjectOutputStream(clientSocket.getOutputStream());
@@ -33,7 +33,7 @@ public class TmpServer implements Runnable {
 				ServerConnections.addConnection(serverTask);
 				
 			    new Thread(serverTask).start();
-		    
+			    
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
