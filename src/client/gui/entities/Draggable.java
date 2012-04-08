@@ -1,10 +1,13 @@
 package client.gui.entities;
 
+import logic.card.CardLogic;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.View;
 
 public abstract class Draggable extends View {
+	protected CardLogic cardLogic;
+	
 	public Draggable(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
@@ -19,6 +22,7 @@ public abstract class Draggable extends View {
 	public abstract void motionAnimation();
 	public abstract void motionAnimation(String str);
 	public abstract void clearAnimation();
+	public abstract CardLogic getCardLogic();
 	
 	public abstract void setLocation(int x, int y);
 	

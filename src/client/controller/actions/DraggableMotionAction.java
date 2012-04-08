@@ -13,8 +13,7 @@ public class DraggableMotionAction extends Action {
 	private int x; 
 	private int y;
 	
-	public DraggableMotionAction(TableView gui, GameLogic logic, String username, int cardId, int x, int y) {
-		super(gui, logic);
+	public DraggableMotionAction( String username, int cardId, int x, int y) {
 		this.username = username;
 		this.cardId = cardId;
 		this.x = x;
