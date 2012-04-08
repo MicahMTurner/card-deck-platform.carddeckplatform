@@ -137,6 +137,8 @@ public class TableView extends SurfaceView {
     @Override
     protected void onDraw(Canvas canvas) {
     	canv = canvas;
+    	canv.drawColor(Color.TRANSPARENT);
+    	super.onDraw(canvas);//if you want another background color  
         canv.scale(1, 1);
         // draws the table.
         table.draw(canvas);
