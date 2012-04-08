@@ -91,8 +91,6 @@ public class Table {
 	public void draw(Canvas canvas){
 		Matrix matrix = new Matrix();
 		matrix.postScale((float) xDimention, (float) yDimention);
-		
-		
 		canvas.drawBitmap(android.graphics.Bitmap.createScaledBitmap(img, xDimention, yDimention,true),(float)0,(float)0, null);
 		for(Droppable d : droppables){
 			d.draw(canvas);

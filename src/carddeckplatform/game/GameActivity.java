@@ -6,6 +6,7 @@ import java.net.Socket;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,6 +60,9 @@ public class GameActivity extends Activity {
         // draw the view
         setContentView(R.layout.game);
         tableview = (TableView)findViewById(R.id.TableView1);
+     // necessary to transparent background!!!!
+        tableview.setZOrderOnTop(true);    
+        tableview.getHolder().setFormat(PixelFormat.TRANSPARENT);
         Controller.getController().setTv(tableview);
         ServerConnection.getConnection().openConnection(Controller.getController());
         
@@ -120,7 +124,7 @@ public class GameActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu){
     	menu.add(0, Menu.FIRST, Menu.NONE, "Restart").setIcon(R.drawable.restart);
     	menu.add(0, Menu.FIRST+1, Menu.NONE, "Ranking").setIcon(R.drawable.rank);
-    	menu.add(0, Menu.FIRST+2, Menu.NONE, "Exit").setIcon(R.drawable.exit);
+    	menu.add(0, Menu.FIRST+2, Menu.NONE, "Main Menu").setIcon(R.drawable.exit);
     	return true;
     }
     @Override
@@ -135,7 +139,8 @@ public class GameActivity extends Activity {
     			Toast.makeText(this, "Ranking", 2000).show();
     			return true;
     		case Menu.FIRST+2:
-    			Toast.makeText(this, "Exit", 2000).show();
+    			Toast.makeText(this, "Main Menu", 2000).show();
+    			finish();
     			return true;
     		default:
     			Toast.makeText(this, "NOthing", 2000).show();
