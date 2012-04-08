@@ -12,12 +12,12 @@ import java.util.Observer;
 import android.os.AsyncTask;
 import android.os.Handler;
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 
 import communication.messages.CardMotionMessage;
 import communication.messages.Message;
 import communication.messages.MessageContainer;
-import communication.messages.MessageDictionary;
+//import communication.messages.MessageDictionary;
 import communication.messages.SampleMessage;
 
 public class TcpReceiver extends Receiver{
@@ -37,11 +37,11 @@ public class TcpReceiver extends Receiver{
 	
 	private class Notifier extends AsyncTask<Integer, Message, Long> {
 		   
-		   public Message unParseMessage(String str){
-				Gson gson = new Gson();
-				MessageContainer mc = gson.fromJson(str , MessageContainer.class);
-				return MessageDictionary.getMessage(mc.className, mc.classJson);
-		   }
+//		   public Message unParseMessage(String str){
+//				Gson gson = new Gson();
+//				MessageContainer mc = gson.fromJson(str , MessageContainer.class);
+//				return MessageDictionary.getMessage(mc.className, mc.classJson);
+//		   }
 		   
 			@Override
 			protected Long doInBackground(Integer... arg0) {

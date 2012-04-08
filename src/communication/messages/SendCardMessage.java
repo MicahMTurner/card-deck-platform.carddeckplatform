@@ -1,7 +1,6 @@
 package communication.messages;
 
 import logic.builtIn.defaultCards.Heart;
-import com.google.gson.annotations.SerializedName;
 //import logic.host.Host;
 import carddeckplatform.game.TableView;
 
@@ -19,7 +18,6 @@ public class SendCardMessage extends Message {
 		this.cardId = cardId;
 	}
 	
-	@SerializedName("cardId")
 	public int cardId;
 	
 	@Override

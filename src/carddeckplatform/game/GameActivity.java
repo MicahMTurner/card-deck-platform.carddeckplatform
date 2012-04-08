@@ -13,7 +13,7 @@ import communication.link.TcpReceiver;
 import communication.link.TcpSender;
 import communication.messages.CardMotionMessage;
 import communication.messages.Message;
-import communication.messages.MessageDictionary;
+//import communication.messages.MessageDictionary;
 import communication.messages.RegistrationMessage;
 import communication.messages.SampleMessage;
 

@@ -1,7 +1,7 @@
 package communication.messages;
 
 //import logic.host.Host;
-import com.google.gson.annotations.SerializedName;
+//import com.google.gson.annotations.SerializedName;
 
 import carddeckplatform.game.TableView;
 
@@ -11,8 +11,6 @@ import communication.server.ServerTask;
 public class PlayerInfoMessage extends Message {
 	
 	
-	
-	@SerializedName("username")
 	public String username;
 	
 	public PlayerInfoMessage(){

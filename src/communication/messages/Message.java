@@ -6,12 +6,10 @@ import java.io.Serializable;
 import carddeckplatform.game.GameStatus;
 
 import carddeckplatform.game.TableView;
-import com.google.gson.annotations.SerializedName;
 import communication.server.ServerMessageHandler;
 import communication.server.ServerTask;
 
 public abstract class Message implements Serializable {
-	@SerializedName("messageType")
 	public String messageType;
 	
 	public Object sender=GameStatus.localIp;
