@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 
 import communication.messages.Message;
 

@@ -3,7 +3,7 @@ package communication.messages;
 //import logic.host.Host;
 import carddeckplatform.game.TableView;
 
-import com.google.gson.annotations.SerializedName;
+//import com.google.gson.annotations.SerializedName;
 import communication.client.ClientMessageHandler;
 import communication.server.ServerMessageHandler;
 import communication.server.ServerTask;
@@ -14,7 +14,6 @@ public class SampleMessage extends Message {
 		messageType = "SampleMessage";
 	}
 	
-	@SerializedName("name")
 	public String name;
 
 	@Override

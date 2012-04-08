@@ -4,7 +4,7 @@ package communication.messages;
 import carddeckplatform.game.TableView;
 import client.controller.Controller;
 
-import com.google.gson.annotations.SerializedName;
+//import com.google.gson.annotations.SerializedName;
 import communication.client.ClientMessageHandler;
 import communication.server.ServerMessageHandler;
 import communication.server.ServerTask;
@@ -23,7 +23,6 @@ public class EndCardMotionMessage extends Message {
 	
 	}
 	
-	@SerializedName("cardId")
 	public int cardId;
 
 	@Override

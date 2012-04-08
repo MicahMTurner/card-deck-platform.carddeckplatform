@@ -3,7 +3,7 @@ package communication.messages;
 //import logic.host.Host;
 import client.controller.Controller;
 
-import com.google.gson.annotations.SerializedName;
+//import com.google.gson.annotations.SerializedName;
 
 import carddeckplatform.game.TableView;
 
