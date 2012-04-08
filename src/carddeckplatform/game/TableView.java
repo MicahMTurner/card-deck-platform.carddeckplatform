@@ -39,7 +39,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.Toast;
 import carddeckplatform.game.R;
 
-public class TableView extends View {
+public class TableView extends SurfaceView {
 	private ServerConnection serverConnection;
 	private Table table;
 	private Context cont; 
@@ -137,7 +137,6 @@ public class TableView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
     	canv = canvas;
-    	canv.drawColor(0xFFCCCCCC);     //if you want another background color  
         canv.scale(1, 1);
         // draws the table.
         table.draw(canvas);
