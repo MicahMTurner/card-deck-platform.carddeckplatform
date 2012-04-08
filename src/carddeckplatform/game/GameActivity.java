@@ -69,9 +69,27 @@ public class GameActivity extends Activity {
         
         // draw the view
         setContentView(R.layout.game);
-        TableView tv = (TableView)findViewById(R.id.TableView1);
+        final TableView tv = (TableView)findViewById(R.id.TableView1);
         Controller.getController().setTv(tv);
         ServerConnection.getConnection().openConnection(Controller.getController());
+        
+        Button btn = (Button) findViewById(R.id.restartButton);
+        
+        btn.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				
+				try {
+					tv.moveDraggable(0, 100, 100);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				
+			}
+        	
+        });
 //        SampleObserver so = new SampleObserver();
 //        so.setCntxt(getBaseContext());
 //        Receiver rc = new TcpReceiver(9999);
