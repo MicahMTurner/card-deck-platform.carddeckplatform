@@ -1,12 +1,12 @@
 package logic.actions;
 
 
-import logic.card.Card;
+import logic.card.CardLogic;
 import logic.client.Player;
 
 public interface PublicActions {
-	public void putInPublic(Player player,Card card);
-	public void removeFromPublic(Player player,Card card);
-	public void placedInPublic(Player player,Card card);
+	public CardLogic putInPublic(Player player,CardLogic card);
+	public void removeFromPublic(Player player,CardLogic card);
+	public void placedInPublic(Player player,CardLogic card);
 	
 }

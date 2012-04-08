@@ -6,9 +6,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 import communication.messages.Message;
 
 import android.database.Observable;
-import logic.card.Card;
+import logic.card.CardLogic;
 import logic.client.GameLogic;
 import logic.client.Player;
+import client.controller.actions.Action;
 import client.controller.actions.DraggableMotionAction;
 import client.controller.actions.EndDraggableMotionAction;
 import client.controller.actions.GiveCardAction;
@@ -105,39 +106,46 @@ public class Controller implements Runnable, Observer {
 		
 		private OutgoingAPI(){}
 		
-		public void endTurn(){
-			commandsQueue.add(new OutgoingCommand(new TurnAction(gui,logic)));
+		public void outgoingCommand(Action action){
+			action.setGui(gui);
+			action.setLogic(logic);
+			//commandsQueue.add(new OutgoingCommand(action));
+			new OutgoingCommand(action).execute();
 		}
 		
-		public void putInPublic(Player player, Card card, boolean isRevealed) {		
-
-			commandsQueue.add(new OutgoingCommand(new PutInPublicAction(gui, logic,player,card,isRevealed)));			
+		public void endTurn(){
+			commandsQueue.add(new OutgoingCommand(new TurnAction()));
 		}
-		public void removeFromPublic(Player player, Card card) {
-			commandsQueue.add(new OutgoingCommand(new RemoveFromPublicAction(gui, logic,player,card)));			
+		
+		public void putInPublic(Player player, CardLogic card, boolean isRevealed) {		
+
+			commandsQueue.add(new OutgoingCommand(new PutInPublicAction(player,card,isRevealed)));			
+		}
+		public void removeFromPublic(Player player, CardLogic card) {
+			commandsQueue.add(new OutgoingCommand(new RemoveFromPublicAction(player,card)));			
 		}		
 
-		public void revealCard(Player player, Card card){
-			commandsQueue.add(new OutgoingCommand(new RevealCardAction(gui, logic,player,card)));
+		public void revealCard(Player player, CardLogic card){
+			commandsQueue.add(new OutgoingCommand(new RevealCardAction(player,card)));
 		}
 		
-		public void hideCard(Player player, Card card) {
-			commandsQueue.add(new OutgoingCommand(new HideCardAction(gui, logic,player,card)));
+		public void hideCard(Player player, CardLogic card) {
+			commandsQueue.add(new OutgoingCommand(new HideCardAction(player,card)));
 			
 		}
 
-		public void giveCard(Player from, Player to, Card card) {
-			commandsQueue.add(new OutgoingCommand(new GiveCardAction(gui, logic,from,to,card)));			
+		public void giveCard(Player from, Player to, CardLogic card) {
+			commandsQueue.add(new OutgoingCommand(new GiveCardAction(from,to,card)));			
 		}
 		
 		public void cardMotion(String username, int cardId, int x, int y){
 			//commandsQueue.add(new OutgoingCommand(new DraggableMotionAction(gui, logic, username, cardId, x, y)));
-			new OutgoingCommand(new DraggableMotionAction(gui, logic, username, cardId, x, y)).execute();
+			new OutgoingCommand(new DraggableMotionAction(username, cardId, x, y)).execute();
 		}
 		
 		public void endCardMotion(int cardId){
 			//commandsQueue.add(new OutgoingCommand(new EndDraggableMotionAction(gui, logic, cardId)));
-			new OutgoingCommand(new EndDraggableMotionAction(gui, logic, cardId)).execute();
+			new OutgoingCommand(new EndDraggableMotionAction( cardId)).execute();
 		}
 		
 	}
@@ -154,41 +162,43 @@ public class Controller implements Runnable, Observer {
 		private IncomingAPI(){}
 		
 		public void myTurn(){
-			commandsQueue.add(new IncomingCommand(new TurnAction(gui,logic)));
+			commandsQueue.add(new IncomingCommand(new TurnAction()));
 		}
 		
-		public void putInPublic(Player player, Card card, boolean isRevealed) {		
+		public void putInPublic(Player player, CardLogic card, boolean isRevealed) {		
 
-			commandsQueue.add(new IncomingCommand(new PutInPublicAction(gui, logic,player,card,isRevealed)));			
+			commandsQueue.add(new IncomingCommand(new PutInPublicAction(player,card,isRevealed)));			
 		}
-		public void removeFromPublic(Player player, Card card) {
-			commandsQueue.add(new IncomingCommand(new RemoveFromPublicAction(gui, logic,player,card)));			
+		public void removeFromPublic(Player player, CardLogic card) {
+			commandsQueue.add(new IncomingCommand(new RemoveFromPublicAction(player,card)));			
 		}		
 
-		public void revealCard(Player player, Card card){
-			commandsQueue.add(new IncomingCommand(new RevealCardAction(gui, logic,player,card)));
+		public void revealCard(Player player, CardLogic card){
+			commandsQueue.add(new IncomingCommand(new RevealCardAction(player,card)));
 		}
 		
-		public void hideCard(Player player, Card card) {
-			commandsQueue.add(new IncomingCommand(new HideCardAction(gui, logic,player,card)));
+		public void hideCard(Player player, CardLogic card) {
+			commandsQueue.add(new IncomingCommand(new HideCardAction(player,card)));
 			
 		}
 
-		public void giveCard(Player from, Player to, Card card) {
-			commandsQueue.add(new IncomingCommand(new GiveCardAction(gui, logic,from,to,card)));			
+		public void giveCard(Player from, Player to, CardLogic card) {
+			commandsQueue.add(new IncomingCommand(new GiveCardAction(from,to,card)));			
 		}
 		
 		public void cardMotion(String username, int cardId, int x, int y){
 			//commandsQueue.add(new IncomingCommand(new DraggableMotionAction(gui, logic, username, cardId, x, y)));
-			new IncomingCommand(new DraggableMotionAction(gui, logic, username, cardId, x, y)).execute();
+			new IncomingCommand(new DraggableMotionAction(username, cardId, x, y)).execute();
 		}
 		
 		public void endCardMotion(int cardId){
 			//commandsQueue.add(new IncomingCommand(new EndDraggableMotionAction(gui, logic, cardId)));
-			new IncomingCommand(new EndDraggableMotionAction(gui, logic, cardId)).execute();
+			new IncomingCommand(new EndDraggableMotionAction(cardId)).execute();
 		}
 		
 	}
+	//--communication with GUI--//
+ 
 	
 	//---Actions on Controller---//
 	

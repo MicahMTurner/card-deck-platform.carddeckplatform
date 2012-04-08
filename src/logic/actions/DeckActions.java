@@ -1,10 +1,10 @@
 package logic.actions;
 
-import logic.card.Card;
+import logic.card.CardLogic;
 
 
 
 public interface DeckActions {
-	public Card drawCard();
-	public Card gotCardFromDeck();
+	public CardLogic drawCard();
+	public CardLogic gotCardFromDeck();
 }

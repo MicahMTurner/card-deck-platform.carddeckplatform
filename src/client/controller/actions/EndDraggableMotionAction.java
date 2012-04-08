@@ -9,8 +9,7 @@ import carddeckplatform.game.TableView;
 public class EndDraggableMotionAction extends Action  {
 
 	private int cardId;
-	public EndDraggableMotionAction(TableView gui, GameLogic logic, int cardId) {
-		super(gui, logic);
+	public EndDraggableMotionAction( int cardId) {
 		this.cardId = cardId;
 		// TODO Auto-generated constructor stub
 	}

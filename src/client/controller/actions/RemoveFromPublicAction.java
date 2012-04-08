@@ -1,16 +1,15 @@
 package client.controller.actions;
 
-import logic.card.Card;
+import logic.card.CardLogic;
 import logic.client.GameLogic;
 import logic.client.Player;
 import carddeckplatform.game.TableView;
 
 public class RemoveFromPublicAction extends Action{
 	private Player player;
-	private Card card;
+	private CardLogic card;
 	
-	public RemoveFromPublicAction(TableView gui, GameLogic logic, Player player, Card card) {
-		super(gui, logic);
+	public RemoveFromPublicAction(Player player, CardLogic card) {
 		this.player=player;
 		this.card=card;
 	}

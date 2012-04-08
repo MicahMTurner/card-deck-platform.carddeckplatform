@@ -4,14 +4,14 @@ package logic.client;
 import java.util.Random;
 import java.util.Stack;
 
-import logic.card.Card;
+import logic.card.CardLogic;
 
 public abstract class Deck {
 	//change to queue?
-	public Stack<Card> cards;
+	public Stack<CardLogic> cards;
 	
 	
-	public Stack<Card> getCards() {
+	public Stack<CardLogic> getCards() {
 		return cards;
 	}
 		
@@ -37,12 +37,12 @@ public abstract class Deck {
 		return cards.size();
 	}
 	private void swap(int i, int randomPlace) {
-		Card temp=cards.get(i);
+		CardLogic temp=cards.get(i);
 		cards.add(i, cards.get(randomPlace));
 		cards.add(randomPlace,temp);		
 	}
 
-	public Card Draw() {
+	public CardLogic Draw() {
 		return cards.pop();
 		
 	}
