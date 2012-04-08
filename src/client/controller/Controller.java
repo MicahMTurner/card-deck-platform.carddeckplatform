@@ -131,11 +131,13 @@ public class Controller implements Runnable, Observer {
 		}
 		
 		public void cardMotion(String username, int cardId, int x, int y){
-			commandsQueue.add(new OutgoingCommand(new DraggableMotionAction(gui, logic, username, cardId, x, y)));
+			//commandsQueue.add(new OutgoingCommand(new DraggableMotionAction(gui, logic, username, cardId, x, y)));
+			new OutgoingCommand(new DraggableMotionAction(gui, logic, username, cardId, x, y)).execute();
 		}
 		
 		public void endCardMotion(int cardId){
-			commandsQueue.add(new OutgoingCommand(new EndDraggableMotionAction(gui, logic, cardId)));
+			//commandsQueue.add(new OutgoingCommand(new EndDraggableMotionAction(gui, logic, cardId)));
+			new OutgoingCommand(new EndDraggableMotionAction(gui, logic, cardId)).execute();
 		}
 		
 	}
@@ -177,11 +179,13 @@ public class Controller implements Runnable, Observer {
 		}
 		
 		public void cardMotion(String username, int cardId, int x, int y){
-			commandsQueue.add(new IncomingCommand(new DraggableMotionAction(gui, logic, username, cardId, x, y)));
+			//commandsQueue.add(new IncomingCommand(new DraggableMotionAction(gui, logic, username, cardId, x, y)));
+			new IncomingCommand(new DraggableMotionAction(gui, logic, username, cardId, x, y)).execute();
 		}
 		
 		public void endCardMotion(int cardId){
-			commandsQueue.add(new IncomingCommand(new EndDraggableMotionAction(gui, logic, cardId)));
+			//commandsQueue.add(new IncomingCommand(new EndDraggableMotionAction(gui, logic, cardId)));
+			new IncomingCommand(new EndDraggableMotionAction(gui, logic, cardId)).execute();
 		}
 		
 	}
