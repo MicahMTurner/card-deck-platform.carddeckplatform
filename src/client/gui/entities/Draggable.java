@@ -1,20 +1,26 @@
 package client.gui.entities;
 
+import android.content.Context;
 import android.graphics.Canvas;
+import android.view.View;
 
-public interface Draggable {
-	public int sensitivityRadius();
-	public void onClick();
-	public void onDrag();
-	public void onRelease();
-	public int getId();
-	public int getX();
-	public int getY();
-	public void motionAnimation();
-	public void motionAnimation(String str);
-	public void clearAnimation();
+public abstract class Draggable extends View {
+	public Draggable(Context context) {
+		super(context);
+		// TODO Auto-generated constructor stub
+	}
+	public abstract int sensitivityRadius();
+	public abstract void onClick();
+	public abstract void onDrag();
+	public abstract void onRelease();
+	public abstract int getId();
+	public abstract int getX();
+	public abstract int getY();
+	public abstract void motionAnimation();
+	public abstract void motionAnimation(String str);
+	public abstract void clearAnimation();
 	
-	public void setLocation(int x, int y);
+	public abstract void setLocation(int x, int y);
 	
-	public void draw(Canvas canvas);
+	public abstract void draw(Canvas canvas);
 }

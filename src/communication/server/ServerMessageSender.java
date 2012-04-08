@@ -10,9 +10,8 @@ public class ServerMessageSender {
 	 * @param msg
 	 */
 	public void sendToAll(Message msg){
-		String str = Sender.parseMessage(msg);
-		for(ConnObj co : ServerConnections.getAllConections()){
-			co.out.println(str);
+		for(ServerTask serverTask : ServerConnections.getAllConections()){
+			serverTask.send(msg);
 		}
 	}
 	
@@ -22,10 +21,9 @@ public class ServerMessageSender {
 	 * @param id
 	 */
 	public void sendToAllExcptMe(Message msg , String id){
-		String str = Sender.parseMessage(msg);
-		for(ConnObj co : ServerConnections.getAllConections()){
-			if(!co.id.equals(id))
-				co.out.println(str);
+		for(ServerTask serverTask : ServerConnections.getAllConections()){
+			if(!serverTask.getId().equals(id))
+				serverTask.send(msg);
 		}
 	}
 	
@@ -35,10 +33,9 @@ public class ServerMessageSender {
 	 * @param id
 	 */
 	public void sendTo(Message msg, String id){
-		String str = Sender.parseMessage(msg);
-		for(ConnObj co : ServerConnections.getAllConections()){
-			if(co.id.equals(id))
-				co.out.println(str);
+		for(ServerTask serverTask : ServerConnections.getAllConections()){
+			if(serverTask.getId().equals(id))
+				serverTask.send(msg);
 		}
 	}
 	

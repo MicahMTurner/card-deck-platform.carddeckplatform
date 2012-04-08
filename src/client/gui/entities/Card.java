@@ -2,6 +2,8 @@ package client.gui.entities;
 
 import java.util.Random;
 
+import client.controller.Controller;
+
 import communication.link.ServerConnection;
 import communication.messages.CardMotionMessage;
 import communication.messages.EndCardMotionMessage;
@@ -16,7 +18,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 
-public class Card implements Draggable {
+public class Card extends Draggable {
 	private Bitmap img; // the image of the ball
 	private int coordX = 0; // the x coordinate at the canvas
 	private int coordY = 0; // the y coordinate at the canvas
@@ -31,6 +33,7 @@ public class Card implements Draggable {
 	private ServerConnection serverConnection;
 
 	public Card(Context context, int drawable, int x, int y, ServerConnection serverConnection){
+		super(context);
 		this.context = context;
 		this.serverConnection = serverConnection;
 		BitmapFactory.Options opts = new BitmapFactory.Options();
@@ -43,7 +46,7 @@ public class Card implements Draggable {
 	}
 	
 	public Card(Context context, int drawable, Droppable dropable){
-		
+		super(context);
 	}
 	
 	public void randomizeAngle(){
@@ -70,14 +73,15 @@ public class Card implements Draggable {
 
 	public void onDrag() {
 		// TODO Auto-generated method stub
-		serverConnection.getMessageSender().sendMessage(new CardMotionMessage(GameStatus.username,getId(), coordX, coordY));
+		//serverConnection.getMessageSender().sendMessage(new CardMotionMessage(GameStatus.username,getId(), coordX, coordY));
+		Controller.getController().outgoingAPI().cardMotion(GameStatus.username,getId(), coordX, coordY);
 	}
 
 
 	public void onRelease() {
 		// TODO Auto-generated method stub
-		serverConnection.getMessageSender().sendMessage(new CardMotionMessage(GameStatus.username,getId(), coordX, coordY));
-		serverConnection.getMessageSender().sendMessage(new EndCardMotionMessage(getId()));
+		Controller.getController().outgoingAPI().cardMotion(GameStatus.username,getId(), coordX, coordY);
+		Controller.getController().outgoingAPI().endCardMotion(getId());
 		
 	}
 

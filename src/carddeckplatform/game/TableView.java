@@ -7,6 +7,7 @@ import communication.entities.TcpClient;
 import communication.link.ServerConnection;
 import communication.link.TcpSender;
 import communication.messages.Message;
+import communication.messages.PlayerInfoMessage;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -16,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import carddeckplatform.game.GameStatus;
+//import logic.client.Game;
 import client.gui.entities.Card;
 import client.gui.entities.Draggable;
 import client.gui.entities.Table;
@@ -31,10 +33,13 @@ import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.view.MotionEvent;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.TranslateAnimation;
 import android.widget.Toast;
 import carddeckplatform.game.R;
 
-public class TableView extends View  implements Observer {
+public class TableView extends View {
 	private ServerConnection serverConnection;
 	private Table table;
 	private Context cont; 
@@ -42,10 +47,15 @@ public class TableView extends View  implements Observer {
 	private Draggable draggableInHand=null;
 	private int xDimention;
 	private int yDimention;
+	//private Game game;
 //	private Logic logic;
 	
 //	public Logic getLogic(){
 		
+//	}
+	
+//	public Game getGame(){
+//		return game;
 //	}
 	
 	public void draggableMotion(String username, int id , int x , int y){
@@ -54,11 +64,32 @@ public class TableView extends View  implements Observer {
 		draggable.setLocation(x, y);
 		invalidate(); 
 	}
+	
 	public void endDraggableMotion(int id){
 		Draggable draggable = table.getDraggableById(id, true);
 		draggable.clearAnimation();
 		invalidate(); 
 	}
+	
+	public void moveDraggable(int id, int newX, int newY){
+		Draggable draggable = table.getDraggableById(id, true);
+		int x = draggable.getX();
+		int y = draggable.getY();
+		
+		Animation mAnimationTranslate = new TranslateAnimation(x, newX, y, newY);
+	    mAnimationTranslate.setDuration(5000);
+	    mAnimationTranslate.setFillAfter(true);
+	    
+		draggable.startAnimation(mAnimationTranslate);
+		draggable.setLocation(newX, newY);
+		invalidate(); 
+		//while
+	}
+	
+	public void sendInfo(){
+		serverConnection.getMessageSender().sendMessage(new PlayerInfoMessage(GameStatus.username));
+	}
+	
 	public TableView(Context context,AttributeSet attrs) {
 		// TODO Auto-generated constructor stub
 		super(context, attrs);
@@ -70,12 +101,13 @@ public class TableView extends View  implements Observer {
 		table = new Table(context);
 		table.setTableImage(R.drawable.boardtest);
 		// connects with the server.
-		serverConnection = new ServerConnection(new TcpClient(GameStatus.localIp , "jojo"), new TcpSender(GameStatus.hostIp , GameStatus.hostPort), this);
-	    serverConnection.openConnection();
+//		serverConnection = new ServerConnection(new TcpClient(GameStatus.localIp , "jojo"), new TcpSender(GameStatus.hostIp , GameStatus.hostPort), this);
+//	    serverConnection.openConnection();
 		
 	    table.addDraggable(new Card(context,R.drawable.ca,50,50,serverConnection));
 	    setFocusable(true); //necessary for getting the touch events.
 	}
+	
 //	public TableView(Context context, int xDimention, int yDimention) {
 //		super(context);
 //		this.xDimention = getMeasuredWidth();
@@ -94,16 +126,16 @@ public class TableView extends View  implements Observer {
 //	    
 //	}
 	@Override
-	  protected void onMeasure(int widthMeasureSpec,
+	protected void onMeasure(int widthMeasureSpec,
 	     int heightMeasureSpec) {
 	    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	    setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight());
 	    table.setxDimention(getMeasuredWidth());
 	    table.setyDimention(getMeasuredHeight());
-	    
 	}
 	// the method that draws the balls
-    @Override protected void onDraw(Canvas canvas) {
+    @Override
+    protected void onDraw(Canvas canvas) {
     	canv = canvas;
     	canv.drawColor(0xFFCCCCCC);     //if you want another background color  
         canv.scale(1, 1);
@@ -150,15 +182,6 @@ public class TableView extends View  implements Observer {
     	
 		return true;
     }
-    
-	
-	
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
-		Message message = (Message) arg1;
-		message.clientAction(this);
-	}
 
 	public int getxDimention() {
 		return xDimention;

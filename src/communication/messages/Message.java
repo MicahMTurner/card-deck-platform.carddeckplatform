@@ -1,19 +1,21 @@
 package communication.messages;
 
+import java.io.Serializable;
+
+//import logic.host.Host;
 import carddeckplatform.game.GameStatus;
 
 import carddeckplatform.game.TableView;
-import com.google.gson.annotations.SerializedName;
 import communication.server.ServerMessageHandler;
+import communication.server.ServerTask;
 
-public abstract class Message {
-	@SerializedName("messageType")
+public abstract class Message implements Serializable {
 	public String messageType;
 	
 	public Object sender=GameStatus.localIp;
 	
-	public abstract void serverAction(ServerMessageHandler serverMessageHandler);
+	public abstract void serverAction();
 	
-	public abstract void clientAction(TableView tableView);
+	public abstract void clientAction();
 
 }

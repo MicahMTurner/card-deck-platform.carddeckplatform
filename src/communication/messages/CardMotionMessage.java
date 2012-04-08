@@ -1,48 +1,49 @@
 package communication.messages;
 
+//import logic.host.Host;
 import carddeckplatform.game.TableView;
+import client.controller.Controller;
 
-import com.google.gson.annotations.SerializedName;
+//import com.google.gson.annotations.SerializedName;
 import communication.client.ClientMessageHandler;
 import communication.server.ServerMessageHandler;
+import communication.server.ServerTask;
 
 public class CardMotionMessage extends Message {
 	public CardMotionMessage(){
 		messageType = "CardMotionMessage";
 	}
 	
-	public CardMotionMessage(String username , int cardId , int X , int Y){
+	public CardMotionMessage(String username , int cardId , int x , int y){
 		messageType = "CardMotionMessage";
 		
 		this.username = username;
 		this.cardId = cardId;
-		this.X = X;
-		this.Y = Y;
+		this.x = x;
+		this.y = y;
 		
 	}
 	
-	@SerializedName("username")
+
 	public String username;
 	
-	@SerializedName("cardId")
 	public int cardId;
 	
-	@SerializedName("X")
-	public int X;
+	public int x;
 	
-	@SerializedName("Y")
-	public int Y;
+	public int y;
 
 	@Override
-	public void serverAction(ServerMessageHandler serverMessageHandler) {
+	public void serverAction() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void clientAction(TableView tableView) {
+	public void clientAction() {
 		// TODO Auto-generated method stub
-		tableView.draggableMotion(username, cardId, X, Y);
+		//controller.draggableMotion(username, cardId, X, Y);
+		Controller.getController().incomingAPI().cardMotion(username, cardId, x, y);
 	}
 	
 }
