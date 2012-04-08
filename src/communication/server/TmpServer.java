@@ -16,11 +16,10 @@ import carddeckplatform.game.GameStatus;
 public class TmpServer implements Runnable {
 	public void run(){
 		try {	
+			ServerSocket serverSocket = new ServerSocket(GameStatus.hostPort);
+			Socket clientSocket;
 			while(true){
-				ServerSocket serverSocket = new ServerSocket(GameStatus.hostPort);
-			
 				
-				Socket clientSocket;
 				System.out.println("Listening to port " + GameStatus.hostPort + " Waiting for messages...");
 				
 				clientSocket = serverSocket.accept();
