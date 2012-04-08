@@ -5,6 +5,8 @@ package carddeckplatform.game;
 
 import java.io.IOException;
 
+//import logic.host.Host;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import communication.server.Server;
+import communication.server.TmpServer;
 
 public class CarddeckplatformActivity extends Activity {
 	private ViewFlipper mFlipper;
@@ -72,7 +75,7 @@ public class CarddeckplatformActivity extends Activity {
             	GameStatus.hostIp = "127.0.0.1";
             	GameStatus.username = username.getText().toString();
                 Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
-                new Thread(new Runnable(){
+/*                new Thread(new Runnable(){
 
 					@Override
 					public void run() {
@@ -86,14 +89,11 @@ public class CarddeckplatformActivity extends Activity {
 						}
 					}
                 	
-                }).start();
-                try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+                }).start(); 
+*/                
+                new Thread(new TmpServer()).start();
                 startActivity(i);
+                
                 } 
              });
         
@@ -104,13 +104,19 @@ public class CarddeckplatformActivity extends Activity {
             	final Dialog dialog = new Dialog(CarddeckplatformActivity.this);
             	dialog.setContentView(R.layout.getipdialog);
             	dialog.setTitle("Host Ip Dialog");
-            	TextView ip = (TextView) dialog.findViewById(R.id.getIpText);
+            	final TextView ip = (TextView) dialog.findViewById(R.id.getIpText);
             	Button connect= (Button) dialog.findViewById(R.id.connectButton);
             	connect.setOnClickListener(new OnClickListener() {
 					
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
+						
+						GameStatus.isServer = false;
+		            	GameStatus.hostIp = ip.getText().toString();
+		            	GameStatus.username = username.getText().toString();
+		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
+		                startActivity(i);
 						System.out.println("finish");
 						dialog.dismiss();
 					}
