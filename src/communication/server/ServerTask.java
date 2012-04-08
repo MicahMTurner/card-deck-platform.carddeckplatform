@@ -46,7 +46,7 @@ public class ServerTask implements Runnable {
 		// TODO Auto-generated method stub
 		
 		// sends AskInfoMessage to the player in order to get its name and etc...
-		send(new AskInfoMessage());
+		//send(new AskInfoMessage());
 		while(true){
 			try {
 				// gets messages.
