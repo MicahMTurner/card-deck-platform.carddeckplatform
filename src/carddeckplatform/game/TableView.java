@@ -33,6 +33,9 @@ import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.view.MotionEvent;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.TranslateAnimation;
 import android.widget.Toast;
 import carddeckplatform.game.R;
 
@@ -66,6 +69,21 @@ public class TableView extends View {
 		Draggable draggable = table.getDraggableById(id, true);
 		draggable.clearAnimation();
 		invalidate(); 
+	}
+	
+	public void moveDraggable(int id, int newX, int newY){
+		Draggable draggable = table.getDraggableById(id, true);
+		int x = draggable.getX();
+		int y = draggable.getY();
+		
+		Animation mAnimationTranslate = new TranslateAnimation(x, newX, y, newY);
+	    mAnimationTranslate.setDuration(5000);
+	    mAnimationTranslate.setFillAfter(true);
+	    
+		draggable.startAnimation(mAnimationTranslate);
+		draggable.setLocation(newX, newY);
+		invalidate(); 
+		//while
 	}
 	
 	public void sendInfo(){

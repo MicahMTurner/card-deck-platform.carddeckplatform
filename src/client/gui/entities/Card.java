@@ -18,7 +18,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 
-public class Card implements Draggable {
+public class Card extends Draggable {
 	private Bitmap img; // the image of the ball
 	private int coordX = 0; // the x coordinate at the canvas
 	private int coordY = 0; // the y coordinate at the canvas
@@ -33,6 +33,7 @@ public class Card implements Draggable {
 	private ServerConnection serverConnection;
 
 	public Card(Context context, int drawable, int x, int y, ServerConnection serverConnection){
+		super(context);
 		this.context = context;
 		this.serverConnection = serverConnection;
 		BitmapFactory.Options opts = new BitmapFactory.Options();
@@ -45,7 +46,7 @@ public class Card implements Draggable {
 	}
 	
 	public Card(Context context, int drawable, Droppable dropable){
-		
+		super(context);
 	}
 	
 	public void randomizeAngle(){
