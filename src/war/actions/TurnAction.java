@@ -1,6 +1,6 @@
 package war.actions;
 
-import war.messages.EndTurnMessage;
+import war.messages.TurnMessage;
 import communication.link.ServerConnection;
 
 import client.controller.actions.Action;
@@ -31,7 +31,7 @@ public class TurnAction extends Action{
 	public void outgoing() {
 		// TODO Auto-generated method stub
 		// lock gui.
-		ServerConnection.getConnection().getMessageSender().sendMessage(new EndTurnMessage());
+		ServerConnection.getConnection().getMessageSender().sendMessage(new TurnMessage());
 	}
 
 }

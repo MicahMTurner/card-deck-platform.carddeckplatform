@@ -1,4 +1,4 @@
-package client.controller.commands;
+package controller.commands;
 
 import client.controller.actions.Action;
 

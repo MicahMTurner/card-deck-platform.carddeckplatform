@@ -5,8 +5,7 @@ import carddeckplatform.game.TableView;
 
 //import com.google.gson.annotations.SerializedName;
 import communication.client.ClientMessageHandler;
-import communication.server.ServerMessageHandler;
-import communication.server.ServerTask;
+
 
 public class SampleMessage extends Message {
 	
@@ -17,7 +16,7 @@ public class SampleMessage extends Message {
 	public String name;
 
 	@Override
-	public void serverAction() {
+	public void serverAction(String connectionId) {
 		// TODO Auto-generated method stub
 		
 	}
