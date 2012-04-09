@@ -2,12 +2,12 @@ package communication.messages;
 
 //import logic.host.Host;
 import carddeckplatform.game.TableView;
-import client.controller.Controller;
+import client.controller.ClientController;
 
 //import com.google.gson.annotations.SerializedName;
 import communication.client.ClientMessageHandler;
-import communication.server.ServerMessageHandler;
-import communication.server.ServerTask;
+
+
 
 public class CardMotionMessage extends Message {
 	public CardMotionMessage(){
@@ -34,7 +34,7 @@ public class CardMotionMessage extends Message {
 	public int y;
 
 	@Override
-	public void serverAction() {
+	public void serverAction(String connectionId) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -43,7 +43,7 @@ public class CardMotionMessage extends Message {
 	public void clientAction() {
 		// TODO Auto-generated method stub
 		//controller.draggableMotion(username, cardId, X, Y);
-		Controller.getController().incomingAPI().cardMotion(username, cardId, x, y);
+		ClientController.getController().incomingAPI().cardMotion(username, cardId, x, y);
 	}
 	
 }

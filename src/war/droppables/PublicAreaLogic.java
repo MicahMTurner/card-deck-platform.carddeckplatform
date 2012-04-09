@@ -2,7 +2,7 @@ package war.droppables;
 
 import war.War;
 import war.actions.RoundWinnerAction;
-import client.controller.Controller;
+import client.controller.ClientController;
 import logic.card.CardLogic;
 
 import logic.client.LogicDroppable;

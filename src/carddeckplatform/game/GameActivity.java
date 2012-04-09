@@ -16,7 +16,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import client.controller.Controller;
+import client.controller.ClientController;
 
 import communication.link.ServerConnection;
 
@@ -63,8 +63,8 @@ public class GameActivity extends Activity {
      // necessary to transparent background!!!!
         tableview.setZOrderOnTop(true);    
         tableview.getHolder().setFormat(PixelFormat.TRANSPARENT);
-        Controller.getController().setTv(tableview);
-        ServerConnection.getConnection().openConnection(Controller.getController());
+        ClientController.getController().setTv(tableview);
+        ServerConnection.getConnection().openConnection(ClientController.getController());
         
 //        SampleObserver so = new SampleObserver();
 //        so.setCntxt(getBaseContext());

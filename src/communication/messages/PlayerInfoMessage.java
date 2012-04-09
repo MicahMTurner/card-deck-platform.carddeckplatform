@@ -5,8 +5,7 @@ package communication.messages;
 
 import carddeckplatform.game.TableView;
 
-import communication.server.ServerMessageHandler;
-import communication.server.ServerTask;
+
 
 public class PlayerInfoMessage extends Message {
 	
@@ -23,7 +22,7 @@ public class PlayerInfoMessage extends Message {
 	}
 	
 	@Override
-	public void serverAction() {
+	public void serverAction(String connectionId) {
 		// TODO Auto-generated method stub
 		//host.addPlayer(username, serverTask.getId());
 	}

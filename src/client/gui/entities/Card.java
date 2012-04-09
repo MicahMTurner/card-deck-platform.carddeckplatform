@@ -4,7 +4,7 @@ import java.util.Random;
 
 import logic.card.CardLogic;
 
-import client.controller.Controller;
+import client.controller.ClientController;
 
 import communication.link.ServerConnection;
 import communication.messages.CardMotionMessage;
@@ -76,14 +76,14 @@ public class Card extends Draggable {
 	public void onDrag() {
 		// TODO Auto-generated method stub
 		//serverConnection.getMessageSender().sendMessage(new CardMotionMessage(GameStatus.username,getId(), coordX, coordY));
-		Controller.getController().outgoingAPI().cardMotion(GameStatus.username,getId(), coordX, coordY);
+		ClientController.getController().outgoingAPI().cardMotion(GameStatus.username,getId(), coordX, coordY);
 	}
 
 
 	public void onRelease() {
 		// TODO Auto-generated method stub
-		Controller.getController().outgoingAPI().cardMotion(GameStatus.username,getId(), coordX, coordY);
-		Controller.getController().outgoingAPI().endCardMotion(getId());
+		ClientController.getController().outgoingAPI().cardMotion(GameStatus.username,getId(), coordX, coordY);
+		ClientController.getController().outgoingAPI().endCardMotion(getId());
 		
 	}
 
