@@ -23,7 +23,7 @@ import communication.messages.SampleMessage;
 public class TcpReceiver extends Receiver{
 	private int port;
 	private ObjectInputStream in;
-	private Handler h = new Handler();
+	public static Handler h = new Handler();
 	
 	
 	public TcpReceiver(){}

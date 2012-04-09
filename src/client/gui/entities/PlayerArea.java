@@ -1,25 +1,16 @@
 package client.gui.entities;
 
 import logic.card.CardLogic;
-import logic.client.LogicDroppable;
-import carddeckplatform.game.R;
-import android.content.Context;
 import android.graphics.Canvas;
 
-public class PublicPlace extends Droppable {
-	
-	public PublicPlace(Context context, int x,int y){
-		this.x = x;
-		this.y = y;
-		this.context = context;
-	}
-	
+public class PlayerArea extends Droppable {
+
 	@Override
 	public int sensitivityRadius() {
 		// TODO Auto-generated method stub
-		return 300;
+		return 0;
 	}
-	
+
 	@Override
 	public void onClick() {
 		// TODO Auto-generated method stub
@@ -31,24 +22,21 @@ public class PublicPlace extends Droppable {
 		// TODO Auto-generated method stub
 		
 	}
-	
+
+	@Override
+	public void onDrop(Draggable draggable) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public void addDraggable(Draggable draggable) {
 		// TODO Auto-generated method stub
 		draggable.setLocation(getX(), getY());
 
-// 		if(draggable.getContainer()!=null)
-//			draggable.getContainer().  remove the card from the previous droppable logic.
-
 		draggable.setContainer(this);
+		
 		logicDroppable.addCard(draggable.getCardLogic());
-	}
-
-	@Override
-	public void onDrop(Draggable draggable) {
-		// TODO Auto-generated method stub
-		addDraggable(draggable);
-		logicDroppable.onDropHandler(draggable.getCardLogic());
 	}
 
 	@Override
@@ -68,7 +56,5 @@ public class PublicPlace extends Droppable {
 		// TODO Auto-generated method stub
 		logicDroppable.getCards().remove(draggable.getCardLogic());
 	}
-
-
 
 }

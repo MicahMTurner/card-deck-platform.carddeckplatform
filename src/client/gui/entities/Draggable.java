@@ -7,6 +7,7 @@ import android.view.View;
 
 public abstract class Draggable extends View {
 	protected CardLogic cardLogic;
+	private Droppable container;
 	
 	public Draggable(Context context) {
 		super(context);
@@ -22,9 +23,20 @@ public abstract class Draggable extends View {
 	public abstract void motionAnimation();
 	public abstract void motionAnimation(String str);
 	public abstract void clearAnimation();
-	public abstract CardLogic getCardLogic();
+	
+	public CardLogic getCardLogic(){
+		return cardLogic;
+	}
+	
+	
+	public Droppable getContainer(){
+		return container;
+	}
+	
+	public void setContainer(Droppable container){
+		this.container = container;
+	}
+	
 	
 	public abstract void setLocation(int x, int y);
-	
-	public abstract void draw(Canvas canvas);
 }

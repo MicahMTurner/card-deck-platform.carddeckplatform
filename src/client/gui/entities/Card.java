@@ -101,9 +101,8 @@ public class Card extends Draggable {
 		return coordY;
 	}
 
-
 	@Override
-	public void draw(Canvas canvas) {
+    protected void onDraw(Canvas canvas) {
 		// TODO Auto-generated method stub
 		Matrix matrix = new Matrix();
 		matrix.postRotate(angle);
@@ -133,7 +132,7 @@ public class Card extends Draggable {
 	@Override
 	public int getId() {
 		// TODO Auto-generated method stub
-		return 0;
+		return id;
 	}
 
 	@Override
@@ -155,13 +154,5 @@ public class Card extends Draggable {
 		isCarried = false;
 		carrier = "";
 	}
-
-	@Override
-	public CardLogic getCardLogic() {
-		// TODO Auto-generated method stub
-		return cardLogic;
-	}
-
-	
 
 }
