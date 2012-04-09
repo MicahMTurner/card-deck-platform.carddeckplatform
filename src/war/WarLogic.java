@@ -3,7 +3,7 @@ package war;
 
 import java.util.ArrayList;
 
-import client.controller.Controller;
+import client.controller.ClientController;
 
 import logic.card.CardLogic;
 import logic.client.Deck;
@@ -12,13 +12,12 @@ import logic.actions.PublicActions;
 import logic.actions.CardsActions;
 import logic.client.GameLogic;
 import communication.messages.SendCardMessage;
-import communication.server.ServerMessageSender;
 
 
 
 
 public class WarLogic extends GameLogic implements CardsActions,PublicActions{
-	private ServerMessageSender serverMessageSender;
+	
 	public WarLogic() {
 	}
 
@@ -39,8 +38,8 @@ public class WarLogic extends GameLogic implements CardsActions,PublicActions{
 		deck.shuffle(2);
 		int size=deck.getSize();
 		for (int i=0;i<size;i++){
+			//TODO 
 			
-			serverMessageSender.sendTo(new SendCardMessage(deck.Draw().getId()), players.get(i%players.size()).getId());
 		}
 		
 	}
@@ -74,7 +73,7 @@ public class WarLogic extends GameLogic implements CardsActions,PublicActions{
 
 	@Override
 	public CardLogic putInPublic(Player player, CardLogic card) {		
-		Controller.outgoingAPI().endTurn();
+		ClientController.outgoingAPI().endTurn();
 		return card;
 	}
 

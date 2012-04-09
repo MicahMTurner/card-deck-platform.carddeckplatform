@@ -1,17 +1,17 @@
-package client.controller.commands;
+package controller.commands;
 
 import client.controller.actions.Action;
 
-public class IncomingCommand extends Command{
+public class OutgoingCommand extends Command{
 
-	public IncomingCommand(Action action) {
+	public OutgoingCommand(Action action) {
 		super(action);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void execute() {
-		action.incoming();
+		action.outgoing();
 		
 	}
 

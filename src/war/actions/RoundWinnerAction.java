@@ -4,7 +4,7 @@ import communication.link.ServerConnection;
 
 import war.War;
 import war.messages.RoundWinnerMessage;
-import client.controller.Controller;
+import client.controller.ClientController;
 import client.controller.actions.Action;
 import logic.card.CardLogic;
 import logic.client.GameLogic;
@@ -14,15 +14,15 @@ import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;
 
 public class RoundWinnerAction extends Action{
-	Player winner;
-	public RoundWinnerAction(Player winner) {
+	String winner;
+	public RoundWinnerAction(String winner) {
 		this.winner=winner;
 	}
 
 	
 	@Override
 	public void incoming() {
-		if (winner.getUsername().equals(GameStatus.username)){
+		if (winner.equals(GameStatus.username)){
 			//i'm the winner
 			for (LogicDroppable droppable : War.getDroppables()){
 				for (CardLogic card : droppable.getCards()){
@@ -43,7 +43,7 @@ public class RoundWinnerAction extends Action{
 	 */
 	@Override
 	public void outgoing() {
-		ServerConnection.getConnection().getMessageSender().sendMessage(new RoundWinnerMessage(winner.getUsername()));
+		ServerConnection.getConnection().getMessageSender().sendMessage(new RoundWinnerMessage(winner));
 		
 	}
 

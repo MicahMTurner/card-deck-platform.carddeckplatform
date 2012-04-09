@@ -1,5 +1,7 @@
 package war.actions;
 
+import communication.server.ConnectionsManager;
+
 import logic.card.CardLogic;
 import war.War;
 import client.controller.actions.Action;
@@ -17,7 +19,7 @@ public class RecieveCardAction extends Action {
 
 	@Override
 	public void outgoing() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
