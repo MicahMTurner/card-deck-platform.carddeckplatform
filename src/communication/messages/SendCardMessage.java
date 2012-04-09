@@ -4,8 +4,8 @@ import logic.builtIn.defaultCards.Heart;
 //import logic.host.Host;
 import carddeckplatform.game.TableView;
 
-import communication.server.ServerMessageHandler;
-import communication.server.ServerTask;
+
+
 
 public class SendCardMessage extends Message {
 	
@@ -21,7 +21,7 @@ public class SendCardMessage extends Message {
 	public int cardId;
 	
 	@Override
-	public void serverAction() {
+	public void serverAction(String connectionId) {
 		// TODO Auto-generated method stub
 	}
 	

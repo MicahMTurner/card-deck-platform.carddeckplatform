@@ -3,8 +3,7 @@ package communication.messages;
 //import logic.host.Host;
 import carddeckplatform.game.TableView;
 import communication.client.ClientMessageHandler;
-import communication.server.ServerMessageHandler;
-import communication.server.ServerTask;
+
 
 public class RegistrationMessage extends Message {
 	public RegistrationMessage(){
@@ -16,7 +15,7 @@ public class RegistrationMessage extends Message {
 	public String id;
 
 	@Override
-	public void serverAction() {
+	public void serverAction(String connectionId) {
 		// TODO Auto-generated method stub
 		
 	}

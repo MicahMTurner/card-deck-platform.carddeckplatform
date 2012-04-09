@@ -1,14 +1,14 @@
 package communication.messages;
 
 //import logic.host.Host;
-import client.controller.Controller;
+import client.controller.ClientController;
 
 //import com.google.gson.annotations.SerializedName;
 
 import carddeckplatform.game.TableView;
 
-import communication.server.ServerMessageHandler;
-import communication.server.ServerTask;
+
+
 
 public class AskInfoMessage extends Message  {
 	
@@ -19,7 +19,7 @@ public class AskInfoMessage extends Message  {
 	}
 	
 	@Override
-	public void serverAction() {
+	public void serverAction(String connectionId) {
 		// TODO Auto-generated method stub
 		
 	}

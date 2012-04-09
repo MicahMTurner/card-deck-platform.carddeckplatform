@@ -13,18 +13,19 @@ import communication.messages.AskInfoMessage;
 import communication.messages.Message;
 
 
-public class ServerTask implements Runnable {
-	private ServerMessageSender serverMessageSender = new ServerMessageSender();
+public class Connection implements Runnable {
+	
 	private String id;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
+	private volatile boolean stop;
 	
 	
-	
-	public ServerTask(String id, ObjectInputStream in, ObjectOutputStream out){
+	public Connection(String id, ObjectInputStream in, ObjectOutputStream out){
 		this.id = id;
 		this.in = in;
 		this.out = out;
+		this.stop=false;
 	}
 	
 	
@@ -40,6 +41,9 @@ public class ServerTask implements Runnable {
 	public String getId(){
 		return id;
 	}
+	public void cancelConnection(){
+		stop=true;
+	}
 	
 	@Override
 	public void run() {
@@ -47,13 +51,13 @@ public class ServerTask implements Runnable {
 		
 		// sends AskInfoMessage to the player in order to get its name and etc...
 		//send(new AskInfoMessage());
-		while(true){
+		while(!stop){
 			try {
 				// gets messages.
 				Message msg;
 				try {
 					msg = (Message)in.readObject();
-					serverMessageSender.sendToAllExcptMe(msg, id);
+					msg.serverAction(this.id);
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -1,5 +1,8 @@
 package war.messages;
 
+import server.controller.ServerController;
+import war.actions.RoundWinnerAction;
+import client.controller.ClientController;
 import communication.messages.Message;
 
 public class RoundWinnerMessage extends Message {
@@ -11,15 +14,18 @@ public class RoundWinnerMessage extends Message {
 	}
 	
 	@Override
-	public void serverAction() {
-		// TODO Auto-generated method stub
+	public void serverAction(String connectionId) {
+		ServerController.getServerController().RoundWinner(connectionId,winner);
 		
 	}
 
 	@Override
 	public void clientAction() {
-		// TODO Auto-generated method stub
-		
+		ClientController.incomingAPI().incomingCommand(new RoundWinnerAction(winner));		
 	}
+
+
+
+	
 
 }

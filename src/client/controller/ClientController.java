@@ -4,6 +4,9 @@ import java.util.Observer;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import communication.messages.Message;
+import controller.commands.Command;
+import controller.commands.IncomingCommand;
+import controller.commands.OutgoingCommand;
 
 import android.database.Observable;
 import logic.card.CardLogic;
@@ -18,14 +21,12 @@ import client.controller.actions.PutInPublicAction;
 import client.controller.actions.RemoveFromPublicAction;
 import client.controller.actions.RevealCardAction;
 import client.controller.actions.TurnAction;
-import client.controller.commands.Command;
-import client.controller.commands.IncomingCommand;
-import client.controller.commands.OutgoingCommand;
+
 import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;
 
 //maybe not creating new action and commands all the time?
-public class Controller implements Runnable, Observer {
+public class ClientController implements Runnable, Observer {
 	
 	
 	private TableView gui=null;
@@ -41,14 +42,14 @@ public class Controller implements Runnable, Observer {
 	//-------Singleton implementation--------//
 		private static class ControllerHolder
 		{
-			private final static Controller controller=new Controller();
+			private final static ClientController controller=new ClientController();
 		}
 		
 				
 		/**
 		 * get Controller instance
 		 */
-		public static Controller getController(){
+		public static ClientController getController(){
 			return ControllerHolder.controller;
 		}
 
@@ -70,7 +71,7 @@ public class Controller implements Runnable, Observer {
 		}
 	
 	//constructor
-	private Controller(){
+	private ClientController(){
 		
 		commandsQueue=new LinkedBlockingQueue<Command>();
 		this.outgoingAPI=new OutgoingAPI();
@@ -160,6 +161,13 @@ public class Controller implements Runnable, Observer {
 	public class IncomingAPI {	
 		
 		private IncomingAPI(){}
+		
+		public void incomingCommand(Action action){
+			action.setGui(gui);
+			action.setLogic(logic);
+			//commandsQueue.add(new OutgoingCommand(action));
+			new IncomingCommand(action).execute();
+		}
 		
 		public void myTurn(){
 			commandsQueue.add(new IncomingCommand(new TurnAction()));
