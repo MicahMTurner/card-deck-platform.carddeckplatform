@@ -11,7 +11,9 @@ import war.War;
 import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,9 +71,13 @@ public class GameActivity extends Activity {
         tableview.getHolder().setFormat(PixelFormat.TRANSPARENT);
         ClientController.getController().setTv(tableview);
         Game game = new War();
-        
-        game.buildLayout(getApplicationContext(), tableview);
         ServerConnection.getConnection().openConnection(ClientController.getController());
+        
+        Display display = getWindowManager().getDefaultDisplay();
+        int width = display.getWidth();
+        int height = display.getHeight();
+        game.buildLayout(getApplicationContext(), tableview, width, height, Game.getMe().getPosition());
+        
         
 //        SampleObserver so = new SampleObserver();
 //        so.setCntxt(getBaseContext());

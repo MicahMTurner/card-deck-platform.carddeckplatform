@@ -10,8 +10,10 @@ import android.content.Context;
 
 
 public abstract class Game {	
-	protected static Player me;
-	protected static ArrayList<LogicDroppable> droppables;
+	//i'm first in the list
+	public static ArrayList<Player> players = new ArrayList<Player>();
+	
+	protected static ArrayList<LogicDroppable> droppables = new ArrayList<LogicDroppable>();
 	ToolsFactory tools=new DefaultTools();
 	Deck cards;
 	Table table;
@@ -24,7 +26,7 @@ public abstract class Game {
 	}
 	
 	public static Player getMe() {
-		return me;
+		return players.get(0);
 	}
 	
 	public abstract GamePrefs getPrefs();
@@ -38,8 +40,10 @@ public abstract class Game {
 		
 		
 	}
-	
-	public abstract void buildLayout(Context context, TableView tv);
+	public Deck getCards() {
+		return cards;
+	}
+	public abstract void buildLayout(Context context, TableView tv, int width, int height, Player.Position position);
 	
 	public Game() {
 		

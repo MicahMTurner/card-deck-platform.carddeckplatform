@@ -42,7 +42,7 @@ public abstract class Deck {
 		cards.add(randomPlace,temp);		
 	}
 
-	public CardLogic Draw() {
+	public CardLogic drawCard() {
 		return cards.pop();
 		
 	}

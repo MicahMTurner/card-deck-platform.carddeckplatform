@@ -1,10 +1,11 @@
 package logic.client;
 
+import java.io.Serializable;
 import java.util.Stack;
 
 import logic.card.CardLogic;
 
-public abstract class LogicDroppable {
+public abstract class LogicDroppable implements Serializable{
 	protected Stack<CardLogic> cards;
 	private int id;
 	public LogicDroppable(int id) {

@@ -57,6 +57,14 @@ public class Table {
 		return res;
 	}
 	
+	public Droppable getDroppableById(int id){
+		for(Droppable d : droppables){
+			if(d.getLogic().getId()==id)
+				return d;
+		}
+		return null;
+	}
+	
 	public Draggable getNearestDraggable(int x, int y, boolean putInFront){
 		// go in reverse in order to get the most top draggable.
 		Draggable res = null;

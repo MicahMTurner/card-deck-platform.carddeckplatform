@@ -1,9 +1,11 @@
 package client.controller.actions;
 
+import java.io.Serializable;
+
 import logic.client.GameLogic;
 import carddeckplatform.game.TableView;
 
-public abstract class  ClientAction {
+public abstract class  ClientAction implements Serializable {
 	protected TableView gui;
 	protected GameLogic logic;
 	public ClientAction() {

@@ -37,6 +37,7 @@ public abstract class Draggable extends View {
 		this.container = container;
 	}
 	
+
 	
 	public abstract void setLocation(int x, int y);
 }
