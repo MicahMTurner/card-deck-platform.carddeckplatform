@@ -2,6 +2,10 @@ package logic.client;
 
 import java.util.ArrayList;
 
+import carddeckplatform.game.TableView;
+
+import android.content.Context;
+
 
 
 
@@ -34,6 +38,8 @@ public abstract class Game {
 		
 		
 	}
+	
+	public abstract void buildLayout(Context context, TableView tv);
 	
 	public Game() {
 		
@@ -103,4 +109,5 @@ public abstract class Game {
 		return deck;
 	}
 	*/
+
 }

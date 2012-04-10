@@ -1,11 +1,11 @@
 package controller.commands;
 
-import client.controller.actions.Action;
+import client.controller.actions.ClientAction;
 
 public abstract class Command {
 	
-	protected Action action;
-	public Command(Action action) {
+	protected ClientAction action;
+	public Command(ClientAction action) {
 		this.action=action;
 	}
 	public abstract void execute();	

@@ -2,9 +2,9 @@ package war.actions;
 
 import war.War;
 import logic.client.LogicDroppable;
-import client.controller.actions.Action;
+import client.controller.actions.ClientAction;
 
-public class PutInPublicAction extends Action {
+public class PutInPublicAction extends ClientAction {
 
 	private LogicDroppable droppable;
 	

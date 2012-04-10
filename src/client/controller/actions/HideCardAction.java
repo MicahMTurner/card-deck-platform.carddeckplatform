@@ -5,7 +5,7 @@ import logic.client.GameLogic;
 import logic.client.Player;
 import carddeckplatform.game.TableView;
 
-public class HideCardAction extends Action{
+public class HideCardAction extends ClientAction{
 
 	private Player player;
 	private CardLogic card;

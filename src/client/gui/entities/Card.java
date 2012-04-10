@@ -7,8 +7,6 @@ import logic.card.CardLogic;
 import client.controller.ClientController;
 
 import communication.link.ServerConnection;
-import communication.messages.CardMotionMessage;
-import communication.messages.EndCardMotionMessage;
 
 import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.R;

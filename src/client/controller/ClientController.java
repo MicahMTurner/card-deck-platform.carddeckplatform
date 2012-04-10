@@ -12,7 +12,7 @@ import android.database.Observable;
 import logic.card.CardLogic;
 import logic.client.GameLogic;
 import logic.client.Player;
-import client.controller.actions.Action;
+import client.controller.actions.ClientAction;
 import client.controller.actions.DraggableMotionAction;
 import client.controller.actions.EndDraggableMotionAction;
 import client.controller.actions.GiveCardAction;
@@ -107,7 +107,7 @@ public class ClientController implements Runnable, Observer {
 		
 		private OutgoingAPI(){}
 		
-		public void outgoingCommand(Action action){
+		public void outgoingCommand(ClientAction action){
 			action.setGui(gui);
 			action.setLogic(logic);
 			//commandsQueue.add(new OutgoingCommand(action));
@@ -162,7 +162,7 @@ public class ClientController implements Runnable, Observer {
 		
 		private IncomingAPI(){}
 		
-		public void incomingCommand(Action action){
+		public void incomingCommand(ClientAction action){
 			action.setGui(gui);
 			action.setLogic(logic);
 			//commandsQueue.add(new OutgoingCommand(action));
@@ -272,7 +272,7 @@ public class ClientController implements Runnable, Observer {
 	public void update(java.util.Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
 		Message message = (Message) arg1;
-		message.clientAction();
+		message.actionOnClient();
 	}
 	
 	

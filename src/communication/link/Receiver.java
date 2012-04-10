@@ -10,7 +10,6 @@ import communication.entities.Server;
 import communication.messages.Message;
 import communication.messages.MessageContainer;
 //import communication.messages.MessageDictionary;
-import communication.messages.SampleMessage;
 
 public abstract class Receiver extends Observable {
 	public void reg(Observer observer){

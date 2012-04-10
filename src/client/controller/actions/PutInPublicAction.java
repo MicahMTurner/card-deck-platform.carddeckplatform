@@ -5,7 +5,7 @@ import logic.client.GameLogic;
 import logic.client.Player;
 import carddeckplatform.game.TableView;
 
-public class PutInPublicAction extends Action{
+public class PutInPublicAction extends ClientAction{
 	Player player;
 	CardLogic card;
 	boolean isRevealed;

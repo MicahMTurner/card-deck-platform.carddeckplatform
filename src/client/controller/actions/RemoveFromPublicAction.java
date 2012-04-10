@@ -5,7 +5,7 @@ import logic.client.GameLogic;
 import logic.client.Player;
 import carddeckplatform.game.TableView;
 
-public class RemoveFromPublicAction extends Action{
+public class RemoveFromPublicAction extends ClientAction{
 	private Player player;
 	private CardLogic card;
 	

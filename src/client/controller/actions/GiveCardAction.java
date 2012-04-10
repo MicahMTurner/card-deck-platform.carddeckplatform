@@ -5,7 +5,7 @@ import logic.client.GameLogic;
 import logic.client.Player;
 import carddeckplatform.game.TableView;
 
-public class GiveCardAction extends Action{
+public class GiveCardAction extends ClientAction{
 
 	private Player from;
 	private Player to;

@@ -5,6 +5,10 @@ package carddeckplatform.game;
 
 import java.io.IOException;
 
+import war.War;
+
+import logic.host.Host;
+
 //import logic.host.Host;
 
 import android.app.Activity;
@@ -92,7 +96,8 @@ public class CarddeckplatformActivity extends Activity {
                 	
                 }).start(); 
 */                
-                new Thread(new TmpServer()).start();
+                //new Thread(new TmpServer()).start();
+                new Thread(new Host(new War())).start();
                 startActivity(i);
                 
                 } 

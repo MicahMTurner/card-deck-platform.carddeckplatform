@@ -1,10 +1,10 @@
 package controller.commands;
 
-import client.controller.actions.Action;
+import client.controller.actions.ClientAction;
 
 public class IncomingCommand extends Command{
 
-	public IncomingCommand(Action action) {
+	public IncomingCommand(ClientAction action) {
 		super(action);
 		// TODO Auto-generated constructor stub
 	}
