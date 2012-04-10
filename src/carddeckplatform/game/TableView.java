@@ -11,7 +11,6 @@ import communication.link.ServerConnection;
 import communication.link.TcpReceiver;
 import communication.link.TcpSender;
 import communication.messages.Message;
-import communication.messages.PlayerInfoMessage;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -197,9 +196,6 @@ public class TableView extends SurfaceView {
 	}
 	
 	
-	public void sendInfo(){
-		serverConnection.getMessageSender().sendMessage(new PlayerInfoMessage(GameStatus.username));
-	}
 	
 	public TableView(Context context,AttributeSet attrs) {
 		// TODO Auto-generated constructor stub
@@ -272,7 +268,7 @@ public class TableView extends SurfaceView {
 	    			if(draggableInHand!=null)
 	    				draggableInHand.onClick();
 	    			
-	    			moveDraggable(table.getDraggableById(1, true),X, Y);
+	    			//moveDraggable(table.getDraggableById(1, true),X, Y);
 
 	    			
 	    			break;

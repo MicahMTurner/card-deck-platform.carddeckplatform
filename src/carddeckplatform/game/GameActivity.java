@@ -4,6 +4,10 @@ package carddeckplatform.game;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import logic.client.Game;
+
+import war.War;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.PixelFormat;
@@ -64,6 +68,9 @@ public class GameActivity extends Activity {
         tableview.setZOrderOnTop(true);    
         tableview.getHolder().setFormat(PixelFormat.TRANSPARENT);
         ClientController.getController().setTv(tableview);
+        Game game = new War();
+        
+        game.buildLayout(getApplicationContext(), tableview);
         ServerConnection.getConnection().openConnection(ClientController.getController());
         
 //        SampleObserver so = new SampleObserver();

@@ -4,9 +4,9 @@ import communication.server.ConnectionsManager;
 
 import logic.card.CardLogic;
 import war.War;
-import client.controller.actions.Action;
+import client.controller.actions.ClientAction;
 
-public class RecieveCardAction extends Action {
+public class RecieveCardAction extends ClientAction {
 
 	CardLogic cardLogic;
 	

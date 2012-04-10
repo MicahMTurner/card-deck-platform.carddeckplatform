@@ -3,7 +3,7 @@ package client.controller.actions;
 import logic.client.GameLogic;
 import carddeckplatform.game.TableView;
 
-public class TurnAction extends Action{
+public class TurnAction extends ClientAction{
 
 	public TurnAction() {
 		

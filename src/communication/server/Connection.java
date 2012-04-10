@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import communication.link.Receiver;
 import communication.link.Sender;
-import communication.messages.AskInfoMessage;
 import communication.messages.Message;
 
 
@@ -57,7 +56,7 @@ public class Connection implements Runnable {
 				Message msg;
 				try {
 					msg = (Message)in.readObject();
-					msg.serverAction(this.id);
+					msg.actionOnServer(id);
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

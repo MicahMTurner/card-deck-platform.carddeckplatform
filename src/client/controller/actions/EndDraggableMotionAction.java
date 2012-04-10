@@ -1,12 +1,12 @@
 package client.controller.actions;
 
 import communication.link.ServerConnection;
-import communication.messages.EndCardMotionMessage;
+import communication.messages.Message;
 
 import logic.client.GameLogic;
 import carddeckplatform.game.TableView;
 
-public class EndDraggableMotionAction extends Action  {
+public class EndDraggableMotionAction extends ClientAction  {
 
 	private int cardId;
 	public EndDraggableMotionAction( int cardId) {
@@ -23,7 +23,7 @@ public class EndDraggableMotionAction extends Action  {
 	@Override
 	public void outgoing() {
 		// TODO Auto-generated method stub
-		ServerConnection.getConnection().getMessageSender().sendMessage(new EndCardMotionMessage(cardId));
+		ServerConnection.getConnection().getMessageSender().sendMessage(new Message(this));
 	}
 
 }

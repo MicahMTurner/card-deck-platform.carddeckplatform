@@ -17,11 +17,9 @@ import android.os.Handler;
 
 //import com.google.gson.Gson;
 
-import communication.messages.CardMotionMessage;
 import communication.messages.Message;
 import communication.messages.MessageContainer;
 //import communication.messages.MessageDictionary;
-import communication.messages.SampleMessage;
 
 public class TcpReceiver extends Receiver{
 	private int port;

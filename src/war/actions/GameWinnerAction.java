@@ -1,8 +1,8 @@
 package war.actions;
 
-import client.controller.actions.Action;
+import client.controller.actions.ClientAction;
 
-public class GameWinnerAction extends Action {
+public class GameWinnerAction extends ClientAction {
 
 	@Override
 	public void incoming() {

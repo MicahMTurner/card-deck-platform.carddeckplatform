@@ -1,12 +1,13 @@
 package client.controller.actions;
 
+import server.controller.actions.SendToAllExceptMe;
 import communication.link.ServerConnection;
-import communication.messages.CardMotionMessage;
+import communication.messages.Message;
 
 import logic.client.GameLogic;
 import carddeckplatform.game.TableView;
 
-public class DraggableMotionAction extends Action {
+public class DraggableMotionAction extends ClientAction {
 
 	private String username;
 	private int cardId;
@@ -30,7 +31,7 @@ public class DraggableMotionAction extends Action {
 	@Override
 	public void outgoing() {
 		// TODO Auto-generated method stub
-		ServerConnection.getConnection().getMessageSender().sendMessage(new CardMotionMessage(username, cardId, x, y));
+		ServerConnection.getConnection().getMessageSender().sendMessage(new Message(this));
 	}
 
 }

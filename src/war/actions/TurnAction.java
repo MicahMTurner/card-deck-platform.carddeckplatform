@@ -1,13 +1,13 @@
 package war.actions;
 
-import war.messages.TurnMessage;
 import communication.link.ServerConnection;
+import communication.messages.Message;
 
-import client.controller.actions.Action;
+import client.controller.actions.ClientAction;
 import logic.client.GameLogic;
 import carddeckplatform.game.TableView;
 
-public class TurnAction extends Action{
+public class TurnAction extends ClientAction{
 
 	public TurnAction() {
 		
@@ -31,7 +31,7 @@ public class TurnAction extends Action{
 	public void outgoing() {
 		// TODO Auto-generated method stub
 		// lock gui.
-		ServerConnection.getConnection().getMessageSender().sendMessage(new TurnMessage());
+		ServerConnection.getConnection().getMessageSender().sendMessage(new Message(this));
 	}
 
 }

@@ -3,10 +3,10 @@ package client.controller.actions;
 import logic.client.GameLogic;
 import carddeckplatform.game.TableView;
 
-public abstract class  Action {
+public abstract class  ClientAction {
 	protected TableView gui;
 	protected GameLogic logic;
-	public Action() {
+	public ClientAction() {
 	}
 	public abstract void incoming();
 	public abstract void outgoing();
