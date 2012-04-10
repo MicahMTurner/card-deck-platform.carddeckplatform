@@ -112,7 +112,7 @@ public class TableView extends SurfaceView {
 				e.printStackTrace();
 			}
 			draggable.setLocation(point[0].x, point[0].y);
-			TcpReceiver.h.post(new Runnable() {
+			CarddeckplatformActivity.h.post(new Runnable() {
 
 				@Override
 				public void run() {
@@ -272,7 +272,7 @@ public class TableView extends SurfaceView {
 	    			if(draggableInHand!=null)
 	    				draggableInHand.onClick();
 	    			
-	    			moveDraggable(table.getDraggableById(1, true),250, 250);
+	    			moveDraggable(table.getDraggableById(1, true),X, Y);
 
 	    			
 	    			break;

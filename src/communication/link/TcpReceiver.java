@@ -9,6 +9,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Observer;
 
+import carddeckplatform.game.CarddeckplatformActivity;
+import carddeckplatform.game.StaticFunctions;
+
 import android.os.AsyncTask;
 import android.os.Handler;
 
@@ -23,7 +26,7 @@ import communication.messages.SampleMessage;
 public class TcpReceiver extends Receiver{
 	private int port;
 	private ObjectInputStream in;
-	public static Handler h = new Handler();
+	
 	
 	
 	public TcpReceiver(){}
@@ -67,7 +70,7 @@ public class TcpReceiver extends Receiver{
 			System.out.println("Entered update");
 			final Message message = progress[0];
 			System.out.println("Got message");			
-			h.post(new Runnable(){
+			CarddeckplatformActivity.h.post(new Runnable(){
 
 				@Override
 				public void run() {

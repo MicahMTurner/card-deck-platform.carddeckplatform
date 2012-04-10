@@ -12,6 +12,7 @@ import carddeckplatform.game.GameStatus;
 import communication.messages.Message;
 
 public class ConnectionsManager {
+	private ServerSocket serverSocket=null;
 
 	//-------Singleton implementation--------//
 			private static class ConnectionsManagerHolder
@@ -31,6 +32,12 @@ public class ConnectionsManager {
 	
 	private ConnectionsManager() {
 		connections = new ArrayList<Connection>();
+		try {
+			serverSocket = new ServerSocket(GameStatus.hostPort);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 		
@@ -82,10 +89,7 @@ public class ConnectionsManager {
 	}
 	
 	public void connectPlayer(){
-		try {	
-			ServerSocket serverSocket = new ServerSocket(GameStatus.hostPort);
-		
-			
+		try {				
 			Socket clientSocket;
 			System.out.println("Listening to port " + GameStatus.hostPort + " Waiting for messages...");
 			
