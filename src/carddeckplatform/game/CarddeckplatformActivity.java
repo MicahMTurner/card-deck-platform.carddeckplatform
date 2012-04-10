@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
@@ -22,12 +23,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-import communication.server.Server;
+//import communication.server.Server;
 import communication.server.TmpServer;
 
 public class CarddeckplatformActivity extends Activity {
 	private ViewFlipper mFlipper;
-	
+	public static Handler h = new Handler();
 	
     /** Called when the activity is first created. */
     @Override

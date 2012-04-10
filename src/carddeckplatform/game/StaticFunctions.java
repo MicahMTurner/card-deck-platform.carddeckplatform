@@ -3,8 +3,14 @@ package carddeckplatform.game;
 import java.util.ArrayList;
 
 import android.graphics.Point;
+import android.os.Handler;
+
+
 
 public class StaticFunctions {
+	
+	
+	
 	public static ArrayList<Point> midLine(int x0, int y0, int x1, int y1){
 		ArrayList<Point> points = new ArrayList<Point>();
 		boolean deltaybiggerdeltax = Math.abs(y1 - y0) > Math.abs(x1 - x0);
