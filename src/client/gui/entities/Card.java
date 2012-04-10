@@ -74,15 +74,15 @@ public class Card extends Draggable {
 	public void onDrag() {
 		// TODO Auto-generated method stub
 		//serverConnection.getMessageSender().sendMessage(new CardMotionMessage(GameStatus.username,getId(), coordX, coordY));
-		ClientController.getController().outgoingAPI().cardMotion(GameStatus.username,getId(), coordX, coordY);
+		ClientController.outgoingAPI().cardMotion(GameStatus.username,getId(), coordX, coordY);
 	}
 
 
 	public void onRelease() {
 		// TODO Auto-generated method stub
-		ClientController.getController().outgoingAPI().cardMotion(GameStatus.username,getId(), coordX, coordY);
-		ClientController.getController().outgoingAPI().endCardMotion(getId());
-		
+		ClientController.outgoingAPI().cardMotion(GameStatus.username,getId(), coordX, coordY);
+		ClientController.outgoingAPI().endCardMotion(getId());
+		randomizeAngle();
 	}
 
 
@@ -105,7 +105,7 @@ public class Card extends Draggable {
 		Matrix matrix = new Matrix();
 		matrix.postRotate(angle);
 		Bitmap resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getScaledWidth(canvas) , img.getScaledHeight(canvas), matrix, true);
-        canvas.drawBitmap(resizedBitmap, getX(), getY(), new Paint());
+        canvas.drawBitmap(resizedBitmap, getX()-20, getY()-20, new Paint());
         
         // if the card is being carried by another player a hand and the name of the carrier would be drawn near the card's image.
         if(isCarried){
@@ -117,6 +117,8 @@ public class Card extends Draggable {
             // draws the hand.
             canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.hand),getX()-25, getY()+20 , paint);
         }
+        
+        	
 	}
 
 

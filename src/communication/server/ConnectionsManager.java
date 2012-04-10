@@ -8,6 +8,12 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Stack;
+
+import logic.client.Player.Position;
+
+import client.controller.actions.AddPlayerAction;
+import client.controller.actions.SetPositionAction;
 import carddeckplatform.game.GameStatus;
 import communication.messages.Message;
 
@@ -88,7 +94,7 @@ public class ConnectionsManager {
 		}
 	}
 	
-	public void connectPlayer(){
+	public void connectPlayer(Stack<Position> availablePositions){
 		try {				
 			Socket clientSocket;
 			System.out.println("Listening to port " + GameStatus.hostPort + " Waiting for messages...");
@@ -97,13 +103,14 @@ public class ConnectionsManager {
 
 			System.out.println("connection request from from " + clientSocket.getRemoteSocketAddress().toString());
 			
-			final ObjectOutputStream out=new ObjectOutputStream(clientSocket.getOutputStream());
+			ObjectOutputStream out=new ObjectOutputStream(clientSocket.getOutputStream());
 			ObjectInputStream in=new ObjectInputStream(clientSocket.getInputStream());
 			
-			Connection serverTask = new Connection(clientSocket.getRemoteSocketAddress().toString(),in, out);
-			connections.add(serverTask);
+			Connection connection = new Connection(clientSocket.getRemoteSocketAddress().toString(),in, out);
+			connections.add(connection);
 			
-		    new Thread(serverTask).start();
+		    new Thread(connection).start();
+		    sendTo(new Message(new SetPositionAction(availablePositions.pop())),connection.getId());
 		    
 		    
 		} catch (IOException e) {

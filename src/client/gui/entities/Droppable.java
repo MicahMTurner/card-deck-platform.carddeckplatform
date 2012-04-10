@@ -29,6 +29,10 @@ public abstract class Droppable {
 		return y;
 	}
 	
+	public LogicDroppable getLogic(){
+		return logicDroppable;
+	}
+	
 	public abstract void draw(Canvas canvas);
 	
 }

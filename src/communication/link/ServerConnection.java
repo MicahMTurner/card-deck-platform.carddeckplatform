@@ -2,11 +2,16 @@ package communication.link;
 
 import java.util.Observer;
 
+import logic.client.Game;
+
+import client.controller.actions.AddPlayerAction;
+
 import carddeckplatform.game.GameStatus;
 
 import communication.client.ClientMessageSender;
 import communication.entities.Client;
 import communication.entities.TcpClient;
+import communication.messages.InitialMessage;
 
 public class ServerConnection {
 	
@@ -38,6 +43,8 @@ public class ServerConnection {
 		s.openConnection();
 		rc = new TcpReceiver(s.getIn());
 	    rc.reg(observer);
+	    
+	   // clientMessageSender.sendMessage(new InitialMessage(new AddPlayerAction(), GameStatus.username));
 	}
 	
 	public void closeConnection(){

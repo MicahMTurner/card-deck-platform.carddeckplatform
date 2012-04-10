@@ -1,13 +1,36 @@
 package logic.card;
 
+import java.io.Serializable;
 
 
 
 
-public abstract class CardLogic implements Comparable<CardLogic>{
+
+public abstract class CardLogic implements Comparable<CardLogic>, Serializable{
 	protected String type;
 	protected int value;
 	protected int id;
+	protected boolean revealed;
+	protected boolean moveable;
+	
+	protected void setValue(int value){}
+	protected void setType(String type){}
+	
+	public boolean isRevealed() {
+		return revealed;
+	}
+	
+	public boolean isMoveable() {
+		return moveable;
+	}
+	
+	public void setMoveable(boolean moveable) {
+		this.moveable = moveable;
+	}
+	
+	public void setRevealed(boolean revealed) {
+		this.revealed = revealed;
+	}
 	
 	public String getType(){
 		return type;
@@ -15,8 +38,7 @@ public abstract class CardLogic implements Comparable<CardLogic>{
 	public int getValue(){
 		return value;
 	}
-	protected void setValue(int value){}
-	protected void setType(String type){}
+	
 	protected abstract void getType(String type);
 	@Override
 	public int compareTo(CardLogic oCard) {

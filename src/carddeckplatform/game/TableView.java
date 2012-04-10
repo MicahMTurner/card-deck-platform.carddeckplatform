@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import war.War;
+
 import logic.card.CardLogic;
+import logic.client.Game;
 
 import communication.entities.TcpClient;
 import communication.link.ServerConnection;
@@ -182,6 +185,8 @@ public class TableView extends SurfaceView {
 		Card card = new Card(getContext(),resourceId,0,0,serverConnection); 
 		table.addDraggable(card);
 		target.addDraggable(card);
+		
+		invalidate();
 	}
 	
 	public void moveFromTo(Droppable from, Droppable to){
@@ -195,7 +200,9 @@ public class TableView extends SurfaceView {
 		from.removeDraggable(draggable);
 	}
 	
-	
+	public Droppable getDroppableById(int id){
+		return table.getDroppableById(id);
+	}
 	
 	public TableView(Context context,AttributeSet attrs) {
 		// TODO Auto-generated constructor stub
@@ -205,6 +212,8 @@ public class TableView extends SurfaceView {
 		this.yDimention = getMeasuredHeight();
 		// TODO Auto-generated constructor stub
 		cont = context;
+		
+		
 		table = new Table(context);
 		table.setTableImage(R.drawable.boardtest);
 		// connects with the server.

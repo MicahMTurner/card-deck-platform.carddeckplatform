@@ -7,6 +7,10 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import logic.host.Host;
+
+import client.controller.actions.SetPositionAction;
+
 import communication.link.Receiver;
 import communication.link.Sender;
 import communication.messages.Message;
@@ -50,6 +54,8 @@ public class Connection implements Runnable {
 		
 		// sends AskInfoMessage to the player in order to get its name and etc...
 		//send(new AskInfoMessage());
+		
+		send(new Message(new SetPositionAction(Host.getAvailablePosition())));
 		while(!stop){
 			try {
 				// gets messages.

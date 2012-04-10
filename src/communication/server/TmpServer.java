@@ -20,7 +20,7 @@ public class TmpServer implements Runnable {
 		
 		while(true){
 			
-			ConnectionsManager.getConnectionsManager().connectPlayer();
+			//ConnectionsManager.getConnectionsManager().connectPlayer();
 		    
 		}
 		

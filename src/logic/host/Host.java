@@ -2,6 +2,10 @@ package logic.host;
 
 
 import java.util.ArrayList;
+import java.util.Stack;
+
+
+
 
 
 
@@ -10,24 +14,36 @@ import communication.server.Connection;
 
 import logic.client.Game;
 import logic.client.Player;
+import logic.client.Player.Position;
 
 
 
 public class Host implements Runnable{
 	
 	private final int maxPlayers=4;
-	private ArrayList<Player> players;
+	public static ArrayList<Player> players = new ArrayList<Player>();
 	private ArrayList<Connection> connections = new ArrayList<Connection>();
-	
+	private static Stack<Position> availablePositions;
 	private Game game;
 
 	//synchronized private boolean startGameFlag=false;
 	int playersRdy=0;
 	
-	public Host(Game game) {		
-		players=new ArrayList<Player>();
-		this.game=game;
+	public static Position getAvailablePosition() {
+		return availablePositions.pop();
 	}
+			
+	public Host(Game game) {	
+		availablePositions=new Stack<Player.Position>();
+		this.availablePositions.add(Player.Position.RIGHT);
+		this.availablePositions.add(Player.Position.LEFT);
+		this.availablePositions.add(Player.Position.TOP);
+		this.availablePositions.add(Player.Position.BOTTOM);
+		
+		this.game=game;
+		
+	}
+
 	
 	public void addPlayer(String player, String id){
 		players.add(new Player(player,id));
@@ -35,7 +51,7 @@ public class Host implements Runnable{
 	
 	public void waitForPlayers(){
 		while(players.size()<game.getPrefs().getMinPlayers()){
-			ConnectionsManager.getConnectionsManager().connectPlayer();
+			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions);
 	    }
 		//TODO send to GUI enable start game button
 		
@@ -46,6 +62,8 @@ public class Host implements Runnable{
 	public void run() {
 		waitForPlayers();
 		game.initiate();
+		game.getLogic().dealCards(game.getCards(), players);
+		
 		
 		
 	}
