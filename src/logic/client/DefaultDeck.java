@@ -8,7 +8,7 @@ import logic.builtIn.defaultCards.Spade;
 public class DefaultDeck extends Deck{
 	private final int timesToShuffle=2;
 	public DefaultDeck() {
-		for (int i=0;i<14;i++){
+		for (int i=2;i<=14;i++){
 			
 			cards.add(new Heart(i));
 			cards.add(new Club(i));

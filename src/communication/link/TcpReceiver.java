@@ -25,7 +25,7 @@ public class TcpReceiver extends Receiver{
 	private int port;
 	private ObjectInputStream in;
 	
-	
+	private Handler h = new Handler();
 	
 	public TcpReceiver(){}
 //	public TcpReceiver(int port){
@@ -68,7 +68,7 @@ public class TcpReceiver extends Receiver{
 			System.out.println("Entered update");
 			final Message message = progress[0];
 			System.out.println("Got message");			
-			CarddeckplatformActivity.h.post(new Runnable(){
+			h.post(new Runnable(){
 
 				@Override
 				public void run() {
@@ -77,6 +77,9 @@ public class TcpReceiver extends Receiver{
 					//message.clientAction();
 					TcpReceiver.this.setChanged();
 					TcpReceiver.this.notifyObservers(message);
+					System.out.println("executing message");
+					//message.actionOnClient();
+					System.out.println("message executed");
 					
 				}
 				
@@ -100,8 +103,33 @@ public class TcpReceiver extends Receiver{
 	
 	@Override
 	public void startListen() {
-		Notifier n = new Notifier();
-		n.execute(0);
+		//Notifier n = new Notifier();
+		//n.execute(0);
+		
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				while(true){
+					try {		
+						
+						System.out.println("Wait for message");
+						Message message = (Message)in.readObject();
+						System.out.println("message received");
+						//System.out.println("Message delivared");
+						message.actionOnClient();
+						System.out.println("message executed");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						System.out.println(e.getMessage());
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} 
+				}
+			}
+		}).start();
 	}
 
 }

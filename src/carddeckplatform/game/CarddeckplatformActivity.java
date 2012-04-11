@@ -97,7 +97,7 @@ public class CarddeckplatformActivity extends Activity {
                 }).start(); 
 */                
                 //new Thread(new TmpServer()).start();
-                new Thread(new Host(new War())).start();
+                new Thread(new Host(GameStatus.game)).start();
                 startActivity(i);
                 
                 } 

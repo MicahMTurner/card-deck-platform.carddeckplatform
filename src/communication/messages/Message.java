@@ -31,7 +31,8 @@ public class Message implements Serializable {
 	}
 	
 	public void actionOnClient(){
-		ClientController.incomingAPI().incomingCommand(clientAction);
+		//ClientController.incomingAPI().incomingCommand(clientAction);
+		clientAction.incoming();
 	}
 
 }

@@ -28,6 +28,9 @@ public abstract class Draggable extends View {
 		return cardLogic;
 	}
 	
+	public void setCardLogic(CardLogic cardLogic) {
+		this.cardLogic = cardLogic;
+	}
 	
 	public Droppable getContainer(){
 		return container;

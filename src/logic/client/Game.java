@@ -46,7 +46,8 @@ public abstract class Game {
 	public abstract void buildLayout(Context context, TableView tv, int width, int height, Player.Position position);
 	
 	public Game() {
-		
+		Player player = new Player("","");
+		players.add(player);
 		// TODO Auto-generated constructor stub
 	}
 	/*

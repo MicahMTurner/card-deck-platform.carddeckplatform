@@ -6,7 +6,7 @@ import java.util.Stack;
 import logic.card.CardLogic;
 
 public abstract class LogicDroppable implements Serializable{
-	protected Stack<CardLogic> cards;
+	protected Stack<CardLogic> cards = new Stack<CardLogic>();
 	private int id;
 	public LogicDroppable(int id) {
 		this.id =id;

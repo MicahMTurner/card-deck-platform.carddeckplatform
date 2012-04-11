@@ -45,6 +45,10 @@ public class ConnectionsManager {
 			e.printStackTrace();
 		}
 	}
+	
+	public int getNumberOfConnections(){
+		return connections.size();
+	}
 
 		
 	//private Connection getConnection(String id){
