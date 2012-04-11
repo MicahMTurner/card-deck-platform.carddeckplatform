@@ -48,8 +48,8 @@ public class War extends Game{
 		}
 			tv.addDroppable(new PublicPlace(context, width/3, height/2, droppables.get(0)));
 			tv.addDroppable(new PublicPlace(context, 2*(width/3), height/2,droppables.get(1)));
-			tv.addDroppable(new PlayerArea(context, width/2, 20, droppables.get(2)));
-			tv.addDroppable(new PlayerArea(context, width/2, height-20, droppables.get(3)));
+			tv.addDroppable(new PlayerArea(context, width/2, 60, droppables.get(2)));
+			tv.addDroppable(new PlayerArea(context, width/2, height-100, droppables.get(3)));
 		
 		
 		

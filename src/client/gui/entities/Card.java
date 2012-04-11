@@ -30,12 +30,10 @@ public class Card extends Draggable {
 	private boolean isCarried=false;
 	private String carrier = "";
 	private Context context;
-	private ServerConnection serverConnection;
 
-	public Card(Context context, int drawable, int x, int y, ServerConnection serverConnection){
+	public Card(Context context, int drawable, int x, int y){
 		super(context);
 		this.context = context;
-		this.serverConnection = serverConnection;
 		BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inJustDecodeBounds = true;
         img = BitmapFactory.decodeResource(context.getResources(), drawable); 
@@ -105,7 +103,7 @@ public class Card extends Draggable {
 		Matrix matrix = new Matrix();
 		matrix.postRotate(angle);
 		Bitmap resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getScaledWidth(canvas) , img.getScaledHeight(canvas), matrix, true);
-        canvas.drawBitmap(resizedBitmap, getX()-20, getY()-20, new Paint());
+        canvas.drawBitmap(resizedBitmap, getX()-25, getY()-20, new Paint());
         
         // if the card is being carried by another player a hand and the name of the carrier would be drawn near the card's image.
         if(isCarried){

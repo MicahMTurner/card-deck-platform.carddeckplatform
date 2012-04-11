@@ -1,11 +1,19 @@
 package war.gui;
 
+import java.util.ArrayList;
+
+import war.actions.RecieveCardAction;
+import communication.link.ServerConnection;
+
+import client.controller.ClientController;
 import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
 import logic.card.CardLogic;
 import logic.client.LogicDroppable;
+import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.R;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 public class PublicPlace extends Droppable {
@@ -20,7 +28,7 @@ public class PublicPlace extends Droppable {
 	@Override
 	public int sensitivityRadius() {
 		// TODO Auto-generated method stub
-		return 300;
+		return 80;
 	}
 	
 	@Override
@@ -52,12 +60,21 @@ public class PublicPlace extends Droppable {
 		// TODO Auto-generated method stub
 		addDraggable(draggable);
 		logicDroppable.onDropHandler(draggable.getCardLogic());
+		
+		// creates new array in order to send it in the action (this action receives ArrayList of CardLogic's)
+		ArrayList<CardLogic> cd = new ArrayList<CardLogic>();
+		cd.add(draggable.getCardLogic());
+		System.out.println("PublicPlace drop");
+		ClientController.outgoingAPI().outgoingCommand(new RecieveCardAction(cd,logicDroppable.getId()));
+		System.out.println("PublicPlace after drop");
 	}
 
 	@Override
 	public void draw(Canvas canvas) {
 		// TODO Auto-generated method stub
 		
+		
+		//canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.place),getX()-45,getY()-60,null);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package client.controller.actions;
 
+import client.controller.ClientController;
 import server.controller.actions.SendToAllExceptMe;
 import communication.link.ServerConnection;
 import communication.messages.Message;
@@ -25,7 +26,7 @@ public class DraggableMotionAction extends ClientAction {
 	@Override
 	public void incoming() {
 		// TODO Auto-generated method stub
-		gui.draggableMotion(username, cardId, x, y);
+		ClientController.getController().getGui().draggableMotion(username, cardId, x, y);
 	}
 
 	@Override

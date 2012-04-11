@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 import logic.client.Game;
+import logic.client.Player.Position;
 
 import war.War;
 
@@ -60,6 +61,9 @@ public class GameActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
                                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Display display = getWindowManager().getDefaultDisplay();
+        int width = display.getWidth();
+        int height = display.getHeight();
         
 //        TableView dv = new TableView(this,null);
         
@@ -67,16 +71,23 @@ public class GameActivity extends Activity {
         setContentView(R.layout.game);
         tableview = (TableView)findViewById(R.id.TableView1);
      // necessary to transparent background!!!!
-        tableview.setZOrderOnTop(true);    
+        tableview.setZOrderOnTop(true);        
         tableview.getHolder().setFormat(PixelFormat.TRANSPARENT);
+        tableview.setxDimention(width);
+        tableview.setyDimention(height);
         ClientController.getController().setTv(tableview);
-        Game game = new War();
+        //Game game = new War();
         ServerConnection.getConnection().openConnection(ClientController.getController());
         
-        Display display = getWindowManager().getDefaultDisplay();
-        int width = display.getWidth();
-        int height = display.getHeight();
-        game.buildLayout(getApplicationContext(), tableview, width, height, Game.getMe().getPosition());
+        
+        Position pos=null;
+        
+        
+        // ------ RACE CONDITION!! may get here before getting the position from server. therefore, we have that loop...
+        while(pos==null){
+        	pos = Game.getMe().getPosition();
+        }
+        GameStatus.game.buildLayout(getApplicationContext(), tableview, width, height, pos);
         
         
 //        SampleObserver so = new SampleObserver();

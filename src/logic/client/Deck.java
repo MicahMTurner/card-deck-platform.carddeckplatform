@@ -1,6 +1,7 @@
 package logic.client;
 
 
+import java.util.Collections;
 import java.util.Random;
 import java.util.Stack;
 
@@ -8,7 +9,7 @@ import logic.card.CardLogic;
 
 public abstract class Deck {
 	//change to queue?
-	public Stack<CardLogic> cards;
+	public Stack<CardLogic> cards = new Stack<CardLogic>();
 	
 	
 	public Stack<CardLogic> getCards() {
@@ -37,9 +38,10 @@ public abstract class Deck {
 		return cards.size();
 	}
 	private void swap(int i, int randomPlace) {
-		CardLogic temp=cards.get(i);
-		cards.add(i, cards.get(randomPlace));
-		cards.add(randomPlace,temp);		
+//		CardLogic temp=cards.get(i);
+//		cards.add(i, cards.get(randomPlace));
+//		cards.add(randomPlace,temp);		
+		Collections.swap(cards,i,randomPlace);
 	}
 
 	public CardLogic drawCard() {

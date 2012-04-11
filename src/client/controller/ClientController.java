@@ -38,6 +38,14 @@ public class ClientController implements Runnable, Observer {
 	private  LinkedBlockingQueue<Command> commandsQueue;
 	//tells the controller to stop
 	private volatile boolean stopped;
+	
+	public GameLogic getLogic() {
+		return logic;
+	}
+	
+	public TableView getGui() {
+		return gui;
+	}
 
 	//-------Singleton implementation--------//
 		private static class ControllerHolder
@@ -108,8 +116,7 @@ public class ClientController implements Runnable, Observer {
 		private OutgoingAPI(){}
 		
 		public void outgoingCommand(ClientAction action){
-			action.setGui(gui);
-			action.setLogic(logic);
+			
 			//commandsQueue.add(new OutgoingCommand(action));
 			new OutgoingCommand(action).execute();
 		}
@@ -163,8 +170,7 @@ public class ClientController implements Runnable, Observer {
 		private IncomingAPI(){}
 		
 		public void incomingCommand(ClientAction action){
-			action.setGui(gui);
-			action.setLogic(logic);
+			
 			//commandsQueue.add(new OutgoingCommand(action));
 			new IncomingCommand(action).execute();
 		}
@@ -271,6 +277,7 @@ public class ClientController implements Runnable, Observer {
 	@Override
 	public void update(java.util.Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
+		System.out.println("controller.update");
 		Message message = (Message) arg1;
 		message.actionOnClient();
 	}

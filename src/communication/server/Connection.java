@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import logic.client.Player;
 import logic.host.Host;
 
 import client.controller.actions.SetPositionAction;
@@ -34,6 +35,10 @@ public class Connection implements Runnable {
 	
 	public void send(Message msg){
 		try {
+			if(out==null){
+				System.out.println("out is null");
+			}
+			System.out.println(msg.getClass().toString());
 			out.writeObject(msg);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -54,8 +59,12 @@ public class Connection implements Runnable {
 		
 		// sends AskInfoMessage to the player in order to get its name and etc...
 		//send(new AskInfoMessage());
+		//System.out.println("here");
+		//Player.Position position = Host.getAvailablePosition();
+		//System.out.println(position);
 		
-		send(new Message(new SetPositionAction(Host.getAvailablePosition())));
+		//send(new Message(new SetPositionAction(position)));
+		System.out.println("there");
 		while(!stop){
 			try {
 				// gets messages.

@@ -3,6 +3,8 @@ package carddeckplatform.game;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import war.War;
 
@@ -20,6 +22,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import carddeckplatform.game.GameStatus;
@@ -54,6 +57,10 @@ public class TableView extends SurfaceView {
 	private Draggable draggableInHand=null;
 	private int xDimention;
 	private int yDimention;
+	private AnimationTask animationTask;
+	
+	
+	
 	//private Game game;
 //	private Logic logic;
 	
@@ -69,68 +76,70 @@ public class TableView extends SurfaceView {
 	public void draggableMotion(String username, int id , int x , int y){
 		Draggable draggable = table.getDraggableById(id, true);
 		draggable.motionAnimation(username);
-		draggable.setLocation(x, y);
-		invalidate(); 
+		draggable.setLocation(xDimention-x, yDimention-y);
+		//invalidate(); 
 		
-		
+		animationTask.redraw();
 	}
 	
 	public void endDraggableMotion(int id){
 		Draggable draggable = table.getDraggableById(id, true);
 		draggable.clearAnimation();
-		invalidate(); 
+		//invalidate();
+		
+		animationTask.redraw();
 	}
 	
-	private class CardAnnimation extends AsyncTask<Integer, Point, Long>{
-		private Draggable draggable;
-		private int newX;
-		private int newY;
-		
-		public CardAnnimation(final Draggable draggable, final int newX, final int newY){
-			this.draggable = draggable;
-			this.newX = newX;
-			this.newY = newY;
-			
-		}
-		
-		@Override
-		protected Long doInBackground(Integer... arg) {
-			// TODO Auto-generated method stub
-			final ArrayList<Point> vector = StaticFunctions.midLine(draggable.getX(), draggable.getY(), newX, newY);
-			for(int i=0; i<vector.size(); i++){
-				if(i%3==0)
-					onProgressUpdate(vector.get(i));
-			}
-			
-			
-			return null;
-		}
-		
-		protected void onProgressUpdate(Point... point) {
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			draggable.setLocation(point[0].x, point[0].y);
-			CarddeckplatformActivity.h.post(new Runnable() {
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					invalidate();
-				} 
-				
-			});
-			
-		}
-		
-	}
+//	private class CardAnnimation extends AsyncTask<Integer, Point, Long>{
+//		private Draggable draggable;
+//		private int newX;
+//		private int newY;
+//		
+//		public CardAnnimation(final Draggable draggable, final int newX, final int newY){
+//			this.draggable = draggable;
+//			this.newX = newX;
+//			this.newY = newY;
+//			
+//		}
+//		
+//		@Override
+//		protected Long doInBackground(Integer... arg) {
+//			// TODO Auto-generated method stub
+//			final ArrayList<Point> vector = StaticFunctions.midLine(draggable.getX(), draggable.getY(), newX, newY);
+//			for(int i=0; i<vector.size(); i++){
+//				if(i%3==0)
+//					onProgressUpdate(vector.get(i));
+//			}
+//			
+//			
+//			return null;
+//		}
+//		
+//		protected void onProgressUpdate(Point... point) {
+//			try {
+//				Thread.sleep(10);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			draggable.setLocation(point[0].x, point[0].y);
+//			CarddeckplatformActivity.h.post(new Runnable() {
+//
+//				@Override
+//				public void run() {
+//					// TODO Auto-generated method stub
+//					invalidate();
+//				} 
+//				
+//			});
+//			
+//		}
+//		
+//	}
 	
 	public void moveDraggable(final Draggable draggable, final int newX, final int newY){
 		
-		new CardAnnimation(draggable, newX, newY).execute(0);
+		//new CardAnnimation(draggable, newX, newY).execute(0);
 		
 		
 //		final int x = draggable.getX();
@@ -170,6 +179,54 @@ public class TableView extends SurfaceView {
 		//while
 	}
 	
+	
+	
+	private class AnimationTask extends AsyncTask<Integer, Integer, Long>{
+		private BlockingQueue<String> calls = new ArrayBlockingQueue<String>(1000);
+		
+		
+		public void redraw(){
+			calls.add("xyz");
+		}
+		
+		public void stopDrawing(){
+			calls.clear();
+		}
+		
+		@Override
+		protected Long doInBackground(Integer... arg0) {
+			// TODO Auto-generated method stub
+			
+			while(true){
+				try {
+					System.out.println("ANIMATION: before take.");
+					calls.take();
+					onProgressUpdate(0);
+					System.out.println("ANIMATION: after take.");
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		@Override
+		protected void onProgressUpdate(Integer... Integ) {
+			CarddeckplatformActivity.h.post(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					System.out.println("ANIMATION: before invalidate.");
+					invalidate();
+					System.out.println("ANIMATION: after invalidate.");
+				}
+			});
+		}
+		
+	}
+	
+	
+	
 	public void moveDraggable(Draggable draggable, Droppable droppable){
 		moveDraggable(draggable, droppable.getX(), droppable.getY());
 	}
@@ -178,15 +235,22 @@ public class TableView extends SurfaceView {
 		table.addDroppable(droppable);
 	}
 	
-	public void addDraggable(CardLogic cardLogic, Droppable target){
+	public void addDraggable(ArrayList<CardLogic> cardLogics, Droppable target){
+		animationTask.stopDrawing();
 		// get the first letter of the type and concatenates it with the value.
-		String key = cardLogic.getType().subSequence(0, 0) + String.valueOf(cardLogic.getValue());
-		int resourceId = getResources().getIdentifier("drawable/" + key, "drawable", "carddeckplatform.game");		
-		Card card = new Card(getContext(),resourceId,0,0,serverConnection); 
-		table.addDraggable(card);
-		target.addDraggable(card);
 		
-		invalidate();
+		for(CardLogic cardLogic : cardLogics){
+			String key = cardLogic.getType().subSequence(0, 1) + String.valueOf(cardLogic.getValue());
+			System.out.println("the key is: " + key);
+			int resourceId = getResources().getIdentifier("drawable/" + key, "drawable", "carddeckplatform.game");		
+			Card card = new Card(getContext(),resourceId,0,0); 
+			card.setCardLogic(cardLogic);
+			table.addDraggable(card);
+			target.addDraggable(card);
+		}
+		//invalidate();
+		
+		animationTask.redraw();
 	}
 	
 	public void moveFromTo(Droppable from, Droppable to){
@@ -207,7 +271,9 @@ public class TableView extends SurfaceView {
 	public TableView(Context context,AttributeSet attrs) {
 		// TODO Auto-generated constructor stub
 		super(context, attrs);
-		
+		animationTask = new AnimationTask();
+		animationTask.execute(0);
+		//init();
 		this.xDimention =  getMeasuredWidth();
 		this.yDimention = getMeasuredHeight();
 		// TODO Auto-generated constructor stub
@@ -219,9 +285,18 @@ public class TableView extends SurfaceView {
 		// connects with the server.
 //		serverConnection = new ServerConnection(new TcpClient(GameStatus.localIp , "jojo"), new TcpSender(GameStatus.hostIp , GameStatus.hostPort), this);
 //	    serverConnection.openConnection();
+		char types[] = {'h', 's', 'd', 'c'};
 		
-	    table.addDraggable(new Card(context,getResources().getIdentifier("drawable/c14", "drawable", "carddeckplatform.game"),50,50,serverConnection));
-	    table.addDraggable(new Card(context,getResources().getIdentifier("drawable/h14", "drawable", "carddeckplatform.game"),60,60,serverConnection));
+//		for(int i=0; i<4; i++){
+//			for(int j=2;j<=2; j++){
+//				String key = String.valueOf(types[i]) + String.valueOf(j);
+//				table.addDraggable(new Card(context,getResources().getIdentifier("drawable/" + key, "drawable", "carddeckplatform.game"),50,50));
+//			}
+//		}
+		
+		
+//	    table.addDraggable(new Card(context,getResources().getIdentifier("drawable/c14", "drawable", "carddeckplatform.game"),50,50,serverConnection));
+	    //table.addDraggable(new Card(context,getResources().getIdentifier("drawable/h14", "drawable", "carddeckplatform.game"),60,60,serverConnection));
 	    setFocusable(true); //necessary for getting the touch events.
 	}
 	
@@ -305,8 +380,8 @@ public class TableView extends SurfaceView {
 			// TODO: handle exception
 			System.out.println(e.getMessage());
 		}
-    	invalidate();
-    	
+    	//invalidate();
+    	animationTask.redraw();
 		return true;
     }
 
@@ -325,5 +400,59 @@ public class TableView extends SurfaceView {
 	public void setyDimention(int yDimention) {
 		this.yDimention = yDimention;
 	}
+
+	
+	
+	
+	
+	
+	
+	
+//	private SurfaceHolder holder;
+//    private SurfaceViewThread surfaceViewThread;
+//    private boolean hasSurface;
+//	
+//	
+//	
+//	@Override
+//	public void surfaceChanged(SurfaceHolder arg0, int arg1, int w, int h) {
+//		// TODO Auto-generated method stub
+////		if (surfaceViewThread != null)
+////            surfaceViewThread.onWindowResize(w, h);
+//	}
+//	
+//	private void init() {
+//        // Create a new SurfaceHolder and assign this class as its callback
+//        holder = getHolder();
+//        holder.addCallback(this);
+//        hasSurface = false;
+//    }
+//		
+//	@Override
+//	public void surfaceCreated(SurfaceHolder arg0) {
+//		// TODO Auto-generated method stub
+//		hasSurface = true;
+//
+//        if (surfaceViewThread != null)
+//            surfaceViewThread.start();
+//	}
+//
+//	@Override
+//	public void surfaceDestroyed(SurfaceHolder arg0) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//	
+//	private final class SurfaceViewThread extends Thread {
+//		@Override
+//        public void run() {
+//			SurfaceHolder surfaceHolder = holder;
+//			while (true) {
+//				Canvas c = surfaceHolder.lockCanvas();
+//				invalidate();
+//				surfaceHolder.unlockCanvasAndPost(c);
+//			}
+//		}
+//	}
 	
 }

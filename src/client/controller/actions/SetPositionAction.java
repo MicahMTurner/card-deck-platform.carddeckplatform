@@ -12,6 +12,7 @@ public class SetPositionAction extends ClientAction{
 	
 	@Override
 	public void incoming() {
+		System.out.println("got position: " + position);
 		Game.getMe().setPosition(position);
 		
 	}

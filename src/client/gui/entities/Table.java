@@ -1,6 +1,7 @@
 package client.gui.entities;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Stack;
 
 import android.content.Context;
@@ -28,7 +29,9 @@ public class Table {
 		this.context = context;
 	}
 	public void addDraggable(Draggable draggable){
-		draggables.add(draggable);
+		synchronized (draggables) {
+			draggables.add(draggable);
+		}
 	}
 	
 	public void addDroppable(Droppable dropable){
@@ -97,6 +100,7 @@ public class Table {
 	}
 	
 	public void draw(Canvas canvas){
+		System.out.println("drawing table");
 		Matrix matrix = new Matrix();
 		matrix.postScale((float) xDimention, (float) yDimention);
 		canvas.drawBitmap(android.graphics.Bitmap.createScaledBitmap(img, xDimention, yDimention,true),(float)0,(float)0, null);
@@ -104,10 +108,15 @@ public class Table {
 			d.draw(canvas);
 		}
 		
-		for(Draggable d : draggables){
-			d.draw(canvas);
+		synchronized (draggables){
+			for(Draggable d : draggables){
+			//for(Iterator<Draggable> it = draggables.iterator(); it.hasNext();){
+					//Draggable d = it.next();
+					d.draw(canvas);
+			}
 		}
 	}
+	
 	public int getxDimention() {
 		return xDimention;
 	}

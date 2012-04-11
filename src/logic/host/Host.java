@@ -50,7 +50,9 @@ public class Host implements Runnable{
 	}
 	
 	public void waitForPlayers(){
-		while(players.size()<game.getPrefs().getMinPlayers()){
+		//while(players.size()<game.getPrefs().getMinPlayers()){
+		while(ConnectionsManager.getConnectionsManager().getNumberOfConnections()<game.getPrefs().getMinPlayers()){
+			System.out.println("waiting for player " + ConnectionsManager.getConnectionsManager().getNumberOfConnections() + "/" + game.getPrefs().getMinPlayers() + " " + String.valueOf(players.size()<game.getPrefs().getMinPlayers()));
 			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions);
 	    }
 		//TODO send to GUI enable start game button
@@ -60,10 +62,19 @@ public class Host implements Runnable{
 	
 	@Override
 	public void run() {
-		waitForPlayers();
-		game.initiate();
-		game.getLogic().dealCards(game.getCards(), players);
+		//---------------------- must fix that ------------------
+		players.add(new Player("",""));
+		players.add(new Player("",""));
 		
+		players.get(0).setPosition(Position.BOTTOM);
+		players.get(1).setPosition(Position.TOP);
+		//-------------------------------------------------------
+		waitForPlayers();
+		System.out.println("got all players");
+		game.initiate();
+		System.out.println("game initiated");
+		game.getLogic().dealCards(game.getCards(), players);
+		System.out.println("cards dealt");
 		
 		
 	}
