@@ -8,10 +8,13 @@ import controller.commands.Command;
 import controller.commands.IncomingCommand;
 import controller.commands.OutgoingCommand;
 
+import android.content.Context;
 import android.database.Observable;
 import logic.card.CardLogic;
+import logic.client.Game;
 import logic.client.GameLogic;
 import logic.client.Player;
+import logic.client.Player.Position;
 import client.controller.actions.ClientAction;
 import client.controller.actions.DraggableMotionAction;
 import client.controller.actions.EndDraggableMotionAction;
@@ -26,11 +29,11 @@ import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;
 
 //maybe not creating new action and commands all the time?
-public class ClientController implements Runnable, Observer {
+public class ClientController implements Observer {
 	
 	
 	private TableView gui=null;
-	private GameLogic logic;
+	private Game logic;
 	private IncomingAPI incomingAPI;
 	private OutgoingAPI outgoingAPI;
 	
@@ -39,7 +42,7 @@ public class ClientController implements Runnable, Observer {
 	//tells the controller to stop
 	private volatile boolean stopped;
 	
-	public GameLogic getLogic() {
+	public Game getLogic() {
 		return logic;
 	}
 	
@@ -88,12 +91,12 @@ public class ClientController implements Runnable, Observer {
 		
 		
 		//--starting controller when first referred--//
-		new Thread(this).start();
+		//new Thread(this).start();
 		//ServerConnection.getConnection().openConnection(this);
 	}
 	
-	public void setLogic(GameLogic logic) {
-		this.logic = logic;
+	public void setLogic(Game game) {
+		this.logic = game;
 	}
 	
 	public void setTv(TableView tv) {
@@ -118,7 +121,8 @@ public class ClientController implements Runnable, Observer {
 		public void outgoingCommand(ClientAction action){
 			
 			//commandsQueue.add(new OutgoingCommand(action));
-			new OutgoingCommand(action).execute();
+			//new OutgoingCommand(action).execute();
+			action.outgoing();
 		}
 		
 //		public void endTurn(){
@@ -146,15 +150,15 @@ public class ClientController implements Runnable, Observer {
 //			commandsQueue.add(new OutgoingCommand(new GiveCardAction(from,to,card)));			
 //		}
 //		
-		public void cardMotion(String username, int cardId, int x, int y){
-			//commandsQueue.add(new OutgoingCommand(new DraggableMotionAction(gui, logic, username, cardId, x, y)));
-			new OutgoingCommand(new DraggableMotionAction(username, cardId, x, y)).execute();
-		}
-		
-		public void endCardMotion(int cardId){
-			//commandsQueue.add(new OutgoingCommand(new EndDraggableMotionAction(gui, logic, cardId)));
-			new OutgoingCommand(new EndDraggableMotionAction( cardId)).execute();
-		}
+//		public void cardMotion(String username, int cardId, int x, int y){
+//			//commandsQueue.add(new OutgoingCommand(new DraggableMotionAction(gui, logic, username, cardId, x, y)));
+//			new OutgoingCommand(new DraggableMotionAction(username, cardId, x, y)).execute();
+//		}
+//		
+//		public void endCardMotion(int cardId){
+//			//commandsQueue.add(new OutgoingCommand(new EndDraggableMotionAction(gui, logic, cardId)));
+//			new OutgoingCommand(new EndDraggableMotionAction( cardId)).execute();
+//		}
 		
 	}
 
@@ -170,9 +174,11 @@ public class ClientController implements Runnable, Observer {
 		private IncomingAPI(){}
 		
 		public void incomingCommand(ClientAction action){
-			
+			//action.setGui(gui);
+			//action.setLogic(logic);
 			//commandsQueue.add(new OutgoingCommand(action));
-			new IncomingCommand(action).execute();
+			//new IncomingCommand(action).execute();
+			action.incoming();
 		}
 		
 //		public void myTurn(){
@@ -200,49 +206,49 @@ public class ClientController implements Runnable, Observer {
 //			commandsQueue.add(new IncomingCommand(new GiveCardAction(from,to,card)));			
 //		}
 		
-		public void cardMotion(String username, int cardId, int x, int y){
-			//commandsQueue.add(new IncomingCommand(new DraggableMotionAction(gui, logic, username, cardId, x, y)));
-			new IncomingCommand(new DraggableMotionAction(username, cardId, x, y)).execute();
-		}
-		
-		public void endCardMotion(int cardId){
-			//commandsQueue.add(new IncomingCommand(new EndDraggableMotionAction(gui, logic, cardId)));
-			new IncomingCommand(new EndDraggableMotionAction(cardId)).execute();
-		}
+//		public void cardMotion(String username, int cardId, int x, int y){
+//			//commandsQueue.add(new IncomingCommand(new DraggableMotionAction(gui, logic, username, cardId, x, y)));
+//			new IncomingCommand(new DraggableMotionAction(username, cardId, x, y)).execute();
+//		}
+//		
+//		public void endCardMotion(int cardId){
+//			//commandsQueue.add(new IncomingCommand(new EndDraggableMotionAction(gui, logic, cardId)));
+//			new IncomingCommand(new EndDraggableMotionAction(cardId)).execute();
+//		}
 		
 	}
 	//--communication with GUI--//
  
 	
 	//---Actions on Controller---//
-	
-	/**
-	 * ends controller's thread
-	 */
-	public void shutDown(){
-		this.stopped=true;
-		//add a new blank command to wake controller and stop it
-		commandsQueue.add(new Command(null) {
-			@Override
-			public void execute() {
-			}
-		});
-	}
-	
-	
-
-	@Override
-	public void run() {
-		while (!stopped){
-			try {
-				commandsQueue.take().execute();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}		
-		
-	}
-	
+//	
+//	/**
+//	 * ends controller's thread
+//	 */
+//	public void shutDown(){
+//		this.stopped=true;
+//		//add a new blank command to wake controller and stop it
+//		commandsQueue.add(new Command(null) {
+//			@Override
+//			public void execute() {
+//			}
+//		});
+//	}
+//	
+//	
+//
+//	@Override
+//	public void run() {
+//		while (!stopped){
+//			try {
+//				commandsQueue.take().execute();
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}		
+//		
+//	}
+//	
 	
 	  
 
@@ -280,6 +286,31 @@ public class ClientController implements Runnable, Observer {
 		System.out.println("controller.update");
 		Message message = (Message) arg1;
 		message.actionOnClient();
+	}
+
+	public void buildGameLayout(Context applicationContext,
+			TableView tableview, int width, int height, Position pos) {
+		logic.buildLayout(applicationContext, tableview, height, height, pos);
+		
+	}
+
+	public void addPlayer(Player newPlayer) {
+		logic.addPlayer(newPlayer);
+		
+	}
+
+	public void setPosition(Position position) {
+		logic.getMe().setPosition(position);
+		
+	}
+
+	public Position getPosition() {
+		return logic.getMe().getPosition();
+	}
+
+	public void addCard(CardLogic cardLogic) {
+		logic.getMe().addCard(cardLogic);
+		
 	}
 	
 	

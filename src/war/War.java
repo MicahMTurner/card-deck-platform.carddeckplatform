@@ -54,4 +54,14 @@ public class War extends Game{
 		
 		
 	}
+	@Override
+	public String toString() {
+		return "war";
+	}
+	@Override
+	public void setTurns() {		
+		super.turnsQueue.add(Player.Position.BOTTOM);
+		super.turnsQueue.add(Player.Position.TOP);
+		
+	}
 }

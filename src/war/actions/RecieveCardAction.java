@@ -15,28 +15,32 @@ import client.controller.actions.ClientAction;
 public class RecieveCardAction extends ClientAction {
 
 	private ArrayList<CardLogic> cardLogics = new ArrayList<CardLogic>();
-	private int droppableId;
+	private int fromDroppableId;
+	private int toDroppableId;
 	
-	public RecieveCardAction(ArrayList<CardLogic> cardLogics, int droppableId){
+	public RecieveCardAction(ArrayList<CardLogic> cardLogics, int fromDroppableId,int toDroppableId){
 		this.cardLogics = cardLogics;
-		this.droppableId = droppableId;
+		this.fromDroppableId = fromDroppableId;
+		this.toDroppableId=toDroppableId;
 	}
 	
 	@Override
 	public void incoming() {
-		// TODO Auto-generated method stub
+	
 		for(CardLogic cardLogic : cardLogics){
-			War.getMe().getHand().add(cardLogic);
-			
+			ClientController.getController().addCard(cardLogic);			
 		}
-		ClientController.getController().getGui().addDraggable(cardLogics, ClientController.getController().getGui().getDroppableById(droppableId));
-		// update gui.
+		
+		//update gui		
+		ClientController.getController().getGui().addDraggable(cardLogics, ClientController.getController().getGui().getDroppableById(fromDroppableId)
+				,ClientController.getController().getGui().getDroppableById(toDroppableId));
+		
 	}
 
 	@Override
 	public void outgoing() {
 		System.out.println("ReceiveCardAction: outgoing");
-		ServerConnection.getConnection().getMessageSender().sendMessage(new Message(this));
+		ServerConnection.getConnection().getMessageSender().send(new Message(this));
 		
 	}
 

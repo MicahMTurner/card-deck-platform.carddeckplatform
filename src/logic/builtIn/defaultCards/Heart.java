@@ -5,7 +5,8 @@ import logic.card.CardLogic;
 public class Heart extends CardLogic{
 	private final String myType="heart";
 	
-	public Heart(int value) {		
+	public Heart(int value,int id) {
+		super(id);
 		setType(myType);
 		setValue(value);
 	}

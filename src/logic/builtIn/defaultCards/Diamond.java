@@ -5,7 +5,8 @@ import logic.card.CardLogic;
 public class Diamond extends CardLogic{
 	private final String myType="diamond";
 	
-	public Diamond(int value) {		
+	public Diamond(int value,int id) {
+		super(id);
 		setType(myType);
 		setValue(value);
 	}

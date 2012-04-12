@@ -4,11 +4,13 @@ package communication.link;
 
 import communication.messages.*;
 
-public abstract class Sender {
+public abstract class Sender {	
 	public abstract void send(Message msg);
 
-	public abstract boolean openConnection();
-	public abstract boolean closeConnection();
+	//public abstract boolean openConnection();
+	public abstract boolean closeStream();
+
+	public abstract void initializeMode();
 	
 //	public static String parseMessage(Message msg){
 //		// TODO Auto-generated method stub

@@ -5,7 +5,8 @@ import logic.card.CardLogic;
 public class Club extends CardLogic{
 	private final String myType="club";
 	
-	public Club(int value) {		
+	public Club(int value,int id) {
+		super(id);
 		setType(myType);
 		setValue(value);
 	}

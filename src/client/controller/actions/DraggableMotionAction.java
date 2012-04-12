@@ -32,7 +32,7 @@ public class DraggableMotionAction extends ClientAction {
 	@Override
 	public void outgoing() {
 		// TODO Auto-generated method stub
-		ServerConnection.getConnection().getMessageSender().sendMessage(new Message(this));
+		ServerConnection.getConnection().getMessageSender().send(new Message(this));
 	}
 
 }

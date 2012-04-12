@@ -11,7 +11,7 @@ import war.War;
 import logic.card.CardLogic;
 import logic.client.Game;
 
-import communication.entities.TcpClient;
+//import communication.entities.TcpClient;
 import communication.link.ServerConnection;
 import communication.link.TcpReceiver;
 import communication.link.TcpSender;
@@ -253,6 +253,16 @@ public class TableView extends SurfaceView {
 		animationTask.redraw();
 	}
 	
+	public void addDraggable(ArrayList<CardLogic> cardLogics,
+			Droppable from, Droppable to) {
+		for(CardLogic cardLogic : cardLogics){
+			Draggable card=table.getDraggableById(cardLogic.getId(), true);
+			from.removeDraggable(card);
+			to.addDraggable(card);
+		}
+		
+	}
+	
 	public void moveFromTo(Droppable from, Droppable to){
 		CardLogic cardLogic = from.getDraggable();
 		int cardId = cardLogic.getId();
@@ -358,18 +368,20 @@ public class TableView extends SurfaceView {
 	    			break;
 	    		case MotionEvent.ACTION_MOVE:
 	    			if(draggableInHand!=null){
-	    				draggableInHand.setLocation(X, Y);
+	    				draggableInHand.setTempLocation(X, Y);
 	    				draggableInHand.onDrag();
 	    				//table.getNearestDroppable(X, Y).onHover();
 	    			}
 	    			break;
 	    		case MotionEvent.ACTION_UP:
 	    			if(draggableInHand!=null){
+	    				draggableInHand.setLocation(X, Y);
 	    				draggableInHand.onRelease();
 	    				try {
 							table.getNearestDroppable(X, Y).onDrop(draggableInHand);
 						} catch (Exception e) {
 							// TODO: handle exception
+							e.printStackTrace();
 						}
 	    				
 	    				draggableInHand = null;
@@ -400,6 +412,8 @@ public class TableView extends SurfaceView {
 	public void setyDimention(int yDimention) {
 		this.yDimention = yDimention;
 	}
+
+	
 
 	
 	

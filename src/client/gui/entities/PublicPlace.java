@@ -34,12 +34,7 @@ public class PublicPlace extends Droppable {
 	
 	@Override
 	public void addDraggable(Draggable draggable) {
-		// TODO Auto-generated method stub
 		draggable.setLocation(getX(), getY());
-
-// 		if(draggable.getContainer()!=null)
-//			draggable.getContainer().  remove the card from the previous droppable logic.
-
 		draggable.setContainer(this);
 		logicDroppable.addCard(draggable.getCardLogic());
 	}

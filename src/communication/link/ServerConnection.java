@@ -1,57 +1,90 @@
 package communication.link;
 
-import java.util.Observer;
-
-import logic.client.Game;
-
-import client.controller.actions.AddPlayerAction;
-
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import carddeckplatform.game.GameStatus;
+//import communication.entities.Client;
+//import communication.entities.TcpClient;
 
-import communication.client.ClientMessageSender;
-import communication.entities.Client;
-import communication.entities.TcpClient;
-import communication.messages.InitialMessage;
 
 public class ServerConnection {
+	private Socket socket;
+	//private Client client;
+	private Sender sender;
+	private Receiver receiver;
 	
-	private ClientMessageSender clientMessageSender;
-	private Client c;
-	private TcpSender s;
-	private Observer observer;
-	private Receiver rc;
+	//-------Singleton implementation--------//
+	private static class ServerConnectionHolder
+	{
+		private final static ServerConnection serverConnectionHolder=new ServerConnection();
+	}
 	
-	private static ServerConnection serverConnection=new ServerConnection(new TcpClient(GameStatus.localIp , "jojo"), new TcpSender(GameStatus.hostIp , GameStatus.hostPort));
+			
+	/**
+	 * get server connection instance
+	 */
 	public static ServerConnection getConnection(){
-		return serverConnection;
+		return ServerConnectionHolder.serverConnectionHolder;
 	}
 	
 	
-	private ServerConnection(){}
 	
-	private ServerConnection(Client c, TcpSender s){
-		this.c = c;
-		this.s = s;
+	private ServerConnection(){	
+		//this.client = new TcpClient(GameStatus.localIp , "jojo");
+		
 		//this.observer = observer;
 		
-		clientMessageSender = new ClientMessageSender();
-	    clientMessageSender.setSender(s, c);
+		//clientMessageSender = new ClientMessageSender();
+	   // clientMessageSender.setSender(sender, client);
 	}
 	
-	public void openConnection(Observer observer){
-		this.observer = observer;
-		s.openConnection();
-		rc = new TcpReceiver(s.getIn());
-	    rc.reg(observer);
+	public void openConnection(){
+
+		try {
+			// creates a socket.
+			socket = new Socket(GameStatus.hostIp,GameStatus.hostPort);
+			// creates an outputstream.
+			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+		
+			this.sender = new TcpSender(out);
+			receiver = new TcpReceiver(in);
+			receiver.initializeMode();
+			sender.initializeMode();
+			new Thread(receiver).start();
+		//this.observer = observer;
+		//sender.openConnection();
+		
+		//TcpReceiver.initializeMode();
+	   // rceiver.reg(observer);
 	    
 	   // clientMessageSender.sendMessage(new InitialMessage(new AddPlayerAction(), GameStatus.username));
+		
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();			
+		}
 	}
 	
 	public void closeConnection(){
-		s.closeConnection();
+		try {
+			sender.closeStream();
+			receiver.closeStream();
+			socket.close();
+		} catch (IOException e) {		
+			e.printStackTrace();
+		}
 	}
 	
-	public ClientMessageSender getMessageSender(){
-		return clientMessageSender;
+	public Sender getMessageSender(){
+		return sender;
 	}
 }

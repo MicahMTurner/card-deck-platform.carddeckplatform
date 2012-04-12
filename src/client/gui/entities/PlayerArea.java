@@ -30,8 +30,7 @@ public class PlayerArea extends Droppable {
 	}
 
 	@Override
-	public void addDraggable(Draggable draggable) {
-		// TODO Auto-generated method stub
+	public void addDraggable(Draggable draggable) {		
 		draggable.setLocation(getX(), getY());
 
 		draggable.setContainer(this);

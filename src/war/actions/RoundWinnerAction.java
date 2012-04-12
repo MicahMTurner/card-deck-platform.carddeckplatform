@@ -26,7 +26,7 @@ public class RoundWinnerAction extends ClientAction{
 			//i'm the winner
 			for (LogicDroppable droppable : War.getDroppables()){
 				for (CardLogic card : droppable.getCards()){
-					War.getMe().getHand().add(card);
+					ClientController.getController().addCard(card);
 				}
 			}
 		}
@@ -43,7 +43,7 @@ public class RoundWinnerAction extends ClientAction{
 	 */
 	@Override
 	public void outgoing() {
-		ServerConnection.getConnection().getMessageSender().sendMessage(new Message(this));
+		ServerConnection.getConnection().getMessageSender().send(new Message(this));
 		
 	}
 
