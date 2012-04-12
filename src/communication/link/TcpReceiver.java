@@ -60,8 +60,7 @@ public class TcpReceiver extends Receiver{
 			Message initMessage = (Message)in.readObject();
 			initMessage.actionOnClient();
 			
-		} catch (ClassNotFoundException e) {
-			
+		} catch (ClassNotFoundException e) {	
 			e.printStackTrace();
 		} catch (IOException e) {
 			
