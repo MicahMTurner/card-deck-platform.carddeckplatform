@@ -114,9 +114,9 @@ public class ConnectionsManager {
 			
 			Connection connection = new Connection(position,in, out);
 			connections.add(connection);
-			
-		    new Thread(connection).start();
-		    sendTo(new InitialMessage(new InitialConnectionAction(gameId,position,players)),position);
+			sendTo(new InitialMessage(new InitialConnectionAction(gameId,position,players)),position);
+			connection.getInitialMessage();			
+		    new Thread(connection).start();		    
 		    
 		    
 		    

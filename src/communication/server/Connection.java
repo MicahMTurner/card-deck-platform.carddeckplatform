@@ -3,6 +3,8 @@ package communication.server;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
+
 import logic.client.Player;
 import communication.messages.Message;
 
@@ -37,6 +39,18 @@ public class Connection implements Runnable {
 	
 	public Player.Position getId(){
 		return id;
+	}
+	public void getInitialMessage(){
+		Message msg;
+		try {
+			msg = (Message)in.readObject();
+			msg.actionOnServer(id);
+		} catch (ClassNotFoundException e) {			
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	public void cancelConnection(){
 		stop=true;
