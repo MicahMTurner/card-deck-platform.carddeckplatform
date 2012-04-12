@@ -31,7 +31,7 @@ public class TurnAction extends ClientAction{
 	public void outgoing() {
 		// TODO Auto-generated method stub
 		// lock gui.
-		ServerConnection.getConnection().getMessageSender().sendMessage(new Message(this));
+		ServerConnection.getConnection().getMessageSender().send(new Message(this));
 	}
 
 }

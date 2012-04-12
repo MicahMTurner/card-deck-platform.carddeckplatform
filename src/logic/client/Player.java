@@ -51,7 +51,9 @@ public class Player implements Comparable<Player> , Serializable{
 	public String getUsername() {
 		return username;
 	}
-	
+	public void addCard(CardLogic card){
+		hand.add(card);
+	}
 	
 
 	//public void setUsername(String username) {

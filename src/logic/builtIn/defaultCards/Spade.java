@@ -5,7 +5,8 @@ import logic.card.CardLogic;
 public class Spade extends CardLogic{
 	private final String myType="spade";
 	
-	public Spade(int value) {		
+	public Spade(int value,int id) {
+		super(id);
 		setType(myType);
 		setValue(value);
 	}

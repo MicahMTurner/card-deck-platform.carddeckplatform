@@ -12,6 +12,10 @@ public abstract class CardLogic implements Comparable<CardLogic>, Serializable{
 	protected int id;
 	protected boolean revealed;
 	protected boolean moveable;
+
+	public CardLogic(int id){
+		this.id=id;
+	}
 	
 	protected void setValue(int value){}
 	protected void setType(String type){}
@@ -59,8 +63,5 @@ public abstract class CardLogic implements Comparable<CardLogic>, Serializable{
 		// TODO Auto-generated method stub
 		return id;
 	}
-	
-	public void setId(int id){
-		this.id = id;
-	}
+
 }

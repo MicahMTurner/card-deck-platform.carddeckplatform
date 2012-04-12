@@ -45,19 +45,19 @@ public class Table {
 	
 	
 	public Draggable getDraggableById(int id, boolean putInFront){
-		Draggable res=null;
-		for(Draggable d : draggables){	// TO CORRECT THE LOOP!!!
-			if(d.getId()==id){
-				res=d;
+		Draggable answer=null;
+		for(Draggable draggable : draggables){	// TO CORRECT THE LOOP!!!
+			if(draggable.getId()==id){
+				answer=draggable;
 				if(putInFront){
-					Draggable tmp = d;
-					draggables.remove(d);
+					Draggable tmp = draggable;
+					draggables.remove(draggable);
 					draggables.add(tmp);
 				}
 				break; 
 			}
 		}
-		return res;
+		return answer;
 	}
 	
 	public Droppable getDroppableById(int id){

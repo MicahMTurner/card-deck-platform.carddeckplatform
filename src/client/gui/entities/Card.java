@@ -5,6 +5,8 @@ import java.util.Random;
 import logic.card.CardLogic;
 
 import client.controller.ClientController;
+import client.controller.actions.DraggableMotionAction;
+import client.controller.actions.EndDraggableMotionAction;
 
 import communication.link.ServerConnection;
 
@@ -20,10 +22,8 @@ import android.graphics.Paint;
 
 public class Card extends Draggable {
 	private Bitmap img; // the image of the ball
-	private int coordX = 0; // the x coordinate at the canvas
-	private int coordY = 0; // the y coordinate at the canvas
-	private int id; // gives every ball his own id, for now not necessary
-	private static int count = 1;
+	//private int id; // gives every ball his own id, for now not necessary
+	//private static int count = 1;
 	private boolean goRight = true;
 	private boolean goDown = true;
 	private float angle = 0;
@@ -32,20 +32,18 @@ public class Card extends Draggable {
 	private Context context;
 
 	public Card(Context context, int drawable, int x, int y){
-		super(context);
+		super(context, x, y);
 		this.context = context;
 		BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inJustDecodeBounds = true;
         img = BitmapFactory.decodeResource(context.getResources(), drawable); 
-        id=count;
-		count++;
-		coordX= x;
-		coordY = y;
+        //id=count;
+		//count++;
 	}
 	
-	public Card(Context context, int drawable, Droppable dropable){
-		super(context);
-	}
+	//public Card(Context context, int drawable, Droppable dropable){
+	//	super(context);
+	//}
 	
 	public void randomizeAngle(){
 		Random generator = new Random();
@@ -59,7 +57,7 @@ public class Card extends Draggable {
 	}
 	
 	public int sensitivityRadius() {
-		// TODO Auto-generated method stub
+
 		return 30;
 	}
 
@@ -70,36 +68,29 @@ public class Card extends Draggable {
 
 
 	public void onDrag() {
-		// TODO Auto-generated method stub
+
 		//serverConnection.getMessageSender().sendMessage(new CardMotionMessage(GameStatus.username,getId(), coordX, coordY));
-		ClientController.outgoingAPI().cardMotion(GameStatus.username,getId(), coordX, coordY);
+		ClientController.outgoingAPI().outgoingCommand(new DraggableMotionAction(GameStatus.username,cardLogic.getId(), tempX, tempY));
 	}
 
 
 	public void onRelease() {
-		// TODO Auto-generated method stub
-		ClientController.outgoingAPI().cardMotion(GameStatus.username,getId(), coordX, coordY);
-		ClientController.outgoingAPI().endCardMotion(getId());
+		
+		//ClientController.outgoingAPI().cardMotion(GameStatus.username,getId(), coordX, coordY);
+		//ClientController.outgoingAPI().endCardMotion(getId());
+		ClientController.outgoingAPI().outgoingCommand(new DraggableMotionAction(GameStatus.username,cardLogic.getId(), x, y));
+		ClientController.outgoingAPI().outgoingCommand(new EndDraggableMotionAction(cardLogic.getId()));
 		randomizeAngle();
 	}
 
 
-	@Override
-	public int getX() {
-		// TODO Auto-generated method stub
-		return coordX;
-	}
 
 
-	@Override
-	public int getY() {
-		// TODO Auto-generated method stub
-		return coordY;
-	}
+
 
 	@Override
     protected void onDraw(Canvas canvas) {
-		// TODO Auto-generated method stub
+
 		Matrix matrix = new Matrix();
 		matrix.postRotate(angle);
 		Bitmap resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getScaledWidth(canvas) , img.getScaledHeight(canvas), matrix, true);
@@ -121,16 +112,9 @@ public class Card extends Draggable {
 
 
 	@Override
-	public void setLocation(int x, int y) {
-		// TODO Auto-generated method stub
-		coordX = x;
-		coordY = y;
-	}
-
-	@Override
 	public int getId() {
-		// TODO Auto-generated method stub
-		return id;
+
+		return cardLogic.getId();
 	}
 
 	@Override
@@ -141,14 +125,14 @@ public class Card extends Draggable {
 
 	@Override
 	public void motionAnimation(String str) {
-		// TODO Auto-generated method stub
+
 		isCarried = true;
 		carrier = str;
 	}
 
 	@Override
 	public void clearAnimation() {
-		// TODO Auto-generated method stub
+
 		isCarried = false;
 		carrier = "";
 	}

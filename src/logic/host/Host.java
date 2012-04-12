@@ -4,11 +4,17 @@ package logic.host;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import client.controller.actions.DealCardAction;
+
+import war.actions.RecieveCardAction;
+import war.actions.TurnAction;
 
 
 
 
 
+
+import communication.messages.Message;
 import communication.server.ConnectionsManager;
 import communication.server.Connection;
 
@@ -23,22 +29,20 @@ public class Host implements Runnable{
 	private final int maxPlayers=4;
 	public static ArrayList<Player> players = new ArrayList<Player>();
 	private ArrayList<Connection> connections = new ArrayList<Connection>();
-	private static Stack<Position> availablePositions;
+	private Stack<Position> availablePositions;
 	private Game game;
 
 	//synchronized private boolean startGameFlag=false;
 	int playersRdy=0;
 	
-	public static Position getAvailablePosition() {
-		return availablePositions.pop();
-	}
+
 			
 	public Host(Game game) {	
 		availablePositions=new Stack<Player.Position>();
-		this.availablePositions.add(Player.Position.RIGHT);
-		this.availablePositions.add(Player.Position.LEFT);
-		this.availablePositions.add(Player.Position.TOP);
-		this.availablePositions.add(Player.Position.BOTTOM);
+		availablePositions.add(Player.Position.RIGHT);
+		availablePositions.add(Player.Position.LEFT);
+		availablePositions.add(Player.Position.TOP);
+		availablePositions.add(Player.Position.BOTTOM);
 		
 		this.game=game;
 		
@@ -53,7 +57,7 @@ public class Host implements Runnable{
 		//while(players.size()<game.getPrefs().getMinPlayers()){
 		while(ConnectionsManager.getConnectionsManager().getNumberOfConnections()<game.getPrefs().getMinPlayers()){
 			System.out.println("waiting for player " + ConnectionsManager.getConnectionsManager().getNumberOfConnections() + "/" + game.getPrefs().getMinPlayers() + " " + String.valueOf(players.size()<game.getPrefs().getMinPlayers()));
-			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions);
+			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions.pop(),game.toString(),players);
 	    }
 		//TODO send to GUI enable start game button
 		
@@ -62,19 +66,18 @@ public class Host implements Runnable{
 	
 	@Override
 	public void run() {
-		//---------------------- must fix that ------------------
-		players.add(new Player("",""));
-		players.add(new Player("",""));
-		
-		players.get(0).setPosition(Position.BOTTOM);
-		players.get(1).setPosition(Position.TOP);
-		//-------------------------------------------------------
+
 		waitForPlayers();
 		System.out.println("got all players");
 		game.initiate();
 		System.out.println("game initiated");
 		game.getLogic().dealCards(game.getCards(), players);
+		//ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getHand(),4)));
+		//ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getHand(),3)));
 		System.out.println("cards dealt");
+		
+		ConnectionsManager.getConnectionsManager().sendTo(new Message(new TurnAction()), game.nextInTurn());
+		
 		
 		
 	}

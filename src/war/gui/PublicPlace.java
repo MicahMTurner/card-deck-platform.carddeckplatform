@@ -65,7 +65,7 @@ public class PublicPlace extends Droppable {
 		ArrayList<CardLogic> cd = new ArrayList<CardLogic>();
 		cd.add(draggable.getCardLogic());
 		System.out.println("PublicPlace drop");
-		ClientController.outgoingAPI().outgoingCommand(new RecieveCardAction(cd,logicDroppable.getId()));
+		ClientController.outgoingAPI().outgoingCommand(new RecieveCardAction(cd,draggable.getContainer().getLogic().getId(),logicDroppable.getId()));
 		System.out.println("PublicPlace after drop");
 	}
 

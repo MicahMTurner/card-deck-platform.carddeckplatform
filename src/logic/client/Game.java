@@ -1,7 +1,12 @@
 package logic.client;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
+import war.actions.TurnAction;
+
+import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;
 
 import android.content.Context;
@@ -11,9 +16,10 @@ import android.content.Context;
 
 public abstract class Game {	
 	//i'm first in the list
-	public static ArrayList<Player> players = new ArrayList<Player>();
-	
+	private ArrayList<Player> players = new ArrayList<Player>();
+	protected Queue<Player.Position> turnsQueue;
 	protected static ArrayList<LogicDroppable> droppables = new ArrayList<LogicDroppable>();
+	
 	ToolsFactory tools=new DefaultTools();
 	Deck cards;
 	Table table;
@@ -21,24 +27,29 @@ public abstract class Game {
 	 * leave empty if want to use default
 	 */
 	protected abstract void setNewTools();	
+	public abstract void setTurns();
+	
 	public static ArrayList<LogicDroppable> getDroppables() {
 		return droppables;
 	}
 	
-	public static Player getMe() {
+	public Player getMe() {
 		return players.get(0);
 	}
-	
+	public void addMe(){
+		players.add(new Player(GameStatus.username,GameStatus.localIp));
+	}
 	public abstract GamePrefs getPrefs();
 	public abstract GameLogic getLogic();
 	
+	@Override
+	/**
+	 * returns the game id
+	 */
+	public abstract String toString();
+	
 	public void initiate(){
 		cards=tools.createCards();	
-		
-		//table=tools.createTable();	
-		
-		
-		
 	}
 	public Deck getCards() {
 		return cards;
@@ -46,73 +57,19 @@ public abstract class Game {
 	public abstract void buildLayout(Context context, TableView tv, int width, int height, Player.Position position);
 	
 	public Game() {
-		Player player = new Player("","");
-		players.add(player);
-		// TODO Auto-generated constructor stub
+		turnsQueue=new LinkedList<Player.Position>();
+		setTurns();
 	}
-	/*
-	public void setGameToolsImp(GameToolsImp toolsImp){
-		this.toolsImp=toolsImp;
-	}	
-	public abstract void run();
-	
-	
-	
-	
-	
-	
-	
-	protected int minimumPlayers;
-	ArrayList<Card> unShuffleDeck;
-	protected Hashtable<String ,Player> players;
-	protected Queue<Card> deck;
-	protected String currentTurn;
-	protected int round;
-	protected PublicArea publicArea;
-	public Game(int minimumPlayers) {
-		this.minimumPlayers=minimumPlayers;
-		unShuffleDeck=createDeck();
-		deck=new LinkedList<Card>();
-		publicArea=new PublicArea();
+	public Player.Position nextInTurn(){
+		Player.Position next=turnsQueue.poll();
+		turnsQueue.add(next);
+		return next;
+		
 	}
 	
-	//shuffle deck
-	//add players to game
-	public abstract void setDeck();
-	public abstract boolean setStartingPlayer();
-	
-	public void addPlayer(Player player){
-		players.put(player.getUsername(), player);
+	public void addPlayer(Player newPlayer) {
+		players.add(newPlayer);
+		
 	}
-	
-	public boolean startGame(){
-		return minimumPlayers<=players.size(); 
-	}
-	public Hashtable<String ,Player> getPlayers() {
-		return players;
-	}
-	public void endTurn(){
-		round++;
-	}
-	
-	public abstract void endGame();
-	
-	public ArrayList<Card> createDeck() {
-		ArrayList<Card>deck=new ArrayList<Card>();
-			for (int j=0;j<14;j++){
-				deck.add(new Card(j,"H"));
-			}
-			for (int j=0;j<14;j++){
-				deck.add(new Card(j,"C"));
-			}
-			for (int j=0;j<14;j++){
-				deck.add(new Card(j,"S"));
-			}
-			for (int j=0;j<14;j++){
-				deck.add(new Card(j,"D"));
-			}
-		return deck;
-	}
-	*/
 
 }

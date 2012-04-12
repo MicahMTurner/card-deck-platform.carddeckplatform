@@ -10,11 +10,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import logic.client.Player;
 import logic.client.Player.Position;
 
 import client.controller.actions.AddPlayerAction;
-import client.controller.actions.SetPositionAction;
+import client.controller.actions.InitialConnectionAction;
 import carddeckplatform.game.GameStatus;
+import communication.messages.InitialMessage;
 import communication.messages.Message;
 
 public class ConnectionsManager {
@@ -76,7 +78,7 @@ public class ConnectionsManager {
 	 * @param msg
 	 * @param id
 	 */
-	public void sendToAllExcptMe(Message msg , String id){
+	public void sendToAllExcptMe(Message msg , Player.Position id){
 		for(Connection conn : connections){
 			if(!conn.getId().equals(id)){
 				conn.send(msg);
@@ -89,7 +91,7 @@ public class ConnectionsManager {
 	 * @param msg
 	 * @param id
 	 */
-	public void sendTo(Message msg, String id){
+	public void sendTo(Message msg, Player.Position id){
 		for(Connection serverTask :connections){
 			if(serverTask.getId().equals(id)){
 				serverTask.send(msg);
@@ -98,7 +100,7 @@ public class ConnectionsManager {
 		}
 	}
 	
-	public void connectPlayer(Stack<Position> availablePositions){
+	public void connectPlayer(Position position,String gameId,ArrayList<Player> players){
 		try {				
 			Socket clientSocket;
 			System.out.println("Listening to port " + GameStatus.hostPort + " Waiting for messages...");
@@ -110,15 +112,16 @@ public class ConnectionsManager {
 			ObjectOutputStream out=new ObjectOutputStream(clientSocket.getOutputStream());
 			ObjectInputStream in=new ObjectInputStream(clientSocket.getInputStream());
 			
-			Connection connection = new Connection(clientSocket.getRemoteSocketAddress().toString(),in, out);
+			Connection connection = new Connection(position,in, out);
 			connections.add(connection);
 			
 		    new Thread(connection).start();
-		    sendTo(new Message(new SetPositionAction(availablePositions.pop())),connection.getId());
+		    sendTo(new InitialMessage(new InitialConnectionAction(gameId,position,players)),position);
+		    
+		    
 		    
 		    
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -76,51 +76,21 @@ public class GameActivity extends Activity {
         tableview.setxDimention(width);
         tableview.setyDimention(height);
         ClientController.getController().setTv(tableview);
-        //Game game = new War();
-        ServerConnection.getConnection().openConnection(ClientController.getController());
         
         
-        Position pos=null;
+        //-------CONNECT TO SERVER(HOST)------//
+        ServerConnection.getConnection().openConnection();
         
         
-        // ------ RACE CONDITION!! may get here before getting the position from server. therefore, we have that loop...
-        while(pos==null){
-        	pos = Game.getMe().getPosition();
-        }
-        GameStatus.game.buildLayout(getApplicationContext(), tableview, width, height, pos);
         
-        
-//        SampleObserver so = new SampleObserver();
-//        so.setCntxt(getBaseContext());
-//        Receiver rc = new TcpReceiver(9999);
-//        System.out.println("Start Listening");
-//        rc.reg(so);
-//        
-//        
-//        System.out.println("WiFi address is " + getLocalHostAddress());
-//        Context context = getApplicationContext();
-//        CharSequence text = getLocalHostAddress();
-//        int duration = Toast.LENGTH_LONG;
-//
-//        Toast toast = Toast.makeText(context, text, duration);
-//        toast.show();
-//        try {
-//			Thread.sleep(2000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//        System.out.println("Creating message");
-//        Sender se = new TcpSender("localhost" , 9999);
-//        SampleMessage msg = new SampleMessage();
-//        msg.name = "Michael";
-//        msg.messageType = "SampleMessage";
-//        se.send(msg.messageType , msg);
-        
+        Position posistion=ClientController.getController().getPosition();
+        ClientController.getController().buildGameLayout(getApplicationContext(), tableview, width, height, posistion);
+                
+
     }
     @Override
 	public void onWindowFocusChanged(boolean hasWindowFocus){
-    	if(ipshown)
+    	if(!GameStatus.isServer)
     		return;
     	//making the ip dialog in case its the first time that we entered
     	final Dialog dialog = new Dialog(GameActivity.this);

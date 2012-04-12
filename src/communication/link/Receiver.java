@@ -8,16 +8,19 @@ import java.util.Observer;
 
 import communication.entities.Server;
 import communication.messages.Message;
-import communication.messages.MessageContainer;
+
 //import communication.messages.MessageDictionary;
 
-public abstract class Receiver extends Observable {
-	public void reg(Observer observer){
-		this.addObserver(observer);
-		startListen();
-	}
+public abstract class Receiver implements Runnable {
+	public abstract boolean closeStream();
+	//public void reg(Observer observer){
+	//	this.addObserver(observer);
+	//	startListen();
+	//}
+
+	public abstract void initializeMode();
 	
-	protected abstract void startListen();
+	//protected abstract void startListen();
 	
 //	public static Message unParseMessage(String str){
 //		Gson gson = new Gson();

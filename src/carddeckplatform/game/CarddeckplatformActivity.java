@@ -27,8 +27,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-//import communication.server.Server;
-import communication.server.TmpServer;
 
 public class CarddeckplatformActivity extends Activity {
 	private ViewFlipper mFlipper;
@@ -97,7 +95,7 @@ public class CarddeckplatformActivity extends Activity {
                 }).start(); 
 */                
                 //new Thread(new TmpServer()).start();
-                new Thread(new Host(GameStatus.game)).start();
+                new Thread(new Host(new War())).start();
                 startActivity(i);
                 
                 } 
@@ -111,6 +109,7 @@ public class CarddeckplatformActivity extends Activity {
             	dialog.setContentView(R.layout.getipdialog);
             	dialog.setTitle("Host Ip Dialog");
             	final TextView ip = (TextView) dialog.findViewById(R.id.getIpText);
+            	//ip.setText("192.168.2.125");
             	Button connect= (Button) dialog.findViewById(R.id.connectButton);
             	connect.setOnClickListener(new OnClickListener() {
 					

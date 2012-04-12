@@ -10,6 +10,7 @@ import communication.server.ConnectionsManager;
 
 import client.controller.ClientController;
 import client.controller.actions.AddPlayerAction;
+import client.controller.actions.DealCardAction;
 
 import logic.card.CardLogic;
 import logic.client.Deck;
@@ -49,8 +50,8 @@ public class WarLogic extends GameLogic implements CardsActions,PublicActions{
 		//for(Player player : players){
 		//	ConnectionsManager.getConnectionsManager().sendToAll(new Message(new RecieveCardAction()));
 		//}
-		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new RecieveCardAction(players.get(0).getHand(),4)));
-		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new RecieveCardAction(players.get(1).getHand(),3)));
+		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getHand(),4)));
+		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getHand(),3)));
 		//players.get(0).
 		
 	}

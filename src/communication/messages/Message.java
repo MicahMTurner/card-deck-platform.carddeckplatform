@@ -2,6 +2,8 @@ package communication.messages;
 
 import java.io.Serializable;
 
+import logic.client.Player;
+
 import communication.server.ConnectionsManager;
 
 import server.controller.actions.SendToAllExceptMe;
@@ -18,21 +20,21 @@ import carddeckplatform.game.TableView;
 
 public class Message implements Serializable {
 	protected ClientAction clientAction;
-	//protected ServerAction serverAction;
 	
+	
+	public Message() {}
 	public Message(ClientAction clientAction){
 		this.clientAction = clientAction;
-		//this.serverAction = serverAction;
+		
 	}
 	
-	public void actionOnServer(String id){
-		//serverAction.execute(id);
+	public void actionOnServer(Player.Position id){
+		
 		ConnectionsManager.getConnectionsManager().sendToAllExcptMe(this, id);
 	}
 	
 	public void actionOnClient(){
-		//ClientController.incomingAPI().incomingCommand(clientAction);
-		clientAction.incoming();
+		ClientController.incomingAPI().incomingCommand(clientAction);		
 	}
 
 }
