@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import war.War;
 
+import logic.client.Player;
 import logic.host.Host;
 
 //import logic.host.Host;
@@ -142,6 +143,7 @@ public class CarddeckplatformActivity extends Activity {
 				});
             	GameStatus.hostIp = ip.getText().toString();
             	GameStatus.username = username.getText().toString();
+            	GameStatus.me=new Player(GameStatus.username,GameStatus.localIp);
 //                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
 //                startActivity(i);
                 } 

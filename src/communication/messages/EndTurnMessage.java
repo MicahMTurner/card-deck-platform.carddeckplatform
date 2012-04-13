@@ -3,6 +3,7 @@ package communication.messages;
 import war.actions.TurnAction;
 import communication.server.ConnectionsManager;
 
+import logic.client.Game;
 import logic.client.Player;
 import client.controller.ClientController;
 import client.controller.actions.ClientAction;
@@ -17,7 +18,7 @@ public class EndTurnMessage extends Message{
 	@Override
 	public void actionOnServer(Player.Position id){		
 		ConnectionsManager.getConnectionsManager().sendToAllExcptMe(this, id);
-		//ConnectionsManager.getConnectionsManager().sendTo(new Message(new TurnAction()),//getnextturn )
+		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new TurnAction(Game.nextInTurn())));
 	}
 	
 	@Override

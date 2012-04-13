@@ -348,14 +348,15 @@ public class TableView extends SurfaceView {
 		    		case MotionEvent.ACTION_DOWN:
 		    			draggableInHand = table.getNearestDraggable(X, Y, true);
 		    			// disable the movement of cards that are not under my possession.
-		    			if(!draggableInHand.getCardLogic().isMoveable())
-		    				draggableInHand=null;
+		    			if(draggableInHand!=null && draggableInHand.getCardLogic().isMoveable()){
+		    				draggableInHand.onClick();
+		    			}		    			
 	//	    			if(draggableInHand==null)
 	//	    				table.getNearestDroppable(X, Y).onClick();
 	//	    			else
 	//	    				draggableInHand.onClick();
-		    			if(draggableInHand!=null)
-		    				draggableInHand.onClick();
+		    			
+		    				
 		    			
 		    			//moveDraggable(table.getDraggableById(1, true),X, Y);
 	
@@ -372,13 +373,22 @@ public class TableView extends SurfaceView {
 		    		case MotionEvent.ACTION_UP:
 		    			if(draggableInHand!=null){
 		    				draggableInHand.setLocation(X, Y);
-		    				draggableInHand.onRelease();
+		    				draggableInHand.onRelease();		    				
+		    				
 		    				try {
-								table.getNearestDroppable(X, Y).onDrop(draggableInHand);
-								
+								Droppable droppable=table.getNearestDroppable(X, Y);
+								if (droppable!=null){									
+									droppable.onDrop(draggableInHand);
+									animationTask.redraw();
+									Thread.sleep(400);
+									droppable.onDropLogic(draggableInHand);									
+									
+								}
+								else{
+									draggableInHand.undoMove();
+								}
 							} catch (Exception e) {
-								// TODO: handle exception
-								e.printStackTrace();
+								draggableInHand.undoMove();
 							}
 		    				draggableInHand = null;
 		    			}

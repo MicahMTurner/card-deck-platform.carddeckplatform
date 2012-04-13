@@ -26,7 +26,7 @@ public class Card extends Draggable {
 	//private static int count = 1;
 	private boolean goRight = true;
 	private boolean goDown = true;
-	private float angle = 0;
+	private float angle = 0;	
 	private boolean isCarried=false;
 	private String carrier = "";
 	private Context context;
@@ -83,9 +83,17 @@ public class Card extends Draggable {
 		randomizeAngle();
 	}
 
-
-
-
+	
+	@Override
+	public void undoMove() {
+		x=prevX;
+		y=prevY;
+		ClientController.outgoingAPI().outgoingCommand(new DraggableMotionAction(GameStatus.username,cardLogic.getId(), x, y));
+		ClientController.outgoingAPI().outgoingCommand(new EndDraggableMotionAction(cardLogic.getId()));
+		angle=0;
+		
+	}
+	
 
 
 	@Override
@@ -139,5 +147,7 @@ public class Card extends Draggable {
 		isCarried = false;
 		carrier = "";
 	}
+
+	
 
 }

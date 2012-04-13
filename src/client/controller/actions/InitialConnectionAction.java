@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import communication.link.ServerConnection;
 import communication.messages.InitialMessage;
 
+import carddeckplatform.game.GameStatus;
 import client.controller.ClientController;
 import client.dataBase.ClientDataBase;
 import logic.client.Game;
@@ -25,8 +26,9 @@ public class InitialConnectionAction extends ClientAction{
 	@Override
 	public void incoming() {
 		Game game=ClientDataBase.getDataBase().getGame(gameId);
+		GameStatus.me.setPosition(position);
 		game.addMe();
-		game.getMe().setPosition(position);
+		//game.getMe().setPosition(position);
 		ClientController.getController().setLogic(game);
 		for (Player newPlayer : newPlayers){
 			ClientController.getController().addPlayer(newPlayer);

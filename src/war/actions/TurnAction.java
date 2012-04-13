@@ -3,14 +3,18 @@ package war.actions;
 import communication.link.ServerConnection;
 import communication.messages.Message;
 
+import client.controller.ClientController;
 import client.controller.actions.ClientAction;
+import client.controller.actions.EndTurnAction;
 import logic.client.GameLogic;
+import logic.client.Player;
+import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;
 
 public class TurnAction extends ClientAction{
-
-	public TurnAction() {
-		
+	Player.Position position;
+	public TurnAction(Player.Position position) {
+		this.position=position;
 		
 	}
 
@@ -19,8 +23,10 @@ public class TurnAction extends ClientAction{
 	 * start turn
 	 */
 	public void incoming() {
-		// TODO Auto-generated method stub
-		// unlock gui.
+		if (GameStatus.me.getHand().size()==0){
+			ClientController.outgoingAPI().outgoingCommand(new EndTurnAction(GameStatus.me.getPosition()));
+		}
+		ClientController.getController().playerTurn(position);
 		
 	}
 
@@ -29,9 +35,7 @@ public class TurnAction extends ClientAction{
 	 * end turn
 	 */
 	public void outgoing() {
-		// TODO Auto-generated method stub
-		// lock gui.
-		ServerConnection.getConnection().getMessageSender().send(new Message(this));
+		//only incoming from host
 	}
 
 }

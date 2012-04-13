@@ -18,6 +18,7 @@ import logic.client.Player;
 import logic.actions.PublicActions;
 import logic.actions.CardsActions;
 import logic.client.GameLogic;
+import logic.host.Host;
 
 
 
@@ -44,25 +45,23 @@ public class WarLogic extends GameLogic implements CardsActions,PublicActions{
 		deck.shuffle(2);
 		int size=deck.getSize();
 		for (int i=0;i<size;i++){
-			players.get(i%2).getHand().add(deck.drawCard());
+			CardLogic card=deck.drawCard();
+			Player player=players.get(i%Host.players.size());
+			card.setOwner(player.getUsername());
+			player.getHand().add(card);
 		}
 		
 		//for(Player player : players){
 		//	ConnectionsManager.getConnectionsManager().sendToAll(new Message(new RecieveCardAction()));
 		//}
-		try {
-			Thread.sleep(1000);
-			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getHand(),4)));
-			System.out.println(players.get(0).getHand().size());
-			Thread.sleep(1000);
-			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getHand(),3)));
-			System.out.println(players.get(0).getHand().size());
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+			
+			//ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getHand(),4)));
+			//System.out.println(players.get(0).getHand().size());
+			
+			//ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getHand(),3)));
+			//System.out.println(players.get(0).getHand().size());
+			
+
 		//players.get(0).
 		
 	}

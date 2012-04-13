@@ -310,12 +310,21 @@ public class ClientController implements Observer {
 		logic.getMe().addCard(cardLogic);
 	}
 	
-	public void enabledUi(){
-		gui.setUiEnabled(true);
-	}
-	
-	public void diabledUi(){
+		
+	public void disableUi(){
 		gui.setUiEnabled(false);
+	}
+
+	public void playerTurn(Player.Position position) {
+		if (position.equals(logic.getMe().getPosition())){
+			gui.setUiEnabled(true);
+		}
+		//glow player icon/name		
+	}
+
+	public void endTurn() {
+		//stop glowing player icon/name
+		
 	}
 	
 	
