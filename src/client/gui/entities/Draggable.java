@@ -10,8 +10,8 @@ public abstract class Draggable extends View {
 	private Droppable container;
 	//protected int tempX;
 	//protected int tempY;
-	protected int prevX=0;
-	protected int prevY=0;
+	protected int prevX;
+	protected int prevY;
 	protected int x;
 	protected int y;
 	
@@ -19,13 +19,14 @@ public abstract class Draggable extends View {
 		super(context);
 		this.x=x;
 		this.y=y;
-		// TODO Auto-generated constructor stub
+		
 	}
 	public abstract int sensitivityRadius();
 	public abstract void onClick();
 	public abstract void onDrag();
 	public abstract void onRelease();
 	public abstract int getId();
+	public abstract void undoMove();
 	public  int getX(){
 		return x;
 	}
@@ -51,15 +52,9 @@ public abstract class Draggable extends View {
 	public void setContainer(Droppable container){
 		this.container = container;
 	}
-	
-
-	
+		
 	public void setLocation(int x, int y){
 		this.x=x;
 		this.y=y;
-	}
-	public void setTempLocation(int x, int y){
-		//tempX=x;
-		//tempY=y;
 	}
 }

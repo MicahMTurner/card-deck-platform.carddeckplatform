@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 public abstract class CardLogic implements Comparable<CardLogic>, Serializable{
 	protected String type;
+	private String owner;
 	protected int value;
 	protected int id;
 	protected boolean revealed;
@@ -26,6 +27,13 @@ public abstract class CardLogic implements Comparable<CardLogic>, Serializable{
 	
 	public boolean isMoveable() {
 		return moveable;
+	}
+	
+	public String getOwner() {
+		return owner;
+	}
+	public void setOwner(String owner) {
+		this.owner = owner;
 	}
 	
 	public void setMoveable(boolean moveable) {

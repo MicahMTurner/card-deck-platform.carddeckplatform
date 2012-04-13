@@ -1,5 +1,6 @@
 package war;
 
+import client.gui.entities.Droppable;
 import android.content.Context;
 import war.droppables.MyPlayerAreaLogic;
 import war.droppables.PlayerAreaLogic;
@@ -9,6 +10,7 @@ import war.gui.PublicPlace;
 import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;
 import logic.client.Game;
+import logic.client.LogicDroppable;
 import logic.client.Player;
 
 
@@ -39,16 +41,16 @@ public class War extends Game{
 		int height = GameStatus.screenHeight;
 		
 		if (position.equals(Player.Position.BOTTOM)){
-			droppables.add(new PublicAreaLogic(1));
-			droppables.add(new PublicAreaLogic(2));
-			droppables.add(new PlayerAreaLogic(3));
-			droppables.add(new MyPlayerAreaLogic(4));
+			droppables.add(new PublicAreaLogic(1,LogicDroppable.Type.PUBLIC));
+			droppables.add(new PublicAreaLogic(2,LogicDroppable.Type.PUBLIC));
+			droppables.add(new PlayerAreaLogic(3,LogicDroppable.Type.PLAYER));
+			droppables.add(new MyPlayerAreaLogic(4,LogicDroppable.Type.PLAYER));
 		}
 		else if (position.equals(Player.Position.TOP)){
-			droppables.add(new PublicAreaLogic(2));
-			droppables.add(new PublicAreaLogic(1));
-			droppables.add(new PlayerAreaLogic(4));
-			droppables.add(new MyPlayerAreaLogic(3));
+			droppables.add(new PublicAreaLogic(2,LogicDroppable.Type.PUBLIC));
+			droppables.add(new PublicAreaLogic(1,LogicDroppable.Type.PUBLIC));
+			droppables.add(new PlayerAreaLogic(4,LogicDroppable.Type.PLAYER));
+			droppables.add(new MyPlayerAreaLogic(3,LogicDroppable.Type.PLAYER));
 		}
 			tv.addDroppable(new PublicPlace(context, width/3, height/2, droppables.get(0)));
 			tv.addDroppable(new PublicPlace(context, 2*(width/3), height/2,droppables.get(1)));

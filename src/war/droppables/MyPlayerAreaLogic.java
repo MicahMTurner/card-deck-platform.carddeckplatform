@@ -4,8 +4,8 @@ import logic.card.CardLogic;
 
 public class MyPlayerAreaLogic extends PlayerAreaLogic {
 
-	public MyPlayerAreaLogic(int id) {
-		super(id);
+	public MyPlayerAreaLogic(int id,Type type) {
+		super(id,type);
 		// TODO Auto-generated constructor stub
 	}
 	

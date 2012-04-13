@@ -17,7 +17,7 @@ import android.content.Context;
 public abstract class Game {	
 	//i'm first in the list
 	private ArrayList<Player> players = new ArrayList<Player>();
-	protected Queue<Player.Position> turnsQueue;
+	protected static Queue<Player.Position> turnsQueue=new LinkedList<Player.Position>();
 	protected static ArrayList<LogicDroppable> droppables = new ArrayList<LogicDroppable>();
 	
 	ToolsFactory tools=new DefaultTools();
@@ -37,7 +37,7 @@ public abstract class Game {
 		return players.get(0);
 	}
 	public void addMe(){
-		players.add(new Player(GameStatus.username,GameStatus.localIp));
+		players.add(GameStatus.me);
 	}
 	public abstract GamePrefs getPrefs();
 	public abstract GameLogic getLogic();
@@ -57,10 +57,9 @@ public abstract class Game {
 	public abstract void buildLayout(Context context, TableView tv, Player.Position position);
 	
 	public Game() {
-		turnsQueue=new LinkedList<Player.Position>();
 		setTurns();
 	}
-	public Player.Position nextInTurn(){
+	public static Player.Position nextInTurn(){
 		Player.Position next=turnsQueue.poll();
 		turnsQueue.add(next);
 		return next;

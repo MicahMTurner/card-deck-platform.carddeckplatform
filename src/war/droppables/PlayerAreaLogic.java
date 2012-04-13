@@ -5,8 +5,8 @@ import logic.client.LogicDroppable;
 
 public class PlayerAreaLogic extends LogicDroppable{
 
-	public PlayerAreaLogic(int id) {
-		super(id);
+	public PlayerAreaLogic(int id,Type type) {
+		super(id,type);
 		// TODO Auto-generated constructor stub
 	}
 

@@ -6,10 +6,19 @@ import java.util.Stack;
 import logic.card.CardLogic;
 
 public abstract class LogicDroppable implements Serializable{
+	public enum Type{
+		PLAYER,PUBLIC;
+	}
+	
 	protected Stack<CardLogic> cards = new Stack<CardLogic>();
+	protected Type type;
 	private int id;
-	public LogicDroppable(int id) {
+	public LogicDroppable(int id,Type type) {
 		this.id =id;
+		this.type=type;
+	}
+	public Type getType() {
+		return type;
 	}
 	public abstract void onClickHandler();
 	public abstract void onDropHandler(CardLogic card);

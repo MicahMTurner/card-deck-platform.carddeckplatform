@@ -59,7 +59,7 @@ public class PublicPlace extends Droppable {
 	public void onDrop(Draggable draggable) {
 		// TODO Auto-generated method stub
 		addDraggable(draggable);
-		logicDroppable.onDropHandler(draggable.getCardLogic());
+		//logicDroppable.onDropHandler(draggable.getCardLogic());
 		
 		// creates new array in order to send it in the action (this action receives ArrayList of CardLogic's)
 		ArrayList<CardLogic> cd = new ArrayList<CardLogic>();

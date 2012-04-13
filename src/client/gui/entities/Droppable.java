@@ -34,5 +34,9 @@ public abstract class Droppable {
 	}
 	
 	public abstract void draw(Canvas canvas);
+	public void onDropLogic(Draggable draggable) {
+		logicDroppable.onDropHandler(draggable.getCardLogic());
+		
+	}
 	
 }

@@ -69,32 +69,21 @@ public class Host implements Runnable{
 
 		waitForPlayers();
 		System.out.println("got all players");
-		try {
-			Thread.sleep(2000);
+		game.initiate();
 		
-			game.initiate();
-			
+
 		
-			
-			
-			System.out.println("game initiated");
-			game.getLogic().dealCards(game.getCards(), players);
-			
-			
-			//ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getHand(),4)));
-			//ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getHand(),3)));
-			System.out.println("cards dealt");
-			
-			ConnectionsManager.getConnectionsManager().sendTo(new Message(new TurnAction()), game.nextInTurn());
-			
-			
 		
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		System.out.println("game initiated");
+		game.getLogic().dealCards(game.getCards(), players);
 		
+		
+		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getHand(),4)));
+		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getHand(),3)));
+		System.out.println("cards dealt");
+		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new TurnAction(game.nextInTurn())));
 	}
+
 	
 	
 	//public void playerLeft(Player player){

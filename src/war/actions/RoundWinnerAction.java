@@ -26,16 +26,17 @@ public class RoundWinnerAction extends ClientAction{
 			//i'm the winner
 			for (LogicDroppable droppable : War.getDroppables()){
 				for (CardLogic card : droppable.getCards()){
+					card.setOwner(GameStatus.username);
 					ClientController.getController().addCard(card);
 				}
 			}
 		}
-		//i'm not the winner
-		else{
-			for (LogicDroppable droppable : War.getDroppables()){
+		for (LogicDroppable droppable : War.getDroppables()){
+			if (droppable.getType().equals(LogicDroppable.Type.PUBLIC)){
 				droppable.getCards().clear();
 			}
 		}
+		
 	}
 
 	/**
