@@ -62,20 +62,20 @@ public class Card extends Draggable {
 	}
 
 
-	public void onClick() {
-		// TODO Auto-generated method stub
+	public void onClick() {		
+		// save the current location in order to be able to return to this position if needed.
+		prevX = x;
+		prevY = y;
 	}
 
 
 	public void onDrag() {
-
 		//serverConnection.getMessageSender().sendMessage(new CardMotionMessage(GameStatus.username,getId(), coordX, coordY));
-		ClientController.outgoingAPI().outgoingCommand(new DraggableMotionAction(GameStatus.username,cardLogic.getId(), tempX, tempY));
+		ClientController.outgoingAPI().outgoingCommand(new DraggableMotionAction(GameStatus.username,cardLogic.getId(), x, y));
 	}
 
 
 	public void onRelease() {
-		
 		//ClientController.outgoingAPI().cardMotion(GameStatus.username,getId(), coordX, coordY);
 		//ClientController.outgoingAPI().endCardMotion(getId());
 		ClientController.outgoingAPI().outgoingCommand(new DraggableMotionAction(GameStatus.username,cardLogic.getId(), x, y));
@@ -90,11 +90,14 @@ public class Card extends Draggable {
 
 	@Override
     protected void onDraw(Canvas canvas) {
-
+		Bitmap resizedBitmap=null;
 		Matrix matrix = new Matrix();
 		matrix.postRotate(angle);
-		Bitmap resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getScaledWidth(canvas) , img.getScaledHeight(canvas), matrix, true);
-        canvas.drawBitmap(resizedBitmap, getX()-25, getY()-20, new Paint());
+		if(cardLogic.isRevealed())
+			resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getScaledWidth(canvas) , img.getScaledHeight(canvas), matrix, true);
+		else
+			resizedBitmap = Bitmap.createBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.back), 0, 0, img.getScaledWidth(canvas) , img.getScaledHeight(canvas), matrix, true);
+		canvas.drawBitmap(resizedBitmap, getX()-25, getY()-20, new Paint());
         
         // if the card is being carried by another player a hand and the name of the carrier would be drawn near the card's image.
         if(isCarried){
@@ -102,9 +105,9 @@ public class Card extends Draggable {
         	// draws the name of the carrier.
             paint.setColor(Color.BLACK); 
             paint.setTextSize(20); 
-            canvas.drawText(carrier,getX(), getY(), paint);
+            canvas.drawText(carrier,getX()-25, getY()-20, paint);
             // draws the hand.
-            canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.hand),getX()-25, getY()+20 , paint);
+            canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.hand),getX()-30, getY()+20 , paint);
         }
         
         	

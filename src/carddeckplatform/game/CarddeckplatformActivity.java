@@ -109,7 +109,7 @@ public class CarddeckplatformActivity extends Activity {
             	dialog.setContentView(R.layout.getipdialog);
             	dialog.setTitle("Host Ip Dialog");
             	final TextView ip = (TextView) dialog.findViewById(R.id.getIpText);
-            	ip.setText("192.168.2.125");
+            	ip.setText("10.0.2.2");
             	Button connect= (Button) dialog.findViewById(R.id.connectButton);
             	connect.setOnClickListener(new OnClickListener() {
 					
@@ -147,6 +147,7 @@ public class CarddeckplatformActivity extends Activity {
                 } 
              });
     }
+    
     public void onWindowFocusChanged(boolean hasWindowFocus){
     	
     }

@@ -74,7 +74,7 @@ public class PublicPlace extends Droppable {
 		// TODO Auto-generated method stub
 		
 		
-		//canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.place),getX()-45,getY()-60,null);
+		canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.place),getX()-28,getY()-27,null);
 	}
 
 	@Override

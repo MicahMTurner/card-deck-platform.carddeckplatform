@@ -47,12 +47,27 @@ public class WarLogic extends GameLogic implements CardsActions,PublicActions{
 			players.get(i%2).getHand().add(deck.drawCard());
 		}
 		
-		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getHand(),4)));
-		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getHand(),3)));
-
+		//for(Player player : players){
+		//	ConnectionsManager.getConnectionsManager().sendToAll(new Message(new RecieveCardAction()));
+		//}
+		try {
+			Thread.sleep(1000);
+			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getHand(),4)));
+			System.out.println(players.get(0).getHand().size());
+			Thread.sleep(1000);
+			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getHand(),3)));
+			System.out.println(players.get(0).getHand().size());
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//players.get(0).
 		
 	}
 
+	
 
 	@Override
 	public CardLogic drawCard() {

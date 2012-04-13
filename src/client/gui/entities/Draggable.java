@@ -8,8 +8,10 @@ import android.view.View;
 public abstract class Draggable extends View {
 	protected CardLogic cardLogic;
 	private Droppable container;
-	protected int tempX;
-	protected int tempY;
+	//protected int tempX;
+	//protected int tempY;
+	protected int prevX=0;
+	protected int prevY=0;
 	protected int x;
 	protected int y;
 	
@@ -57,7 +59,7 @@ public abstract class Draggable extends View {
 		this.y=y;
 	}
 	public void setTempLocation(int x, int y){
-		tempX=x;
-		tempY=y;
+		//tempX=x;
+		//tempY=y;
 	}
 }
