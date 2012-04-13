@@ -11,6 +11,7 @@ public class MyPlayerAreaLogic extends PlayerAreaLogic {
 	
 	@Override
 	public void addCard(CardLogic card) {
+		card.setRevealed(false);
 		card.setMoveable(true);
 		cards.push(card);
 	}

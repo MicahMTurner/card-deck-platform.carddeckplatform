@@ -51,6 +51,7 @@ public class PublicAreaLogic extends LogicDroppable{
 	@Override
 	public void addCard(CardLogic card) {
 		// TODO Auto-generated method stub
+		card.setRevealed(true);
 		card.setMoveable(false);
 		cards.push(card);
 	}

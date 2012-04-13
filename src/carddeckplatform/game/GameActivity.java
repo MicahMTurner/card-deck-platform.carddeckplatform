@@ -62,8 +62,8 @@ public class GameActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
                                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Display display = getWindowManager().getDefaultDisplay();
-        int width = display.getWidth();
-        int height = display.getHeight();
+        GameStatus.screenWidth = display.getWidth();
+        GameStatus.screenHeight = display.getHeight();
         
 //        TableView dv = new TableView(this,null);
         
@@ -73,8 +73,8 @@ public class GameActivity extends Activity {
      // necessary to transparent background!!!!
         tableview.setZOrderOnTop(true);        
         tableview.getHolder().setFormat(PixelFormat.TRANSPARENT);
-        tableview.setxDimention(width);
-        tableview.setyDimention(height);
+        tableview.setxDimention(GameStatus.screenWidth);
+        tableview.setyDimention(GameStatus.screenHeight);
         ClientController.getController().setTv(tableview);
         
         
@@ -84,8 +84,8 @@ public class GameActivity extends Activity {
         
         
         Position posistion=ClientController.getController().getPosition();
-        ClientController.getController().buildGameLayout(getApplicationContext(), tableview, width, height, posistion);
-                
+        ClientController.getController().buildGameLayout(getApplicationContext(), tableview, posistion);
+        System.out.println("Layout was created");
 
     }
     @Override

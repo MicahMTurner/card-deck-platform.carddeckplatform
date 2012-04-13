@@ -7,6 +7,8 @@ public class GameStatus {
 	public static String localIp;
 	public static String username;
 	public static int hostPort = 9997;
+	public static int screenWidth;
+	public static int screenHeight;
 	//public static Game game = new War();
 	//public static int localPort = 9998;
 }

@@ -24,6 +24,7 @@ public class PlayerAreaLogic extends LogicDroppable{
 
 	@Override
 	public void addCard(CardLogic card) {
+		card.setRevealed(false);
 		card.setMoveable(false);
 		cards.push(card);
 		

@@ -288,10 +288,8 @@ public class ClientController implements Observer {
 		message.actionOnClient();
 	}
 
-	public void buildGameLayout(Context applicationContext,
-			TableView tableview, int width, int height, Position pos) {
-		logic.buildLayout(applicationContext, tableview, height, height, pos);
-		
+	public void buildGameLayout(Context applicationContext, TableView tableview, Position pos) {
+		logic.buildLayout(applicationContext, tableview, pos);	
 	}
 
 	public void addPlayer(Player newPlayer) {
@@ -310,7 +308,14 @@ public class ClientController implements Observer {
 
 	public void addCard(CardLogic cardLogic) {
 		logic.getMe().addCard(cardLogic);
-		
+	}
+	
+	public void enabledUi(){
+		gui.setUiEnabled(true);
+	}
+	
+	public void diabledUi(){
+		gui.setUiEnabled(false);
 	}
 	
 	

@@ -6,6 +6,7 @@ import war.droppables.PlayerAreaLogic;
 import war.droppables.PublicAreaLogic;
 import war.gui.PlayerArea;
 import war.gui.PublicPlace;
+import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;
 import logic.client.Game;
 import logic.client.Player;
@@ -32,7 +33,10 @@ public class War extends Game{
 		
 	}
 	@Override
-	public void buildLayout(Context context, TableView tv, int width, int height, Player.Position position) {
+	public void buildLayout(Context context, TableView tv, Player.Position position) {
+		
+		int width = GameStatus.screenWidth;
+		int height = GameStatus.screenHeight;
 		
 		if (position.equals(Player.Position.BOTTOM)){
 			droppables.add(new PublicAreaLogic(1));

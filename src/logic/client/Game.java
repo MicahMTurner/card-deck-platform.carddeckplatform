@@ -54,7 +54,7 @@ public abstract class Game {
 	public Deck getCards() {
 		return cards;
 	}
-	public abstract void buildLayout(Context context, TableView tv, int width, int height, Player.Position position);
+	public abstract void buildLayout(Context context, TableView tv, Player.Position position);
 	
 	public Game() {
 		turnsQueue=new LinkedList<Player.Position>();
@@ -70,6 +70,10 @@ public abstract class Game {
 	public void addPlayer(Player newPlayer) {
 		players.add(newPlayer);
 		
+	}
+	
+	public ArrayList<Player> getPlayers(){
+		return players;
 	}
 
 }
