@@ -13,6 +13,7 @@ import android.database.Observable;
 import logic.card.CardLogic;
 import logic.client.Game;
 import logic.client.GameLogic;
+import logic.client.LogicDroppable;
 import logic.client.Player;
 import logic.client.Player.Position;
 import client.controller.actions.ClientAction;
@@ -36,6 +37,8 @@ public class ClientController implements Observer {
 	private Game logic;
 	private IncomingAPI incomingAPI;
 	private OutgoingAPI outgoingAPI;
+	
+	private LogicDroppable myArea;
 	
 	//holds commands in queue
 	private  LinkedBlockingQueue<Command> commandsQueue;
@@ -291,21 +294,21 @@ public class ClientController implements Observer {
 	public void buildGameLayout(Context applicationContext, TableView tableview, Position pos) {
 		logic.buildLayout(applicationContext, tableview, pos);	
 	}
-
+	
 	public void addPlayer(Player newPlayer) {
 		logic.addPlayer(newPlayer);
 		
 	}
-
+	
 	public void setPosition(Position position) {
 		logic.getMe().setPosition(position);
 		
 	}
-
+	
 	public Position getPosition() {
 		return logic.getMe().getPosition();
 	}
-
+	
 	public void addCard(CardLogic cardLogic) {
 		logic.getMe().addCard(cardLogic);
 	}
@@ -328,6 +331,17 @@ public class ClientController implements Observer {
 	}
 	
 	
+	public void setMyArea(LogicDroppable myArea) {
+		this.myArea = myArea;
+	}
+	
+	public LogicDroppable getMyArea() {
+		return myArea;
+	}
+	
+	public void runCardAnimation(CardLogic cardLogic, LogicDroppable logicDroppable, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
+		gui.moveDraggable(gui.getDraggableById(cardLogic.getId(), true), gui.getDroppableById(logicDroppable.getId()), initialDelay, delay, revealedWhileMoving, revealedAtEnd);
+	}
 	
 	
 	//---------------------------------------------------------------------//

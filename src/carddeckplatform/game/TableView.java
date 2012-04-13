@@ -183,20 +183,27 @@ public class TableView extends SurfaceView {
 	}
 	
 	
-	public void moveDraggable(final Draggable draggable, final int newX, final int newY){
+	public void moveDraggable(final Draggable draggable, final int newX, final int newY, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
+		
 		new Thread(new Runnable() {	
 			@Override
 			public void run() {
+				draggable.getCardLogic().setRevealed(revealedWhileMoving);
 				// TODO Auto-generated method stub
 				int x = draggable.getX();
 				int y = draggable.getY();
 				final ArrayList<Point> vector = StaticFunctions.midLine(x, y, newX, newY);
-				
+				try {
+        			Thread.sleep(initialDelay);
+        		} catch (InterruptedException e) {
+        			// TODO Auto-generated catch block
+        			e.printStackTrace();
+        		}
             	for(int i=0; i<vector.size(); i++){
             		final int index = i;
 		
             		try {
-            			Thread.sleep(10);
+            			Thread.sleep(delay);
             		} catch (InterruptedException e) {
             			// TODO Auto-generated catch block
             			e.printStackTrace();
@@ -206,6 +213,7 @@ public class TableView extends SurfaceView {
             		draggable.setLocation(vector.get(index).x, vector.get(index).y);
             		animationTask.redraw();
             	}
+            	draggable.getCardLogic().setRevealed(revealedAtEnd);
 				
 			}
 		}).start();
@@ -214,8 +222,8 @@ public class TableView extends SurfaceView {
 	
 	
 	
-	public void moveDraggable(Draggable draggable, Droppable droppable){
-		moveDraggable(draggable, droppable.getX(), droppable.getY());
+	public void moveDraggable(Draggable draggable, Droppable droppable, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
+		moveDraggable(draggable, droppable.getX(), droppable.getY(), initialDelay, delay, revealedWhileMoving, revealedAtEnd);
 	}
 	
 	public void addDroppable(Droppable droppable){
@@ -262,6 +270,10 @@ public class TableView extends SurfaceView {
 	
 	public Droppable getDroppableById(int id){
 		return table.getDroppableById(id);
+	}
+	
+	public Draggable getDraggableById(int id, boolean putInFront){
+		return table.getDraggableById(id, putInFront);
 	}
 	
 	public TableView(Context context,AttributeSet attrs) {
@@ -350,7 +362,11 @@ public class TableView extends SurfaceView {
 		    			// disable the movement of cards that are not under my possession.
 		    			if(draggableInHand!=null && draggableInHand.getCardLogic().isMoveable()){
 		    				draggableInHand.onClick();
-		    			}		    			
+		    			}	
+		    			if(draggableInHand!=null && !draggableInHand.getCardLogic().isMoveable()){
+		    				Toast toast = Toast.makeText(cont, "You cannot move this card", Toast.LENGTH_SHORT);
+		        			toast.show();
+		    			}
 	//	    			if(draggableInHand==null)
 	//	    				table.getNearestDroppable(X, Y).onClick();
 	//	    			else
@@ -379,9 +395,9 @@ public class TableView extends SurfaceView {
 								Droppable droppable=table.getNearestDroppable(X, Y);
 								if (droppable!=null){									
 									droppable.onDrop(draggableInHand);
-									animationTask.redraw();
-									Thread.sleep(400);
-									droppable.onDropLogic(draggableInHand);									
+//									animationTask.redraw();
+//									Thread.sleep(400);
+//									droppable.onDropLogic(draggableInHand);									
 									
 								}
 								else{
@@ -394,6 +410,10 @@ public class TableView extends SurfaceView {
 		    			}
 		    			break;
 	    		}
+    		}
+    		else{
+    			Toast toast = Toast.makeText(cont, "It's not your turn now!!", Toast.LENGTH_SHORT);
+    			toast.show();
     		}
 		} catch (Exception e) {
 			// TODO: handle exception

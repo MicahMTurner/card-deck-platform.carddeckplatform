@@ -33,6 +33,8 @@ public abstract class Game {
 		return droppables;
 	}
 	
+	
+	
 	public Player getMe() {
 		return players.get(0);
 	}
