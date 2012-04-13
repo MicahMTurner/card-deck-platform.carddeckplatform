@@ -36,7 +36,6 @@ public class War extends Game{
 	}
 	@Override
 	public void buildLayout(Context context, TableView tv, Player.Position position) {
-		
 		int width = GameStatus.screenWidth;
 		int height = GameStatus.screenHeight;
 		
@@ -52,10 +51,11 @@ public class War extends Game{
 			droppables.add(new PlayerAreaLogic(4,LogicDroppable.Type.PLAYER));
 			droppables.add(new MyPlayerAreaLogic(3,LogicDroppable.Type.PLAYER));
 		}
-			tv.addDroppable(new PublicPlace(context, width/3, height/2, droppables.get(0)));
-			tv.addDroppable(new PublicPlace(context, 2*(width/3), height/2,droppables.get(1)));
-			tv.addDroppable(new PlayerArea(context, width/2, 60, droppables.get(2)));
-			tv.addDroppable(new PlayerArea(context, width/2, height-100, droppables.get(3)));
+		
+		tv.addDroppable(new PublicPlace(context, width/3, height/2, droppables.get(0)));
+		tv.addDroppable(new PublicPlace(context, 2*(width/3), height/2,droppables.get(1)));
+		tv.addDroppable(new PlayerArea(context, width/2, 60, droppables.get(2)));
+		tv.addDroppable(new PlayerArea(context, width/2, height-100, droppables.get(3)));
 		
 		
 		

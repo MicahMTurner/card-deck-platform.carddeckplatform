@@ -1,5 +1,6 @@
 package war.droppables;
 
+import carddeckplatform.game.GameStatus;
 import logic.card.CardLogic;
 
 public class MyPlayerAreaLogic extends PlayerAreaLogic {

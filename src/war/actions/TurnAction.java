@@ -27,7 +27,6 @@ public class TurnAction extends ClientAction{
 			ClientController.outgoingAPI().outgoingCommand(new EndTurnAction(GameStatus.me.getPosition()));
 		}
 		ClientController.getController().playerTurn(position);
-		
 	}
 
 	@Override
