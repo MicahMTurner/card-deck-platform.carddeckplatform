@@ -46,7 +46,7 @@ public class PublicPlace extends Droppable {
 	@Override
 	public void addDraggable(Draggable draggable) {
 		draggable.setLocation(getX(), getY());
-
+		draggable.randomizeAngle();
 
 		draggable.setContainer(this);
 		logicDroppable.addCard(draggable.getCardLogic());

@@ -1,5 +1,7 @@
 package client.gui.entities;
 
+import java.util.Random;
+
 import logic.card.CardLogic;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -14,6 +16,7 @@ public abstract class Draggable extends View {
 	protected int prevY;
 	protected int x;
 	protected int y;
+	protected float angle = 0;
 	
 	public Draggable(Context context,int x, int y) {
 		super(context);
@@ -57,4 +60,17 @@ public abstract class Draggable extends View {
 		this.x=x;
 		this.y=y;
 	}
+	
+	public void randomizeAngle(){
+		Random generator = new Random();
+		float randomIndex = generator.nextInt(20);
+		randomIndex -= 10;
+		angle = randomIndex;
+	}
+	
+	public void setAngle(float angle){
+		this.angle = angle%360;
+	}
+	
+	
 }

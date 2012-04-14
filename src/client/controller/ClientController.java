@@ -19,6 +19,7 @@ import logic.client.Player.Position;
 import client.controller.actions.ClientAction;
 import client.controller.actions.DraggableMotionAction;
 import client.controller.actions.EndDraggableMotionAction;
+import client.gui.entities.Table;
 //import client.controller.actions.GiveCardAction;
 //import client.controller.actions.HideCardAction;
 //import client.controller.actions.PutInPublicAction;
@@ -188,8 +189,8 @@ public class ClientController {
 		return myArea;
 	}
 	
-	public void runCardAnimation(CardLogic cardLogic, LogicDroppable logicDroppable, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
-		gui.moveDraggable(gui.getDraggableById(cardLogic.getId(), true), gui.getDroppableById(logicDroppable.getId()), initialDelay, delay, revealedWhileMoving, revealedAtEnd);
+	public void runCardAnimation(CardLogic cardLogic, LogicDroppable logicDroppable, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd, Table.GetMethod g){
+		gui.moveDraggable(gui.getDraggableById(cardLogic.getId(), g), gui.getDroppableById(logicDroppable.getId()), initialDelay, delay, revealedWhileMoving, revealedAtEnd);
 	}
 
 	public boolean isMyTurn() {

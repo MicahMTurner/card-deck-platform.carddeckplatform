@@ -31,6 +31,7 @@ import client.gui.entities.Card;
 import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
 import client.gui.entities.Table;
+import client.gui.entities.Table.GetMethod;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -75,7 +76,7 @@ public class TableView extends SurfaceView {
 	
 	
 	public void draggableMotion(String username, int id , int x , int y){
-		Draggable draggable = table.getDraggableById(id, true);
+		Draggable draggable = table.getDraggableById(id, GetMethod.PutInFront);
 		draggable.motionAnimation(username);
 		draggable.setLocation(xDimention-x, yDimention-y);
 		//invalidate(); 
@@ -84,7 +85,7 @@ public class TableView extends SurfaceView {
 	}
 	
 	public void endDraggableMotion(int id){
-		Draggable draggable = table.getDraggableById(id, true);
+		Draggable draggable = table.getDraggableById(id, GetMethod.PutInFront);
 		draggable.clearAnimation();
 		//invalidate();
 		
@@ -142,7 +143,7 @@ public class TableView extends SurfaceView {
 	
 	
 	private class AnimationTask extends AsyncTask<Integer, Integer, Long>{
-		private BlockingQueue<String> calls = new ArrayBlockingQueue<String>(1000);
+		private BlockingQueue<String> calls = new ArrayBlockingQueue<String>(10000);
 		public void redraw(){
 			calls.add("xyz");
 		}
@@ -161,10 +162,14 @@ public class TableView extends SurfaceView {
 					calls.take();
 					onProgressUpdate(0);
 					System.out.println("ANIMATION: after take.");
-				} catch (InterruptedException e) {
+				} catch (InterruptedException ie) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					ie.printStackTrace();
+				} catch (IllegalStateException ise){
+					stopDrawing();
+					redraw();
 				}
+				
 			}
 		}
 		@Override
@@ -200,6 +205,7 @@ public class TableView extends SurfaceView {
         			e.printStackTrace();
         		}
             	for(int i=0; i<vector.size(); i++){
+            		draggable.getCardLogic().setRevealed(revealedWhileMoving);
             		final int index = i;
 		
             		try {
@@ -209,10 +215,12 @@ public class TableView extends SurfaceView {
             			e.printStackTrace();
             		}
 		
-		
+            		
             		draggable.setLocation(vector.get(index).x, vector.get(index).y);
+            		draggable.setAngle(i*10);
             		animationTask.redraw();
             	}
+            	draggable.setAngle(0);
             	draggable.getCardLogic().setRevealed(revealedAtEnd);
 				
 			}
@@ -250,7 +258,7 @@ public class TableView extends SurfaceView {
 	public void addDraggable(ArrayList<CardLogic> cardLogics,
 			Droppable from, Droppable to) {
 		for(CardLogic cardLogic : cardLogics){
-			Draggable card=table.getDraggableById(cardLogic.getId(), true);
+			Draggable card=table.getDraggableById(cardLogic.getId(), GetMethod.PutInFront);
 			from.removeDraggable(card);
 			to.addDraggable(card);
 		}
@@ -272,8 +280,8 @@ public class TableView extends SurfaceView {
 		return table.getDroppableById(id);
 	}
 	
-	public Draggable getDraggableById(int id, boolean putInFront){
-		return table.getDraggableById(id, putInFront);
+	public Draggable getDraggableById(int id, GetMethod g){
+		return table.getDraggableById(id, g);
 	}
 	
 	public TableView(Context context,AttributeSet attrs) {
@@ -360,7 +368,7 @@ public class TableView extends SurfaceView {
     		if(uiEnabled){
 	    		switch (eventaction ) { 
 		    		case MotionEvent.ACTION_DOWN:
-		    			draggableInHand = table.getNearestDraggable(X, Y, true);
+		    			draggableInHand = table.getNearestDraggable(X, Y, GetMethod.PutInFront);
 		    			// disable the movement of cards that are not under my possession.
 		    			if(draggableInHand!=null && draggableInHand.getCardLogic().isMoveable()){
 		    				draggableInHand.onClick();
