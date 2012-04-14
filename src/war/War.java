@@ -18,7 +18,7 @@ import logic.client.Player;
 public class War extends Game{
 	private WarPrefs prefs=new WarPrefs();
 	private WarLogic logic=new WarLogic();
-	
+	private static boolean tie=false;	
 	public War() {
 		// TODO Auto-generated constructor stub
 		
@@ -69,5 +69,12 @@ public class War extends Game{
 		super.turnsQueue.add(Player.Position.BOTTOM);
 		super.turnsQueue.add(Player.Position.TOP);
 		
+	}
+	public static void setTie(boolean isTie) {
+		tie=isTie;
+		
+	}
+	public static boolean isTie() {
+		return tie;
 	}
 }

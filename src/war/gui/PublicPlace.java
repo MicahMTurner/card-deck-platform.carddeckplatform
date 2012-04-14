@@ -45,11 +45,8 @@ public class PublicPlace extends Droppable {
 	
 	@Override
 	public void addDraggable(Draggable draggable) {
-		// TODO Auto-generated method stub
 		draggable.setLocation(getX(), getY());
 
-// 		if(draggable.getContainer()!=null)
-//			draggable.getContainer().  remove the card from the previous droppable logic.
 
 		draggable.setContainer(this);
 		logicDroppable.addCard(draggable.getCardLogic());
@@ -57,9 +54,8 @@ public class PublicPlace extends Droppable {
 
 	@Override
 	public void onDrop(Draggable draggable) {
-		// TODO Auto-generated method stub
-		addDraggable(draggable);
-		//logicDroppable.onDropHandler(draggable.getCardLogic());
+		
+		
 		
 		// creates new array in order to send it in the action (this action receives ArrayList of CardLogic's)
 		ArrayList<CardLogic> cd = new ArrayList<CardLogic>();
@@ -67,6 +63,8 @@ public class PublicPlace extends Droppable {
 		System.out.println("PublicPlace drop");
 		ClientController.outgoingAPI().outgoingCommand(new RecieveCardAction(cd,draggable.getContainer().getLogic().getId(),logicDroppable.getId()));
 		System.out.println("PublicPlace after drop");
+		addDraggable(draggable);
+		logicDroppable.onDropHandler(draggable.getCardLogic());
 	}
 
 	@Override

@@ -14,9 +14,11 @@ import logic.client.Game;
 import logic.client.LogicDroppable;
 
 public class PublicAreaLogic extends LogicDroppable{
-
+	private int cardsPlacedWhileTie;
+	private boolean guiLocked;
 	public PublicAreaLogic(int id,Type type) {
 		super(id,type);		
+		this.cardsPlacedWhileTie=0;
 	}
 
 	@Override
@@ -27,74 +29,108 @@ public class PublicAreaLogic extends LogicDroppable{
 
 	@Override
 	public void onDropHandler(CardLogic card) {		
-		addCard(card);
+		//addCard(card);
+		//end turn
+		//ClientController.outgoingAPI().outgoingCommand(new EndTurnAction(GameStatus.me.getPosition()));
 		
 	}
 
 	@Override
-	public void addCard(CardLogic card) {		
-		card.setRevealed(true);
-		card.setMoveable(false);
+	public void addCard(CardLogic card) {
 		cards.push(card);
+		card.setMoveable(false);
+		if (War.isTie() && this.cardsPlacedWhileTie<2){
+			card.setRevealed(false);
+			this.cardsPlacedWhileTie++;
+		}
+		else{
+			if (this.cardsPlacedWhileTie==2 && guiLocked){
+				ClientController.getController().getGui().setUiEnabled(false);
+			}
+			War.setTie(false);
+			cardsPlacedWhileTie=0;
+			card.setRevealed(true);
+			calculateWinner(card);
+		
+			}
+	}
 
+	private void calculateWinner(CardLogic card) {
 		for (LogicDroppable logicDroppable : War.getDroppables() ){
-			if (logicDroppable.getType().equals(LogicDroppable.Type.PUBLIC)){
-				if (logicDroppable.equals(this)){
-					continue;
-				}	
-				if(!logicDroppable.getCards().empty()){
-					CardLogic otherPublicCard=logicDroppable.getCards().peek();
-					CardLogic winnerCard = null;
-					if(otherPublicCard.getValue()>card.getValue()){						
-						winnerCard=otherPublicCard;
-					}
-					
-					else if(logicDroppable.getCards().peek().getValue()<(card.getValue())){
-						winnerCard=card;
-					}
+			if (logicDroppable.getType().equals(LogicDroppable.Type.PUBLIC) 
+					&& !logicDroppable.equals(this)){
 				
-					else{
-						//TODO add tie mode (game state?)
-						
+			
+				if( logicDroppable.getCards().size()!=getCards().size()){
+					if (ClientController.getController().isMyTurn()){
+						//end turn
+						ClientController.outgoingAPI().outgoingCommand(new EndTurnAction(GameStatus.me.getPosition()));
 					}
-					if (winnerCard.getOwner().equals(GameStatus.username)){
-						//won
-						for (LogicDroppable droppable : War.getDroppables()){
-							if (droppable.getType().equals(LogicDroppable.Type.PUBLIC)){
-								for (CardLogic cardlogic : droppable.getCards()){
-									cardlogic.setOwner(winnerCard.getOwner());
-									//ClientController.getController().addCard(cardlogic);
-									
-									// ui update.
-									ClientController.getController().runCardAnimation(cardlogic, War.getDroppables().get(3), 2000, 10, true, false);
+				}else{
+					
+				
+					
+				
+				
+					
+					CardLogic winnerCard = getWinnerCard(card,logicDroppable.getCards().peek());
+					if (winnerCard!=null){
+					for (LogicDroppable droppable : War.getDroppables()){
+						if (droppable.getType().equals(LogicDroppable.Type.PUBLIC)){
+							for (CardLogic cardlogic : droppable.getCards()){
+								cardlogic.setOwner(winnerCard.getOwner());
+								if (winnerCard.getOwner().equals(GameStatus.username)){
+									//won									
+									ClientController.getController().runCardAnimation(cardlogic, War.getDroppables().get(3), 1000, 10, true, false);
 									
 									War.getDroppables().get(3).addCard(cardlogic);	// get the droppable that represents my area.
 								}
-								droppable.getCards().clear();
-							}
-						}						
-					}
-					else {
-						//lost					
-						for (LogicDroppable droppable : War.getDroppables()){
-							if (droppable.getType().equals(LogicDroppable.Type.PUBLIC)){
-								for (CardLogic cardlogic : droppable.getCards()){
-									cardlogic.setOwner(winnerCard.getOwner());
-									
-									// ui update.
-									ClientController.getController().runCardAnimation(cardlogic, War.getDroppables().get(2), 2000, 10, true, false);
+								else {
+									//lost
+									ClientController.getController().runCardAnimation(cardlogic, War.getDroppables().get(2), 1000, 10, true, false);
 									
 									War.getDroppables().get(2).addCard(cardlogic);	// get the droppable that represents oponent's area.
+									
 								}
-								droppable.getCards().clear();
+								
+							
 							}
-						}
+							if (!winnerCard.getOwner().equals(GameStatus.username) 
+									&& ClientController.getController().isMyTurn()){								
+									//end turn
+									ClientController.outgoingAPI().outgoingCommand(new EndTurnAction(GameStatus.me.getPosition()));
+								}
+							}
+							droppable.getCards().clear();
+					}
 					}
 				}
-			}				
+			}
 		}
-		//end turn
-		ClientController.outgoingAPI().outgoingCommand(new EndTurnAction(GameStatus.me.getPosition()));
+		
+
+		
+	}
+
+	private CardLogic getWinnerCard(CardLogic card,CardLogic otherPublicCard) {
+		CardLogic answer=null;
+		if(otherPublicCard.getValue()>card.getValue()){						
+			answer=otherPublicCard;
+		}
+		
+		else if(otherPublicCard.getValue()<(card.getValue())){
+			answer=card;
+		}
+	
+		else{
+			War.setTie(true);
+			if (!ClientController.getController().isMyTurn()){
+				ClientController.getController().getGui().setUiEnabled(true);
+				guiLocked=true;
+			}
+			
+		}
+		return answer;
 	}
 
 }

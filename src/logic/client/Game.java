@@ -32,9 +32,17 @@ public abstract class Game {
 	public static ArrayList<LogicDroppable> getDroppables() {
 		return droppables;
 	}
-	
-	
-	
+	public static void addDroppable(LogicDroppable droppable){
+		droppables.add(droppable);
+	}
+	public static LogicDroppable getDroppableByid(int id){
+		for (LogicDroppable droppable : droppables){
+			if (droppable.getId()==id){
+				return droppable;
+			}
+		}
+		return null;
+	}
 	public Player getMe() {
 		return players.get(0);
 	}
