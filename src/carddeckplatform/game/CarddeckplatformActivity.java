@@ -78,6 +78,7 @@ public class CarddeckplatformActivity extends Activity {
             	GameStatus.isServer = true;
             	GameStatus.hostIp = "127.0.0.1";
             	GameStatus.username = username.getText().toString();
+            	GameStatus.me=new Player(GameStatus.username,GameStatus.localIp);
                 Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
 /*                new Thread(new Runnable(){
 
@@ -97,6 +98,7 @@ public class CarddeckplatformActivity extends Activity {
 */                
                 //new Thread(new TmpServer()).start();
                 new Thread(new Host(new War())).start();
+                
                 startActivity(i);
                 
                 } 
