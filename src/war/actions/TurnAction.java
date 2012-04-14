@@ -1,11 +1,14 @@
 package war.actions;
 
+import war.War;
 import communication.link.ServerConnection;
+import communication.messages.LoseMessage;
 import communication.messages.Message;
 
 import client.controller.ClientController;
 import client.controller.actions.ClientAction;
 import client.controller.actions.EndTurnAction;
+import logic.card.CardLogic;
 import logic.client.GameLogic;
 import logic.client.Player;
 import carddeckplatform.game.GameStatus;
@@ -23,10 +26,17 @@ public class TurnAction extends ClientAction{
 	 * start turn
 	 */
 	public void incoming() {
-		if (GameStatus.me.getHand().size()==0){
-			ClientController.outgoingAPI().outgoingCommand(new EndTurnAction(GameStatus.me.getPosition()));
-		}
+		
+		
 		ClientController.getController().playerTurn(position);
+		if (ClientController.getController().isMyTurn()){
+			if (War.getDroppables().get(3).getCards().size()==0){
+				ServerConnection.getConnection().getMessageSender().send(new LoseMessage());
+				ClientController.outgoingAPI().outgoingCommand(new EndTurnAction(GameStatus.me.getPosition()));
+				ClientController.getController().declareLoser();
+				
+			}
+		}
 	}
 
 	@Override

@@ -19,7 +19,9 @@ public abstract class Game {
 	private ArrayList<Player> players = new ArrayList<Player>();
 	protected static Queue<Player.Position> turnsQueue=new LinkedList<Player.Position>();
 	protected static ArrayList<LogicDroppable> droppables = new ArrayList<LogicDroppable>();
-	
+	public void playerLost(Player.Position position){		
+		turnsQueue.remove(position);
+	}
 	ToolsFactory tools=new DefaultTools();
 	Deck cards;
 	Table table;

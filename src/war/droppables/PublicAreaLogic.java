@@ -1,5 +1,7 @@
 package war.droppables;
 
+import communication.link.ServerConnection;
+import communication.messages.LoseMessage;
 import communication.messages.Message;
 
 import war.War;
@@ -92,7 +94,11 @@ public class PublicAreaLogic extends LogicDroppable{
 							
 							}
 							if (!winnerCard.getOwner().equals(GameStatus.username) 
-									&& ClientController.getController().isMyTurn()){								
+									&& ClientController.getController().isMyTurn()){
+								
+								 if(War.getDroppables().get(3).getCards().size()==0){
+										ClientController.getController().declareWinner();
+									}
 									//end turn
 									ClientController.outgoingAPI().outgoingCommand(new EndTurnAction(GameStatus.me.getPosition()));
 								}
