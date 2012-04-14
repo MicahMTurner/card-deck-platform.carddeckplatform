@@ -30,7 +30,7 @@ public class Host implements Runnable{
 	public static ArrayList<Player> players = new ArrayList<Player>();
 	private ArrayList<Connection> connections = new ArrayList<Connection>();
 	private Stack<Position> availablePositions;
-	private Game game;
+	private static Game game;
 
 	//synchronized private boolean startGameFlag=false;
 	int playersRdy=0;
@@ -52,7 +52,9 @@ public class Host implements Runnable{
 	public void addPlayer(String player, String id){
 		players.add(new Player(player,id));
 	}
-	
+	public static void playerLost(Player.Position position){
+		game.playerLost(position);
+	}
 	public void waitForPlayers(){
 		//while(players.size()<game.getPrefs().getMinPlayers()){
 		while(ConnectionsManager.getConnectionsManager().getNumberOfConnections()<game.getPrefs().getMinPlayers()){

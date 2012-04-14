@@ -422,8 +422,9 @@ public class TableView extends SurfaceView {
 	    		}
     		}
     		else{
-    			Toast toast = Toast.makeText(cont, "It's not your turn now!!", Toast.LENGTH_SHORT);
-    			toast.show();
+    			popToast("It's not your turn now!!");
+    			//Toast toast = Toast.makeText(cont, "It's not your turn now!!", Toast.LENGTH_SHORT);
+    			//toast.show();
     		}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -433,7 +434,10 @@ public class TableView extends SurfaceView {
     	animationTask.redraw();
 		return true;
     }
-
+    public void popToast(String displayMessage){
+    	Toast toast = Toast.makeText(cont, displayMessage, Toast.LENGTH_SHORT);
+		toast.show();
+    }
 	public int getxDimention() {
 		return xDimention;
 	}
