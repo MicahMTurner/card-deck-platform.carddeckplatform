@@ -1,10 +1,15 @@
 package client.dataBase;
 
+import java.util.HashMap;
+
 import war.War;
 import logic.client.Game;
 
 
 public class ClientDataBase {
+	private HashMap<String, Game> games;
+	
+	
 	//-------Singleton implementation--------//
 	private static class DataBaseHolder
 	{
@@ -19,13 +24,15 @@ public class ClientDataBase {
 		return DataBaseHolder.dataBase;
 	}
 	private ClientDataBase() {
-
+		games = new HashMap<String, Game>();
+		games.put(War.class.toString(), new War());
+		
 	}
 	/**
 	 * factory
 	 */
 	public Game getGame(String gameId){
-		return new War();
+		return games.get(gameId);
 	}
 	
 	public void addGame(String gameId){

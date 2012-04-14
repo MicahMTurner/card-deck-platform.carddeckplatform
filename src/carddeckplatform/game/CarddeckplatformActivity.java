@@ -75,6 +75,9 @@ public class CarddeckplatformActivity extends Activity {
         Button joinBtn = (Button) findViewById(R.id.joingamebutton);
         hostBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
+            	final Dialog dialog = new Dialog(CarddeckplatformActivity.this);
+            	
+            	
             	GameStatus.isServer = true;
             	GameStatus.hostIp = "127.0.0.1";
             	GameStatus.username = username.getText().toString();
