@@ -111,7 +111,7 @@ public class GameActivity extends Activity {
 				dialog.dismiss();
 			}
 		});
-    	dialog.show();
+    	//dialog.show();
 	}
     
     @Override
