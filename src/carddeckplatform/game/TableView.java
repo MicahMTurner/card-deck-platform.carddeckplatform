@@ -58,7 +58,7 @@ public class TableView extends SurfaceView {
 	private int xDimention;
 	private int yDimention;
 	private AnimationTask animationTask;
-	private boolean uiEnabled=true;
+	private boolean uiEnabled=false;
 	
 	
 	
@@ -256,7 +256,7 @@ public class TableView extends SurfaceView {
 		}
 		
 	}
-	
+	/*
 	public void moveFromTo(Droppable from, Droppable to){
 		CardLogic cardLogic = from.getDraggable();
 		int cardId = cardLogic.getId();
@@ -267,7 +267,7 @@ public class TableView extends SurfaceView {
 		to.addDraggable(draggable);
 		from.removeDraggable(draggable);
 	}
-	
+	*/
 	public Droppable getDroppableById(int id){
 		return table.getDroppableById(id);
 	}
@@ -348,7 +348,9 @@ public class TableView extends SurfaceView {
     public void setUiEnabled(boolean uiEnabled) {
 		this.uiEnabled = uiEnabled;
 	}
-
+    public boolean isUiEnabled() {
+		return uiEnabled;
+	}
  // events when touching the screen
     public boolean onTouchEvent(MotionEvent event) {
     	try {

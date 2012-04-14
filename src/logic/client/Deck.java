@@ -38,9 +38,6 @@ public abstract class Deck {
 		return cards.size();
 	}
 	private void swap(int i, int randomPlace) {
-//		CardLogic temp=cards.get(i);
-//		cards.add(i, cards.get(randomPlace));
-//		cards.add(randomPlace,temp);		
 		Collections.swap(cards,i,randomPlace);
 	}
 
