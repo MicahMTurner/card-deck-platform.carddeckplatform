@@ -26,9 +26,7 @@ public class TurnAction extends ClientAction{
 	 * start turn
 	 */
 	public void incoming() {
-		
-		
-		ClientController.getController().playerTurn(position);
+		ClientController.getController().playerTurn(position);		
 		if (ClientController.getController().isMyTurn()){
 			if (War.getDroppables().get(3).getCards().size()==0){
 				ServerConnection.getConnection().getMessageSender().send(new LoseMessage());

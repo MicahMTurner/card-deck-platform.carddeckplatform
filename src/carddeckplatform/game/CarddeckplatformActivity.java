@@ -4,9 +4,13 @@ package carddeckplatform.game;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import client.dataBase.ClientDataBase;
 
 import war.War;
 
+import logic.client.Game;
 import logic.client.Player;
 import logic.host.Host;
 
@@ -14,17 +18,25 @@ import logic.host.Host;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ListActivity;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -76,33 +88,43 @@ public class CarddeckplatformActivity extends Activity {
         hostBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
             	final Dialog dialog = new Dialog(CarddeckplatformActivity.this);
+            	dialog.setContentView(R.layout.gamelistdialog);
+            	dialog.setTitle("Please choose a game");
+            	ArrayList<String> games = ClientDataBase.getDataBase().getGamesNames();
             	
-            	
-            	GameStatus.isServer = true;
-            	GameStatus.hostIp = "127.0.0.1";
-            	GameStatus.username = username.getText().toString();
-            	GameStatus.me=new Player(GameStatus.username,GameStatus.localIp);
-                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
-/*                new Thread(new Runnable(){
-
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						Server s = new Server();
-						try {
-							s.start();
-						} catch (IOException e) {
-							// TODO Auto-generated catch blockbb
-							e.printStackTrace();
+            	LinearLayout ll = (LinearLayout)dialog.findViewById(R.id.gameListLayout);
+            	for(final String name : games){
+            		Button gameBtn = new Button(getApplicationContext());
+            		gameBtn.setText(name);
+            		gameBtn.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+			            	GameStatus.isServer = true;
+			            	GameStatus.hostIp = "127.0.0.1";
+			            	GameStatus.username = username.getText().toString();
+			            	GameStatus.me=new Player(GameStatus.username,GameStatus.localIp);
+			                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
+			            	
+			                new Thread(new Host(ClientDataBase.getDataBase().getGame(name))).start();
+			                
+			                startActivity(i);
+			                
+			                dialog.dismiss();
 						}
-					}
-                	
-                }).start(); 
-*/                
-                //new Thread(new TmpServer()).start();
-                new Thread(new Host(new War())).start();
-                
-                startActivity(i);
+					});
+            		ll.addView(gameBtn);
+            	}
+            	
+            	
+            	
+            	
+            	
+            	dialog.show();
+            	
+           
+
                 
                 } 
              });
@@ -153,6 +175,10 @@ public class CarddeckplatformActivity extends Activity {
 //                startActivity(i);
                 } 
              });
+    }
+    
+    private void createNewGame(String gameName){
+    	
     }
     
     public void onWindowFocusChanged(boolean hasWindowFocus){
