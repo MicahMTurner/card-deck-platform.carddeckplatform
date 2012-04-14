@@ -48,7 +48,7 @@ public class PublicAreaLogic extends LogicDroppable{
 			if (this.cardsPlacedWhileTie==2 && guiLocked){
 				ClientController.getController().getGui().setUiEnabled(false);
 			}
-			War.setTie(false);
+			
 			cardsPlacedWhileTie=0;
 			card.setRevealed(true);
 			calculateWinner(card);
@@ -68,6 +68,7 @@ public class PublicAreaLogic extends LogicDroppable{
 						ClientController.outgoingAPI().outgoingCommand(new EndTurnAction(GameStatus.me.getPosition()));
 					}
 				}else{
+					War.setTie(false);
 					CardLogic winnerCard = getWinnerCard(card,logicDroppable.getCards().peek());
 					if (winnerCard!=null){
 					for (LogicDroppable droppable : War.getDroppables()){
