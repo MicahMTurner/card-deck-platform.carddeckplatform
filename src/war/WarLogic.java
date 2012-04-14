@@ -44,7 +44,7 @@ public class WarLogic extends GameLogic implements CardsActions,PublicActions{
 	public void dealCards(Deck deck,ArrayList<Player> players) {
 		deck.shuffle(2);
 		int size=deck.getSize();
-		for (int i=0;i<size;i++){
+		for (int i=0;i<2;i++){
 			CardLogic card=deck.drawCard();
 			Player player=players.get(i%Host.players.size());
 			card.setOwner(player.getUsername());

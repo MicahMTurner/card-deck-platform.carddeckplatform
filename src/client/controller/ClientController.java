@@ -196,6 +196,16 @@ public class ClientController {
 	public boolean isMyTurn() {
 		return gui.isUiEnabled();
 	}
+
+	public void declareWinner() {
+		gui.popToast("WINNER!");
+		
+	}
+	
+	public void declareLoser() {
+		gui.popToast("LOSSER!");
+		
+	}
 	
 	
 	//---------------------------------------------------------------------//	
