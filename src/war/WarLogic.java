@@ -51,6 +51,8 @@ public class WarLogic extends GameLogic implements CardsActions,PublicActions{
 			player.getHand().add(card);
 		}
 		
+		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getHand(),4)));
+		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getHand(),3)));
 		//for(Player player : players){
 		//	ConnectionsManager.getConnectionsManager().sendToAll(new Message(new RecieveCardAction()));
 		//}

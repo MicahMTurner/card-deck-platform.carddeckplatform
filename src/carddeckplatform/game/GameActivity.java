@@ -103,7 +103,6 @@ public class GameActivity extends Activity {
     	System.out.println("Your ip address is:\n "+GameStatus.localIp);
 		myIP.setText(GameStatus.localIp);
 		contin.setOnClickListener(new View.OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub

@@ -75,6 +75,9 @@ public class TableView extends SurfaceView {
 //	}
 	
 	
+
+	
+	
 	public void draggableMotion(String username, int id , int x , int y){
 		Draggable draggable = table.getDraggableById(id, GetMethod.PutInFront);
 		draggable.motionAnimation(username);
@@ -158,10 +161,8 @@ public class TableView extends SurfaceView {
 			
 			while(true){
 				try {
-					System.out.println("ANIMATION: before take.");
 					calls.take();
 					onProgressUpdate(0);
-					System.out.println("ANIMATION: after take.");
 				} catch (InterruptedException ie) {
 					// TODO Auto-generated catch block
 					ie.printStackTrace();
@@ -179,9 +180,7 @@ public class TableView extends SurfaceView {
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					System.out.println("ANIMATION: before invalidate.");
 					invalidate();
-					System.out.println("ANIMATION: after invalidate.");
 				}
 			});
 		}	
@@ -374,8 +373,8 @@ public class TableView extends SurfaceView {
 		    				draggableInHand.onClick();
 		    			}	
 		    			if(draggableInHand!=null && !draggableInHand.getCardLogic().isMoveable()){
-		    				Toast toast = Toast.makeText(cont, "You cannot move this card", Toast.LENGTH_SHORT);
-		        			toast.show();
+		    				popToast("You cannot move this card");
+		        			
 		    			}
 	//	    			if(draggableInHand==null)
 	//	    				table.getNearestDroppable(X, Y).onClick();
@@ -434,9 +433,17 @@ public class TableView extends SurfaceView {
     	animationTask.redraw();
 		return true;
     }
-    public void popToast(String displayMessage){
-    	Toast toast = Toast.makeText(cont, displayMessage, Toast.LENGTH_SHORT);
-		toast.show();
+    public void popToast(final String displayMessage){
+    	this.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				Toast toast = Toast.makeText(cont, displayMessage, Toast.LENGTH_SHORT);
+				toast.show();
+			}
+		});
+    	
     }
 	public int getxDimention() {
 		return xDimention;

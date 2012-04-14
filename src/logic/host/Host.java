@@ -80,8 +80,8 @@ public class Host implements Runnable{
 		game.getLogic().dealCards(game.getCards(), players);
 		
 		
-		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getHand(),4)));
-		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getHand(),3)));
+//		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getHand(),4)));
+//		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getHand(),3)));
 		System.out.println("cards dealt");
 		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new TurnAction(game.nextInTurn())));
 	}

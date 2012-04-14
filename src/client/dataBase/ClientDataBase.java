@@ -1,5 +1,6 @@
 package client.dataBase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import war.War;
@@ -25,7 +26,8 @@ public class ClientDataBase {
 	}
 	private ClientDataBase() {
 		games = new HashMap<String, Game>();
-		games.put(War.class.toString(), new War());
+		War war = new War();
+		games.put(war.toString(), war);
 		
 	}
 	/**
@@ -38,5 +40,12 @@ public class ClientDataBase {
 	public void addGame(String gameId){
 		
 	}
-			
+	
+	public ArrayList<String> getGamesNames(){
+		ArrayList<String> gameNames = new ArrayList<String>();
+		for(String gameName : games.keySet()){
+			gameNames.add(gameName);
+		}
+		return gameNames;
+	}	
 }
