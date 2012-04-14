@@ -26,7 +26,6 @@ public class Card extends Draggable {
 	//private static int count = 1;
 	private boolean goRight = true;
 	private boolean goDown = true;
-	private float angle = 0;	
 	private boolean isCarried=false;
 	private String carrier = "";
 	private Context context;
@@ -44,17 +43,6 @@ public class Card extends Draggable {
 	//public Card(Context context, int drawable, Droppable dropable){
 	//	super(context);
 	//}
-	
-	public void randomizeAngle(){
-		Random generator = new Random();
-		float randomIndex = generator.nextInt(20);
-		randomIndex -= 10;
-		angle = randomIndex;
-	}
-	
-	public void setAngle(float angle){
-		this.angle = angle;
-	}
 	
 	public int sensitivityRadius() {
 
@@ -80,7 +68,7 @@ public class Card extends Draggable {
 		//ClientController.outgoingAPI().endCardMotion(getId());
 		ClientController.outgoingAPI().outgoingCommand(new DraggableMotionAction(GameStatus.username,cardLogic.getId(), x, y));
 		ClientController.outgoingAPI().outgoingCommand(new EndDraggableMotionAction(cardLogic.getId()));
-		randomizeAngle();
+		//randomizeAngle();
 	}
 
 	

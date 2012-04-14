@@ -46,7 +46,7 @@ public class PlayerArea extends Droppable {
 		draggable.setLocation(getX(), getY());
 
 		draggable.setContainer(this);
-		
+		draggable.setAngle(0);
 		logicDroppable.addCard(draggable.getCardLogic());
 	}
 

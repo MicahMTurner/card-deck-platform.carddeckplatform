@@ -8,6 +8,7 @@ import war.actions.TurnAction;
 import carddeckplatform.game.GameStatus;
 import client.controller.ClientController;
 import client.controller.actions.EndTurnAction;
+import client.gui.entities.Table;
 import logic.card.CardLogic;
 
 import logic.client.Game;
@@ -67,12 +68,6 @@ public class PublicAreaLogic extends LogicDroppable{
 						ClientController.outgoingAPI().outgoingCommand(new EndTurnAction(GameStatus.me.getPosition()));
 					}
 				}else{
-					
-				
-					
-				
-				
-					
 					CardLogic winnerCard = getWinnerCard(card,logicDroppable.getCards().peek());
 					if (winnerCard!=null){
 					for (LogicDroppable droppable : War.getDroppables()){
@@ -81,13 +76,13 @@ public class PublicAreaLogic extends LogicDroppable{
 								cardlogic.setOwner(winnerCard.getOwner());
 								if (winnerCard.getOwner().equals(GameStatus.username)){
 									//won									
-									ClientController.getController().runCardAnimation(cardlogic, War.getDroppables().get(3), 1000, 10, true, false);
+									ClientController.getController().runCardAnimation(cardlogic, War.getDroppables().get(3), 1000, 10, true, false, Table.GetMethod.PutInBack);
 									
 									War.getDroppables().get(3).addCard(cardlogic);	// get the droppable that represents my area.
 								}
 								else {
 									//lost
-									ClientController.getController().runCardAnimation(cardlogic, War.getDroppables().get(2), 1000, 10, true, false);
+									ClientController.getController().runCardAnimation(cardlogic, War.getDroppables().get(2), 1000, 10, true, false, Table.GetMethod.PutInBack);
 									
 									War.getDroppables().get(2).addCard(cardlogic);	// get the droppable that represents oponent's area.
 									
@@ -120,8 +115,7 @@ public class PublicAreaLogic extends LogicDroppable{
 		
 		else if(otherPublicCard.getValue()<(card.getValue())){
 			answer=card;
-		}
-	
+		}	
 		else{
 			War.setTie(true);
 			if (!ClientController.getController().isMyTurn()){
