@@ -100,5 +100,10 @@ public class FreePlay extends Game {
 		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(cardsToSend,4)));
 		
 	}
+	
+	@Override
+	public boolean hasTurns(){
+		return false;
+	}
 
 }
