@@ -40,7 +40,7 @@ public class DeckArea extends Droppable{
 	public void addDraggable(Draggable draggable) {
 		draggable.setContainer(this);
 		draggable.setLocation(getX(), getY());
-		
+		logicDroppable.addCard(draggable.getCardLogic());
 	}
 
 	@Override
