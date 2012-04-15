@@ -1,18 +1,17 @@
-package war.gui;
+package blackJack.gui;
 
-import client.gui.entities.Draggable;
-import client.gui.entities.Droppable;
 import logic.card.CardLogic;
 import logic.client.LogicDroppable;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import client.gui.entities.Draggable;
+import client.gui.entities.Droppable;
 
-public class DeckArea extends Droppable {
-
+public class DeckArea extends Droppable{
 	public DeckArea(Context context, int x,int y, LogicDroppable logicDroppable){
 		super(context,x,y,logicDroppable);
 	}
-	
 	@Override
 	public int sensitivityRadius() {
 		// TODO Auto-generated method stub
@@ -40,15 +39,11 @@ public class DeckArea extends Droppable {
 	@Override
 	public void addDraggable(Draggable draggable) {
 		// TODO Auto-generated method stub
-		draggable.setLocation(getX(), getY());
-
-		draggable.setContainer(this);
 		
-		logicDroppable.addCard(draggable.getCardLogic());
 	}
 
 	@Override
-	public void draw(Canvas canvas) {
+	public void removeDraggable(Draggable draggable) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -56,13 +51,13 @@ public class DeckArea extends Droppable {
 	@Override
 	public CardLogic getDraggable() {
 		// TODO Auto-generated method stub
-		return logicDroppable.getCards().peek();
+		return null;
 	}
 
 	@Override
-	public void removeDraggable(Draggable draggable) {
-		// TODO Auto-generated method stub
-		logicDroppable.getCards().remove(draggable.getCardLogic());
+	public void draw(Canvas canvas) {
+		canvas.drawText("Deck Area", getX(), getY(), new Paint());
+		
 	}
 
 }

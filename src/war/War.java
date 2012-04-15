@@ -1,5 +1,11 @@
 package war;
 
+import java.util.ArrayList;
+
+import communication.messages.Message;
+import communication.server.ConnectionsManager;
+
+import client.controller.actions.DealCardAction;
 import client.gui.entities.Droppable;
 import android.content.Context;
 import war.droppables.MyPlayerAreaLogic;
@@ -9,23 +15,23 @@ import war.gui.PlayerArea;
 import war.gui.PublicPlace;
 import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;
+import logic.card.CardLogic;
+import logic.client.Deck;
 import logic.client.Game;
 import logic.client.LogicDroppable;
 import logic.client.Player;
+import logic.host.Host;
 
 
 
 public class War extends Game{
 	private WarPrefs prefs=new WarPrefs();
-	private WarLogic logic=new WarLogic();
 	private static boolean tie=false;	
 	public War() {
 		// TODO Auto-generated constructor stub
 		
 	}
-	public WarLogic getLogic() {
-		return logic;
-	}
+
 	public WarPrefs getPrefs() {
 		return prefs;
 	}
@@ -76,5 +82,21 @@ public class War extends Game{
 	}
 	public static boolean isTie() {
 		return tie;
+	}
+	@Override
+	public void dealCards(Deck deck, ArrayList<Player> players) {
+		deck.shuffle(2);
+		int size=deck.getSize();
+		for (int i=0;i<2;i++){
+			CardLogic card=deck.drawCard();
+			Player player=players.get(i%Host.players.size());
+			card.setOwner(player.getUsername());
+			player.getHand().add(card);
+			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getHand(),4)));
+			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getHand(),3)));
+		}
+		
+		
+		
 	}
 }

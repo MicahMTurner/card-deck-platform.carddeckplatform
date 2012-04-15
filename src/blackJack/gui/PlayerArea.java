@@ -1,4 +1,4 @@
-package freeplay.gui;
+package blackJack.gui;
 
 import java.util.ArrayList;
 
@@ -12,16 +12,18 @@ import client.controller.ClientController;
 import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
 
-public class PublicArea extends Droppable {
-	
-	public PublicArea(Context context, int x,int y, LogicDroppable logicDroppable){
-		super(context,x,y,logicDroppable);
+public class PlayerArea extends Droppable{
+
+	public PlayerArea(Context context, int x, int y,
+			LogicDroppable logicDroppable) {
+		super(context, x, y, logicDroppable);
+
 	}
 
 	@Override
 	public int sensitivityRadius() {
 		// TODO Auto-generated method stub
-		return 500;
+		return 120;
 	}
 
 	@Override
@@ -38,19 +40,21 @@ public class PublicArea extends Droppable {
 
 	@Override
 	public void onDrop(Draggable draggable) {
-		// TODO Auto-generated method stub
-		logicDroppable.onDropHandler(draggable.getCardLogic());
+		
 		
 		ArrayList<CardLogic> cd = new ArrayList<CardLogic>();
 		cd.add(draggable.getCardLogic());
 		ClientController.outgoingAPI().outgoingCommand(new RecieveCardAction(cd,draggable.getContainer().getLogic().getId(),logicDroppable.getId()));
+		logicDroppable.onDropHandler(draggable.getCardLogic());
+		
 	}
 
 	@Override
 	public void addDraggable(Draggable draggable) {
-		// TODO Auto-generated method stub
-		draggable.setContainer(this);
-		logicDroppable.onDropHandler(draggable.getCardLogic());
+		
+		draggable.setLocation(getX(), getY());
+		
+		
 	}
 
 	@Override
@@ -67,8 +71,8 @@ public class PublicArea extends Droppable {
 
 	@Override
 	public void draw(Canvas canvas) {
-		// TODO Auto-generated method stub
-		canvas.drawText("Public Area", getX(), getY(), new Paint());
+		canvas.drawText("Player Area", getX(), getY(), new Paint());
+		
 	}
 
 }

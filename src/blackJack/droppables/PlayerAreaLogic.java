@@ -1,13 +1,12 @@
-package war.droppables;
+package blackJack.droppables;
 
-import carddeckplatform.game.GameStatus;
 import logic.card.CardLogic;
 import logic.client.LogicDroppable;
 
 public class PlayerAreaLogic extends LogicDroppable{
 
-	public PlayerAreaLogic(int id,Type type) {
-		super(id,type);
+	public PlayerAreaLogic(int id, Type type) {
+		super(id, type);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -25,7 +24,7 @@ public class PlayerAreaLogic extends LogicDroppable{
 
 	@Override
 	public void addCard(CardLogic card) {
-		card.setRevealed(false);
+		card.setRevealed(true);
 		card.setMoveable(false);
 		cards.push(card);
 		
