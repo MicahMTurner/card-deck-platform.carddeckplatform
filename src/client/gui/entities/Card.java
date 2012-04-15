@@ -94,8 +94,12 @@ public class Card extends Draggable {
 		else
 			resizedBitmap = Bitmap.createBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.back), 0, 0, img.getScaledWidth(canvas) , img.getScaledHeight(canvas), matrix, true);
 		canvas.drawBitmap(resizedBitmap, getX()-25, getY()-20, new Paint());
+		
+		//canvas.drawBitmap(resizedBitmap, getX()-resizedBitmap.getWidth()/2, getY()-resizedBitmap.getHeight()/2, new Paint());
         
-        // if the card is being carried by another player a hand and the name of the carrier would be drawn near the card's image.
+		
+		
+		// if the card is being carried by another player a hand and the name of the carrier would be drawn near the card's image.
         if(isCarried){
         	Paint paint = new Paint(); 		   
         	// draws the name of the carrier.
@@ -106,7 +110,7 @@ public class Card extends Draggable {
             canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.hand),getX()-30, getY()+20 , paint);
         }
         
-        	
+        //canvas.drawCircle(getX(), getY(), 5, new Paint());
 	}
 
 
