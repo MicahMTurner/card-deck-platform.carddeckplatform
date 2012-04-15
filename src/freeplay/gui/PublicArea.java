@@ -68,7 +68,7 @@ public class PublicArea extends Droppable {
 	@Override
 	public void draw(Canvas canvas) {
 		// TODO Auto-generated method stub
-		canvas.drawText("Public Area", getX(), getY(), new Paint());
+		//canvas.drawText("Public Area", getX(), getY(), new Paint());
 	}
 
 }

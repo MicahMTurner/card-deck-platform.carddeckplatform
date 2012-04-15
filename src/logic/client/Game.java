@@ -88,5 +88,9 @@ public abstract class Game {
 	public ArrayList<Player> getPlayers(){
 		return players;
 	}
+	
+	public boolean hasTurns(){
+		return true;
+	}
 
 }
