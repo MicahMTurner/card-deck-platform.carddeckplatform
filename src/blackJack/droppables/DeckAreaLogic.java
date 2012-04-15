@@ -24,7 +24,8 @@ public class DeckAreaLogic extends LogicDroppable{
 
 	@Override
 	public void addCard(CardLogic card) {
-		// TODO Auto-generated method stub
+		card.setMoveable(true);
+		card.setRevealed(false);
 		
 	}
 
