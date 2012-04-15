@@ -38,7 +38,8 @@ public class DeckArea extends Droppable{
 
 	@Override
 	public void addDraggable(Draggable draggable) {
-		// TODO Auto-generated method stub
+		draggable.setContainer(this);
+		draggable.setLocation(getX(), getY());
 		
 	}
 

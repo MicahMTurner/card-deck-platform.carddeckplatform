@@ -52,8 +52,10 @@ public class PlayerArea extends Droppable{
 	@Override
 	public void addDraggable(Draggable draggable) {
 		
-		draggable.setLocation(getX(), getY());
-		
+		draggable.setLocation(getX(), getY());		
+
+		draggable.setContainer(this);
+		logicDroppable.addCard(draggable.getCardLogic());
 		
 	}
 
