@@ -81,7 +81,7 @@ public class BlackJack extends Game{
 	@Override
 	public void dealCards(Deck deck, ArrayList<Player> players) {
 		deck.shuffle(2);
-		for (int i=0;i<4;i++){
+		for (int i=0;i<4;i++){//
 			CardLogic card=deck.drawCard();
 			Player player=players.get(i%Host.players.size());
 			card.setOwner(player.getUsername());
