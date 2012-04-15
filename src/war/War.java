@@ -91,10 +91,10 @@ public class War extends Game{
 			CardLogic card=deck.drawCard();
 			Player player=players.get(i%Host.players.size());
 			card.setOwner(player.getUsername());
-			player.getHand().add(card);
-			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getHand(),4)));
-			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getHand(),3)));
+			player.getHand().add(card);			
 		}
+		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getHand(),4)));
+		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getHand(),3)));
 		
 		
 		

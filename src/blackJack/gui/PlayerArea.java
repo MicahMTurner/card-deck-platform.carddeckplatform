@@ -53,7 +53,10 @@ public class PlayerArea extends Droppable{
 	public void addDraggable(Draggable draggable) {
 		
 		draggable.setLocation(getX(), getY());
-		
+		draggable.randomizeAngle();
+
+		draggable.setContainer(this);
+		logicDroppable.addCard(draggable.getCardLogic());
 		
 	}
 
