@@ -2,7 +2,6 @@ package war.droppables;
 
 import carddeckplatform.game.GameStatus;
 import logic.card.CardLogic;
-import logic.client.GameLogic;
 import logic.client.LogicDroppable;
 
 public class PlayerAreaLogic extends LogicDroppable{

@@ -2,18 +2,12 @@ package war.droppables;
 
 import communication.link.ServerConnection;
 import communication.messages.LoseMessage;
-import communication.messages.Message;
-
 import war.War;
-import war.actions.RoundWinnerAction;
-import war.actions.TurnAction;
 import carddeckplatform.game.GameStatus;
 import client.controller.ClientController;
 import client.controller.actions.EndTurnAction;
 import client.gui.entities.Table;
 import logic.card.CardLogic;
-
-import logic.client.Game;
 import logic.client.LogicDroppable;
 
 public class PublicAreaLogic extends LogicDroppable{

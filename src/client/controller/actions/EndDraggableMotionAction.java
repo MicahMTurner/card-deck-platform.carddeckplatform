@@ -4,9 +4,6 @@ import client.controller.ClientController;
 import communication.link.ServerConnection;
 import communication.messages.Message;
 
-import logic.client.GameLogic;
-import carddeckplatform.game.TableView;
-
 public class EndDraggableMotionAction extends ClientAction  {
 
 	private int cardId;

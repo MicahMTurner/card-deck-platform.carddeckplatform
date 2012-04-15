@@ -7,7 +7,6 @@ import war.War;
 import client.controller.ClientController;
 import client.controller.actions.ClientAction;
 import logic.card.CardLogic;
-import logic.client.GameLogic;
 import logic.client.LogicDroppable;
 import logic.client.Player;
 import carddeckplatform.game.GameStatus;

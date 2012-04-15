@@ -77,8 +77,8 @@ public class Host implements Runnable{
 		
 		
 		System.out.println("game initiated");
-		game.getLogic().dealCards(game.getCards(), players);
-		
+		game.dealCards(game.getCards(), players);
+
 		
 //		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getHand(),4)));
 //		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getHand(),3)));
