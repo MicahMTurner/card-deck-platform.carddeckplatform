@@ -76,14 +76,14 @@ public class FreePlay extends Game {
 			droppables.add(new PlayerAreaLogic(2,LogicDroppable.Type.PUBLIC));
 			droppables.add(new DeckAreaLogic(4,LogicDroppable.Type.PUBLIC));
 			
-			tv.addDroppable(new DeckArea(context, width-60, height/2, droppables.get(2)));
+			tv.addDroppable(new DeckArea(context, width-90, height/2, droppables.get(2)));
 		}
 		droppables.add(new PublicAreaLogic(1,LogicDroppable.Type.PUBLIC));
 		
 		
 		
-		tv.addDroppable(new PlayerArea(context,  width/2, height-100, droppables.get(0))); // places my area in the gui.
-		tv.addDroppable(new PlayerArea(context,  width/2, 60, droppables.get(1))); // places opponent area in the gui.
+		tv.addDroppable(new PlayerArea(context,  width/2, height-110, droppables.get(0))); // places my area in the gui.
+		tv.addDroppable(new PlayerArea(context,  width/2, 80, droppables.get(1))); // places opponent area in the gui.
 		tv.addDroppable(new PublicArea(context, width/2, height/2, droppables.get(3)));	// places the public area in the gui.
 		
 	}
@@ -99,6 +99,11 @@ public class FreePlay extends Game {
 		
 		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(cardsToSend,4)));
 		
+	}
+	
+	@Override
+	public boolean hasTurns(){
+		return false;
 	}
 
 }
