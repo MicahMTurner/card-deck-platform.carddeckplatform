@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.OptionalDataException;
 
+import client.controller.ClientController;
+
 import communication.messages.Message;
 
 public class TcpReceiver extends Receiver{
@@ -35,11 +37,22 @@ public class TcpReceiver extends Receiver{
 				System.out.println("message executed");
 			} catch (IOException e) {
 				//stream got closed
-				System.out.println(e.getMessage());
+				System.out.println("stream got closed");
+				try {
+					in.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (Exception e2){
+					
+				}
+				break;
+				
+				//System.out.println(e.getMessage());
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} 
+			}
 		}
 		
 	}
