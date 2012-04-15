@@ -42,7 +42,23 @@ public class blackJack extends Game{
 	public void buildLayout(Context context, TableView tv, Position position) {
 		int width = GameStatus.screenWidth;
 		int height = GameStatus.screenHeight;
-		
+		switch(position){
+		case TOP:{
+			break;
+		}
+		case BOTTOM:{
+			break;
+		}
+			
+		case LEFT:{
+			break;
+		}
+		case RIGHT:{
+			break;
+		}
+			
+			
+		}
 	}
 
 	@Override

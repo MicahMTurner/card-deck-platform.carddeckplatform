@@ -10,10 +10,7 @@ import android.graphics.Canvas;
 public class PlayerArea extends Droppable {
 	
 	public PlayerArea(Context context, int x,int y, LogicDroppable logicDroppable){
-		this.x = x;
-		this.y = y;
-		this.logicDroppable = logicDroppable;
-		this.context = context;
+		super(context,x,y,logicDroppable);
 	}
 
 	@Override
