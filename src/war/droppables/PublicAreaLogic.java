@@ -93,17 +93,23 @@ public class PublicAreaLogic extends LogicDroppable{
 								
 							
 							}
-							if (!winnerCard.getOwner().equals(GameStatus.username) 
-									&& ClientController.getController().isMyTurn()){
-								
-								 if(War.getDroppables().get(3).getCards().size()==0){
-										ClientController.getController().declareWinner();
-									}
-									//end turn
-									ClientController.outgoingAPI().outgoingCommand(new EndTurnAction(GameStatus.me.getPosition()));
-								}
-							}
+							
 							droppable.getCards().clear();
+					}
+					}
+					if (!winnerCard.getOwner().equals(GameStatus.username) 
+							&& ClientController.getController().isMyTurn()){
+						
+						 	//end turn
+							ClientController.outgoingAPI().outgoingCommand(new EndTurnAction(GameStatus.me.getPosition()));
+						}
+					if(War.getDroppables().get(2).getCards().size()==0){
+						ClientController.getController().declareWinner();
+						ClientController.getController().disableUi();
+					}else{
+						ClientController.getController().declareLoser();
+						ClientController.getController().disableUi();
+						ServerConnection.getConnection().getMessageSender().send(new LoseMessage());
 					}
 					}
 				}

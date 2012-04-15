@@ -27,14 +27,14 @@ public class TurnAction extends ClientAction{
 	 */
 	public void incoming() {
 		ClientController.getController().playerTurn(position);		
-		if (ClientController.getController().isMyTurn()){
-			if (War.getDroppables().get(3).getCards().size()==0){
-				ServerConnection.getConnection().getMessageSender().send(new LoseMessage());
-				ClientController.outgoingAPI().outgoingCommand(new EndTurnAction(GameStatus.me.getPosition()));
-				ClientController.getController().declareLoser();
+		//if (ClientController.getController().isMyTurn()){
+		//	if (War.getDroppables().get(3).getCards().size()==0){
 				
-			}
-		}
+		//		ClientController.outgoingAPI().outgoingCommand(new EndTurnAction(GameStatus.me.getPosition()));
+		//		ClientController.getController().declareLoser();
+		//		
+		//	}
+		//}
 	}
 
 	@Override
