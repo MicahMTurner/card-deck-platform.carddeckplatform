@@ -385,7 +385,14 @@ public class TableView extends SurfaceView {
 		    			
 		    			//moveDraggable(table.getDraggableById(1, true),X, Y);
 	
-		    			
+		    			Droppable droppable2=table.getNearestDroppable(X, Y);
+						if (droppable2!=null){									
+							droppable2.onDrop(draggableInHand);
+//							animationTask.redraw();
+//							Thread.sleep(400);
+//							droppable.onDropLogic(draggableInHand);									
+							
+						}
 		    			break;
 		    		case MotionEvent.ACTION_MOVE:
 		    			if(draggableInHand!=null){
