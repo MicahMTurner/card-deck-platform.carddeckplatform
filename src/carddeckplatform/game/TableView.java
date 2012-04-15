@@ -81,7 +81,7 @@ public class TableView extends SurfaceView {
 	public void draggableMotion(String username, int id , int x , int y){
 		Draggable draggable = table.getDraggableById(id, GetMethod.PutInFront);
 		draggable.motionAnimation(username);
-		draggable.setLocation(xDimention-x, yDimention-y);
+		draggable.setLocation(GameStatus.screenWidth-x, GameStatus.screenHeight-y);
 		//invalidate(); 
 		
 		animationTask.redraw();
