@@ -9,7 +9,6 @@ import client.controller.ClientController;
 import client.controller.actions.ClientAction;
 import client.controller.actions.EndTurnAction;
 import logic.card.CardLogic;
-import logic.client.GameLogic;
 import logic.client.Player;
 import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;

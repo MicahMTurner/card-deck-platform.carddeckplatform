@@ -1,5 +1,12 @@
 package freeplay;
 
+import java.util.ArrayList;
+
+import client.controller.actions.DealCardAction;
+
+import communication.messages.Message;
+import communication.server.ConnectionsManager;
+
 import freeplay.droppables.DeckAreaLogic;
 import freeplay.droppables.MyPlayerAreaLogic;
 import freeplay.droppables.PlayerAreaLogic;
@@ -10,8 +17,9 @@ import freeplay.gui.PublicArea;
 import android.content.Context;
 import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;
+import logic.card.CardLogic;
+import logic.client.Deck;
 import logic.client.Game;
-import logic.client.GameLogic;
 import logic.client.GamePrefs;
 import logic.client.LogicDroppable;
 import logic.client.Player;
@@ -20,7 +28,7 @@ import logic.client.Player.Position;
 public class FreePlay extends Game {
 
 	private GamePrefs prefs = new FreePlayPrefs();
-	private GameLogic logic = new FreePlayLogic();
+	//private GameLogic logic = new FreePlayLogic();
 	
 	@Override
 	protected void setNewTools() {
@@ -41,11 +49,6 @@ public class FreePlay extends Game {
 		return prefs;
 	}
 
-	@Override
-	public GameLogic getLogic() {
-		// TODO Auto-generated method stub
-		return logic;
-	}
 
 	@Override
 	public String toString() {
@@ -82,6 +85,19 @@ public class FreePlay extends Game {
 		tv.addDroppable(new PlayerArea(context,  width/2, height-100, droppables.get(0))); // places my area in the gui.
 		tv.addDroppable(new PlayerArea(context,  width/2, 60, droppables.get(1))); // places opponent area in the gui.
 		tv.addDroppable(new PublicArea(context, width/2, height/2, droppables.get(3)));	// places the public area in the gui.
+		
+	}
+
+	@Override
+	public void dealCards(Deck deck, ArrayList<Player> players) {
+		deck.shuffle(2);
+		ArrayList<CardLogic> cardsToSend = new ArrayList<CardLogic>();
+		// convert from Stack to ArrayList.. :(
+		for(CardLogic cl : deck.getCards()){
+			cardsToSend.add(cl);
+		}
+		
+		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(cardsToSend,4)));
 		
 	}
 

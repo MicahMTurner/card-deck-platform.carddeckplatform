@@ -4,8 +4,6 @@ import client.controller.ClientController;
 import server.controller.actions.SendToAllExceptMe;
 import communication.link.ServerConnection;
 import communication.messages.Message;
-
-import logic.client.GameLogic;
 import carddeckplatform.game.TableView;
 
 public class DraggableMotionAction extends ClientAction {

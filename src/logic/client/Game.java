@@ -30,6 +30,16 @@ public abstract class Game {
 	 */
 	protected abstract void setNewTools();	
 	public abstract void setTurns();
+	public abstract void dealCards(Deck deck,ArrayList<Player> players);
+	public abstract GamePrefs getPrefs();
+	//public abstract GameLogic getLogic();
+	public abstract void buildLayout(Context context, TableView tv, Player.Position position);
+	
+	@Override
+	/**
+	 * returns the game id
+	 */
+	public abstract String toString();
 	
 	public static ArrayList<LogicDroppable> getDroppables() {
 		return droppables;
@@ -51,14 +61,6 @@ public abstract class Game {
 	public void addMe(){
 		players.add(GameStatus.me);
 	}
-	public abstract GamePrefs getPrefs();
-	public abstract GameLogic getLogic();
-	
-	@Override
-	/**
-	 * returns the game id
-	 */
-	public abstract String toString();
 	
 	public void initiate(){
 		cards=tools.createCards();	
@@ -66,7 +68,7 @@ public abstract class Game {
 	public Deck getCards() {
 		return cards;
 	}
-	public abstract void buildLayout(Context context, TableView tv, Player.Position position);
+	
 	
 	public Game() {
 		setTurns();

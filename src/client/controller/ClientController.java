@@ -1,33 +1,14 @@
 package client.controller;
 
-import java.util.Observer;
-import java.util.concurrent.LinkedBlockingQueue;
-
-import communication.messages.Message;
-import controller.commands.Command;
-import controller.commands.IncomingCommand;
-import controller.commands.OutgoingCommand;
 
 import android.content.Context;
-import android.database.Observable;
 import logic.card.CardLogic;
 import logic.client.Game;
-import logic.client.GameLogic;
 import logic.client.LogicDroppable;
 import logic.client.Player;
 import logic.client.Player.Position;
 import client.controller.actions.ClientAction;
-import client.controller.actions.DraggableMotionAction;
-import client.controller.actions.EndDraggableMotionAction;
 import client.gui.entities.Table;
-//import client.controller.actions.GiveCardAction;
-//import client.controller.actions.HideCardAction;
-//import client.controller.actions.PutInPublicAction;
-//import client.controller.actions.RemoveFromPublicAction;
-//import client.controller.actions.RevealCardAction;
-//import client.controller.actions.TurnAction;
-
-import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;
 
 //maybe not creating new action and commands all the time?
@@ -41,11 +22,7 @@ public class ClientController {
 	
 	private LogicDroppable myArea;
 	
-	//holds commands in queue
-	private  LinkedBlockingQueue<Command> commandsQueue;
-	//tells the controller to stop
-	private volatile boolean stopped;
-	
+
 	public Game getLogic() {
 		return logic;
 	}
@@ -86,9 +63,8 @@ public class ClientController {
 		}
 	
 	//constructor
-	private ClientController(){
+	private ClientController(){		
 		
-		commandsQueue=new LinkedBlockingQueue<Command>();
 		this.outgoingAPI=new OutgoingAPI();
 		this.incomingAPI=new IncomingAPI();		
 
