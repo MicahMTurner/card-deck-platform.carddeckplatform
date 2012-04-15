@@ -70,7 +70,7 @@ public class DeckArea extends Droppable {
 	@Override
 	public void draw(Canvas canvas) {
 		// TODO Auto-generated method stub
-		canvas.drawText("Deck Area", getX(), getY(), new Paint());
+		//canvas.drawText("Deck Area", getX(), getY(), new Paint());
 	}
 
 }
