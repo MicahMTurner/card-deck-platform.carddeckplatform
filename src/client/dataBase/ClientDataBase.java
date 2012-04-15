@@ -3,6 +3,8 @@ package client.dataBase;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import blackJack.BlackJack;
+
 import freeplay.FreePlay;
 
 import war.War;
@@ -32,6 +34,8 @@ public class ClientDataBase {
 		games.put(war.toString(), war);
 		FreePlay freePlay = new FreePlay();
 		games.put(freePlay.toString(), freePlay);
+		BlackJack blackJack=new BlackJack();
+		games.put(blackJack.toString(), blackJack);
 		
 	}
 	/**
