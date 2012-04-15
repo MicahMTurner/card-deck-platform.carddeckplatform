@@ -39,9 +39,14 @@ public class PlayerArea extends Droppable{
 	}
 
 	@Override
+	public int getX(){
+		
+		return x+getLogic().getCards().size()*50-150;
+	}
+	@Override
 	public void onDrop(Draggable draggable) {
 		
-		
+		addDraggable(draggable);
 		ArrayList<CardLogic> cd = new ArrayList<CardLogic>();
 		cd.add(draggable.getCardLogic());
 		ClientController.outgoingAPI().outgoingCommand(new RecieveCardAction(cd,draggable.getContainer().getLogic().getId(),logicDroppable.getId()));
