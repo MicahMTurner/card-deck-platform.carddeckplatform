@@ -2,6 +2,12 @@ package blackJack;
 
 import java.util.ArrayList;
 
+import blackJack.droppables.DeckAreaLogic;
+import blackJack.droppables.MyPlayerAreaLogic;
+import blackJack.droppables.PlayerAreaLogic;
+import blackJack.gui.DeckArea;
+import blackJack.gui.PlayerArea;
+
 import client.controller.actions.DealCardAction;
 
 import communication.messages.Message;
@@ -10,13 +16,6 @@ import communication.server.ConnectionsManager;
 import android.content.Context;
 import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;
-import freeplay.droppables.DeckAreaLogic;
-import freeplay.droppables.MyPlayerAreaLogic;
-import freeplay.droppables.PlayerAreaLogic;
-import freeplay.droppables.PublicAreaLogic;
-import freeplay.gui.DeckArea;
-import freeplay.gui.PlayerArea;
-import freeplay.gui.PublicArea;
 import logic.card.CardLogic;
 import logic.client.Deck;
 import logic.client.Game;
@@ -72,7 +71,7 @@ public class BlackJack extends Game{
 			tv.addDroppable(new DeckArea(context, width-100, height/2, droppables.get(2)));
 		}
 		
-		tv.addDroppable(new PlayerArea(context,  width/2, height-150, droppables.get(0))); // places my area in the gui.
+		tv.addDroppable(new PlayerArea(context,  width/2, height-100, droppables.get(0))); // places my area in the gui.
 		tv.addDroppable(new PlayerArea(context,  width/2, 60, droppables.get(1))); // places opponent area in the gui.
 		
 		
