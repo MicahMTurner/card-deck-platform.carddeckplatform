@@ -15,10 +15,7 @@ import client.gui.entities.Droppable;
 public class PublicArea extends Droppable {
 	
 	public PublicArea(Context context, int x,int y, LogicDroppable logicDroppable){
-		this.x = x;
-		this.y = y;
-		this.logicDroppable = logicDroppable;
-		this.context = context;
+		super(context,x,y,logicDroppable);
 	}
 
 	@Override

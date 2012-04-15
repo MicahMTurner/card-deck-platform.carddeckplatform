@@ -21,7 +21,12 @@ public abstract class Droppable {
 	public abstract void removeDraggable(Draggable draggable);
 	
 	public abstract CardLogic getDraggable();
-	
+	public Droppable(Context context, int x,int y, LogicDroppable logicDroppable){
+		this.x = x;
+		this.y = y;
+		this.logicDroppable = logicDroppable;
+		this.context = context;
+	}
 	public int getX(){
 		return x;
 	}

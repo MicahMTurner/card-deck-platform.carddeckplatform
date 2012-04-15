@@ -19,10 +19,7 @@ import android.graphics.Canvas;
 public class PublicPlace extends Droppable {
 	
 	public PublicPlace(Context context, int x,int y, LogicDroppable logicDroppable){
-		this.x = x;
-		this.y = y;
-		this.logicDroppable = logicDroppable;
-		this.context = context;
+		super(context,x,y,logicDroppable);
 	}
 	
 	@Override
