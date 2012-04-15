@@ -71,7 +71,7 @@ public class PlayerArea extends Droppable {
 	public void draw(Canvas canvas) {
 		// TODO Auto-generated method stub
 		canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.playerarea),getX()-75,getY()-30,null);
-		canvas.drawText("Player Area", getX(), getY(), new Paint());
+		//canvas.drawText("Player Area", getX(), getY(), new Paint());
 	}
 
 }
