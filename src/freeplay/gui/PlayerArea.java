@@ -6,8 +6,10 @@ import war.actions.RecieveCardAction;
 import logic.card.CardLogic;
 import logic.client.LogicDroppable;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import carddeckplatform.game.R;
 import client.controller.ClientController;
 import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
@@ -71,6 +73,7 @@ public class PlayerArea extends Droppable {
 	@Override
 	public void draw(Canvas canvas) {
 		// TODO Auto-generated method stub
+		canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.playerarea),getX()-75,getY()-30,null);
 		canvas.drawText("Player Area", getX(), getY(), new Paint());
 	}
 
