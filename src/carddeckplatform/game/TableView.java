@@ -376,7 +376,8 @@ public class TableView extends SurfaceView {
 		    			}	
 		    			if(draggableInHand!=null && !draggableInHand.getCardLogic().isMoveable()){
 		    				popToast("You cannot move this card");
-		        			
+		    				draggableInHand=null;
+		        			break;
 		    			}
 	//	    			if(draggableInHand==null)
 	//	    				table.getNearestDroppable(X, Y).onClick();
@@ -387,14 +388,7 @@ public class TableView extends SurfaceView {
 		    			
 		    			//moveDraggable(table.getDraggableById(1, true),X, Y);
 	
-		    			Droppable droppable2=table.getNearestDroppable(X, Y);
-						if (droppable2!=null){									
-							droppable2.onDrop(draggableInHand);
-//							animationTask.redraw();
-//							Thread.sleep(400);
-//							droppable.onDropLogic(draggableInHand);									
-							
-						}
+		    			
 		    			break;
 		    		case MotionEvent.ACTION_MOVE:
 		    			if(draggableInHand!=null){
@@ -426,6 +420,16 @@ public class TableView extends SurfaceView {
 							}
 		    				draggableInHand = null;
 		    			}
+		    			
+		    			Droppable droppable2=table.getNearestDroppable(X, Y);
+						if (droppable2!=null){									
+							droppable2.onClick();
+//							animationTask.redraw();
+//							Thread.sleep(400);
+//							droppable.onDropLogic(draggableInHand);									
+							
+						}
+		    			
 		    			break;
 	    		}
     		}

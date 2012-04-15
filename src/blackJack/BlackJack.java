@@ -63,17 +63,18 @@ public class BlackJack extends Game{
 			droppables.add(new MyPlayerAreaLogic(1,LogicDroppable.Type.PLAYER));
 			droppables.add(new PlayerAreaLogic(2,LogicDroppable.Type.PLAYER));
 			droppables.add(new DeckAreaLogic(3,LogicDroppable.Type.PUBLIC));
-			
+			droppables.add(new PressButtonLogic(4, Type.PUBLIC));
 			tv.addDroppable(new DeckArea(context, 60, height/2, droppables.get(2)));
 		}
 		else if (position.equals(Player.Position.TOP)){
 			droppables.add(new MyPlayerAreaLogic(2,LogicDroppable.Type.PLAYER));
 			droppables.add(new PlayerAreaLogic(1,LogicDroppable.Type.PLAYER));
 			droppables.add(new DeckAreaLogic(3,LogicDroppable.Type.PUBLIC));
-			
+			droppables.add(new PressButtonLogic(4, Type.PUBLIC));
 			tv.addDroppable(new DeckArea(context, width-100, height/2, droppables.get(2)));
 		}
-		tv.addDroppable(new PressButton(context, 70, height-100, new PressButtonLogic(4, Type.PUBLIC)));
+		
+		tv.addDroppable(new PressButton(context, 70, height-100, droppables.get(3)));
 		tv.addDroppable(new PlayerArea(context,  width/2, height-100, droppables.get(0))); // places my area in the gui.
 		tv.addDroppable(new PlayerArea(context,  width/2, 60, droppables.get(1))); // places opponent area in the gui.
 		
