@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import blackJack.droppables.DeckAreaLogic;
 import blackJack.droppables.MyPlayerAreaLogic;
 import blackJack.droppables.PlayerAreaLogic;
+import blackJack.droppables.PressButtonLogic;
 import blackJack.gui.DeckArea;
 import blackJack.gui.PlayerArea;
+import blackJack.gui.PressButton;
 
 import client.controller.actions.DealCardAction;
 
@@ -21,6 +23,7 @@ import logic.client.Deck;
 import logic.client.Game;
 import logic.client.GamePrefs;
 import logic.client.LogicDroppable;
+import logic.client.LogicDroppable.Type;
 import logic.client.Player;
 import logic.client.Player.Position;
 import logic.host.Host;
@@ -70,7 +73,7 @@ public class BlackJack extends Game{
 			
 			tv.addDroppable(new DeckArea(context, width-100, height/2, droppables.get(2)));
 		}
-		
+		tv.addDroppable(new PressButton(context, 70, height-100, new PressButtonLogic(4, Type.PUBLIC)));
 		tv.addDroppable(new PlayerArea(context,  width/2, height-100, droppables.get(0))); // places my area in the gui.
 		tv.addDroppable(new PlayerArea(context,  width/2, 60, droppables.get(1))); // places opponent area in the gui.
 		

@@ -8,33 +8,59 @@ import communication.messages.Message;
 
 import client.controller.ClientController;
 import client.controller.actions.ClientAction;
+import client.gui.entities.Table;
 
 public class EndRoundAction extends ClientAction{
-
-	@Override
-	public void incoming() {
-		int mySum=0;
-		//calc my sum
-		for (CardLogic card : BlackJack.getDroppables().get(2).getCards()){
-			mySum+=card.getValue();
+	
+	private void clearCards(LogicDroppable player){
+		for (CardLogic card : player.getCards()){
+			ClientController.getController().runCardAnimation(card, -100,-100, 1000, 10, true, false, Table.GetMethod.PutInBack);
+			
 		}
-		for (LogicDroppable droppable : BlackJack.getDroppables()){
-			if (droppable.getType().equals(LogicDroppable.Type.PLAYER)){
-				int othersSum=0;
-				for (CardLogic card : droppable.getCards()){
-					othersSum+=card.getValue();
-				}
-				if (mySum<othersSum){
-					//lose
-					ClientController.getController().disableUi();
-					ClientController.getController().declareLoser();
-					return;
-				}
+		player.getCards().clear();
+	}
+	private int sumCardsInHand(LogicDroppable player){
+		int sum=0;
+		for (CardLogic card : player.getCards()){
+			int value=card.getValue();
+			if (value>10 ){
+				sum+=10;
+			}
+			else if (value==14){
+				sum+=11;
+			}else{
+				sum+=value;
 			}
 		}
-		//win
+		return sum;
+	}
+	
+	@Override
+	public void incoming() {
 		ClientController.getController().disableUi();
-		ClientController.getController().declareWinner();
+		LogicDroppable me= BlackJack.getDroppables().get(0);
+		LogicDroppable other= BlackJack.getDroppables().get(1);
+		int mySum=sumCardsInHand(me);
+		int otherSum=sumCardsInHand(other);
+		
+//		for (LogicDroppable droppable : BlackJack.getDroppables()){
+//			if (droppable.getType().equals(LogicDroppable.Type.PLAYER)){
+//				int othersSum=0;
+//				for (CardLogic card : droppable.getCards()){
+//					othersSum+=card.getValue();
+//				}
+		if (mySum>21 || (otherSum<21 && mySum<otherSum)){		
+			//lose
+			ClientController.getController().declareLoser();	
+		}else {
+			ClientController.getController().declareWinner();
+		}
+		clearCards(me);
+		clearCards(other);
+		
+		
+//			}
+//		}
 		
 	}
 

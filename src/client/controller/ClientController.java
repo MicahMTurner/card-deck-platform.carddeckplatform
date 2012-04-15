@@ -182,6 +182,18 @@ public class ClientController {
 		gui.popToast("LOSSER!");
 		
 	}
+
+	public void popMessage(String displayMessage) {
+		gui.popToast(displayMessage);
+		
+	}
+	public void runCardAnimation(CardLogic cardLogic, int x,int y, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd, Table.GetMethod g){
+		gui.moveDraggable(gui.getDraggableById(cardLogic.getId(), g), x,y, initialDelay, delay, revealedWhileMoving, revealedAtEnd);
+	}
+	public void removeCard(CardLogic card) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	//---------------------------------------------------------------------//	
