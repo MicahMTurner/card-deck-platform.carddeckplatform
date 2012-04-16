@@ -188,9 +188,61 @@ public class TableView extends SurfaceView {
 		}	
 	}
 	
-	
-	public void moveDraggable(final Draggable draggable, final int newX, final int newY, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
+	public void moveDraggable(final ArrayList<Draggable> draggables, final int newX, final int newY, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
+		ArrayList<Thread> drawingThreads = new ArrayList<Thread>();
+		for (final Draggable draggable: draggables ){
+			drawingThreads.add(	new Thread(new Runnable() {	
+						@Override
+						public void run() {
+							draggable.getCardLogic().setRevealed(revealedWhileMoving);
+							// TODO Auto-generated method stub
+							int x = draggable.getX();
+							int y = draggable.getY();
+							final ArrayList<Point> vector = StaticFunctions.midLine(x, y, newX, newY);
+							try {
+			        			Thread.sleep(initialDelay);
+			        		} catch (InterruptedException e) {
+			        			// TODO Auto-generated catch block
+			        			e.printStackTrace();
+			        		}
+			            	for(int i=0; i<vector.size(); i++){
+			            		draggable.getCardLogic().setRevealed(revealedWhileMoving);
+			            		final int index = i;
+					
+			            		try {
+			            			Thread.sleep(delay);
+			            		} catch (InterruptedException e) {
+			            			// TODO Auto-generated catch block
+			            			e.printStackTrace();
+			            		}
+					
+			            		
+			            		draggable.setLocation(vector.get(index).x, vector.get(index).y);
+			            		draggable.setAngle(i*10);
+			            		animationTask.redraw();
+			            	}
+			            	draggable.setAngle(0);
+			            	draggable.getCardLogic().setRevealed(revealedAtEnd);
+							
+						}
+					}));
+		}
 		
+		for (Thread drawingThread : drawingThreads){
+			drawingThread.start();
+		}
+		for (Thread drawingThread : drawingThreads){
+			try {
+				drawingThread.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
+	}
+	public void moveDraggable(final Draggable draggable, final int newX, final int newY, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
+		Thread drawingThread=
 		new Thread(new Runnable() {	
 			@Override
 			public void run() {
@@ -225,7 +277,9 @@ public class TableView extends SurfaceView {
             	draggable.getCardLogic().setRevealed(revealedAtEnd);
 				
 			}
-		}).start();
+		});
+		drawingThread.start();
+		
 	}
 	
 	

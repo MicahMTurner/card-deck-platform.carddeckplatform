@@ -15,6 +15,10 @@ import war.gui.PlayerArea;
 import war.gui.PublicPlace;
 import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;
+import logic.builtIn.defaultCards.Club;
+import logic.builtIn.defaultCards.Diamond;
+import logic.builtIn.defaultCards.Heart;
+import logic.builtIn.defaultCards.Spade;
 import logic.card.CardLogic;
 import logic.client.Deck;
 import logic.client.Game;
@@ -87,12 +91,36 @@ public class War extends Game{
 	public void dealCards(Deck deck, ArrayList<Player> players) {
 		deck.shuffle(2);
 		int size=deck.getSize();
-		for (int i=0;i<2;i++){
-			CardLogic card=deck.drawCard();
-			Player player=players.get(i%Host.players.size());
-			card.setOwner(player.getUsername());
-			player.getHand().add(card);			
-		}
+		//for (int i=0;i<2;i++){
+		//	CardLogic card=deck.drawCard();
+		//	Player player=players.get(i%Host.players.size());
+		//	card.setOwner(player.getUsername());
+		//	player.getHand().add(card);			
+		//}
+
+		//make presentation deal
+		Player player1=players.get(0);
+		Player player2=players.get(1);
+		
+		player1.addCard(new Spade(12, 65));
+		player1.addCard(new Spade(5, 64));
+		player1.addCard(new Diamond(5, 63));
+		player1.addCard(new Spade(3, 62));
+		player1.addCard(new Club(2, 61));
+		player1.addCard(new Diamond(6, 60));
+		
+		player2.addCard(new Heart(9,71));
+		player2.addCard(new Heart(3,70));
+		player2.addCard(new Club(5,69));
+		player2.addCard(new Spade(7,68));
+		player2.addCard(new Spade(8,67));
+		player2.addCard(new Spade(4,66));
+		
+		
+		
+		
+		
+		
 		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getHand(),4)));
 		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getHand(),3)));
 		
