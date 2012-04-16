@@ -13,11 +13,9 @@ import client.gui.entities.Table;
 public class EndRoundAction extends ClientAction{
 	
 	private void clearCards(LogicDroppable player){
-		for (CardLogic card : player.getCards()){
-			ClientController.getController().runCardAnimation(card, -100,-100, 1000, 10, true, false, Table.GetMethod.PutInBack);
-			
-		}
+		ClientController.getController().runCardAnimation(player.getCards(), -100,-100, 1000, 10, true, false, Table.GetMethod.PutInBack);
 		player.getCards().clear();
+		
 	}
 	private int sumCardsInHand(LogicDroppable player){
 		int sum=0;
@@ -57,8 +55,6 @@ public class EndRoundAction extends ClientAction{
 		}
 		clearCards(me);
 		clearCards(other);
-		
-		
 //			}
 //		}
 		

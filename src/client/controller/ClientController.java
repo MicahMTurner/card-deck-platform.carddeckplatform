@@ -1,6 +1,9 @@
 package client.controller;
 
 
+import java.util.ArrayList;
+import java.util.Stack;
+
 import android.content.Context;
 import logic.card.CardLogic;
 import logic.client.Game;
@@ -8,7 +11,9 @@ import logic.client.LogicDroppable;
 import logic.client.Player;
 import logic.client.Player.Position;
 import client.controller.actions.ClientAction;
+import client.gui.entities.Draggable;
 import client.gui.entities.Table;
+import client.gui.entities.Table.GetMethod;
 import carddeckplatform.game.TableView;
 
 //maybe not creating new action and commands all the time?
@@ -187,11 +192,21 @@ public class ClientController {
 		gui.popToast(displayMessage);
 		
 	}
+	
 	public void runCardAnimation(CardLogic cardLogic, int x,int y, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd, Table.GetMethod g){
 		gui.moveDraggable(gui.getDraggableById(cardLogic.getId(), g), x,y, initialDelay, delay, revealedWhileMoving, revealedAtEnd);
 	}
 	public void removeCard(CardLogic card) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	public void runCardAnimation(Stack<CardLogic> cards, int x,int y, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd, Table.GetMethod g) {
+		ArrayList<Draggable>guiCards=new ArrayList<Draggable>();
+		for (CardLogic card : cards){
+			guiCards.add(gui.getDraggableById(card.getId(), g));
+		}		
+		gui.moveDraggable(guiCards, x,y, initialDelay, delay, revealedWhileMoving, revealedAtEnd);
 		
 	}
 	
