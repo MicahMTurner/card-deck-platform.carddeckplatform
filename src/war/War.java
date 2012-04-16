@@ -101,20 +101,47 @@ public class War extends Game{
 		//make presentation deal
 		Player player1=players.get(0);
 		Player player2=players.get(1);
+		CardLogic card;
 		
-		player1.addCard(new Spade(12, 65));
-		player1.addCard(new Spade(5, 64));
-		player1.addCard(new Diamond(5, 63));
-		player1.addCard(new Spade(3, 62));
-		player1.addCard(new Club(2, 61));
-		player1.addCard(new Diamond(6, 60));
-		
-		player2.addCard(new Heart(9,71));
-		player2.addCard(new Heart(3,70));
-		player2.addCard(new Club(5,69));
-		player2.addCard(new Spade(7,68));
-		player2.addCard(new Spade(8,67));
-		player2.addCard(new Spade(4,66));
+		card=new Heart(14, 65);
+		card.setOwner(player1.getUsername());
+		player1.addCard(card);
+		card=new Spade(14, 65);
+		card.setOwner(player1.getUsername());
+		player1.addCard(card);
+		card=new Spade(2, 64);
+		card.setOwner(player1.getUsername());
+		player1.addCard(card);
+		card=new Diamond(12, 63);
+		card.setOwner(player1.getUsername());
+		player1.addCard(card);
+		card=new Spade(11, 62);
+		card.setOwner(player1.getUsername());
+		player1.addCard(card);
+		card=new Club(5, 61);
+		card.setOwner(player1.getUsername());
+		player1.addCard(card);
+		card=new Diamond(3, 60);
+		card.setOwner(player1.getUsername());
+		player1.addCard(card);
+
+
+		player2.addCard(card);
+		card=new Heart(3,70);
+		card.setOwner(player2.getUsername());
+		player2.addCard(card);
+		card=new Club(9,69);
+		card.setOwner(player2.getUsername());
+		player2.addCard(card);
+		card=new Spade(7,68);
+		card.setOwner(player2.getUsername());
+		player2.addCard(card);
+		card=new Spade(5,67);
+		card.setOwner(player2.getUsername());
+		player2.addCard(card);
+		card=new Spade(3,66);
+		card.setOwner(player2.getUsername());
+		player2.addCard(card);		
 		
 		
 		
