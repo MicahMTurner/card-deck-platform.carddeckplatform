@@ -59,10 +59,10 @@ public class PublicAreaLogic extends LogicDroppable{
 				
 			
 				if( logicDroppable.getCards().size()!=getCards().size()){
-					if (ClientController.getController().isMyTurn()){
+					if (ClientController.getController().isMyTurn() && !War.isTie()){
 						//end turn
-						return;
-						//ClientController.outgoingAPI().outgoingCommand(new EndTurnAction(GameStatus.me.getPosition()));
+						
+						ClientController.outgoingAPI().outgoingCommand(new EndTurnAction(GameStatus.me.getPosition()));
 					}
 				}else{
 					War.setTie(false);
