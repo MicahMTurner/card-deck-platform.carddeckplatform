@@ -1,5 +1,8 @@
 package blackJack.actions;
 
+import java.util.ArrayList;
+import java.util.Stack;
+
 import blackJack.BlackJack;
 import logic.card.CardLogic;
 import logic.client.LogicDroppable;
@@ -13,8 +16,15 @@ import client.gui.entities.Table;
 public class EndRoundAction extends ClientAction{
 	
 	private void clearCards(LogicDroppable player){
-		ClientController.getController().runCardAnimation(player.getCards(), -100,-100, 1000, 10, true, false, Table.GetMethod.PutInBack);
-		player.getCards().clear();
+		ArrayList<CardLogic>logiccards=new ArrayList<CardLogic>();
+		for (CardLogic logicCard : player.getCards()){
+			logiccards.add(logicCard);
+		}
+		for (CardLogic cardLogic : logiccards){
+			ClientController.getController().runCardAnimation(cardLogic, -100,-100, 1000, 10, true, false, Table.GetMethod.PutInBack);
+		}
+		//ClientController.getController().runCardAnimation((Stack<CardLogic>)player.getCards().clone(), -100,-100, 1000, 10, true, false, Table.GetMethod.PutInBack);
+		
 		
 	}
 	private int sumCardsInHand(LogicDroppable player){
@@ -55,6 +65,8 @@ public class EndRoundAction extends ClientAction{
 		}
 		clearCards(me);
 		clearCards(other);
+		me.getCards().clear();
+		other.getCards().clear();
 //			}
 //		}
 		
