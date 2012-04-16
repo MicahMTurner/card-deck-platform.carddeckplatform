@@ -102,44 +102,41 @@ public class War extends Game{
 		Player player1=players.get(0);
 		Player player2=players.get(1);
 		CardLogic card;
-		
-		card=new Heart(14, 65);
+		card=new Spade(12, 65);
 		card.setOwner(player1.getUsername());
 		player1.addCard(card);
-		card=new Spade(14, 65);
+		card=new Spade(5, 64);
 		card.setOwner(player1.getUsername());
 		player1.addCard(card);
-		card=new Spade(2, 64);
+		card=new Diamond(5, 63);
 		card.setOwner(player1.getUsername());
 		player1.addCard(card);
-		card=new Diamond(12, 63);
+		card=new Spade(3, 62);
 		card.setOwner(player1.getUsername());
 		player1.addCard(card);
-		card=new Spade(11, 62);
+		card=new Club(2, 61);
 		card.setOwner(player1.getUsername());
 		player1.addCard(card);
-		card=new Club(5, 61);
-		card.setOwner(player1.getUsername());
-		player1.addCard(card);
-		card=new Diamond(3, 60);
+		card=new Diamond(6, 60);
 		card.setOwner(player1.getUsername());
 		player1.addCard(card);
 
-
+		card=new Heart(9,71);
+		card.setOwner(player2.getUsername());
 		player2.addCard(card);
 		card=new Heart(3,70);
 		card.setOwner(player2.getUsername());
 		player2.addCard(card);
-		card=new Club(9,69);
+		card=new Club(5,69);
 		card.setOwner(player2.getUsername());
 		player2.addCard(card);
-		card=new Spade(7,68);
+		card=new Spade(3,68);
 		card.setOwner(player2.getUsername());
 		player2.addCard(card);
-		card=new Spade(5,67);
+		card=new Spade(8,67);
 		card.setOwner(player2.getUsername());
 		player2.addCard(card);
-		card=new Spade(3,66);
+		card=new Spade(4,66);
 		card.setOwner(player2.getUsername());
 		player2.addCard(card);		
 		

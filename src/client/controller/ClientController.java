@@ -152,6 +152,7 @@ public class ClientController {
 	public void playerTurn(Player.Position position) {
 		if (position.equals(logic.getMe().getPosition())){
 			gui.setUiEnabled(true);
+			gui.popToast("Your Move");
 		}
 		//glow player icon/name		
 	}
