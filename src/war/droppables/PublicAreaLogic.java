@@ -100,7 +100,7 @@ public class PublicAreaLogic extends LogicDroppable{
 					if(War.getDroppables().get(2).getCards().size()==0){
 						ClientController.getController().declareWinner();
 						ClientController.getController().disableUi();
-					}else{
+					}else if(War.getDroppables().get(3).getCards().size()==0){
 						ClientController.getController().declareLoser();
 						ClientController.getController().disableUi();
 						ServerConnection.getConnection().getMessageSender().send(new LoseMessage());
