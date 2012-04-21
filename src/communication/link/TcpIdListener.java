@@ -33,7 +33,7 @@ public class TcpIdListener implements Runnable {
 			try {
 				Socket clientSocket;
 				clientSocket = serverSocket.accept();
-				
+				System.out.println("Got request from " + clientSocket.getLocalAddress().toString());
 				ObjectOutputStream out=new ObjectOutputStream(clientSocket.getOutputStream());
 				//ObjectInputStream in=new ObjectInputStream(clientSocket.getInputStream());
 				

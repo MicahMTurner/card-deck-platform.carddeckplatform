@@ -123,16 +123,7 @@ public class CarddeckplatformActivity extends Activity {
 					});
             		ll.addView(gameBtn);
             	}
-            	
-            	
-            	
-            	
-            	
             	dialog.show();
-            	
-           
-
-                
                 } 
              });
         
@@ -140,6 +131,7 @@ public class CarddeckplatformActivity extends Activity {
             public void onClick(View arg0) {
             	GameStatus.isServer = false;
             	//making dialog to get ip
+            	GameStatus.me=new Player(GameStatus.username,GameStatus.localIp);
             	final Dialog dialog = new Dialog(CarddeckplatformActivity.this);
             	dialog.setContentView(R.layout.hostlist);
             	dialog.setTitle("List of available games");
@@ -148,6 +140,42 @@ public class CarddeckplatformActivity extends Activity {
             	ArrayList<HostId> hosts;
             	HostFinder hostFinder = new TcpHostFinder((WifiManager) getSystemService(Context.WIFI_SERVICE));
             	hosts = hostFinder.findHosts();
+            	
+            	// adds the localhost option for emulator debug (should be removed in the release version).
+            	Button hostBtn = new Button(getApplicationContext());
+            	hostBtn.setText("Local host");
+            	hostBtn.setOnClickListener(new OnClickListener(){
+					@Override
+					public void onClick(View arg0) {
+						// TODO Auto-generated method stub
+						GameStatus.isServer = false;
+						GameStatus.hostIp = "192.168.1.100";
+		            	GameStatus.username = username.getText().toString();
+		            	
+		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
+		                startActivity(i);
+		                dialog.dismiss();
+					}    		
+            	});
+            	ll.addView(hostBtn);
+            	
+            	for(final HostId hostId : hosts){
+            		hostBtn = new Button(getApplicationContext());
+            		hostBtn.setText("Play " + hostId.getGameName() + " with " + hostId.getOwner());
+            		hostBtn.setOnClickListener(new OnClickListener(){
+    					@Override
+    					public void onClick(View arg0) {
+    						// TODO Auto-generated method stub
+    						GameStatus.isServer = false;
+    						GameStatus.hostIp = hostId.getAddress();
+    		            	GameStatus.username = username.getText().toString();
+    		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
+    		                startActivity(i);
+    		                dialog.dismiss();
+    					}                		
+                	});
+            		ll.addView(hostBtn);
+            	}
             	
 //            	final TextView ip = (TextView) dialog.findViewById(R.id.getIpText);
 //            	ip.setText("10.0.2.2");
