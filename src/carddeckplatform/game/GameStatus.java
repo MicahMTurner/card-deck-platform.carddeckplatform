@@ -9,6 +9,7 @@ public class GameStatus {
 	public static String localIp;
 	public static String username;
 	public static int hostPort = 9997;
+	public static int idPort = 9998;
 	public static int screenWidth;
 	public static int screenHeight;
 	public static Player me;

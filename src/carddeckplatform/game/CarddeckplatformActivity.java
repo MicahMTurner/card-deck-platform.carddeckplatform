@@ -6,6 +6,11 @@ package carddeckplatform.game;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import communication.link.HostFinder;
+import communication.link.HostId;
+import communication.link.ServerConnection;
+import communication.link.TcpHostFinder;
+
 import client.dataBase.ClientDataBase;
 
 import war.War;
@@ -19,6 +24,7 @@ import logic.host.Host;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.net.wifi.WifiInfo;
@@ -135,43 +141,49 @@ public class CarddeckplatformActivity extends Activity {
             	GameStatus.isServer = false;
             	//making dialog to get ip
             	final Dialog dialog = new Dialog(CarddeckplatformActivity.this);
-            	dialog.setContentView(R.layout.getipdialog);
-            	dialog.setTitle("Host Ip Dialog");
-            	final TextView ip = (TextView) dialog.findViewById(R.id.getIpText);
-            	ip.setText("10.0.2.2");
-            	Button connect= (Button) dialog.findViewById(R.id.connectButton);
-            	connect.setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						
-						GameStatus.isServer = false;
-		            	GameStatus.hostIp = ip.getText().toString();
-		            	GameStatus.username = username.getText().toString();
-		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
-		                startActivity(i);
-						System.out.println("finish");
-						dialog.dismiss();
-					}
-				});
+            	dialog.setContentView(R.layout.hostlist);
+            	dialog.setTitle("List of available games");
+            	LinearLayout ll = (LinearLayout)dialog.findViewById(R.id.hostListLayout);
+            	// finds all available 
+            	ArrayList<HostId> hosts;
+            	HostFinder hostFinder = new TcpHostFinder((WifiManager) getSystemService(Context.WIFI_SERVICE));
+            	hosts = hostFinder.findHosts();
+            	
+//            	final TextView ip = (TextView) dialog.findViewById(R.id.getIpText);
+//            	ip.setText("10.0.2.2");
+//            	Button connect= (Button) dialog.findViewById(R.id.connectButton);
+//            	connect.setOnClickListener(new OnClickListener() {
+//					
+//					@Override
+//					public void onClick(View v) {
+//						// TODO Auto-generated method stub
+//						
+//						GameStatus.isServer = false;
+//		            	GameStatus.hostIp = ip.getText().toString();
+//		            	GameStatus.username = username.getText().toString();
+//		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
+//		                startActivity(i);
+//						System.out.println("finish");
+//						dialog.dismiss();
+//					}
+//				});
             	//making blur when button pressed
             	dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
                         WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
             	dialog.show();
-            	Button retur= (Button) dialog.findViewById(R.id.returnButtonIP);
-            	retur.setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						System.out.println("finish");
-						dialog.dismiss();
-					}
-				});
-            	GameStatus.hostIp = ip.getText().toString();
-            	GameStatus.username = username.getText().toString();
-            	GameStatus.me=new Player(GameStatus.username,GameStatus.localIp);
+//            	Button retur= (Button) dialog.findViewById(R.id.returnButtonIP);
+//            	retur.setOnClickListener(new OnClickListener() {
+//					
+//					@Override
+//					public void onClick(View v) {
+//						// TODO Auto-generated method stub
+//						System.out.println("finish");
+//						dialog.dismiss();
+//					}
+//				});
+//            	GameStatus.hostIp = ip.getText().toString();
+//            	GameStatus.username = username.getText().toString();
+//            	GameStatus.me=new Player(GameStatus.username,GameStatus.localIp);
 //                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
 //                startActivity(i);
                 } 
