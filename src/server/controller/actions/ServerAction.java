@@ -1,7 +1,7 @@
 package server.controller.actions;
 
-import logic.client.Player;
+import utils.Position;
 
 public abstract class ServerAction {
-	public abstract void execute(Player.Position id);
+	public abstract void execute(Position.Player id);
 }

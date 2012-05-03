@@ -1,13 +1,13 @@
 package communication.messages;
 
-import logic.client.Player;
-import logic.host.Host;
-import communication.server.ConnectionsManager;
 
-import client.controller.ClientController;
+import utils.Player;
+import utils.Position;
+import logic.host.Host;
+import communication.actions.Action;
+import communication.server.ConnectionsManager;
 import client.controller.actions.AddPlayerAction;
-import client.controller.actions.ClientAction;
-import client.controller.actions.InitialConnectionAction;
+
 
 public class InitialMessage extends Message {
 	
@@ -17,18 +17,18 @@ public class InitialMessage extends Message {
 		this.newPlayer=newPlayer;
 	}
 	
-	public InitialMessage(ClientAction clientAction) {
-		super.clientAction=clientAction;
+	public InitialMessage(Action action) {
+		super.action=action;
 	}
 
 	@Override
-	public void actionOnServer(Player.Position id){		
+	public void actionOnServer(Position.Player id){		
 		ConnectionsManager.getConnectionsManager().sendToAllExcptMe(new Message(new AddPlayerAction(newPlayer)), id);
 		Host.players.add(newPlayer);
 	}
 	
 	@Override
 	public void actionOnClient(){
-		ClientController.incomingAPI().incomingCommand(clientAction);
+		action.execute();
 	}
 }

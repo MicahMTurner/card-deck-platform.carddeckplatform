@@ -1,6 +1,8 @@
 package server.controller.actions;
 
-import logic.client.Player;
+
+
+import utils.Position;
 import communication.messages.Message;
 import communication.server.ConnectionsManager;
 
@@ -14,8 +16,7 @@ public class SendTo extends ServerAction {
 	}
 	
 	@Override
-	public void execute(Player.Position id) {
-		// TODO Auto-generated method stub
+	public void execute(Position.Player id) {		
 		ConnectionsManager.getConnectionsManager().sendTo(msg, id);
 	}
 

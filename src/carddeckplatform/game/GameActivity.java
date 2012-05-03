@@ -3,17 +3,14 @@ package carddeckplatform.game;
 
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 
-import logic.client.Game;
-import logic.client.Player.Position;
-
-import war.War;
-
+import utils.Position;
+import utils.Public;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Menu;
@@ -25,7 +22,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import client.controller.ClientController;
-
 import communication.link.ServerConnection;
 
 public class GameActivity extends Activity {
@@ -79,7 +75,7 @@ public class GameActivity extends Activity {
         tableview.getHolder().setFormat(PixelFormat.TRANSPARENT);
         tableview.setxDimention(GameStatus.screenWidth);
         tableview.setyDimention(GameStatus.screenHeight);
-        ClientController.getController().setTv(tableview);
+        ClientController.getController().setGui(tableview);
         
         
         //-------CONNECT TO SERVER(HOST)------//
@@ -87,12 +83,36 @@ public class GameActivity extends Activity {
         
         
         
-        Position posistion=ClientController.getController().getPosition();
-        ClientController.getController().buildGameLayout(getApplicationContext(), tableview, posistion);
+        //Position posistion=ClientController.getController().getPosition();
+        ArrayList<Public>publics=new ArrayList<Public>();
+
+        //insert public areas into publics array
+        ClientController.getController().setLayouts(publics);
+        
+        //ArrayList<Button>buttons=new ArrayList<Public>();
+        
+        //build the layout
+        buildLayout(publics);
+        
         System.out.println("Layout was created");
 
     }
-    @Override
+    
+    private void buildLayout( ArrayList<Public> publics){
+    	for (Public publicZone : publics){
+    		//set public zone according to my position
+    		publicZone.setPosition(publicZone.getPosition().getRelativePosition(ClientController.getController().getMe().getPosition()));
+    		
+    		tableview.addDroppable(publicZone);
+    	}
+    	
+    }
+   
+
+
+
+
+	@Override
 	public void onWindowFocusChanged(boolean hasWindowFocus){
     	if(!GameStatus.isServer)
     		return;
@@ -108,8 +128,7 @@ public class GameActivity extends Activity {
 		myIP.setText(GameStatus.localIp);
 		contin.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
+			public void onClick(View v) {				
 				ipshown=true;
 				dialog.dismiss();
 			}
@@ -127,8 +146,7 @@ public class GameActivity extends Activity {
     	return true;
     }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-    	// TODO Auto-generated method stub
+    public boolean onOptionsItemSelected(MenuItem item) {    	
     	switch(item.getItemId()){
     		case Menu.FIRST:
 //    			tableview.moveDraggable(0, 100, 100);

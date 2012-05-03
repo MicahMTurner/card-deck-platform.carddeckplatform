@@ -10,12 +10,13 @@ public abstract class LogicDroppable implements Serializable{
 		PLAYER,PUBLIC;
 	}
 	
-	protected Stack<CardLogic> cards = new Stack<CardLogic>();
+	protected Stack<CardLogic> cards;
 	protected Type type;
 	private int id;
 	public LogicDroppable(int id,Type type) {
 		this.id =id;
 		this.type=type;
+		this.cards=new Stack<CardLogic>();
 	}
 	public Type getType() {
 		return type;

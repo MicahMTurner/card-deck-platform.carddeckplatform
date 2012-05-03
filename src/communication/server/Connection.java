@@ -3,21 +3,22 @@ package communication.server;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OptionalDataException;
 
-import logic.client.Player;
+
+import utils.Player;
+import utils.Position;
 import communication.messages.Message;
 
 
 public class Connection implements Runnable {
 	
-	private Player.Position id;
+	private Position.Player id;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private volatile boolean stop;
 	
 	
-	public Connection(Player.Position id, ObjectInputStream in, ObjectOutputStream out){
+	public Connection(Position.Player id, ObjectInputStream in, ObjectOutputStream out){
 		this.id = id;
 		this.in = in;
 		this.out = out;
@@ -37,7 +38,7 @@ public class Connection implements Runnable {
 		}
 	}
 	
-	public Player.Position getId(){
+	public Position.Player getId(){
 		return id;
 	}
 	public void getInitialMessage(){

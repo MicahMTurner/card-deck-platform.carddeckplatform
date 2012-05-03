@@ -2,11 +2,6 @@ package client.dataBase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import blackJack.BlackJack;
-
-import freeplay.FreePlay;
-
 import war.War;
 import logic.client.Game;
 
@@ -32,10 +27,10 @@ public class ClientDataBase {
 		games = new HashMap<String, Game>();
 		War war = new War();
 		games.put(war.toString(), war);
-		FreePlay freePlay = new FreePlay();
-		games.put(freePlay.toString(), freePlay);
-		BlackJack blackJack=new BlackJack();
-		games.put(blackJack.toString(), blackJack);
+		//FreePlay freePlay = new FreePlay();
+		//games.put(freePlay.toString(), freePlay);
+		//BlackJack blackJack=new BlackJack();
+		//games.put(blackJack.toString(), blackJack);
 		
 	}
 	/**

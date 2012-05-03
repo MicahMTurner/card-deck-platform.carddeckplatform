@@ -1,7 +1,6 @@
 package client.gui.entities;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Stack;
 
 import android.content.Context;
@@ -9,7 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Point;
+
 
 public class Table {
 	public enum GetMethod {KeepTheSame, PutInFront, PutInBack}
@@ -21,12 +20,7 @@ public class Table {
 	private int xDimention;
 	private int yDimention;
 	
-	
-//	public Table(Context context, int xDimention, int yDimention){
-//		this.xDimention = xDimention;
-//		this.yDimention = yDimention;
-//		this.context = context;
-//	}
+
 	public Table(Context context){
 		this.context = context;
 	}
@@ -60,7 +54,7 @@ public class Table {
 	public Draggable getDraggableById(int id, GetMethod g){
 		Draggable answer=null;
 		for(Draggable draggable : draggables){	// TO CORRECT THE LOOP!!!
-			if(draggable.getId()==id){
+			if(draggable.getMyId()==id){
 				answer=draggable;
 				changeDraggableDrawingOrder(draggable, g);
 				break; 
@@ -71,7 +65,7 @@ public class Table {
 	
 	public Droppable getDroppableById(int id){
 		for(Droppable d : droppables){
-			if(d.getLogic().getId()==id)
+			if(d.getMyId()==id)
 				return d;
 		}
 		return null;

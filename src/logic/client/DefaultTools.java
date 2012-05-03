@@ -1,11 +1,13 @@
 package logic.client;
 
+import utils.Deck;
+
 public class DefaultTools implements ToolsFactory{
 	
 	@Override
-	public Deck createCards() {
+	public AbstractDeck createCards() {
 
-		return new DefaultDeck();
+		return null;
 	}
 
 	@Override

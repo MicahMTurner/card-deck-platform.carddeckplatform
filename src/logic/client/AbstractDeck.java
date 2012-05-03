@@ -5,14 +5,15 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.Stack;
 
-import logic.card.CardLogic;
+import utils.Card;
 
-public abstract class Deck {
+
+public abstract class AbstractDeck {
 	//change to queue?
-	public Stack<CardLogic> cards = new Stack<CardLogic>();
+	public Stack<Card> cards = new Stack<Card>();
 	
 	
-	public Stack<CardLogic> getCards() {
+	public Stack<Card> getCards() {
 		return cards;
 	}
 		
@@ -41,7 +42,7 @@ public abstract class Deck {
 		Collections.swap(cards,i,randomPlace);
 	}
 
-	public CardLogic drawCard() {
+	public Card drawCard() {
 		return cards.pop();
 		
 	}

@@ -1,6 +1,8 @@
 package server.controller.actions;
 
-import logic.client.Player;
+
+
+import utils.Position;
 import communication.messages.Message;
 import communication.server.ConnectionsManager;
 
@@ -12,7 +14,7 @@ public class SendToAll extends ServerAction {
 	}
 	
 	@Override
-	public void execute(Player.Position id) {
+	public void execute(Position.Player id) {
 		// TODO Auto-generated method stub
 		ConnectionsManager.getConnectionsManager().sendToAll(msg);
 	}
