@@ -3,33 +3,21 @@ package logic.host;
 
 import java.util.ArrayList;
 import java.util.Stack;
-
-import client.controller.actions.DealCardAction;
-
-import war.actions.RecieveCardAction;
-import war.actions.TurnAction;
-
-
-
-
-
-
+import utils.Player;
+import utils.Position;
+import communication.actions.Turn;
 import communication.messages.Message;
 import communication.server.ConnectionsManager;
-import communication.server.Connection;
-
 import logic.client.Game;
-import logic.client.Player;
-import logic.client.Player.Position;
+
 
 
 
 public class Host implements Runnable{
 	
 	private final int maxPlayers=4;
-	public static ArrayList<Player> players = new ArrayList<Player>();
-	private ArrayList<Connection> connections = new ArrayList<Connection>();
-	private Stack<Position> availablePositions;
+	public static ArrayList<Player> players = new ArrayList<Player>();	
+	private Stack<Position.Player> availablePositions;
 	private static Game game;
 
 	//synchronized private boolean startGameFlag=false;
@@ -38,27 +26,26 @@ public class Host implements Runnable{
 
 			
 	public Host(Game game) {	
-		availablePositions=new Stack<Player.Position>();
-		availablePositions.add(Player.Position.RIGHT);
-		availablePositions.add(Player.Position.LEFT);
-		availablePositions.add(Player.Position.TOP);
-		availablePositions.add(Player.Position.BOTTOM);
+		availablePositions=new Stack<Position.Player>();
+		availablePositions.add(Position.Player.RIGHT);
+		availablePositions.add(Position.Player.LEFT);
+		availablePositions.add(Position.Player.TOP);
+		availablePositions.add(Position.Player.BOTTOM);
 		
-		this.game=game;
+		Host.game=game;
 		
 	}
 
-	
-	public void addPlayer(String player, String id){
-		players.add(new Player(player,id));
+	public static Position.Player nextInTurn(){
+		return game.nextInTurn();
 	}
-	public static void playerLost(Player.Position position){
+	public static void playerLost(Position.Player position){
 		game.playerLost(position);
 	}
 	public void waitForPlayers(){
-		//while(players.size()<game.getPrefs().getMinPlayers()){
-		while(ConnectionsManager.getConnectionsManager().getNumberOfConnections()<game.getPrefs().getMinPlayers()){
-			System.out.println("waiting for player " + ConnectionsManager.getConnectionsManager().getNumberOfConnections() + "/" + game.getPrefs().getMinPlayers() + " " + String.valueOf(players.size()<game.getPrefs().getMinPlayers()));
+		
+		while(ConnectionsManager.getConnectionsManager().getNumberOfConnections()<game.minPlayers()){
+			System.out.println("waiting for player " + ConnectionsManager.getConnectionsManager().getNumberOfConnections() + "/" + game.minPlayers() + " " + String.valueOf(players.size()<game.minPlayers()));
 			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions.pop(),game.toString(),players);
 	    }
 		//TODO send to GUI enable start game button
@@ -71,52 +58,19 @@ public class Host implements Runnable{
 
 		waitForPlayers();
 		System.out.println("got all players");
-		game.initiate();
-		
-
-		
+		game.initiate();		
 		
 		System.out.println("game initiated");
-		game.dealCards(game.getCards(), players);
-
+		game.dealCards();		
 		
-//		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getHand(),4)));
-//		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getHand(),3)));
 		System.out.println("cards dealt");
 		// send the turn action if the game is turned base card game.
-		if(game.hasTurns())
-			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new TurnAction(game.nextInTurn())));
+		try{
+			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(game.nextInTurn())));
+		}catch(Exception e){			
+		}
 	}
-
-	
-	
-	//public void playerLeft(Player player){
-		//TODO add compare method in player
-	//	players.remove(player);
-	//}
-	
-	//public void playerRdy(Player player){
-		
-	//	playersRdy++;
-	//	int totalPlayers=players.size();		
-	//	if (playersRdy==totalPlayers){
-	//		if (totalPlayers>=game.getMinPlayers()){
-				//start the game
-	//			game.start();
-	//		}
-	//	}
-	//}	
-	
-	//public void kickPlayer(Player player){
-		//TODO add - disconnect player
-	//	playerLeft(player);
-	//}
 	
 
-	//public void waitForRdy(){
-		//while all players not rdy, wait for them to be rdy
-		//if someone is rdy , ping the other ones to notify them
-		
-	//}	
 	
 }

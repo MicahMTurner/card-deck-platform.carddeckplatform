@@ -1,47 +1,90 @@
 package war;
 
 import java.util.ArrayList;
+import java.util.Queue;
 
+import client.gui.entities.Droppable;
+
+import communication.actions.DealCardAction;
 import communication.messages.Message;
 import communication.server.ConnectionsManager;
 
-import client.controller.actions.DealCardAction;
-import client.gui.entities.Droppable;
-import android.content.Context;
-import war.droppables.MyPlayerAreaLogic;
-import war.droppables.PlayerAreaLogic;
-import war.droppables.PublicAreaLogic;
-import war.gui.PlayerArea;
-import war.gui.PublicPlace;
-import carddeckplatform.game.GameStatus;
-import carddeckplatform.game.TableView;
-import logic.builtIn.defaultCards.Club;
-import logic.builtIn.defaultCards.Diamond;
-import logic.builtIn.defaultCards.Heart;
-import logic.builtIn.defaultCards.Spade;
-import logic.card.CardLogic;
-import logic.client.Deck;
+
+import utils.Card;
+import utils.Player;
+import utils.Position;
+import utils.Public;
+
 import logic.client.Game;
-import logic.client.LogicDroppable;
-import logic.client.Player;
-import logic.host.Host;
+
 
 
 
 public class War extends Game{
-	private WarPrefs prefs=new WarPrefs();
-	private static boolean tie=false;	
-	public War() {
-		// TODO Auto-generated constructor stub
+	static public boolean tie=false;
+	@Override
+	protected void setNewTools() {}
+
+	@Override
+	public Queue<Position.Player> setTurns() {
+		return utils.Turns.clockWise(Position.Player.BOTTOM);
 		
 	}
 
-	public WarPrefs getPrefs() {
-		return prefs;
-	}
 	@Override
-	protected void setNewTools() {
-		// TODO Auto-generated method stub
+	public int minPlayers() {		
+		return 2;
+	}
+
+	@Override
+	public int cardsForEachPlayer() {
+		return 0;
+	}
+
+	
+
+	@Override
+	public String toString() {		
+		return "War";
+	}
+
+	@Override
+	public void dealCards() {
+		int size=cards.getSize();
+		for (int i=0;i<size;i++){
+			Card card=cards.drawCard();
+			Player player=players.get(i%players.size());
+			card.setOwner(player.getUsername());
+			player.getCards().add(card);
+			
+		}
+		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(0).getCards(),false,false,-1,players.get(0).getMyId())));
+		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(players.get(1).getCards(),false,false,-1,players.get(1).getMyId())));
+		
+	}
+
+	@Override
+	public void getLayouts(ArrayList<Public> publics){//,ArrayList<Button>buttons) {
+		publics.add(new Public(new PublicHandler(),Position.Public.MIDLEFT));
+		publics.add(new Public(new PublicHandler(),Position.Public.MIDRIGHT));
+	}
+
+	@Override
+	protected Player createPlayer(String userName,
+			utils.Position.Player position) {
+		
+		return new Player(userName,position,new PlayerHandler());
+	}
+	
+}
+	/*
+	private static boolean tie=false;	
+	public War() {		
+		
+	}
+	
+	@Override
+	protected void setNewTools() {		
 		
 	}
 	@Override
@@ -88,7 +131,7 @@ public class War extends Game{
 		return tie;
 	}
 	@Override
-	public void dealCards(Deck deck, ArrayList<Player> players) {
+	public void dealCards(AbstractDeck deck, ArrayList<Player> players) {
 		deck.shuffle(2);
 		int size=deck.getSize();
 		//for (int i=0;i<2;i++){
@@ -166,3 +209,4 @@ public class War extends Game{
 		
 	}
 }
+*/

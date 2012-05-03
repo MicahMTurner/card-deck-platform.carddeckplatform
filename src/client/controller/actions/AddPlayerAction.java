@@ -1,16 +1,12 @@
 package client.controller.actions;
 
-import java.util.ArrayList;
-
+import utils.Player;
 import client.controller.ClientController;
+import communication.actions.Action;
 
-import communication.link.ServerConnection;
-import communication.messages.InitialMessage;
 
-import logic.client.Game;
-import logic.client.Player;
 
-public class AddPlayerAction extends ClientAction{
+public class AddPlayerAction implements Action{
 	
 	private Player newPlayer;
 	
@@ -18,13 +14,9 @@ public class AddPlayerAction extends ClientAction{
 		this.newPlayer=newPlayer;
 	}
 	@Override
-	public void incoming() {		
+	public void execute() {		
 		ClientController.getController().addPlayer(newPlayer);
 	}
 
-	@Override
-	public void outgoing() {
-		//action is only incoming action.
-	}
 
 }

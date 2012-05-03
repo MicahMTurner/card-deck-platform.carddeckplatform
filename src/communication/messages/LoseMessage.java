@@ -1,19 +1,19 @@
 package communication.messages;
 
-import logic.client.Player;
+import utils.Position;
 import logic.host.Host;
 
 
 
 public class LoseMessage extends Message{
 	@Override
-	public void actionOnServer(Player.Position id){
+	public void actionOnServer(Position.Player id){
 		Host.playerLost(id);
 	}
 	
 	@Override
 	public void actionOnClient(){
-		//only inform the server
+		//only informs the server
 	}
 
 }

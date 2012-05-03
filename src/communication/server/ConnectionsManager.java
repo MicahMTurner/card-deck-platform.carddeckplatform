@@ -8,12 +8,8 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Stack;
-
-import logic.client.Player;
-import logic.client.Player.Position;
-
-import client.controller.actions.AddPlayerAction;
+import utils.Player;
+import utils.Position;
 import client.controller.actions.InitialConnectionAction;
 import carddeckplatform.game.GameStatus;
 import communication.messages.InitialMessage;
@@ -42,8 +38,7 @@ public class ConnectionsManager {
 		connections = new ArrayList<Connection>();
 		try {
 			serverSocket = new ServerSocket(GameStatus.hostPort);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException e) {			
 			e.printStackTrace();
 		}
 	}
@@ -78,7 +73,7 @@ public class ConnectionsManager {
 	 * @param msg
 	 * @param id
 	 */
-	public void sendToAllExcptMe(Message msg , Player.Position id){
+	public void sendToAllExcptMe(Message msg , Position.Player id){
 		for(Connection conn : connections){
 			if(!conn.getId().equals(id)){
 				conn.send(msg);
@@ -91,7 +86,7 @@ public class ConnectionsManager {
 	 * @param msg
 	 * @param id
 	 */
-	public void sendTo(Message msg, Player.Position id){
+	public void sendTo(Message msg, Position.Player id){
 		for(Connection serverTask :connections){
 			if(serverTask.getId().equals(id)){
 				serverTask.send(msg);
@@ -100,7 +95,7 @@ public class ConnectionsManager {
 		}
 	}
 	
-	public void connectPlayer(Position position,String gameId,ArrayList<Player> players){
+	public void connectPlayer(Position.Player position,String gameId,ArrayList<Player> players){
 		try {				
 			Socket clientSocket;
 			System.out.println("Listening to port " + GameStatus.hostPort + " Waiting for messages...");

@@ -8,7 +8,7 @@ package logic.client;
  *
  */
 public interface ToolsFactory {
-	public Deck createCards();
+	public AbstractDeck createCards();
 	public Table createTable();
 	
 }

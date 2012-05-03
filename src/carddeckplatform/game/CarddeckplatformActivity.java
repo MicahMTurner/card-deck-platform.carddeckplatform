@@ -3,48 +3,33 @@ package carddeckplatform.game;
 
 
 
-import java.io.IOException;
+
 import java.util.ArrayList;
 
 import communication.link.HostFinder;
 import communication.link.HostId;
-import communication.link.ServerConnection;
 import communication.link.TcpHostFinder;
 
 import client.dataBase.ClientDataBase;
 
-import war.War;
-
-import logic.client.Game;
-import logic.client.Player;
 import logic.host.Host;
 
-//import logic.host.Host;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 
@@ -106,12 +91,11 @@ public class CarddeckplatformActivity extends Activity {
             		gameBtn.setOnClickListener(new OnClickListener() {
 						
 						@Override
-						public void onClick(View v) {
-							// TODO Auto-generated method stub
+						public void onClick(View v) {							
 			            	GameStatus.isServer = true;
 			            	GameStatus.hostIp = "127.0.0.1";
 			            	GameStatus.username = username.getText().toString();
-			            	GameStatus.me=new Player(GameStatus.username,GameStatus.localIp);
+			            	//GameStatus.me=new Player(GameStatus.username,GameStatus.localIp);
 			                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
 			            	
 			                new Thread(new Host(ClientDataBase.getDataBase().getGame(name))).start();
@@ -131,7 +115,7 @@ public class CarddeckplatformActivity extends Activity {
             public void onClick(View arg0) {
             	GameStatus.isServer = false;
             	//making dialog to get ip
-            	GameStatus.me=new Player(GameStatus.username,GameStatus.localIp);
+            	//GameStatus.me=new Player(GameStatus.username,GameStatus.localIp);
             	final Dialog dialog = new Dialog(CarddeckplatformActivity.this);
             	dialog.setContentView(R.layout.hostlist);
             	dialog.setTitle("List of available games");
@@ -218,9 +202,6 @@ public class CarddeckplatformActivity extends Activity {
              });
     }
     
-    private void createNewGame(String gameName){
-    	
-    }
     
     public void onWindowFocusChanged(boolean hasWindowFocus){
     	

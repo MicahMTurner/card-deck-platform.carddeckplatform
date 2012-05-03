@@ -2,34 +2,45 @@ package client.controller;
 
 
 import java.util.ArrayList;
-import java.util.Stack;
 
-import android.content.Context;
-import logic.card.CardLogic;
+import communication.actions.CardAdded;
+import communication.actions.CardRemoved;
+import communication.actions.DraggableMotionAction;
+import communication.actions.EndDraggableMotionAction;
+import communication.actions.EndRoundAction;
+import communication.actions.EndTurnAction;
+import communication.link.ServerConnection;
+import communication.messages.EndTurnMessage;
+import communication.messages.Message;
+
+import utils.Card;
+import utils.Player;
+import utils.Point;
+import utils.Position;
+import utils.Public;
+
+import IDmaker.IDMaker;
 import logic.client.Game;
-import logic.client.LogicDroppable;
-import logic.client.Player;
-import logic.client.Player.Position;
-import client.controller.actions.ClientAction;
-import client.gui.entities.Draggable;
-import client.gui.entities.Table;
-import client.gui.entities.Table.GetMethod;
+import client.gui.entities.Droppable;
+
+import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;
 
-//maybe not creating new action and commands all the time?
+
 public class ClientController {
 	
 	
-	private TableView gui=null;
-	private Game logic;
-	private IncomingAPI incomingAPI;
-	private OutgoingAPI outgoingAPI;
+	private TableView gui;	
+	private Game game;	
 	
-	private LogicDroppable myArea;
+	private Send send;
+	private GuiAPI guiAPI;
+	
+	
 	
 
 	public Game getLogic() {
-		return logic;
+		return game;
 	}
 	
 	public TableView getGui() {
@@ -51,36 +62,35 @@ public class ClientController {
 		}
 
 	
-	//---------STATIC GETters for incoming and outgoing APIs-------//
+	//---------STATIC GETters for GUI and outgoing APIs-------//
+		
 		/**
-		 * get Incoming API
-		 * @return IncomingAPI instance
+		 * get Send API
+		 * @return SendAPI instance
 		 */
-		public static IncomingAPI incomingAPI(){
-			return ControllerHolder.controller.incomingAPI;
+		public static Send sendAPI(){
+			return ControllerHolder.controller.send;
 		}
 		/**
-		 * get Outgoing API
-		 * @return OutgoingAPI instance
+		 * get Send API
+		 * @return SendAPI instance
 		 */
-		public static OutgoingAPI outgoingAPI(){
-			return ControllerHolder.controller.outgoingAPI;
+		public static GuiAPI guiAPI(){
+			return ControllerHolder.controller.guiAPI;
 		}
 	
 	//constructor
-	private ClientController(){		
-		
-		this.outgoingAPI=new OutgoingAPI();
-		this.incomingAPI=new IncomingAPI();		
-
+	private ClientController(){				
+		this.send=new Send();
+		this.guiAPI=new GuiAPI();
 	}
 	
-	public void setLogic(Game game) {
-		this.logic = game;
+	public void setGame(Game game) {
+		this.game = game;
 	}
 	
-	public void setTv(TableView tv) {
-		this.gui = tv;
+	public void setGui(TableView gui) {
+		this.gui = gui;
 	}
 	
 	
@@ -90,67 +100,101 @@ public class ClientController {
 	
 	//---------API for outgoing-----------//
 	/**
-	 * API used by the class that creating events (for now GUI)
+	 * API for sending messages
 	 * @author Yoav
 	 *
 	 */
-	public class OutgoingAPI{
+	public class Send{
 		
-		private OutgoingAPI(){}
+		private Send(){}
 		
-		public void outgoingCommand(ClientAction action){
-			action.outgoing();
+		public void endTurn(Position.Player position){
+			gui.setUiEnabled(false);
+			ServerConnection.getConnection().getMessageSender().send(new EndTurnMessage(new EndTurnAction(position)));
+		}
+		public void cardAdded(ArrayList<Card> cards,int to,int from){			
+			ServerConnection.getConnection().getMessageSender().send(new Message(new CardAdded(cards,to,from)));
+		}
+		public void cardRemoved(ArrayList<Card> cards,String from){
+			ServerConnection.getConnection().getMessageSender().send(new Message(new CardRemoved(cards, from)));
+		}
+		public void endRound(){
+			ServerConnection.getConnection().getMessageSender().send(new Message(new EndRoundAction()));
+		}
+		public void cardRevealed(Card card){
+			
+		}
+
+		public void cardHidden(Card card) {
+			
+			
+		}
+
+		public void dragMotion(String username, int id, Point coord) {
+			ServerConnection.getConnection().getMessageSender().send(new Message(
+					new DraggableMotionAction(GameStatus.username,id, coord.getX(), coord.getY())));
+			
+		}
+		public void endDragMotion(int id){
+			ServerConnection.getConnection().getMessageSender().send(new Message(new EndDraggableMotionAction(id)));
+			
 		}
 		
+		
+		
 	}
+	
+	//---------API for GUI options-----------//
+	/**
+	 * API for GUI options	
+	 * @author Yoav
+	 *
+	 */
+	public class GuiAPI{
+		private GuiAPI() {}
+		public void moveCards(ArrayList<Card> cards,int toId,boolean revealWhileMoving,boolean revealAtEnd){
+			
+			gui.drawMovement(cards, toId,1000,10,revealWhileMoving,revealAtEnd);	
+		}
+		
+		
+	}
+	
+	//---------Controller functionality-----------//
 
 	
-	//---------API for incoming-----------//
-	/**
-	 * API used by the class that receive messages (for now TCP RECIEVER)
-	 * @author Yoav
-	 *
-	 */
-	public class IncomingAPI {	
-		
-		private IncomingAPI(){}
-		
-		public void incomingCommand(ClientAction action){		
-			action.incoming();
-		}
-
-		
+	public Droppable getZone(String id){
+		return gui.getDroppableById(IDMaker.getMaker().getId(id));
 	}
-
-	public void buildGameLayout(Context applicationContext, TableView tableview, Position pos) {
-		logic.buildLayout(applicationContext, tableview, pos);	
+	public void setLayouts(ArrayList<Public> publics) {
+		game.getLayouts(publics);	
+	}
+	public void cardMoved(ArrayList<Card> cards,int from, int to){
+		gui.moveCards(cards, from, to);	
 	}
 	
 	public void addPlayer(Player newPlayer) {
-		logic.addPlayer(newPlayer);
+		game.addPlayer(newPlayer);
 		
 	}
 	
-	public void setPosition(Position position) {
-		logic.getMe().setPosition(position);
-		
-	}
+	//public void setPosition(Position position) {
+	//	game.getMe().setPosition(position);
+	//	
+	//}
 	
 	public Position getPosition() {
-		return logic.getMe().getPosition();
+		return game.getMe().getPosition();
 	}
-	
-	public void addCard(CardLogic cardLogic) {
-		logic.getMe().addCard(cardLogic);
-	}
+
 	
 		
 	public void disableUi(){
 		gui.setUiEnabled(false);
 	}
 
-	public void playerTurn(Player.Position position) {
-		if (position.equals(logic.getMe().getPosition())){
+	public void playerTurn(Position position) {
+		if (position.equals(game.getMe().getPosition())){
 			gui.setUiEnabled(true);
 			gui.popToast("Your Move");
 		}
@@ -163,17 +207,14 @@ public class ClientController {
 	}
 	
 	
-	public void setMyArea(LogicDroppable myArea) {
-		this.myArea = myArea;
-	}
-	
-	public LogicDroppable getMyArea() {
-		return myArea;
-	}
-	
-	public void runCardAnimation(CardLogic cardLogic, LogicDroppable logicDroppable, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd, Table.GetMethod g){
-		gui.moveDraggable(gui.getDraggableById(cardLogic.getId(), g), gui.getDroppableById(logicDroppable.getId()), initialDelay, delay, revealedWhileMoving, revealedAtEnd);
-	}
+	//private void moveCard(Card card,Droppable from,Droppable to){		
+	//	to.addCard(card);
+	//	from.removeCard(card);		
+	//	gui.moveCard(card,from,to);
+	//}
+	//public void runCardAnimation(CardLogic cardLogic, LogicDroppable logicDroppable, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd, Table.GetMethod g){
+	//	gui.moveDraggable(gui.getDraggableById(cardLogic.getId(), g), gui.getDroppableById(logicDroppable.getId()), initialDelay, delay, revealedWhileMoving, revealedAtEnd);
+	//}
 
 	public boolean isMyTurn() {
 		return gui.isUiEnabled();
@@ -193,23 +234,20 @@ public class ClientController {
 		gui.popToast(displayMessage);
 		
 	}
-	
-	public void runCardAnimation(CardLogic cardLogic, int x,int y, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd, Table.GetMethod g){
-		gui.moveDraggable(gui.getDraggableById(cardLogic.getId(), g), x,y, initialDelay, delay, revealedWhileMoving, revealedAtEnd);
-	}
-	public void removeCard(CardLogic card) {
-		// TODO Auto-generated method stub
+
+
+	public void removeCards(ArrayList<Card> cards, String from) {
+		gui.removeCards(cards,from);
 		
 	}
 
-	public void runCardAnimation(Stack<CardLogic> cards, int x,int y, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd, Table.GetMethod g) {
-		ArrayList<Draggable>guiCards=new ArrayList<Draggable>();
-		for (CardLogic card : cards){
-			guiCards.add(gui.getDraggableById(card.getId(), g));
-		}		
-		gui.moveDraggable(guiCards, x,y, initialDelay, delay, revealedWhileMoving, revealedAtEnd);
-		
+	public void endRound() {
+		game.getMe().roundEnded();		
 	}
+	public Player getMe(){
+		return game.getMe();
+	}
+
 	
 	
 	//---------------------------------------------------------------------//	

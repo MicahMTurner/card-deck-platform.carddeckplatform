@@ -2,51 +2,67 @@ package client.gui.entities;
 
 import java.util.Random;
 
-import logic.card.CardLogic;
+import utils.Point;
+
+import carddeckplatform.game.GameStatus;
+import client.controller.ClientController;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.View;
 
 public abstract class Draggable extends View {
-	protected CardLogic cardLogic;
 	private Droppable container;
-	//protected int tempX;
-	//protected int tempY;
-	protected int prevX;
-	protected int prevY;
-	protected int x;
-	protected int y;
+	private String carrier = "";
+	private boolean moveable;
+	protected int myId;
+	protected Point prevCoord;
+	protected Point coord;
 	protected float angle = 0;
+	public void draw(Canvas canvas){
+		onDraw(canvas);
+		
+	}
+	@Override
+	protected abstract void onDraw(Canvas canvas);
 	
-	public Draggable(Context context,int x, int y) {
-		super(context);
-		this.x=x;
-		this.y=y;
+	public Draggable(Context context,int myId) {
+		super(context);		
+		this.myId=myId;
 		
 	}
 	public abstract int sensitivityRadius();
-	public abstract void onClick();
-	public abstract void onDrag();
-	public abstract void onRelease();
-	public abstract int getId();
-	public abstract void undoMove();
+	
+	public void onClick() {		
+		// save the current location in order to be able to return to this position if needed.
+		prevCoord.setX(coord.getX());
+		prevCoord.setY(coord.getY());
+	}
+	public void onDrag() {		
+		ClientController.sendAPI().dragMotion(GameStatus.username,myId,coord);
+	}
+	public void onRelease() {		
+		ClientController.sendAPI().dragMotion(GameStatus.username, myId, coord);
+		ClientController.sendAPI().endDragMotion(myId);
+	}
+	public void invalidMove(){		
+			coord.setX(prevCoord.getX());
+			coord.setY(prevCoord.getY());
+			ClientController.sendAPI().dragMotion(GameStatus.username, myId, coord);
+			ClientController.sendAPI().endDragMotion(myId);			
+			angle=0;			
+		}
+	
 	public  int getX(){
-		return x;
+		return coord.getX();
 	}
 	public  int getY(){
-		return y;
+		return coord.getY();
 	}
-	public abstract void motionAnimation();
-	public abstract void motionAnimation(String str);
-	public abstract void clearAnimation();
-	
-	public CardLogic getCardLogic(){
-		return cardLogic;
+	public void setCarrier(String carrier) {
+		this.carrier = carrier;
 	}
 	
-	public void setCardLogic(CardLogic cardLogic) {
-		this.cardLogic = cardLogic;
-	}
+	
 	
 	public Droppable getContainer(){
 		return container;
@@ -57,8 +73,8 @@ public abstract class Draggable extends View {
 	}
 		
 	public void setLocation(int x, int y){
-		this.x=x;
-		this.y=y;
+		coord.setX(x);
+		coord.setY(y);
 	}
 	
 	public void randomizeAngle(){
@@ -71,6 +87,14 @@ public abstract class Draggable extends View {
 	public void setAngle(float angle){
 		this.angle = angle%360;
 	}
-	
+	public boolean isMoveable() {
+		return moveable;
+	}
+	public void setMoveable(boolean moveable) {
+		this.moveable = moveable;
+	}
+	public int getMyId() {
+		return myId;
+	}
 	
 }
