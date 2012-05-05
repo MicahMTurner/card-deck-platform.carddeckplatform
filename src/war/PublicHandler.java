@@ -6,6 +6,7 @@ import client.gui.entities.GuiPlayer;
 import carddeckplatform.game.GameStatus;
 import utils.Card;
 import utils.Player;
+import utils.Position;
 import utils.Public;
 import utils.StandartCard;
 import handlers.PublicEventsHandler;
@@ -27,10 +28,9 @@ public class PublicHandler implements PublicEventsHandler{
 		}else{
 			
 			card.reveal();
-		if (ClientController.getController().getMe().isMyTurn()){
-			publicArea.addCard(player,card);
-			Public otherPublic=(Public) ClientController.getController().getZone("public2");	
-			Player otherPlayer=((GuiPlayer) ClientController.getController().getZone("otherPlayer")).getPlayer();
+		if (ClientController.getController().getMe().isMyTurn()){			
+			Public otherPublic=getOtherPublic(publicArea);	
+			Player otherPlayer=((GuiPlayer) ClientController.getController().getZone(card.getOwner())).getPlayer();
 			if (otherPublic.cardsHolding()==publicArea.cardsHolding()){
 				
 				War.tie=false;
@@ -69,6 +69,19 @@ public class PublicHandler implements PublicEventsHandler{
 	}
 
 	
+	private Player getOtherPlayer(Player player) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	private Public getOtherPublic(Public publicArea) {
+		Public answer=null;
+		if (publicArea.getPosition().equals(Position.Public.MIDLEFT)){
+			answer=(Public) ClientController.getController().getZone(Position.Public.MIDRIGHT);
+		}else{
+			answer=(Public) ClientController.getController().getZone(Position.Public.MIDLEFT);
+		}
+		return answer;
+	}
 	@Override
 	public boolean onCardRemoved(Public publicZone, Player player, Card card) {
 		// TODO Auto-generated method stub

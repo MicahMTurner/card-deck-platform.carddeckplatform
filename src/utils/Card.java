@@ -21,7 +21,7 @@ public abstract class Card implements Serializable{
 	private final String frontImg;
 	private final String backImg;
 	private boolean revealed;	
-	private String owner;
+	private Position.Player owner;
 
 	private boolean isCarried=false;
 	private String carrier = "";
@@ -49,10 +49,10 @@ public abstract class Card implements Serializable{
 	public boolean isRevealed() {
 		return revealed;
 	}
-	public String getOwner() {
+	public Position.Player getOwner() {
 		return owner;
 	}
-	public void setOwner(String owner) {
+	public void setOwner(Position.Player owner) {
 		this.owner = owner;
 	}
 	public int getId() {

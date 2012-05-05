@@ -166,7 +166,7 @@ public class ClientController implements Observer {
 	//---------Controller functionality-----------//
 
 	
-	public Droppable getZone(String id){
+	public Droppable getZone(Position id){
 		return gui.getDroppableById(IDMaker.getMaker().getId(id));
 	}
 	public void setLayouts(ArrayList<Public> publics) {

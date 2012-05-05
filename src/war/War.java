@@ -61,7 +61,7 @@ public class War extends Game{
 
 		for (int i=0;i<deckSize;i++){			
 			Card card=deck.drawCard();			
-			card.setOwner(players.get(i%players.size()).getUserName());
+			//card.setOwner(players.get(i%players.size()).getPosition());
 			playersCards.get(i%players.size()).add(card);			
 			
 		}

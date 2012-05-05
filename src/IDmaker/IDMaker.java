@@ -8,6 +8,7 @@ import utils.Position;
 public class IDMaker {
 	private int id;
 	private Hashtable<String,Integer> names;
+	private Hashtable<Position,Integer> positions;
 	
 	//-------Singleton implementation--------//
 			private static class IDMakerHolder
@@ -26,10 +27,15 @@ public class IDMaker {
 			
 	public IDMaker() {
 		names=new Hashtable<String,Integer>();
+		positions=new Hashtable<Position, Integer>();
 		id=100;
 	}
 	public int createId(String name){		
 		names.put(name, id);		
+		return id++;
+	}
+	public int getId(Position position){
+		positions.put(position, id);
 		return id++;
 	}
 	public Integer getId(String name){
