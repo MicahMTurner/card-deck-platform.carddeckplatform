@@ -3,10 +3,11 @@ package logic.client;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+
 import utils.Player;
 import utils.Position;
 import utils.Public;
-import carddeckplatform.game.GameStatus;
+
 
 
 
@@ -16,16 +17,14 @@ public abstract class Game {
 	protected ArrayList<Player> players = new ArrayList<Player>();
 	protected Queue<utils.Position.Player> turnsQueue=new LinkedList<utils.Position.Player>();
 	protected ArrayList<Public> publics=new ArrayList<Public>();
-	private ToolsFactory tools=new DefaultTools();
+	//private ToolsFactory tools=new DefaultTools();
 	//private Player.Position currentTurn;
-	protected AbstractDeck cards;	
+	protected AbstractDeck deck;	
 	
 	 
-	/**
-	 * leave empty for default tools
-	 */
-	protected abstract void setNewTools();
-	protected abstract Player createPlayer(String userName, Position.Player position);
+
+	//protected abstract Player createPlayer(String userName, Position.Player position);
+	public abstract AbstractDeck getDeck();
 	public abstract Queue<utils.Position.Player> setTurns();
 	public abstract int minPlayers();
 	public abstract int cardsForEachPlayer();
@@ -40,7 +39,7 @@ public abstract class Game {
 	 */
 	@Override	
 	public abstract String toString();
-	
+	public abstract Player createPlayer(String userName,utils.Position.Player position);	
 
 	
 	public Player getMe() {
@@ -48,7 +47,7 @@ public abstract class Game {
 	}
 	
 	public void initiate(){
-		cards=tools.createCards();	
+		deck=getDeck();	
 	}
 	
 	
@@ -63,7 +62,9 @@ public abstract class Game {
 	}
 	
 	public void addPlayer(Player newPlayer) {
-		players.add(newPlayer);
+		if (!players.contains(newPlayer)){
+			players.add(newPlayer);
+		}
 		
 	}
 	
@@ -74,8 +75,11 @@ public abstract class Game {
 		turnsQueue.remove(position);
 	}
 	public void addMe(String userName, utils.Position.Player position) {
-		players.add(createPlayer(userName,position));
+		players.add(createPlayer(userName, position));
 		
 	}
+		
+		
+	
 
 }

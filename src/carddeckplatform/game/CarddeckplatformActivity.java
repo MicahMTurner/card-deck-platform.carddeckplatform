@@ -133,7 +133,7 @@ public class CarddeckplatformActivity extends Activity {
 					public void onClick(View arg0) {
 						// TODO Auto-generated method stub
 						GameStatus.isServer = false;
-						GameStatus.hostIp = "192.168.1.100";
+						GameStatus.hostIp = "192.168.2.125";
 		            	GameStatus.username = username.getText().toString();
 		            	
 		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);

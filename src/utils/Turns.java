@@ -17,10 +17,10 @@ public class Turns {
 		while (turns.isEmpty() || nextPlayer!=(startingPlayer.ordinal())){
 			turns.add(positions[nextPlayer]);
 			if (clockWise){
-				nextPlayer+=(1%positions.length);
+				nextPlayer=(nextPlayer+1)%(positions.length);
 			}
 			else{
-				nextPlayer-=(1%positions.length);
+				nextPlayer-=(nextPlayer+1)%(positions.length);
 			}
 		}
 		return turns;

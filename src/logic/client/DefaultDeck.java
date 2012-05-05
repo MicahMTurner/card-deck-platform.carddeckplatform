@@ -1,21 +1,20 @@
 //package logic.client;
 //
-//import logic.builtIn.defaultCards.Club;
-//import logic.builtIn.defaultCards.Diamond;
-//import logic.builtIn.defaultCards.Heart;
-//import logic.builtIn.defaultCards.Spade;
+//import handlers.CardEventsHandler;
+//import utils.Card;
 //
 //public class DefaultDeck extends AbstractDeck{
 //	private final int timesToShuffle=2;
-//	public DefaultDeck() {
+//	public DefaultDeck(CardEventsHandler handler) {
 //		int id=1;
 //		for (int i=2;i<=14;i++){
 //			
-//			cards.add(new Heart(i,id));
-//			cards.add(new Club(i,id+1));
-//			cards.add(new Diamond(i,id+2));
-//			cards.add(new Spade(i,id+3));
-//			id+=4;
+//			cards.add(new Card(i,Card.Color.DIAMOND,handler));
+//			cards.add(new Card(i,Card.Color.HEART,handler));
+//			cards.add(new Card(i,Card.Color.CLUB,handler));
+//			cards.add(new Card(i,Card.Color.SPADE,handler));
+//			
+//			
 //		}
 //		super.shuffle(timesToShuffle);
 //	}

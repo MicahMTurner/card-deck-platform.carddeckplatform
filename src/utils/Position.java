@@ -1,17 +1,28 @@
 package utils;
 
-public interface Position {
+import java.io.Serializable;
+import java.util.Collections;
+
+import IDmaker.IDMaker;
+
+public interface Position extends Serializable{
 	public int getX();
 	public int getY();
 	
 	public enum Player implements Position{   
-	    BOTTOM(6,6),TOP(6,6),RIGHT(6,6),LEFT(6,6);
+		
+	    BOTTOM(700,500),LEFT(6,6),TOP(200,500),RIGHT(6,6);
 	    private final int x;
 		private final int y;
+		private int id;		
 		
+		public int getId(){
+			return id;
+		}
 		private Player(int x,int y){
 			this.x=x;
 			this.y=y;
+			this.id=IDMaker.getMaker().getId();
 		}
 		public int getX(){
 			return x;
@@ -57,30 +68,52 @@ public interface Position {
 			Player answer=playerPos;
 			switch(playerPos){
 				case BOTTOM:{
+					
+					//swap(playerPos,TOP);
 					answer=TOP;
 					break;
 				}
 				case LEFT:{
+					//swap(playerPos,RIGHT);					
 					answer=RIGHT;
 				}
 				case RIGHT:{
+					//swap(playerPos,LEFT);					
 					answer=LEFT;
 				}
 			}
 			return answer;
 		}
+		private void swap (Player a,Player b){
+			int temp=a.id;
+			a.id=b.id;
+			b.id=temp;
+		}
+		public utils.Position.Player sitMe(utils.Position.Player globalPosition) {
+			//swap(globalPosition,BOTTOM);
+			return BOTTOM;
+		}
 	}  
 	  
 	public enum Public{
 		TOPRIGHT(6,6),TOPMIDRIGHT(6,6),TOPMID(6,6),TOPMIDLEFT(6,6),TOPLEFT(6,6),
-		RIGHT(6,6),MIDRIGHT(6,6),MID(6,6),MIDLEFT(6,6),LEFT(6,6),
+		RIGHT(6,6),MIDRIGHT(800,300),MID(6,6),MIDLEFT(500,300),LEFT(6,6),
 		BOTLEFT(6,6),BOTMIDLEFT(6,6),BOTMID(6,6),BOTMIDRIGHT(6,6),BOTRIGHT(6,6);
 		private final int x;
 		private final int y;
-		
+		private int id;		
+		private void swap (Public a,Public b){
+			int temp=a.id;
+			a.id=b.id;
+			b.id=temp;
+		}
+		public int getId(){
+			return id;
+		}
 		private Public(int x,int y){
 			this.x=x;
 			this.y=y;
+			this.id=IDMaker.getMaker().getId();
 		}
 		public int getX(){
 			return x;
@@ -122,50 +155,62 @@ public interface Position {
 			Public answer=publicPos;
 			switch(publicPos){
 				case TOPRIGHT:{
+					//swap(publicPos,TOPRIGHT);
 					answer=BOTLEFT;
 					break;
 				}
-				case TOPMIDRIGHT:{
+				case TOPMIDRIGHT:{	
+					//swap(publicPos,TOPMIDRIGHT);
 					answer=BOTMIDLEFT;
 					break;
 				}
 				case TOPMIDLEFT:{
+					//swap(publicPos,TOPMIDLEFT);
 					answer=BOTMIDRIGHT;
 					break;
 				}
 				case TOPLEFT:{
+					//swap(publicPos,TOPLEFT);
 					answer=BOTRIGHT;
 					break;
 				}
 				case RIGHT:{
+					//swap(publicPos,RIGHT);
 					answer=LEFT;
 					break;
 				}
 				case MIDRIGHT:{
+					//swap(publicPos,MIDLEFT);					
 					answer=MIDLEFT;
 					break;					
 				}
 				case MIDLEFT:{
+					//swap(publicPos,MIDRIGHT);					
 					answer=MIDRIGHT;
 					break;					
 				}
 				case BOTRIGHT:{
+					//swap(publicPos,BOTRIGHT);
 					answer=TOPLEFT;
 					break;
 				}
 				case BOTMIDRIGHT:{
+					//swap(publicPos,BOTMIDRIGHT);
 					answer=TOPMIDLEFT;
 					break;
 				}
 				case BOTMID:{
+					//swap(publicPos,BOTMID);
 					answer=TOPMID;
 					break;
 				}
 				case BOTMIDLEFT:{
+					//swap(publicPos,BOTMIDLEFT);
 					answer=TOPMIDRIGHT;
 					break;
 				}
 				case BOTLEFT:{
+					//swap(publicPos,BOTLEFT);
 					answer=TOPRIGHT;
 					break;
 				}
@@ -180,9 +225,15 @@ public interface Position {
 		  TOPRIGHT(6,6),TOPLEFT(6,6),BOTLEFT(6,6),BOTRIGHT(6,6);
 		  private final int x;
 		  private final int y;
+		  private final int id;		
+			
+		  public int getId(){
+			  return id;
+		  }
 		  private Button(int x,int y){
 				this.x=x;
 				this.y=y;
+				this.id=IDMaker.getMaker().getId();
 			}
 			public int getX(){
 				return x;

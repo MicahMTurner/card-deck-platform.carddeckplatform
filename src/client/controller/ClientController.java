@@ -2,6 +2,8 @@ package client.controller;
 
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import communication.actions.CardAdded;
 import communication.actions.CardRemoved;
@@ -22,12 +24,13 @@ import utils.Public;
 import IDmaker.IDMaker;
 import logic.client.Game;
 import client.gui.entities.Droppable;
+import client.gui.entities.GuiPlayer;
 
 import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;
 
 
-public class ClientController {
+public class ClientController implements Observer {
 	
 	
 	private TableView gui;	
@@ -154,7 +157,7 @@ public class ClientController {
 		private GuiAPI() {}
 		public void moveCards(ArrayList<Card> cards,int toId,boolean revealWhileMoving,boolean revealAtEnd){
 			
-			gui.drawMovement(cards, toId,1000,10,revealWhileMoving,revealAtEnd);	
+			//gui.drawMovement(cards, toId,1000,10,revealWhileMoving,revealAtEnd);	
 		}
 		
 		
@@ -170,11 +173,13 @@ public class ClientController {
 		game.getLayouts(publics);	
 	}
 	public void cardMoved(ArrayList<Card> cards,int from, int to){
-		gui.moveCards(cards, from, to);	
+		gui.moveCards(cards, from, to);		
 	}
 	
 	public void addPlayer(Player newPlayer) {
+		newPlayer.setRelativePosition(game.getMe().getGlobalPosition());
 		game.addPlayer(newPlayer);
+		gui.addPlayer(newPlayer);
 		
 	}
 	
@@ -183,9 +188,9 @@ public class ClientController {
 	//	
 	//}
 	
-	public Position getPosition() {
-		return game.getMe().getPosition();
-	}
+	//public Position getPosition() {
+	//	return game.getMe().getPosition();
+	//}
 
 	
 		
@@ -193,8 +198,10 @@ public class ClientController {
 		gui.setUiEnabled(false);
 	}
 
-	public void playerTurn(Position position) {
-		if (position.equals(game.getMe().getPosition())){
+	public void playerTurn(int playerId) {
+		Player me=game.getMe();
+		if (playerId==me.getId()){
+			me.startTurn();
 			gui.setUiEnabled(true);
 			gui.popToast("Your Move");
 		}
@@ -216,9 +223,9 @@ public class ClientController {
 	//	gui.moveDraggable(gui.getDraggableById(cardLogic.getId(), g), gui.getDroppableById(logicDroppable.getId()), initialDelay, delay, revealedWhileMoving, revealedAtEnd);
 	//}
 
-	public boolean isMyTurn() {
-		return gui.isUiEnabled();
-	}
+	//public boolean isMyTurn() {
+	//	return gui.isUiEnabled();
+	//}
 
 	public void declareWinner() {
 		gui.popToast("WINNER!");
@@ -242,10 +249,32 @@ public class ClientController {
 	}
 
 	public void endRound() {
-		game.getMe().roundEnded();		
+		//game.getMe().roundEnded();		
 	}
 	public Player getMe(){
 		return game.getMe();
+	}
+
+	public void dealCards(ArrayList<Card> cards, int from, int to,boolean revealWhileMoving,boolean revealAtEnd) {
+		gui.moveCards(cards, from, to);
+		ClientController.guiAPI().moveCards(cards, to, revealWhileMoving, revealAtEnd);
+		
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		if (arg1!=null){
+			boolean myTurn=(Boolean)arg1;
+			if (myTurn){
+				gui.setUiEnabled(true);
+				gui.popToast("Your Move");
+			}
+			else{
+				gui.setUiEnabled(false);				
+			}
+		}
+		//if(arg0 instanceof Player)
+		
 	}
 
 	

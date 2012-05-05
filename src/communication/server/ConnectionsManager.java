@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+
 import utils.Player;
 import utils.Position;
 import client.controller.actions.InitialConnectionAction;
@@ -95,7 +96,7 @@ public class ConnectionsManager {
 		}
 	}
 	
-	public void connectPlayer(Position.Player position,String gameId,ArrayList<Player> players){
+	public void connectPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo){
 		try {				
 			Socket clientSocket;
 			System.out.println("Listening to port " + GameStatus.hostPort + " Waiting for messages...");
@@ -109,7 +110,7 @@ public class ConnectionsManager {
 			
 			Connection connection = new Connection(position,in, out);
 			connections.add(connection);
-			sendTo(new InitialMessage(new InitialConnectionAction(gameId,position,players)),position);
+			sendTo(new InitialMessage(new InitialConnectionAction(gameId,position,playersInfo)),position);
 			connection.getInitialMessage();			
 		    new Thread(connection).start();		    
 		    

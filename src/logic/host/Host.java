@@ -3,6 +3,8 @@ package logic.host;
 
 import java.util.ArrayList;
 import java.util.Stack;
+
+import client.gui.entities.GuiPlayer;
 import utils.Player;
 import utils.Position;
 import communication.actions.Turn;
@@ -16,7 +18,7 @@ import logic.client.Game;
 public class Host implements Runnable{
 	
 	private final int maxPlayers=4;
-	public static ArrayList<Player> players = new ArrayList<Player>();	
+	//public static ArrayList<Player> playersInfo = new ArrayList<Player>();	
 	private Stack<Position.Player> availablePositions;
 	private static Game game;
 
@@ -35,7 +37,10 @@ public class Host implements Runnable{
 		Host.game=game;
 		
 	}
-
+	public static void addPlayer(Player playerInfo){
+		//playersInfo.add(playerInfo);
+		game.addPlayer(playerInfo);
+	}
 	public static Position.Player nextInTurn(){
 		return game.nextInTurn();
 	}
@@ -45,8 +50,7 @@ public class Host implements Runnable{
 	public void waitForPlayers(){
 		
 		while(ConnectionsManager.getConnectionsManager().getNumberOfConnections()<game.minPlayers()){
-			System.out.println("waiting for player " + ConnectionsManager.getConnectionsManager().getNumberOfConnections() + "/" + game.minPlayers() + " " + String.valueOf(players.size()<game.minPlayers()));
-			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions.pop(),game.toString(),players);
+			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions.pop(),game.toString(),game.getPlayers());
 	    }
 		//TODO send to GUI enable start game button
 		
