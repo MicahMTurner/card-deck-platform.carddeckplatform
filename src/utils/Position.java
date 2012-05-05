@@ -11,7 +11,7 @@ public interface Position extends Serializable{
 	
 	public enum Player implements Position{   
 		
-	    BOTTOM(700,500),LEFT(6,6),TOP(200,500),RIGHT(6,6);
+	    BOTTOM(300,400),LEFT(6,6),TOP(200,50),RIGHT(6,6);
 	    private final int x;
 		private final int y;
 		private int id;		
@@ -22,7 +22,7 @@ public interface Position extends Serializable{
 		private Player(int x,int y){
 			this.x=x;
 			this.y=y;
-			this.id=IDMaker.getMaker().getId();
+			this.id=IDMaker.getMaker().getId(this);
 		}
 		public int getX(){
 			return x;
@@ -95,9 +95,9 @@ public interface Position extends Serializable{
 		}
 	}  
 	  
-	public enum Public{
+	public enum Public implements Position{
 		TOPRIGHT(6,6),TOPMIDRIGHT(6,6),TOPMID(6,6),TOPMIDLEFT(6,6),TOPLEFT(6,6),
-		RIGHT(6,6),MIDRIGHT(800,300),MID(6,6),MIDLEFT(500,300),LEFT(6,6),
+		RIGHT(6,6),MIDRIGHT(400,200),MID(6,6),MIDLEFT(270,200),LEFT(6,6),
 		BOTLEFT(6,6),BOTMIDLEFT(6,6),BOTMID(6,6),BOTMIDRIGHT(6,6),BOTRIGHT(6,6);
 		private final int x;
 		private final int y;
@@ -113,7 +113,7 @@ public interface Position extends Serializable{
 		private Public(int x,int y){
 			this.x=x;
 			this.y=y;
-			this.id=IDMaker.getMaker().getId();
+			this.id=IDMaker.getMaker().getId(this);
 		}
 		public int getX(){
 			return x;
@@ -221,7 +221,7 @@ public interface Position extends Serializable{
 		}
 	 }  
 	  
-	public enum Button{
+	public enum Button implements Position{
 		  TOPRIGHT(6,6),TOPLEFT(6,6),BOTLEFT(6,6),BOTRIGHT(6,6);
 		  private final int x;
 		  private final int y;
@@ -233,7 +233,7 @@ public interface Position extends Serializable{
 		  private Button(int x,int y){
 				this.x=x;
 				this.y=y;
-				this.id=IDMaker.getMaker().getId();
+				this.id=IDMaker.getMaker().getId(this);
 			}
 			public int getX(){
 				return x;

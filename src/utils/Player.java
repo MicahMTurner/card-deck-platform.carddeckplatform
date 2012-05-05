@@ -53,7 +53,7 @@ public class Player extends Observable implements Serializable, Comparable<Playe
 		return id;
 	}
 	public void addCard(Card card) {
-		card.setOwner(userName);
+		card.setOwner(globalPosition);
 		hand.add(card);		
 		handler.onCardAdded(this, card);
 		
@@ -82,7 +82,7 @@ public class Player extends Observable implements Serializable, Comparable<Playe
 		ClientController.sendAPI().endTurn(position);
 	}
 	public void deltCard(Card card) {
-		card.setOwner(userName);
+		card.setOwner(globalPosition);
 		hand.add(card);			
 	}
 	public int cardsHolding() {		
@@ -104,8 +104,10 @@ public class Player extends Observable implements Serializable, Comparable<Playe
 		return this.globalPosition.compareTo(another.getGlobalPosition());
 	}
 	
-	public void setRelativePosition(utils.Position.Player myGlobalPos) {
-		position=this.globalPosition.getRelativePosition(myGlobalPos);
+	public void setRelativePosition(utils.Position.Player devicePlayerGlobalPos) {
+		if (!(this.globalPosition.equals(devicePlayerGlobalPos))){
+			position=this.globalPosition.getRelativePosition(devicePlayerGlobalPos);
+		}
 		
 	}
 	

@@ -22,7 +22,7 @@ public class Public extends Droppable{
 	public Public(PublicEventsHandler handler,Position.Public position) {
 		this.handler=handler;
 		this.position=position;
-		this.id=IDMaker.getMaker().getId();
+		this.id=position.getId();
 	}
 	
 	public void setPosition(Position.Public position) {

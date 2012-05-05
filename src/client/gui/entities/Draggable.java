@@ -23,7 +23,7 @@ public abstract class Draggable implements Serializable{
 	//protected abstract void draw(Canvas canvas,Context context);
 	public Draggable() {
 		this.coord=new Point(0,0);
-		this.prevCoord=coord;
+		this.prevCoord=new Point(0,0);
 	}
 	public abstract int sensitivityRadius();
 	public String getCarrier() {
@@ -45,7 +45,7 @@ public abstract class Draggable implements Serializable{
 			coord.setX(prevCoord.getX());
 			coord.setY(prevCoord.getY());
 			ClientController.sendAPI().dragMotion(GameStatus.username, getMyId(), coord);
-			ClientController.sendAPI().endDragMotion(getMyId());			
+			//ClientController.sendAPI().endDragMotion(getMyId());			
 			angle=0;			
 		}
 	
