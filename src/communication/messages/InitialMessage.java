@@ -9,9 +9,11 @@ import communication.server.ConnectionsManager;
 import client.controller.actions.AddPlayerAction;
 
 
+
 public class InitialMessage extends Message {
 	
 	private Player newPlayer;
+	public InitialMessage() {}
 	
 	public InitialMessage(Player newPlayer) {
 		this.newPlayer=newPlayer;
@@ -22,9 +24,10 @@ public class InitialMessage extends Message {
 	}
 
 	@Override
-	public void actionOnServer(Position.Player id){		
+	public void actionOnServer(Position.Player id){	
+		Host.addPlayer(newPlayer);
 		ConnectionsManager.getConnectionsManager().sendToAllExcptMe(new Message(new AddPlayerAction(newPlayer)), id);
-		Host.players.add(newPlayer);
+		
 	}
 	
 	@Override

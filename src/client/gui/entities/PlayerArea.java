@@ -1,6 +1,6 @@
 //package client.gui.entities;
 //
-//import logic.card.CardLogic;
+//
 //import android.graphics.Canvas;
 //
 //public class PlayerArea extends Droppable {

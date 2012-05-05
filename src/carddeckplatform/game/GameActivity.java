@@ -4,6 +4,7 @@ package carddeckplatform.game;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 import utils.Position;
 import utils.Public;
@@ -12,6 +13,7 @@ import android.app.Dialog;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +43,7 @@ public class GameActivity extends Activity {
                 //return new IpAddress("127.0.0.2"); 
         } 
         return ipAddress.getHostAddress(); 
-} 
+	} 
 	
 	
 	
@@ -101,7 +103,7 @@ public class GameActivity extends Activity {
     private void buildLayout( ArrayList<Public> publics){
     	for (Public publicZone : publics){
     		//set public zone according to my position
-    		publicZone.setPosition(publicZone.getPosition().getRelativePosition(ClientController.getController().getMe().getPosition()));
+    		publicZone.setPosition(publicZone.getPosition().getRelativePosition(ClientController.getController().getMe().getGlobalPosition()));
     		
     		tableview.addDroppable(publicZone);
     	}

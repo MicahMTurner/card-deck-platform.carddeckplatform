@@ -1,5 +1,6 @@
 package client.gui.entities;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import utils.Point;
@@ -10,45 +11,41 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.view.View;
 
-public abstract class Draggable extends View {
-	private Droppable container;
+public abstract class Draggable implements Serializable{
+	//private Droppable container;
 	private String carrier = "";
 	private boolean moveable;
-	protected int myId;
 	protected Point prevCoord;
 	protected Point coord;
 	protected float angle = 0;
-	public void draw(Canvas canvas){
-		onDraw(canvas);
-		
-	}
-	@Override
-	protected abstract void onDraw(Canvas canvas);
+	protected boolean carried;
 	
-	public Draggable(Context context,int myId) {
-		super(context);		
-		this.myId=myId;
-		
+	//protected abstract void draw(Canvas canvas,Context context);
+	public Draggable() {
+		this.coord=new Point(0,0);
+		this.prevCoord=coord;
 	}
 	public abstract int sensitivityRadius();
-	
+	public String getCarrier() {
+		return carrier;
+	}
 	public void onClick() {		
 		// save the current location in order to be able to return to this position if needed.
 		prevCoord.setX(coord.getX());
 		prevCoord.setY(coord.getY());
 	}
 	public void onDrag() {		
-		ClientController.sendAPI().dragMotion(GameStatus.username,myId,coord);
+		ClientController.sendAPI().dragMotion(GameStatus.username,getMyId(),coord);
 	}
 	public void onRelease() {		
-		ClientController.sendAPI().dragMotion(GameStatus.username, myId, coord);
-		ClientController.sendAPI().endDragMotion(myId);
+		ClientController.sendAPI().dragMotion(GameStatus.username, getMyId(), coord);
+		ClientController.sendAPI().endDragMotion(getMyId());
 	}
 	public void invalidMove(){		
 			coord.setX(prevCoord.getX());
 			coord.setY(prevCoord.getY());
-			ClientController.sendAPI().dragMotion(GameStatus.username, myId, coord);
-			ClientController.sendAPI().endDragMotion(myId);			
+			ClientController.sendAPI().dragMotion(GameStatus.username, getMyId(), coord);
+			ClientController.sendAPI().endDragMotion(getMyId());			
 			angle=0;			
 		}
 	
@@ -61,16 +58,16 @@ public abstract class Draggable extends View {
 	public void setCarrier(String carrier) {
 		this.carrier = carrier;
 	}
+	public abstract void draw(Canvas canvas,Context context);
 	
 	
+	//public Droppable getContainer(){
+	//	return container;
+	//}
 	
-	public Droppable getContainer(){
-		return container;
-	}
-	
-	public void setContainer(Droppable container){
-		this.container = container;
-	}
+	//public void setContainer(Droppable container){
+	//	this.container = container;
+	//}
 		
 	public void setLocation(int x, int y){
 		coord.setX(x);
@@ -87,14 +84,22 @@ public abstract class Draggable extends View {
 	public void setAngle(float angle){
 		this.angle = angle%360;
 	}
+	public void setCarried(boolean carried) {
+		this.carried = carried;
+	}
+	public boolean isCarried() {
+		return carried;
+	}
 	public boolean isMoveable() {
-		return moveable;
+		return true;
 	}
 	public void setMoveable(boolean moveable) {
 		this.moveable = moveable;
 	}
-	public int getMyId() {
-		return myId;
-	}
+	public abstract int getMyId() ;
 	
+	public void clearAnimation() {
+		this.carrier="";
+		
+	}
 }

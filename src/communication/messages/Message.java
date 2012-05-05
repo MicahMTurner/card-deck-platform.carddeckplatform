@@ -7,10 +7,10 @@ import communication.actions.Action;
 import communication.server.ConnectionsManager;
 import server.controller.actions.SendToAllExceptMe;
 import server.controller.actions.ServerAction;
-import utils.Player;
 import utils.Position;
 import client.controller.ClientController;
 import client.controller.actions.ClientAction;
+import client.gui.entities.GuiPlayer;
 import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;
 

@@ -1,5 +1,7 @@
 package handlers;
 
-public interface Handler {
+import java.io.Serializable;
+
+public interface Handler extends Serializable{
 
 }

@@ -101,9 +101,10 @@ public class TcpHostFinder implements HostFinder {
 				in.close();
 				socket.close();
 			} catch (Exception e) {
+				int x=5;
 				// TODO: handle exception
-				System.out.println(intToIp(d.gateway,i) + " is not reachable");
-				System.out.println(e.getMessage());
+				//System.out.println(intToIp(d.gateway,i) + " is not reachable");
+				//System.out.println(e.getMessage());
 			}
 		}		
 		return hosts;

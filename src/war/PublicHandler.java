@@ -1,17 +1,20 @@
 package war;
 
+import java.util.ArrayList;
 import client.controller.ClientController;
+import client.gui.entities.GuiPlayer;
 import carddeckplatform.game.GameStatus;
 import utils.Card;
 import utils.Player;
 import utils.Public;
+import utils.StandartCard;
 import handlers.PublicEventsHandler;
 
 public class PublicHandler implements PublicEventsHandler{
 	private int cardsPlacedWhileTie=0;
 	private void getCards(Public publicArea, Player player){
-		for (Card card : publicArea.getCards()){
-			player.addCard(null,card);
+		for (StandartCard card : ((ArrayList<StandartCard>)((ArrayList)publicArea.getCards()))){
+			player.addCard(card);
 		}
 		publicArea.clear();
 	}
@@ -24,35 +27,37 @@ public class PublicHandler implements PublicEventsHandler{
 		}else{
 			
 			card.reveal();
-		if (ClientController.getController().isMyTurn()){
+		if (ClientController.getController().getMe().isMyTurn()){
 			publicArea.addCard(player,card);
 			Public otherPublic=(Public) ClientController.getController().getZone("public2");	
-			Player otherPlayer=(Player) ClientController.getController().getZone("otherPlayer");
+			Player otherPlayer=((GuiPlayer) ClientController.getController().getZone("otherPlayer")).getPlayer();
 			if (otherPublic.cardsHolding()==publicArea.cardsHolding()){
 				
 				War.tie=false;
-				if (otherPublic.peek().getValue()==card.getValue()){
+				if (((StandartCard)otherPublic.peek()).getValue()==((StandartCard)card).getValue()){
 					//tie
 					War.tie=true;
 
 				}
-				else if (otherPublic.peek().getValue()>card.getValue()){
+				else if (((StandartCard)otherPublic.peek()).getValue()>((StandartCard)card).getValue()){
 					//	lost
 					
-					ClientController.guiAPI().moveCards(publicArea.getCards(),otherPlayer.getMyId(), true, false);
+					ClientController.guiAPI().moveCards(publicArea.getCards(),otherPlayer.getId(), true, false);
 					getCards(publicArea,otherPlayer);
-					ClientController.guiAPI().moveCards(otherPublic.getCards(),otherPlayer.getMyId(), true, false);					
+					ClientController.guiAPI().moveCards(otherPublic.getCards(),otherPlayer.getId(), true, false);					
 					getCards(otherPublic,otherPlayer);
-					player.endTurn();
+					if (player.isMyTurn()){
+						player.endTurn();
+					}
 				}
 				else{
 					//	won
 					
-					ClientController.guiAPI().moveCards(publicArea.getCards(),player.getMyId(), true, false);
+					ClientController.guiAPI().moveCards(publicArea.getCards(),player.getId(), true, false);
 					getCards(publicArea,player);
-					ClientController.guiAPI().moveCards(otherPublic.getCards(),player.getMyId(), true, false);					
+					ClientController.guiAPI().moveCards(otherPublic.getCards(),player.getId(), true, false);					
 					getCards(otherPublic,player);
-					if (player.getUsername().equals(GameStatus.username)){
+					if (player.getUserName().equals(GameStatus.username)){
 					
 					}
 				
