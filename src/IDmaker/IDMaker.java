@@ -46,28 +46,28 @@ public class IDMaker {
 	}
 
 
-	public int getId(Position.Player position) {
-		int answer = 0;
-		switch(position){
-			case TOP:{
-				answer=2;
-				break;
-			}
-			case BOTTOM:{
-				answer=1;
-				break;
-			}
-			case LEFT:{
-				answer=3;
-				break;
-			}
-			case RIGHT:{
-				answer=4;
-				break;
-			}
-			default:{}
-		}
-	
-		return answer;
-	}
+//	public int getId(Position.Player position) {
+//		int answer = 0;
+//		switch(position){
+//			case TOP:{
+//				answer=2;
+//				break;
+//			}
+//			case BOTTOM:{
+//				answer=1;
+//				break;
+//			}
+//			case LEFT:{
+//				answer=3;
+//				break;
+//			}
+//			case RIGHT:{
+//				answer=4;
+//				break;
+//			}
+//			default:{}
+//		}
+//	
+//		return answer;
+//	}
 }

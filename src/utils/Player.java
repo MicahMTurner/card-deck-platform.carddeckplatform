@@ -79,7 +79,7 @@ public class Player extends Observable implements Serializable, Comparable<Playe
 		myTurn=false;
 		setChanged();
 		notifyObservers(myTurn);
-		ClientController.sendAPI().endTurn(position);
+		ClientController.sendAPI().endTurn(globalPosition);
 	}
 	public void deltCard(Card card) {
 		card.setOwner(globalPosition);

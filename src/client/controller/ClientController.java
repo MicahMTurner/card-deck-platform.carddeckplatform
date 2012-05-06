@@ -125,7 +125,7 @@ public class ClientController implements Observer {
 			ServerConnection.getConnection().getMessageSender().send(new Message(new EndRoundAction()));
 		}
 		public void cardRevealed(Card card){
-			
+			//ServerConnection.getConnection().getMessageSender().send(new Message(new CardRevealAction()))
 		}
 
 		public void cardHidden(Card card) {

@@ -8,6 +8,7 @@ import java.util.concurrent.CountDownLatch;
 
 import utils.Position;
 import utils.Public;
+import IDmaker.IDMaker;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.pm.ActivityInfo;
@@ -104,7 +105,6 @@ public class GameActivity extends Activity {
     	for (Public publicZone : publics){
     		//set public zone according to my position
     		publicZone.setPosition(publicZone.getPosition().getRelativePosition(ClientController.getController().getMe().getGlobalPosition()));
-    		
     		tableview.addDroppable(publicZone);
     	}
     	
