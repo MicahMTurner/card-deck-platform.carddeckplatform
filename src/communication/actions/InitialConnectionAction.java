@@ -1,11 +1,10 @@
-package client.controller.actions;
+package communication.actions;
 
 import java.util.ArrayList;
 
 import utils.Player;
 import utils.Position;
 
-import communication.actions.Action;
 import carddeckplatform.game.GameStatus;
 import client.controller.ClientController;
 import client.dataBase.ClientDataBase;
@@ -28,20 +27,20 @@ public class InitialConnectionAction implements Action{
 	@Override
 	public void execute() {
 		Game game=ClientDataBase.getDataBase().getGame(gameId);
-		ClientController.getController().setGame(game);
+		ClientController.get().setGame(game);
 		
 		//create my instance		
 		
 		game.addMe(GameStatus.username, position);
 		
-		ClientController.getController().addPlayer(game.getMe());
+		ClientController.get().addPlayer(game.getMe());
 		
 				
 		
 		
 		
 		for (Player newPlayer : newPlayersInfo){			
-			ClientController.getController().addPlayer(newPlayer);
+			ClientController.get().addPlayer(newPlayer);
 		}		
 		
 	}

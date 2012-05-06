@@ -1,9 +1,6 @@
 package communication.actions;
 
 import client.controller.ClientController;
-import client.controller.actions.ClientAction;
-import communication.link.ServerConnection;
-import communication.messages.Message;
 
 public class EndDraggableMotionAction implements Action  {
 
@@ -15,7 +12,7 @@ public class EndDraggableMotionAction implements Action  {
 
 	@Override
 	public void execute() {
-		ClientController.getController().getGui().endDraggableMotion(cardId);
+		ClientController.get().getGui().endDraggableMotion(cardId);
 		
 	}
 

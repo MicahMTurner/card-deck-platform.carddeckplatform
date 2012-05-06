@@ -24,7 +24,7 @@ public class DealCardAction implements Action{
 	}
 	@Override
 	public void execute() {
-		ClientController.getController().dealCards(cards, from, to,revealWhileMoving,revealAtEnd);
+		ClientController.get().dealCards(cards, from, to,revealWhileMoving,revealAtEnd);
 		
 		
 	}

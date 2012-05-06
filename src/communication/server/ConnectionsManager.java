@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 import utils.Player;
 import utils.Position;
-import client.controller.actions.InitialConnectionAction;
 import carddeckplatform.game.GameStatus;
+import communication.actions.InitialConnectionAction;
 import communication.messages.InitialMessage;
 import communication.messages.Message;
 
@@ -20,18 +20,18 @@ public class ConnectionsManager {
 	private ServerSocket serverSocket=null;
 
 	//-------Singleton implementation--------//
-			private static class ConnectionsManagerHolder
-			{
-				private final static ConnectionsManager connectionsManager=new ConnectionsManager();
-			}
+	private static class ConnectionsManagerHolder
+	{
+		private final static ConnectionsManager connectionsManager=new ConnectionsManager();
+	}
 			
 					
-			/**
-			 * get Controller instance
-			 */
-			public static ConnectionsManager getConnectionsManager(){
-				return ConnectionsManagerHolder.connectionsManager;
-			}
+	/**
+	 * get Controller instance
+	 */
+	public static ConnectionsManager getConnectionsManager(){
+		return ConnectionsManagerHolder.connectionsManager;
+	}
 			
 	private ArrayList<Connection> connections;
 	
@@ -49,16 +49,6 @@ public class ConnectionsManager {
 	}
 
 		
-	//private Connection getConnection(String id){
-	//	Connection answer=null;
-	//	for (Connection conn : connections){
-	//		if (conn.getId().equals(id)){
-	//			answer=conn;
-	//		}
-	//	}
-	//	return answer;		
-	//}
-	
 	/**
 	 * sendToAll - sends the message to every user.
 	 * @param msg
@@ -112,10 +102,7 @@ public class ConnectionsManager {
 			connections.add(connection);
 			sendTo(new InitialMessage(new InitialConnectionAction(gameId,position,playersInfo)),position);
 			connection.getInitialMessage();			
-		    new Thread(connection).start();		    
-		    
-		    
-		    
+		    new Thread(connection).start();	
 		    
 		} catch (IOException e) {
 			e.printStackTrace();

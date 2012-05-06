@@ -24,7 +24,7 @@ public class CardAdded implements Action{
 
 	@Override
 	public void execute() {
-		ClientController.getController().cardMoved(cards, from, to);
+		ClientController.get().cardMoved(cards, from, to);
 		
 	}
 	

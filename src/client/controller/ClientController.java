@@ -60,7 +60,7 @@ public class ClientController implements Observer {
 		/**
 		 * get Controller instance
 		 */
-		public static ClientController getController(){
+		public static ClientController get(){
 			return ControllerHolder.controller;
 		}
 
