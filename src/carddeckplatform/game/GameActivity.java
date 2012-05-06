@@ -78,7 +78,7 @@ public class GameActivity extends Activity {
         tableview.getHolder().setFormat(PixelFormat.TRANSPARENT);
         tableview.setxDimention(GameStatus.screenWidth);
         tableview.setyDimention(GameStatus.screenHeight);
-        ClientController.getController().setGui(tableview);
+        ClientController.get().setGui(tableview);
         
         
         //-------CONNECT TO SERVER(HOST)------//
@@ -90,7 +90,7 @@ public class GameActivity extends Activity {
         ArrayList<Public>publics=new ArrayList<Public>();
 
         //insert public areas into publics array
-        ClientController.getController().setLayouts(publics);
+        ClientController.get().setLayouts(publics);
         
         //ArrayList<Button>buttons=new ArrayList<Public>();
         
@@ -104,7 +104,7 @@ public class GameActivity extends Activity {
     private void buildLayout( ArrayList<Public> publics){
     	for (Public publicZone : publics){
     		//set public zone according to my position
-    		publicZone.setPosition(publicZone.getPosition().getRelativePosition(ClientController.getController().getMe().getGlobalPosition()));
+    		publicZone.setPosition(publicZone.getPosition().getRelativePosition(ClientController.get().getMe().getGlobalPosition()));
     		tableview.addDroppable(publicZone);
     	}
     	

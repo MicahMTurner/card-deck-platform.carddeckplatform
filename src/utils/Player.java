@@ -35,7 +35,7 @@ public class Player extends Observable implements Serializable, Comparable<Playe
 		this.handler=handler;
 		this.hand=new ArrayList<Card>();
 		this.myTurn=false;
-		addObserver(ClientController.getController());
+		addObserver(ClientController.get());
 	}
 	public Position.Player getGlobalPosition() {
 		return globalPosition;

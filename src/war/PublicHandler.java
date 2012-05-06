@@ -34,10 +34,10 @@ public class PublicHandler implements PublicEventsHandler{
 			
 			card.reveal();			
 			cardsPlacedWhileTie=0;
-			Player me=ClientController.getController().getMe();
+			Player me=ClientController.get().getMe();
 			
 			Public otherPublic=getOtherPublic(publicArea);	
-			Player otherPlayer=((GuiPlayer) ClientController.getController().getZone(card.getOwner())).getPlayer();
+			Player otherPlayer=((GuiPlayer) ClientController.get().getZone(card.getOwner())).getPlayer();
 			
 			if (publicArea.cardsHolding()!=otherPublic.cardsHolding()){
 				if( me.isMyTurn() && !War.tie){
@@ -76,11 +76,11 @@ public class PublicHandler implements PublicEventsHandler{
 				
 				}
 				if (me.isEmpty()){
-					ClientController.getController().declareLoser();
-					ClientController.getController().disableUi();
+					ClientController.get().declareLoser();
+					ClientController.get().disableUi();
 				}else{
-					ClientController.getController().declareWinner();
-					ClientController.getController().disableUi();
+					ClientController.get().declareWinner();
+					ClientController.get().disableUi();
 					
 				}
 			}
@@ -96,9 +96,9 @@ public class PublicHandler implements PublicEventsHandler{
 	private Public getOtherPublic(Public publicArea) {
 		Public answer=null;
 		if (publicArea.getPosition().equals(Position.Public.MIDLEFT)){
-			answer=(Public) ClientController.getController().getZone(Position.Public.MIDRIGHT);
+			answer=(Public) ClientController.get().getZone(Position.Public.MIDRIGHT);
 		}else{
-			answer=(Public) ClientController.getController().getZone(Position.Public.MIDLEFT);
+			answer=(Public) ClientController.get().getZone(Position.Public.MIDLEFT);
 		}
 		return answer;
 	}

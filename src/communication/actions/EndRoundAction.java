@@ -6,7 +6,7 @@ public class EndRoundAction implements Action{
 
 	@Override
 	public void execute() {
-		ClientController.getController().endRound();
+		ClientController.get().endRound();
 		
 	}
 

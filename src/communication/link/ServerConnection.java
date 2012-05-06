@@ -19,6 +19,8 @@ public class ServerConnection implements Runnable{
 	private Sender sender;
 	private Receiver receiver;
 	private CountDownLatch cdl = new CountDownLatch(1);
+	private  LinkedBlockingQueue<ActionForQueue> commandsQueue;
+	private volatile boolean stopped;
 	
 	//---Singleton implementation---//
 		private static class ServerConnectionHolder
@@ -65,8 +67,7 @@ public class ServerConnection implements Runnable{
 			
 		}
 	
-		private  LinkedBlockingQueue<ActionForQueue> commandsQueue;
-		private volatile boolean stopped;
+		
 	
 	
 	
@@ -79,43 +80,15 @@ public class ServerConnection implements Runnable{
 	//---Public methods---//
 	
 	public void openConnection(){
+		//this.stopped=false;
 		commandsQueue.add(new OpenConnectionExecutor());
 		try {
 			cdl.await();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		try {
-//			// creates a socket.
-//			socket = new Socket("192.168.2.125",9997);
-//			// creates an outputstream.
-//			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-//			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-//		
-//			this.sender = new TcpSender(out);
-//			receiver = new TcpReceiver(in);
-//			receiver.initializeMode();
-//			sender.initializeMode();
-//			new Thread(receiver).start();
-//		//this.observer = observer;
-//		//sender.openConnection();
-//		
-//		//TcpReceiver.initializeMode();
-//	   // rceiver.reg(observer);
-//	    
-//	   // clientMessageSender.sendMessage(new InitialMessage(new AddPlayerAction(), GameStatus.username));
-//		
-//		} catch (UnknownHostException e) {
-//			// TODO Auto-generated catch block
-//			System.out.println(e.getMessage());
-//			e.printStackTrace();
-//			
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();			
-//		}
 	}
+	
 	@Override
 	public void run() {
 		while (!stopped){
@@ -125,14 +98,25 @@ public class ServerConnection implements Runnable{
 			}
 		}		
 	}
-	public void closeConnection(){
+	
+	public void closeConnection(){		
 		try {
+			//this.stopped=true;
 			sender.closeStream();
 			receiver.closeStream();
 			socket.close();
+		
 		} catch (IOException e) {		
 			e.printStackTrace();
 		}
+	}
+	public void shutDown(){
+		this.stopped=true;
+		//add a new blank command to wake controller and stop it
+		commandsQueue.add(new ActionForQueue() {				
+			@Override
+			public void execute() {	}
+		});			
 	}
 	
 	public Sender getMessageSender(){

@@ -48,7 +48,7 @@ public class TcpSender extends Sender {
 
 	@Override
 	public void initializeMode() {
-		send(new InitialMessage(ClientController.getController().getMe()));
+		send(new InitialMessage(ClientController.get().getMe()));
 		
 	}	
 

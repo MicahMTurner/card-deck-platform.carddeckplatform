@@ -17,7 +17,7 @@ public class CardRemoved implements Action{
 
 	@Override
 	public void execute() {
-		ClientController.getController().removeCards(cards, from);
+		ClientController.get().removeCards(cards, from);
 		
 	}
 }

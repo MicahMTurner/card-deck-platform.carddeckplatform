@@ -1,9 +1,7 @@
-package client.controller.actions;
+package communication.actions;
 
 import utils.Player;
 import client.controller.ClientController;
-import client.gui.entities.GuiPlayer;
-import communication.actions.Action;
 
 
 
@@ -16,7 +14,7 @@ public class AddPlayerAction implements Action{
 	}
 	@Override
 	public void execute() {		
-		ClientController.getController().addPlayer(newPlayerInfo);
+		ClientController.get().addPlayer(newPlayerInfo);
 	}
 
 

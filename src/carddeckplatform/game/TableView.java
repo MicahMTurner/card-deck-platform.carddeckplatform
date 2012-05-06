@@ -320,7 +320,7 @@ public class TableView extends SurfaceView {
 		    				
 							Droppable droppable=table.getNearestDroppable(X, Y);
 							if (droppable!=null && from!=null){									
-								droppable.onDrop(ClientController.getController().getMe(),from.getMyId(),((GuiCard)draggableInHand).getCard());
+								droppable.onDrop(ClientController.get().getMe(),from.getMyId(),((GuiCard)draggableInHand).getCard());
 							}
 							else{
 								draggableInHand.invalidMove();

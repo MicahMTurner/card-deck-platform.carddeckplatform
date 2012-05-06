@@ -1,11 +1,6 @@
 package communication.actions;
 
 import client.controller.ClientController;
-import client.controller.actions.ClientAction;
-import server.controller.actions.SendToAllExceptMe;
-import communication.link.ServerConnection;
-import communication.messages.Message;
-import carddeckplatform.game.TableView;
 
 public class DraggableMotionAction implements Action {
 
@@ -24,7 +19,7 @@ public class DraggableMotionAction implements Action {
 
 	@Override
 	public void execute() {
-		ClientController.getController().getGui().draggableMotion(username, cardId, x, y);
+		ClientController.get().getGui().draggableMotion(username, cardId, x, y);
 		
 	}
 
