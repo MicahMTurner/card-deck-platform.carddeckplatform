@@ -3,6 +3,7 @@ package carddeckplatform.game;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
 
 import utils.Card;
 import utils.Player;
@@ -111,6 +112,7 @@ public class TableView extends SurfaceView {
 	
 	public void drawMovement(final ArrayList<GuiCard> cards, final int toId, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
 		ArrayList<Thread> drawingThreads = new ArrayList<Thread>();
+		final CountDownLatch cdl=new CountDownLatch(cards.size());
 		final Droppable destination=getDroppableById(toId);
 		for (final GuiCard guiCard : cards){
 			drawingThreads.add(	new Thread(new Runnable() {	
@@ -141,6 +143,7 @@ public class TableView extends SurfaceView {
 			            	}
 			            	guiCard.setAngle(0);
 			            	guiCard.getCard().setRevealed(revealedAtEnd);
+			            	cdl.countDown();
 							
 						}
 					}));
@@ -149,13 +152,18 @@ public class TableView extends SurfaceView {
 		for (Thread drawingThread : drawingThreads){
 			drawingThread.start();
 		}
-		for (Thread drawingThread : drawingThreads){
-			try {
-				drawingThread.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		try {
+			cdl.await();
+		} catch (InterruptedException e) {		
+			e.printStackTrace();
 		}
+		//for (Thread drawingThread : drawingThreads){
+		//	try {
+		//		drawingThread.join();
+		//	} catch (InterruptedException e) {
+		//		e.printStackTrace();
+		//	}
+		//}
 		
 		
 	}
@@ -396,11 +404,17 @@ public class TableView extends SurfaceView {
 				//move card from one zone to another
 					source.removeCard(card);
 					destination.addCard(null, card);
+					animationTask.redraw();
 					//drawMovement(cards, destination.getPoint(), 1000, 10, revealWhileMoving, revealAtEnd);
 				}
 		}
 	}
-
+	//public void revealedDraggable(int id){
+	//	GuiCard revealed=(GuiCard)table.getDraggableById(id, GetMethod.PutInFront);
+	//	revealed.getCard().setRevealed(true);
+	//	animationTask.redraw();
+		
+	//}
 	public void addPlayer(Player newPlayer) {
 		table.addDroppable(new GuiPlayer(newPlayer));
 		animationTask.redraw();

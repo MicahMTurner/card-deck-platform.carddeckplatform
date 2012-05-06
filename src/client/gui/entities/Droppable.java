@@ -37,6 +37,7 @@ public abstract class Droppable{
 		addCard(player,card);
 		ArrayList<Card>cards=new ArrayList<Card>();
 		cards.add(card);
+		
 		ClientController.sendAPI().cardAdded(cards, getMyId(), fromId);
 	}
 	public abstract void deltCard(Card card);

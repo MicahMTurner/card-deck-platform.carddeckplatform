@@ -41,7 +41,7 @@ public class ServerConnection implements Runnable{
 			public void execute() {
 				try {
 					// creates a socket.
-					socket = new Socket("192.168.42.169",9997);
+					socket = new Socket("192.168.42.112",9997);
 					// creates an outputstream.
 					ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 					ObjectInputStream in = new ObjectInputStream(socket.getInputStream());

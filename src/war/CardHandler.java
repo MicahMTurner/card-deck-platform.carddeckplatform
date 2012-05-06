@@ -8,13 +8,13 @@ public class CardHandler implements CardEventsHandler{
 
 	@Override
 	public void onReveal(Card card) {
-		ClientController.sendAPI().cardRevealed(card);
+		;
 		
 	}
 
 	@Override
 	public void OnHide(Card card) {
-		ClientController.sendAPI().cardHidden(card);
+		;
 		
 		
 	}
