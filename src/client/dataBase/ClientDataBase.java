@@ -2,13 +2,15 @@ package client.dataBase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
+
 import war.War;
 import logic.client.Game;
 
 
 public class ClientDataBase {
 	private HashMap<String, Game> games;
-	
+	private DynamicLoader loader;
 	
 	//-------Singleton implementation--------//
 	private static class DataBaseHolder
@@ -24,6 +26,7 @@ public class ClientDataBase {
 		return DataBaseHolder.dataBase;
 	}
 	private ClientDataBase() {
+		loader=new DynamicLoader();
 		games = new HashMap<String, Game>();
 		War war = new War();
 		games.put(war.toString(), war);
@@ -36,8 +39,9 @@ public class ClientDataBase {
 	/**
 	 * factory
 	 */
-	public Game getGame(String gameId){
-		return games.get(gameId);
+	public Game getGame(String gameName){
+		return games.get(gameName);
+		//loader.LoadPlugin(gameName);
 	}
 	
 	public void addGame(String gameId){
@@ -49,6 +53,7 @@ public class ClientDataBase {
 		for(String gameName : games.keySet()){
 			gameNames.add(gameName);
 		}
+		Set<String>names=loader.getGameNames();
 		return gameNames;
 	}	
 }
