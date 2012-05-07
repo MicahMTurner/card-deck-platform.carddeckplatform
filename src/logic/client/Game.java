@@ -39,6 +39,7 @@ public abstract class Game {
 	 */
 	@Override	
 	public abstract String toString();
+	
 	public abstract Player createPlayer(String userName,utils.Position.Player position);	
 
 	
