@@ -1,13 +1,12 @@
 package utils;
 
+import handlers.PublicEventsHandler;
+
 import java.util.ArrayList;
 
-import IDmaker.IDMaker;
-import android.R;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import handlers.PublicEventsHandler;
 import client.gui.entities.Droppable;
 
 
