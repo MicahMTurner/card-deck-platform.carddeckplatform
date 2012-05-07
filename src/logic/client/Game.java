@@ -42,7 +42,9 @@ public abstract class Game {
 	
 	public abstract Player createPlayer(String userName,utils.Position.Player position);	
 
-	
+	public String getClassName(){
+		return getClass().getName();
+	}
 	public Player getMe() {
 		return players.get(0);
 	}
