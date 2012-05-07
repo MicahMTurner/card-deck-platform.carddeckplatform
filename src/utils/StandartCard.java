@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 
 public  class StandartCard extends Card {
+	
 	public  enum Color implements Serializable{
 		HEART("h"),
 		DIAMOND("d"),

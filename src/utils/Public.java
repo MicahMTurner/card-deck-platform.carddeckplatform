@@ -102,10 +102,5 @@ public class Public extends Droppable{
 	}
 	public Card peek(){
 		return cards.get(cards.size()-1);
-	}
-	
-	
-
-	
-
+	}	
 }
