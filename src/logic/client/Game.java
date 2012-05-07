@@ -25,27 +25,31 @@ public abstract class Game {
 
 	//protected abstract Player createPlayer(String userName, Position.Player position);
 	public abstract AbstractDeck getDeck();
+
+	//the order of the players turns 
 	public abstract Queue<utils.Position.Player> setTurns();
+	//the minimal players count
 	public abstract int minPlayers();
+	//how many cards to split
 	public abstract int cardsForEachPlayer();
 	
-	
+	//the game split cards on the begginng of the game
 	public abstract void dealCards();	
 	
-	
-	public abstract void getLayouts(ArrayList<Public>publics);
+	public abstract void getLayouts(ArrayList<Public> publics);
 	/**
 	 * game id
 	 */
 	@Override	
 	public abstract String toString();
+	//the game create player according to his hander
 	public abstract Player createPlayer(String userName,utils.Position.Player position);	
 
-	
+	//return my player object
 	public Player getMe() {
 		return players.get(0);
 	}
-	
+	//create the deck of the game
 	public void initiate(){
 		deck=getDeck();	
 	}
@@ -54,7 +58,7 @@ public abstract class Game {
 	public Game() {
 		turnsQueue=setTurns();
 	}
-	
+	//return the next player
 	public utils.Position.Player nextInTurn(){
 		utils.Position.Player next=turnsQueue.poll();
 		turnsQueue.add(next);
@@ -71,9 +75,11 @@ public abstract class Game {
 	public ArrayList<Player> getPlayers(){
 		return players;
 	}	
+	//player lost so we remove him from the list
 	public void playerLost(Position.Player position){		
 		turnsQueue.remove(position);
 	}
+	// 
 	public void addMe(String userName, utils.Position.Player position) {
 		players.add(createPlayer(userName, position));
 		

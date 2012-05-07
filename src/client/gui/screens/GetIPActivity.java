@@ -1,4 +1,4 @@
-package UI;
+package client.gui.screens;
 
 
 import android.app.Activity;

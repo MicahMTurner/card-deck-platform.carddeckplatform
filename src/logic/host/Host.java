@@ -19,6 +19,7 @@ public class Host implements Runnable{
 	
 	private final int maxPlayers=4;
 	//public static ArrayList<Player> playersInfo = new ArrayList<Player>();	
+	
 	private Stack<Position.Player> availablePositions;
 	private static Game game;
 
