@@ -299,9 +299,9 @@ public class TableView extends SurfaceView {
 	    		
 		    		case MotionEvent.ACTION_DOWN:{
 		    			draggableInHand = table.getNearestDraggable(X, Y);
-		    			table.setFrontOrRear(draggableInHand, Focus.FRONT);
+		    			
 		    			if (draggableInHand!=null){
-		    				
+		    				table.setFrontOrRear(draggableInHand, Focus.FRONT);
 		    				if(draggableInHand.isMoveable()){
 		    					from=table.getNearestDroppable(X, Y);
 		    					draggableInHand.onClick();
