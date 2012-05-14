@@ -39,5 +39,18 @@ public  class StandartCard extends Card {
 	public int getValue() {
 		return value;
 	}
+
+	@Override
+	public int compareTo(Card otherStandartCard) {
+		StandartCard otherCard=(StandartCard)otherStandartCard;
+		if (this.value<otherCard.value){
+			return -1;
+		}else if (this.value>otherCard.value){
+			return 1;
+		}
+		return 0;
+	}
+
+
 	
 }

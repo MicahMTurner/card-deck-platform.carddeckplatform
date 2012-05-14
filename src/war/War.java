@@ -59,14 +59,14 @@ public class War extends Game{
 			playersCards.add(new ArrayList<Card>());
 		}
 
-		for (int i=0;i<deckSize;i++){			
+		for (int i=0;i<4;i++){			
 			Card card=deck.drawCard();			
 			//card.setOwner(players.get(i%players.size()).getPosition());
 			playersCards.get(i%players.size()).add(card);			
 			
 		}
 		for (int i=0;i<players.size();i++){
-			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(playersCards.get(i),false,false,-1,players.get(0).getId())));
+			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(playersCards.get(i),false,false,-1,players.get(i).getId())));
 		}
 		
 	}

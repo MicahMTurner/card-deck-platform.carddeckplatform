@@ -3,6 +3,7 @@ package client.gui.entities;
 import java.util.Random;
 
 import utils.Card;
+import utils.Point;
 
 
 import client.controller.ClientController;
@@ -40,15 +41,19 @@ public class GuiCard extends Draggable {
 
 	@Override
 	public void draw(Canvas canvas, Context context) {
-		Bitmap resizedBitmap=null;
-		card.getFrontImg();
-		Bitmap frontImg = BitmapFactory.decodeResource(context.getResources(), R.drawable.back);
+		Bitmap resizedBitmap=null;				
 		Matrix matrix = new Matrix();
 		matrix.postRotate(angle);
-		if(card.isRevealed())
+		int resourceId;
+		if(card.isRevealed()){		
+			resourceId=context.getResources().getIdentifier(card.getFrontImg(), "drawable", "carddeckplatform.game");
+			Bitmap frontImg = BitmapFactory.decodeResource(context.getResources(), resourceId);	
 			resizedBitmap = Bitmap.createBitmap(frontImg, 0, 0, frontImg.getScaledWidth(canvas) , frontImg.getScaledHeight(canvas), matrix, true);
-		else
-			resizedBitmap = Bitmap.createBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.back), 0, 0, frontImg.getScaledWidth(canvas) , frontImg.getScaledHeight(canvas), matrix, true);
+		}else{
+			resourceId=context.getResources().getIdentifier(card.getBackImg(), "drawable", "carddeckplatform.game");
+			Bitmap backImg = BitmapFactory.decodeResource(context.getResources(), resourceId);
+			resizedBitmap = Bitmap.createBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.back), 0, 0, backImg.getScaledWidth(canvas) , backImg.getScaledHeight(canvas), matrix, true);
+		}
 		canvas.drawBitmap(resizedBitmap, getX()-25, getY()-20, new Paint());
 		
 		        
@@ -71,6 +76,20 @@ public class GuiCard extends Draggable {
 	public int getMyId() {
 		return card.getId();
 	}
+
+	@Override
+	public Point getCoord() {
+		
+		return card.getCoord();
+	}
+
+	@Override
+	public void setLocation(int x, int y) {
+		card.setCoord(x,y);
+		
+	}
+
+	
 	
 	
 	

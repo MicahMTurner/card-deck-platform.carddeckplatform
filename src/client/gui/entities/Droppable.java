@@ -1,6 +1,7 @@
 package client.gui.entities;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 import utils.Card;
 import utils.Player;
@@ -27,19 +28,26 @@ public abstract class Droppable{
 	
 	
 	//protected Point point;	
-	
+	//public Stack<GuiCard>guiCards=new Stack<GuiCard>(); 
 	//protected Stack<Card> cards = new Stack<Card>();
 	//protected ArrayList<Card> cards; 
 	public abstract int sensitivityRadius();
 	//protected Position position;
 	
-	public void onDrop(Player player,int fromId, Card card){
+	public void onDrop(Player player,Droppable from, Card card){
+		card.setCoord(getX(), getY());
 		addCard(player,card);
 		ArrayList<Card>cards=new ArrayList<Card>();
 		cards.add(card);
-		
-		ClientController.sendAPI().cardAdded(cards, getMyId(), fromId);
+		from.removeCard(player,card);		
+		ClientController.sendAPI().cardAdded(card, from.getMyId(),getMyId(),player);
 	}
+	
+	public void onCardAdded(Player byWhom, Card card) {
+		card.setCoord(getX(), getY());
+		addCard(byWhom, card);
+	}
+	
 	public abstract void deltCard(Card card);
 	public void addDraggable(Draggable draggable){}	
 	public abstract void addCard(Player player,Card card);	
@@ -71,6 +79,7 @@ public abstract class Droppable{
 	//}
 	public abstract void clear();
 	public abstract int getMyId();
+
 	
 //	public Position getPosition() {
 //		return position;

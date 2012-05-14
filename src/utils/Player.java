@@ -20,8 +20,9 @@ public class Player extends Observable implements Serializable, Comparable<Playe
 	private String userName;
 	private ArrayList<Card>hand;
 	boolean myTurn;
-	Position.Player position;
-	Position.Player globalPosition;
+	private Point coord;
+	private Position.Player position;
+	private Position.Player globalPosition;
 	int id;
 	
 	
@@ -57,6 +58,10 @@ public class Player extends Observable implements Serializable, Comparable<Playe
 		hand.add(card);		
 		handler.onCardAdded(this, card);
 		
+	}
+	
+	public void setCoord(Point coord) {
+		this.coord = coord;
 	}
 	public void remove(Card card) {
 		hand.remove(card);

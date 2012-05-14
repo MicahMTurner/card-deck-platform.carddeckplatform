@@ -29,12 +29,12 @@ public class TcpReceiver extends Receiver{
 		while(true){
 			try {		
 				
-				System.out.println("Wait for message");
+				//System.out.println("Wait for message");
 				Message message = (Message)in.readObject();
-				System.out.println("message received");
+				//System.out.println("message received");
 
 				message.actionOnClient();
-				System.out.println("message executed");
+				//System.out.println("message executed");
 			} catch (IOException e) {
 				//stream got closed
 				System.out.println("stream got closed");

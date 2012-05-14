@@ -1,6 +1,7 @@
 package client.gui.entities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Stack;
 
 import utils.Card;
@@ -13,7 +14,7 @@ import android.graphics.Matrix;
 
 
 public class Table {
-	public enum GetMethod {KeepTheSame, PutInFront, PutInBack}
+	public enum Focus {FRONT, REAR}
 	
 	private Stack<Draggable> draggables = new Stack<Draggable>();
 	private ArrayList<Droppable> droppables = new ArrayList<Droppable>();
@@ -40,25 +41,33 @@ public class Table {
 		img = BitmapFactory.decodeResource(context.getResources(), drawable); 
 	}
 	
-	
-	private void changeDraggableDrawingOrder(Draggable draggable, GetMethod g){
-		Draggable tmp = draggable;
+	public void setFrontOrRear(Draggable draggable,Focus focus){
 		draggables.remove(draggable);
-		if(g==GetMethod.PutInFront){		
-			draggables.add(tmp);
-		}
-		else if(g==GetMethod.PutInBack){
-			draggables.add(0,tmp);
+		if (focus.equals(Focus.FRONT)){
+			draggables.add(draggable);
+		}else{
+			draggables.add(0,draggable);
 		}
 	}
 	
+//	private void changeDraggableDrawingOrder(Draggable draggable, GetMethod g){
+//		Draggable tmp = draggable;
+//		draggables.remove(draggable);
+//		if(g==GetMethod.PutInFront){		
+//			draggables.add(tmp);
+//		}
+//		else if(g==GetMethod.PutInBack){
+//			draggables.add(0,tmp);
+//		}
+//	}
 	
-	public Draggable getDraggableById(int id, GetMethod g){
+	
+	public Draggable getDraggableById(int id){
 		Draggable answer=null;
 		for(Draggable draggable : draggables){	// TO CORRECT THE LOOP!!!
 			if(draggable.getMyId()==id){
 				answer=draggable;
-				changeDraggableDrawingOrder(draggable, g);
+				//changeDraggableDrawingOrder(draggable, g);
 				break; 
 			}
 		}
@@ -74,7 +83,7 @@ public class Table {
 		return null;
 	}
 	
-	public Draggable getNearestDraggable(int x, int y, GetMethod g){
+	public Draggable getNearestDraggable(int x, int y){
 		// go in reverse in order to get the most top draggable.
 		Draggable res = null;
 		for(int i=draggables.size()-1; i>=0; i--){	// TO CORRECT THE LOOP!!!
@@ -83,7 +92,7 @@ public class Table {
 			if(radius <= d.sensitivityRadius()){
 				// puts the draggable in the front.
 				res = d;
-				changeDraggableDrawingOrder(d, g);
+				//changeDraggableDrawingOrder(d, g);
 				break;
 			}
 		}
@@ -103,7 +112,7 @@ public class Table {
 
 	
 	public void draw(Canvas canvas){
-		System.out.println("drawing table");
+		//System.out.println("drawing table");
 		Matrix matrix = new Matrix();
 		matrix.postScale((float) xDimention, (float) yDimention);
 		canvas.drawBitmap(android.graphics.Bitmap.createScaledBitmap(img, xDimention, yDimention,true),(float)0,(float)0, null);

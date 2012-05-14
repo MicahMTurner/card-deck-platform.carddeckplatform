@@ -24,7 +24,8 @@ import client.gui.entities.Droppable;
 import client.gui.entities.GuiCard;
 import client.gui.entities.GuiPlayer;
 import client.gui.entities.Table;
-import client.gui.entities.Table.GetMethod;
+import client.gui.entities.Table.Focus;
+
 
 public class TableView extends SurfaceView {
 	private Table table;
@@ -94,14 +95,17 @@ public class TableView extends SurfaceView {
 	
 	
 	public void draggableMotion(String username, int id , int x , int y){
-		Draggable draggable = table.getDraggableById(id, GetMethod.PutInFront);
+		Draggable draggable = table.getDraggableById(id);
+		table.setFrontOrRear(draggable,Focus.FRONT);
+		
 		draggable.setCarrier(username);
 		draggable.setLocation(780-x, 460-y);
 		animationTask.redraw();
 	}
 	
 	public void endDraggableMotion(int id){
-		Draggable draggable = table.getDraggableById(id, GetMethod.PutInFront);
+		Draggable draggable = table.getDraggableById(id);
+		table.setFrontOrRear(draggable,Focus.FRONT);
 		draggable.setCarrier("");
 		animationTask.redraw();
 	}
@@ -240,9 +244,10 @@ public class TableView extends SurfaceView {
 	private void addNewDraggable(Card card,Droppable destination){
 		animationTask.stopDrawing();
 						
-			destination.deltCard(card);
+			destination.deltCard(card);			
 			GuiCard guiCard=new GuiCard(card);
-			guiCard.setLocation(destination.getX(), destination.getY());
+			
+			guiCard.setLocation(destination.getX(), destination.getY());		
 			table.addDraggable(guiCard);
 		
 		animationTask.redraw();
@@ -293,7 +298,8 @@ public class TableView extends SurfaceView {
 	    		switch (eventAction ) { 
 	    		
 		    		case MotionEvent.ACTION_DOWN:{
-		    			draggableInHand = table.getNearestDraggable(X, Y, GetMethod.PutInFront);
+		    			draggableInHand = table.getNearestDraggable(X, Y);
+		    			table.setFrontOrRear(draggableInHand, Focus.FRONT);
 		    			if (draggableInHand!=null){
 		    				
 		    				if(draggableInHand.isMoveable()){
@@ -320,7 +326,8 @@ public class TableView extends SurfaceView {
 		    				
 							Droppable droppable=table.getNearestDroppable(X, Y);
 							if (droppable!=null && from!=null){									
-								droppable.onDrop(ClientController.get().getMe(),from.getMyId(),((GuiCard)draggableInHand).getCard());
+								droppable.onDrop(ClientController.get().getMe(),from,((GuiCard)draggableInHand).getCard());
+								
 							}
 							else{
 								draggableInHand.invalidMove();
@@ -387,23 +394,26 @@ public class TableView extends SurfaceView {
 		return table.getDroppableById(id);
 	}
 
-	public void moveCard(Card card,int from,int to){
+	public void moveCard(Card card,int from,int to,Player byWhom){
 		ArrayList<Card> cards=new ArrayList<Card>();
-		cards.add(card);
-		moveCards(cards,from,to);
+		System.out.println("card moved: "+card.getId());
+		cards.add(((GuiCard)(table.getDraggableById(card.getId()))).getCard());
+		moveCards(cards,from,to,byWhom);
 	}
 	
-	public void moveCards(ArrayList<Card> cards, int from, int to) {		
+	public void moveCards(ArrayList<Card> cards, int from, int to, Player byWhom) {		
 		Droppable destination=table.getDroppableById(to);
 		Droppable source=table.getDroppableById(from);
 		for (Card card : cards){
 			if (from==-1){
 				//new card, create it
-				addNewDraggable(card, destination);				
+				System.out.println(GameStatus.username+": card id: "+card.getId());
+				addNewDraggable(card, destination);
+				
 			}else{
 				//move card from one zone to another
-					source.removeCard(card);
-					destination.addCard(null, card);
+					source.removeCard(byWhom,card);					
+					destination.onCardAdded(byWhom, card);
 					animationTask.redraw();
 					//drawMovement(cards, destination.getPoint(), 1000, 10, revealWhileMoving, revealAtEnd);
 				}
@@ -419,6 +429,15 @@ public class TableView extends SurfaceView {
 		table.addDroppable(new GuiPlayer(newPlayer));
 		animationTask.redraw();
 		
+	}
+
+	public void dealCards(ArrayList<Card> cards, int to) {
+		Droppable destination=table.getDroppableById(to);
+		for (Card card : cards){			
+			//new card, create it
+			System.out.println(GameStatus.username+": card id: "+card.getId());
+			addNewDraggable(card, destination);
+		}			
 	}
 	
 	

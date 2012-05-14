@@ -12,7 +12,7 @@ public class Deck extends AbstractDeck{
 		for (StandartCard.Color color : StandartCard.Color.values()){
 			
 			for (int i=2;i<=14;i++){			
-				cards.add(new StandartCard(handler,color.getCode()+i+".png","back.png",i,color));							
+				cards.add(new StandartCard(handler,color.getCode()+i,"back",i,color));							
 			}
 		}	
 		//check if shuffle requested
