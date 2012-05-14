@@ -14,7 +14,7 @@ import android.graphics.Paint;
 import carddeckplatform.game.R;
 import client.gui.entities.Draggable;
 
-public abstract class Card implements Serializable{
+public abstract class Card implements Serializable,Comparable<Card>{
 	
 	private int id;
 	private CardEventsHandler eventsHandler;
@@ -22,6 +22,7 @@ public abstract class Card implements Serializable{
 	private final String backImg;
 	private boolean revealed;	
 	private Position.Player owner;
+	private Point coord;
 
 	private boolean isCarried=false;
 	private String carrier = "";
@@ -32,9 +33,15 @@ public abstract class Card implements Serializable{
 		this.backImg=backImg;
 		this.frontImg= frontImg;
 		this.revealed=false;		
-		
+		this.coord=new Point(0,0);
 	}
-	
+	public Point getCoord() {
+		return coord;
+	}
+	public void setCoord(int x,int y) {
+		coord.setX(x);
+		coord.setY(y);
+	}
 	public void reveal(){
 		this.revealed = true;
 		eventsHandler.onReveal(this);
@@ -64,6 +71,8 @@ public abstract class Card implements Serializable{
 	public String getBackImg() {
 		return backImg;
 	}
+	
+	
 	
 	//public void setCardImage(Bitmap img) {
 	//	this.frontImg = img;

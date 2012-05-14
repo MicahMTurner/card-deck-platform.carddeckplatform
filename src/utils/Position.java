@@ -8,6 +8,7 @@ import IDmaker.IDMaker;
 public interface Position extends Serializable{
 	public int getX();
 	public int getY();
+	public Position getRelativePosition(Player playerPos);
 	
 	public enum Player implements Position{   
 		

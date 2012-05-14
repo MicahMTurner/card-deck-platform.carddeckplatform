@@ -1,19 +1,17 @@
 package war;
 
+import handlers.PublicEventsHandler;
+
 import java.util.ArrayList;
 
-import communication.link.ServerConnection;
-import communication.messages.LoseMessage;
-
-import client.controller.ClientController;
-import client.gui.entities.GuiPlayer;
-import carddeckplatform.game.GameStatus;
 import utils.Card;
 import utils.Player;
 import utils.Position;
 import utils.Public;
 import utils.StandartCard;
-import handlers.PublicEventsHandler;
+import carddeckplatform.game.GameStatus;
+import client.controller.ClientController;
+import client.gui.entities.GuiPlayer;
 
 public class PublicHandler implements PublicEventsHandler{
 	private int cardsPlacedWhileTie=0;
@@ -25,7 +23,7 @@ public class PublicHandler implements PublicEventsHandler{
 		publicArea.clear();
 	}
 	@Override
-	public boolean onCardAdded(Public publicArea,Player player, Card card) {
+	public boolean onCardAdded(Public publicArea,Player byWhom, Card card) {
 		
 		if (War.tie && cardsPlacedWhileTie<2){
 			card.hide();
@@ -40,7 +38,7 @@ public class PublicHandler implements PublicEventsHandler{
 			Player otherPlayer=((GuiPlayer) ClientController.get().getZone(card.getOwner())).getPlayer();
 			
 			if (publicArea.cardsHolding()!=otherPublic.cardsHolding()){
-				if( me.isMyTurn() && !War.tie){
+				if( byWhom.equals(me) && !War.tie){
 					me.endTurn();
 				}
 			}
@@ -59,26 +57,23 @@ public class PublicHandler implements PublicEventsHandler{
 					getCards(publicArea,otherPlayer);
 					ClientController.guiAPI().moveCards(otherPublic.getCards(),otherPlayer.getId(), true, false);					
 					getCards(otherPublic,otherPlayer);
-					if (me.equals(player) && me.isMyTurn()){
-						player.endTurn();
+					if (me.equals(byWhom) && me.isMyTurn()){
+						byWhom.endTurn();
 					}
 				}
 				else{
 					//	won
 					
-					ClientController.guiAPI().moveCards(publicArea.getCards(),player.getId(), true, false);
-					getCards(publicArea,player);
-					ClientController.guiAPI().moveCards(otherPublic.getCards(),player.getId(), true, false);					
-					getCards(otherPublic,player);
-					if (player.getUserName().equals(GameStatus.username)){
-					
-					}
+					ClientController.guiAPI().moveCards(publicArea.getCards(),me.getId(), true, false);
+					getCards(publicArea,me);
+					ClientController.guiAPI().moveCards(otherPublic.getCards(),me.getId(), true, false);					
+					getCards(otherPublic,me);					
 				
-				}
+				}				
 				if (me.isEmpty()){
 					ClientController.get().declareLoser();
 					ClientController.get().disableUi();
-				}else{
+				}else if (otherPlayer.isEmpty()){
 					ClientController.get().declareWinner();
 					ClientController.get().disableUi();
 					

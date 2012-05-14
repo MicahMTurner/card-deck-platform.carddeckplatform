@@ -115,8 +115,8 @@ public class ClientController implements Observer {
 			gui.setUiEnabled(false);
 			ServerConnection.getConnection().getMessageSender().send(new EndTurnMessage(new EndTurnAction(position)));
 		}
-		public void cardAdded(ArrayList<Card> cards,int to,int from){			
-			ServerConnection.getConnection().getMessageSender().send(new Message(new CardAdded(cards,to,from)));
+		public void cardAdded(Card card,int from,int to,Player byWhom){			
+			ServerConnection.getConnection().getMessageSender().send(new Message(new CardAdded(card,from,to,byWhom)));
 		}
 		public void cardRemoved(ArrayList<Card> cards,String from){
 			ServerConnection.getConnection().getMessageSender().send(new Message(new CardRemoved(cards, from)));
@@ -166,14 +166,14 @@ public class ClientController implements Observer {
 	//---------Controller functionality-----------//
 
 	
-	public Droppable getZone(Position id){
-		return gui.getDroppableById(IDMaker.getMaker().getId(id));
+	public Droppable getZone(Position pos){
+		return gui.getDroppableById(IDMaker.getMaker().getIdByPos(pos.getRelativePosition(getMe().getGlobalPosition())));
 	}
 	public void setLayouts(ArrayList<Public> publics) {
 		game.getLayouts(publics);	
 	}
-	public void cardMoved(ArrayList<Card> cards,int from, int to){
-		gui.moveCards(cards, from, to);		
+	public void cardMoved(Card card,int from, int to, Player byWhom){
+		gui.moveCard(card, from, to,byWhom);		
 	}
 	
 	public void addPlayer(Player newPlayer) {
@@ -202,8 +202,6 @@ public class ClientController implements Observer {
 		Player me=game.getMe();
 		if (playerId==me.getId()){
 			me.startTurn();
-			gui.setUiEnabled(true);
-			gui.popToast("Your Move");
 		}
 		//glow player icon/name		
 	}
@@ -256,7 +254,7 @@ public class ClientController implements Observer {
 	}
 
 	public void dealCards(ArrayList<Card> cards, int from, int to,boolean revealWhileMoving,boolean revealAtEnd) {
-		gui.moveCards(cards, from, to);
+		gui.dealCards(cards, to);
 		ClientController.guiAPI().moveCards(cards, to, revealWhileMoving, revealAtEnd);
 		
 	}
@@ -270,7 +268,8 @@ public class ClientController implements Observer {
 				gui.popToast("Your Move");
 			}
 			else{
-				gui.setUiEnabled(false);				
+				gui.setUiEnabled(false);
+				send.endTurn(getMe().getGlobalPosition());								
 			}
 		}
 		//if(arg0 instanceof Player)

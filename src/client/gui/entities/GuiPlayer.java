@@ -38,10 +38,10 @@ public class GuiPlayer extends Droppable {
 		player.addCard(card);
 	}
 	public void removeCard(Player player,Card card){
-		player.remove(card);		
+		this.player.remove(card);		
 		ArrayList<Card>cards=new ArrayList<Card>();
 		cards.add(card);
-		ClientController.sendAPI().cardRemoved(cards, player.getUserName());
+		//ClientController.sendAPI().cardRemoved(cards, player.getUserName());
 	}
 	//public void endTurn(){		
 	//	handler.onTurnEnd(player);
