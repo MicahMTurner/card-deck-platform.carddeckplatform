@@ -5,6 +5,7 @@ package carddeckplatform.game;
 
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import communication.link.HostFinder;
 import communication.link.HostId;
@@ -82,7 +83,7 @@ public class CarddeckplatformActivity extends Activity {
             	final Dialog dialog = new Dialog(CarddeckplatformActivity.this);
             	dialog.setContentView(R.layout.gamelistdialog);
             	dialog.setTitle("Please choose a game");
-            	ArrayList<String> games = ClientDataBase.getDataBase().getGamesNames();
+            	Set<String> games = ClientDataBase.getDataBase().getGamesNames();
             	
             	LinearLayout ll = (LinearLayout)dialog.findViewById(R.id.gameListLayout);
             	for(final String name : games){

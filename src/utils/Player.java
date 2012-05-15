@@ -54,7 +54,7 @@ public class Player extends Observable implements Serializable, Comparable<Playe
 		return id;
 	}
 	public void addCard(Card card) {
-		card.setOwner(globalPosition);
+		card.setOwner(position);		
 		hand.add(card);		
 		handler.onCardAdded(this, card);
 		
@@ -87,7 +87,7 @@ public class Player extends Observable implements Serializable, Comparable<Playe
 		ClientController.sendAPI().endTurn(globalPosition);
 	}
 	public void deltCard(Card card) {
-		card.setOwner(globalPosition);
+		card.setOwner(position);
 		hand.add(card);			
 	}
 	public int cardsHolding() {		
