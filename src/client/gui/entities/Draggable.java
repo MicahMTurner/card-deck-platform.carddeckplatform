@@ -17,7 +17,7 @@ public abstract class Draggable implements Serializable{
 	private boolean moveable;
 	protected Point prevCoord;
 	//protected Point coord;
-	protected float angle = 0;
+	
 	protected boolean carried;
 	
 	//protected abstract void draw(Canvas canvas,Context context);
@@ -45,7 +45,7 @@ public abstract class Draggable implements Serializable{
 			setLocation(prevCoord.getX(),prevCoord.getY());			
 			ClientController.sendAPI().dragMotion(GameStatus.username, getMyId(), getCoord());
 			//ClientController.sendAPI().endDragMotion(getMyId());			
-			angle=0;			
+			//angle=0;			
 		}
 	
 	public abstract Point getCoord();
@@ -60,29 +60,9 @@ public abstract class Draggable implements Serializable{
 		this.carrier = carrier;
 	}
 	public abstract void draw(Canvas canvas,Context context);
-	
-	
-	//public Droppable getContainer(){
-	//	return container;
-	//}
-	
-	//public void setContainer(Droppable container){
-	//	this.container = container;
-	//}
-		
-	public abstract void setLocation(int x, int y);
-		
 
-	public void randomizeAngle(){
-		Random generator = new Random();
-		float randomIndex = generator.nextInt(20);
-		randomIndex -= 10;
-		angle = randomIndex;
-	}
-	
-	public void setAngle(float angle){
-		this.angle = angle%360;
-	}
+	public abstract void setLocation(int x, int y);		
+
 	public void setCarried(boolean carried) {
 		this.carried = carried;
 	}
