@@ -100,6 +100,10 @@ public class Public extends Droppable{
 		return cards;
 	}
 	public Card peek(){
-		return cards.get(cards.size()-1);
+		if (!cards.isEmpty()){
+			return cards.get(cards.size()-1);
+		}else{
+			return null;
+		}
 	}	
 }

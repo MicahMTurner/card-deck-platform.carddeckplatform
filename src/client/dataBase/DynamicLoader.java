@@ -21,6 +21,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import communication.actions.AddPlayerAction;
+import dalvik.system.DexClassLoader;
+import dalvik.system.PathClassLoader;
 
 import logic.client.Game;
 import utils.Player;
@@ -29,7 +31,7 @@ import war.War;
 
 
 public class DynamicLoader {
-	final static String PLUGINDIR="plugins/";
+	final static String PLUGINDIR="/sdcard/plugins/";
 	private HashMap<String, String> mapping;
 	
 	public DynamicLoader() {
@@ -64,8 +66,9 @@ public class DynamicLoader {
 			File folder = new File(PLUGINDIR);		
 			for (File file : folder.listFiles()){		
 				URL url=file.toURI().toURL();						
-				URL[] urls = new URL[]{url};				
-				mapGame(file.getName().substring(0, file.getName().lastIndexOf(".")),urls);
+				URL[] urls = new URL[]{url};
+				String gameName=file.getName().substring(0, file.getName().lastIndexOf("."));				
+				mapGame(gameName.toString(),urls);
 			}		
 			
 		} catch (IOException e) {			
@@ -84,9 +87,7 @@ public class DynamicLoader {
 		
 		Game game=null;
 		try {
-			File file = new File(PLUGINDIR+"/"+gameName+".jar");
-			URL url = file.toURI().toURL();				
-			URL[] urls = new URL[]{url};
+			
 			//get the classPath that extends Game class
 			String classPath=mapping.get(gameName);
 			
@@ -94,11 +95,17 @@ public class DynamicLoader {
 			if (classPath==null){
 				/*we are not the host, therefore we didn't
 				 *map all plug-ins.*/
+				File file = new File(PLUGINDIR+"/"+gameName+".jar");
+				URL url = file.toURI().toURL();				
+				URL[] urls = new URL[]{url};				
 				mapGame(gameName,urls);
 			}
-			
-			ClassLoader cl = new URLClassLoader(urls);	
-			Class<?> cls = cl.loadClass(mapping.get(gameName));		
+			 PathClassLoader classLoader= new PathClassLoader(PLUGINDIR+"/"+gameName+".jar", getClass().getClassLoader());
+			//DexClassLoader classLoader = new DexClassLoader(
+			//		(PLUGINDIR+"/"+gameName+".jar"), PLUGINDIR, null, getClass().getClassLoader());
+			//Class<?> cls = classLoader.loadClass(mapping.get(gameName));
+			//ClassLoader cl = new URLClassLoader(urls);	
+			Class<?> cls = classLoader.loadClass(mapping.get(gameName));		
 			game=(Game)cls.newInstance();
 		 
 		 
