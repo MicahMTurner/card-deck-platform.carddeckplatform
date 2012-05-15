@@ -23,7 +23,9 @@ import utils.Public;
 
 import IDmaker.IDMaker;
 import logic.client.Game;
+import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
+import client.gui.entities.GuiCard;
 import client.gui.entities.GuiPlayer;
 
 import carddeckplatform.game.GameStatus;
@@ -156,11 +158,8 @@ public class ClientController implements Observer {
 	public class GuiAPI{
 		private GuiAPI() {}
 		public void moveCards(ArrayList<Card> cards,int toId,boolean revealWhileMoving,boolean revealAtEnd){
-			
-			//gui.drawMovement(cards, toId,1000,10,revealWhileMoving,revealAtEnd);	
+			gui.drawMovement(cards, toId,1000,10,revealWhileMoving,revealAtEnd);	
 		}
-		
-		
 	}
 	
 	//---------Controller functionality-----------//
