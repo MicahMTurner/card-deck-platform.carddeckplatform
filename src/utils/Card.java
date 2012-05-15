@@ -2,6 +2,7 @@ package utils;
 
 
 import java.io.Serializable;
+import java.util.Random;
 
 import handlers.CardEventsHandler;
 import IDmaker.IDMaker;
@@ -23,6 +24,7 @@ public abstract class Card implements Serializable,Comparable<Card>{
 	private boolean revealed;	
 	private Position.Player owner;
 	private Point coord;
+	protected float angle = 0;
 
 	private boolean isCarried=false;
 	private String carrier = "";
@@ -41,6 +43,12 @@ public abstract class Card implements Serializable,Comparable<Card>{
 	public void setCoord(int x,int y) {
 		coord.setX(x);
 		coord.setY(y);
+	}
+	public void setAngle(float angle) {
+		this.angle = angle%360;
+	}
+	public float getAngle() {
+		return angle;
 	}
 	public void reveal(){
 		this.revealed = true;
@@ -72,7 +80,12 @@ public abstract class Card implements Serializable,Comparable<Card>{
 		return backImg;
 	}
 	
-	
+	public void randomizeAngle(){
+		Random generator = new Random();
+		float randomIndex = generator.nextInt(20);
+		randomIndex -= 10;
+		angle = randomIndex;
+	}
 	
 	//public void setCardImage(Bitmap img) {
 	//	this.frontImg = img;

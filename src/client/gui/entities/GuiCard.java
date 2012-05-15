@@ -43,7 +43,7 @@ public class GuiCard extends Draggable {
 	public void draw(Canvas canvas, Context context) {
 		Bitmap resizedBitmap=null;				
 		Matrix matrix = new Matrix();
-		matrix.postRotate(angle);
+		matrix.postRotate(card.getAngle());
 		int resourceId;
 		if(card.isRevealed()){		
 			resourceId=context.getResources().getIdentifier(card.getFrontImg(), "drawable", "carddeckplatform.game");

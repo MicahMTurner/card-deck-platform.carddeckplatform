@@ -93,34 +93,13 @@ public class PublicHandler implements PublicEventsHandler{
 			else{
 				Player winner=getWinner(otherPublic, otherPlayer, byWhom, card);
 				//move cards from public areas to winner
-				//ClientController.guiAPI().moveCards(publicArea.getCards(),winner.getId(), true, false);
+				ClientController.guiAPI().moveCards(publicArea.getCards(),winner.getId(), true, false);
 				getCards(publicArea,winner);
-				//ClientController.guiAPI().moveCards(otherPublic.getCards(),winner.getId(), true, false);					
+				ClientController.guiAPI().moveCards(otherPublic.getCards(),winner.getId(), true, false);					
 				getCards(otherPublic,winner);
 				if (winner.equals(otherPlayer) && me.isMyTurn()){
 					me.endTurn();
 				}
-//				if (((StandartCard)otherPublic.peek()).getValue()>((StandartCard)card).getValue()){					
-//			
-//				//player who didn't move the card won
-//				//ClientController.guiAPI().moveCards(publicArea.getCards(),otherPlayer.getId(), true, false);
-//				getCards(publicArea,otherPlayer);
-//				//ClientController.guiAPI().moveCards(otherPublic.getCards(),otherPlayer.getId(), true, false);					
-//				getCards(otherPublic,otherPlayer);
-//				if (me.equals(byWhom) && me.isMyTurn()){
-//					byWhom.endTurn();
-//				}
-//				
-//				}
-//			else{			
-//				//player who moved the card won
-//				//ClientController.guiAPI().moveCards(publicArea.getCards(),byWhom.getId(), true, false);
-//				getCards(publicArea,byWhom);
-//				//ClientController.guiAPI().moveCards(otherPublic.getCards(),byWhom.getId(), true, false);					
-//				getCards(otherPublic,byWhom);					
-//			
-//			}
-
 			}
 
 	}

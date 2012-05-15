@@ -145,10 +145,10 @@ public class TableView extends SurfaceView {
 			            		}					
 			            		
 			            		card.setCoord(vector.get(index).x, vector.get(index).y);
-			            		//card.setAngle(i*10);
+			            		card.setAngle(i*10);
 			            		animationTask.redraw();
 			            	}
-			            	//guiCard.setAngle(0);
+			            	card.setAngle(0);
 			            	card.setRevealed(revealedAtEnd);
 			            	//cdl.countDown();
 							
@@ -174,53 +174,53 @@ public class TableView extends SurfaceView {
 		
 		
 	}
-	public void moveDraggable(final Draggable draggable, final int newX, final int newY, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
-		Thread drawingThread=
-		new Thread(new Runnable() {	
-			@Override
-			public void run() {
-				//draggable..setRevealed(revealedWhileMoving);
-				
-				int x = draggable.getX();
-				int y = draggable.getY();
-				final ArrayList<Point> vector = StaticFunctions.midLine(x, y, newX, newY);
-				try {
-        			Thread.sleep(initialDelay);
-        		} catch (InterruptedException e) {
-        			
-        			e.printStackTrace();
-        		}
-            	for(int i=0; i<vector.size(); i++){
-            		//draggable.getCardLogic().setRevealed(revealedWhileMoving);
-            		final int index = i;
-		
-            		try {
-            			Thread.sleep(delay);
-            		} catch (InterruptedException e) {
-            			
-            			e.printStackTrace();
-            		}
-		
-            		
-            		draggable.setLocation(vector.get(index).x, vector.get(index).y);
-            		draggable.setAngle(i*10);
-            		animationTask.redraw();
-            	}
-            	draggable.setAngle(0);
-            	//draggable.getCardLogic().setRevealed(revealedAtEnd);
-				
-			}
-		});
-		drawingThread.start();
-		
-	}
+//	public void moveDraggable(final Draggable draggable, final int newX, final int newY, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
+//		Thread drawingThread=
+//		new Thread(new Runnable() {	
+//			@Override
+//			public void run() {
+//				//draggable..setRevealed(revealedWhileMoving);
+//				
+//				int x = draggable.getX();
+//				int y = draggable.getY();
+//				final ArrayList<Point> vector = StaticFunctions.midLine(x, y, newX, newY);
+//				try {
+//        			Thread.sleep(initialDelay);
+//        		} catch (InterruptedException e) {
+//        			
+//        			e.printStackTrace();
+//        		}
+//            	for(int i=0; i<vector.size(); i++){
+//            		//draggable.getCardLogic().setRevealed(revealedWhileMoving);
+//            		final int index = i;
+//		
+//            		try {
+//            			Thread.sleep(delay);
+//            		} catch (InterruptedException e) {
+//            			
+//            			e.printStackTrace();
+//            		}
+//		
+//            		
+//            		draggable.setLocation(vector.get(index).x, vector.get(index).y);
+//            		draggable.setAngle(i*10);
+//            		animationTask.redraw();
+//            	}
+//            	draggable.setAngle(0);
+//            	//draggable.getCardLogic().setRevealed(revealedAtEnd);
+//				
+//			}
+//		});
+//		drawingThread.start();
+//		
+//	}
 	
 	
 	
 	
-	public void moveDraggable(Draggable draggable, Droppable droppable, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
-		moveDraggable(draggable, droppable.getX(), droppable.getY(), initialDelay, delay, revealedWhileMoving, revealedAtEnd);
-	}
+//	public void moveDraggable(Draggable draggable, Droppable droppable, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
+//		moveDraggable(draggable, droppable.getX(), droppable.getY(), initialDelay, delay, revealedWhileMoving, revealedAtEnd);
+//	}
 	
 	public void addDroppable(Droppable droppable){
 		table.addDroppable(droppable);		
