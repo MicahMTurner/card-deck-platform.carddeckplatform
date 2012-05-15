@@ -159,6 +159,9 @@ public class GameActivity extends Activity {
     			return true;
     		case Menu.FIRST+2:
     			Toast.makeText(this, "Main Menu", 2000).show();
+    			ServerConnection.getConnection().closeConnection();
+    			//add new message - shut down server
+    			
     			finish();
     			return true;
     		default:

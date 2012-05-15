@@ -59,7 +59,7 @@ public class War extends Game{
 			playersCards.add(new ArrayList<Card>());
 		}
 
-		for (int i=0;i<4;i++){			
+		for (int i=0;i<8;i++){			
 			Card card=deck.drawCard();			
 			//card.setOwner(players.get(i%players.size()).getPosition());
 			playersCards.get(i%players.size()).add(card);			

@@ -82,6 +82,9 @@ public interface Position extends Serializable{
 					//swap(playerPos,LEFT);					
 					answer=LEFT;
 				}
+				case TOP:{
+					answer=BOTTOM;
+				}
 			}
 			return answer;
 		}

@@ -43,7 +43,11 @@ public class ServerConnection implements Runnable{
 			public void execute() {
 				try {
 					// creates a socket.
-					socket = new Socket("192.168.2.125",9997);
+					if (GameStatus.isServer){
+						socket = new Socket(GameStatus.hostIp,9997);
+					}else{
+						socket = new Socket("192.168.2.125",9997);
+					}
 					// creates an outputstream.
 					ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 					ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
@@ -66,7 +70,22 @@ public class ServerConnection implements Runnable{
 			}
 			
 		}
-	
+	private class CloseConnectionExecutor extends ActionForQueue{
+
+		@Override
+		public void execute() {
+			try {				
+				sender.closeStream();
+				receiver.closeStream();
+				socket.close();
+			
+			} catch (IOException e) {		
+				e.printStackTrace();
+			}
+			
+		}
+		
+	}
 		
 	
 	
@@ -100,16 +119,9 @@ public class ServerConnection implements Runnable{
 	}
 	
 	public void closeConnection(){		
-		try {
-			//this.stopped=true;
-			sender.closeStream();
-			receiver.closeStream();
-			socket.close();
-		
-		} catch (IOException e) {		
-			e.printStackTrace();
-		}
+		commandsQueue.add(new CloseConnectionExecutor());		
 	}
+	
 	public void shutDown(){
 		this.stopped=true;
 		//add a new blank command to wake controller and stop it
