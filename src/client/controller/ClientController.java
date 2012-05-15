@@ -197,6 +197,9 @@ public class ClientController implements Observer {
 	public void disableUi(){
 		gui.setUiEnabled(false);
 	}
+	public void enableUi(){
+		gui.setUiEnabled(true);
+	}
 
 	public void playerTurn(int playerId) {
 		Player me=game.getMe();

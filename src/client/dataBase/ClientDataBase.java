@@ -2,6 +2,7 @@ package client.dataBase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import war.War;
@@ -41,19 +42,19 @@ public class ClientDataBase {
 	 */
 	public Game getGame(String gameName){
 		return games.get(gameName);
-		//loader.LoadPlugin(gameName);
+		//return loader.LoadPlugin(gameName);
 	}
 	
 	public void addGame(String gameId){
 		
 	}
 	
-	public ArrayList<String> getGamesNames(){
-		ArrayList<String> gameNames = new ArrayList<String>();
+	public Set<String> getGamesNames(){
+		Set<String> gameNames =new HashSet<String>();
 		for(String gameName : games.keySet()){
 			gameNames.add(gameName);
 		}
-		Set<String>names=loader.getGameNames();
+		//Set<String>gameNames=loader.getGameNames();
 		return gameNames;
 	}	
 }

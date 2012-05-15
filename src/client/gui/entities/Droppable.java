@@ -35,11 +35,11 @@ public abstract class Droppable{
 	//protected Position position;
 	
 	public void onDrop(Player player,Droppable from, Card card){
+		from.removeCard(player,card);
 		card.setCoord(getX(), getY());
 		addCard(player,card);
 		ArrayList<Card>cards=new ArrayList<Card>();
-		cards.add(card);
-		from.removeCard(player,card);		
+		cards.add(card);				
 		ClientController.sendAPI().cardAdded(card, from.getMyId(),getMyId(),player);
 	}
 	
