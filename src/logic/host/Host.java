@@ -68,10 +68,16 @@ public class Host implements Runnable{
 		
 		System.out.println("cards dealt");
 		// send the turn action if the game is turned base card game.
-		try{
-			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(game.nextInTurn())));
-		}catch(Exception e){			
+		Position.Player next=game.nextInTurn();
+		if (next!=null){
+			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(next)));
+		}else{
+			for (Player player: game.getPlayers()){
+				ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(player.getGlobalPosition())));
+			}
 		}
+		
+		
 	}
 	
 

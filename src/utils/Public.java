@@ -12,28 +12,24 @@ import client.gui.entities.Droppable;
 
 public class Public extends Droppable{	
 	private PublicEventsHandler handler;
-	private Position.Public position;
+	
 	private ArrayList<Card> cards=new ArrayList<Card>();	
 	
 	
 	
 	public Public(PublicEventsHandler handler,Position.Public position) {
-		super(position.getId());
+		super(position.getId(),position);
 		this.handler=handler;
-		this.position=position;
 		
 	}
 	
-	public void setPosition(Position.Public position) {
-		this.position = position;
-	}
-	
-	public Position.Public getPosition() {
-		return position;
-	}
+//	public void setPosition(Position.Public position) {
+//		this.position = position;
+//	}
+//	
 	
 	public int sensitivityRadius() {		
-		return 30;
+		return 1000;
 	}
 	
 	@Override

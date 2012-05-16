@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import client.controller.ClientController;
+import client.gui.entities.Droppable;
 import communication.link.ServerConnection;
 
 public class GameActivity extends Activity {
@@ -87,7 +88,7 @@ public class GameActivity extends Activity {
         
         
         //Position posistion=ClientController.getController().getPosition();
-        ArrayList<Public>publics=new ArrayList<Public>();
+        ArrayList<Droppable>publics=new ArrayList<Droppable>();
 
         //insert public areas into publics array
         ClientController.get().setLayouts(publics);
@@ -101,8 +102,8 @@ public class GameActivity extends Activity {
 
     }
     
-    private void buildLayout( ArrayList<Public> publics){
-    	for (Public publicZone : publics){
+    private void buildLayout( ArrayList<Droppable> publics){
+    	for (Droppable publicZone : publics){
     		//set public zone according to my position
     		publicZone.setPosition(publicZone.getPosition().getRelativePosition(ClientController.get().getMe().getGlobalPosition()));
     		tableview.addDroppable(publicZone);

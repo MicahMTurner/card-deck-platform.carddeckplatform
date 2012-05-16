@@ -164,7 +164,7 @@ public class ClientController implements Observer {
 	public Droppable getZone(Position pos){
 		return gui.getDroppableById(IDMaker.getMaker().getIdByPos(pos.getRelativePosition(getMe().getGlobalPosition())));
 	}
-	public void setLayouts(ArrayList<Public> publics) {
+	public void setLayouts(ArrayList<Droppable> publics) {
 		game.getLayouts(publics);	
 	}
 	public void cardMoved(Card card,int from, int to, Player byWhom){

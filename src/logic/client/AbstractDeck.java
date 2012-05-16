@@ -1,19 +1,35 @@
 package logic.client;
 
 
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 import java.util.Stack;
 
+import android.content.Context;
+import android.graphics.Canvas;
+
+import IDmaker.IDMaker;
+
+import client.gui.entities.Droppable;
+
 import utils.Card;
+import utils.Player;
+import utils.Position;
 
 
-public abstract class AbstractDeck {
+public abstract class AbstractDeck extends Droppable{
+	
+	public AbstractDeck(Position.Button position) {
+		super(IDMaker.getMaker().getId(),position);
+	}
+
 	//change to queue?
 	public Stack<Card> cards = new Stack<Card>();
 	
-	
-	public Stack<Card> getCards() {
+	@Override
+	public AbstractList<Card> getCards() {
 		return cards;
 	}
 		
@@ -44,6 +60,60 @@ public abstract class AbstractDeck {
 
 	public Card drawCard() {
 		return cards.pop();
+		
+	}
+
+	@Override
+	public int sensitivityRadius() {
+		return 30;
+	}
+
+	@Override
+	public void deltCard(Card card) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addCard(Player player, Card card) {
+		card.setLocation(getX(), getY());
+		cards.push(card);
+	}
+
+	@Override
+	public void removeCard(Player player, Card card) {
+		cards.remove(card);
+		
+	}
+
+	@Override
+	public void draw(Canvas canvas, Context context) {
+		
+	}
+
+	@Override
+	public int getX() {
+		return 100;
+	}
+
+	@Override
+	public int getY() {
+		return 100;
+	}
+
+	@Override
+	public int cardsHolding() {
+		return cards.size();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return cards.isEmpty();
+	}
+
+	@Override
+	public void clear() {
+		cards.clear();
 		
 	}
 }

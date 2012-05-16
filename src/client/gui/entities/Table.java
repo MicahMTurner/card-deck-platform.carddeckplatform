@@ -1,5 +1,6 @@
 package client.gui.entities;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
@@ -139,7 +140,7 @@ public class Table {
 			d.draw(canvas, context);
 		}
 		for (Droppable d: droppables){			
-			ArrayList<Card>cards=d.getCards();
+			AbstractList<Card>cards=d.getCards();
 			synchronized (cards){
 				for (Card card : cards){
 					card.draw(canvas, context);

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import freeplay.Free;
+
 import war.War;
 import logic.client.Game;
 
@@ -12,6 +14,8 @@ import logic.client.Game;
 public class ClientDataBase {
 	private HashMap<String, Game> games;
 	private DynamicLoader loader;
+	
+	
 	
 	//-------Singleton implementation--------//
 	private static class DataBaseHolder
@@ -31,8 +35,8 @@ public class ClientDataBase {
 		games = new HashMap<String, Game>();
 		War war = new War();
 		games.put(war.toString(), war);
-		//FreePlay freePlay = new FreePlay();
-		//games.put(freePlay.toString(), freePlay);
+		Free freePlay = new Free();
+		games.put(freePlay.toString(), freePlay);
 		//BlackJack blackJack=new BlackJack();
 		//games.put(blackJack.toString(), blackJack);
 		
@@ -41,8 +45,9 @@ public class ClientDataBase {
 	 * factory
 	 */
 	public Game getGame(String gameName){
-		return (Game)new War();
+		//return games.get(gameName);
 		//return loader.LoadPlugin(gameName);
+		return new Free();
 	}
 	
 	public void addGame(String gameId){

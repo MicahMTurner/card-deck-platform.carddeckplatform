@@ -3,6 +3,8 @@ package war;
 import java.util.ArrayList;
 import java.util.Queue;
 
+import client.gui.entities.Droppable;
+
 import communication.actions.DealCardAction;
 import communication.messages.Message;
 import communication.server.ConnectionsManager;
@@ -72,7 +74,7 @@ public class War extends Game{
 	}
 
 	@Override
-	public void getLayouts(ArrayList<Public> publics){//,ArrayList<Button>buttons) {
+	public void getLayouts(ArrayList<Droppable> publics){//,ArrayList<Button>buttons) {
 		publics.add(new Public(new PublicHandler(),Position.Public.MIDLEFT));
 		publics.add(new Public(new PublicHandler(),Position.Public.MIDRIGHT));
 	}
@@ -86,7 +88,7 @@ public class War extends Game{
 
 	@Override
 	public AbstractDeck getDeck() {		
-		return new Deck(new CardHandler(),true);
+		return new Deck(new CardHandler(),true,null);
 	}	
 	
 }

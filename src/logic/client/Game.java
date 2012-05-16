@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import client.gui.entities.Droppable;
+
 import utils.Player;
 import utils.Position;
 import utils.Public;
@@ -33,7 +35,7 @@ public abstract class Game {
 	public abstract void dealCards();	
 	
 	
-	public abstract void getLayouts(ArrayList<Public>publics);
+	public abstract void getLayouts(ArrayList<Droppable>publics);
 	/**
 	 * game id
 	 */
@@ -59,16 +61,18 @@ public abstract class Game {
 	}
 	
 	public utils.Position.Player nextInTurn(){
-		
-		ArrayList<Position.Player> availablePos=new ArrayList<Position.Player>();
-		for (Player player : players){
-			availablePos.add(player.getGlobalPosition());
-		}
-		utils.Position.Player next=turnsQueue.poll();
-		while (!availablePos.contains(next)){
+		utils.Position.Player next=null;
+		if (turnsQueue!=null){
+			ArrayList<Position.Player> availablePos=new ArrayList<Position.Player>();
+			for (Player player : players){
+				availablePos.add(player.getGlobalPosition());
+			}
 			next=turnsQueue.poll();
+			while (!availablePos.contains(next)){
+				next=turnsQueue.poll();
+			}
+			turnsQueue.add(next);
 		}
-		turnsQueue.add(next);
 		return next;		
 	}
 	

@@ -1,12 +1,14 @@
 package client.gui.entities;
 
 import java.io.Serializable;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Stack;
 
 import utils.Card;
 import utils.Player;
 import utils.Point;
+import utils.Position;
 import android.content.Context;
 import android.graphics.Canvas;
 import client.controller.ClientController;
@@ -34,18 +36,21 @@ public abstract class Droppable implements Serializable{
 	//protected ArrayList<Card> cards; 
 	public abstract int sensitivityRadius();
 	protected int id;
-	//protected Position position;
 	
+	protected Position position;
+
 	public void onDrop(Player player,Droppable from, Card card){
 		from.removeCard(player,card);
-		card.setCoord(getX(), getY());
+		//card.setCoord(getX(), getY());
 		ClientController.sendAPI().cardAdded(card, from.getId(),id,player);
 		addCard(player,card);						
 		
 	}
-	
+	public Position getPosition(){
+		return position;
+	}
 	public void onCardAdded(Player byWhom, Card card) {
-		card.setCoord(getX(),getY());
+		//card.setCoord(getX(),getY());
 		addCard(byWhom, card);
 	}
 	@Override
@@ -57,13 +62,14 @@ public abstract class Droppable implements Serializable{
         return this.id==otherDroppable.id;		
 	}
 	public abstract void deltCard(Card card);
-	public abstract ArrayList<Card> getCards();
+	public abstract AbstractList<Card> getCards();
 	public abstract void addCard(Player player,Card card);	
 	public abstract void removeCard(Player player,Card card);
 	public abstract void draw(Canvas canvas,Context context);
-	public Droppable(int id){
+	
+	public Droppable(int id,Position position){
 		this.id=id;
-		
+		this.position=position;
 		//this.cards=new ArrayList<Card>();		
 		//this.point=new Point(190,175);
 		//this.myId=IDMaker.getMaker().getId(position);
@@ -78,6 +84,10 @@ public abstract class Droppable implements Serializable{
 	public abstract void clear();
 	public int getId(){
 		return id;
+	}
+	public void setPosition(Position relativePosition) {
+	this.position=relativePosition;
+		
 	}
 
 	
