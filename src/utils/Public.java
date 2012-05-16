@@ -13,15 +13,15 @@ import client.gui.entities.Droppable;
 public class Public extends Droppable{	
 	private PublicEventsHandler handler;
 	private Position.Public position;
-	private ArrayList<Card> cards=new ArrayList<Card>();
-	private int id;
+	private ArrayList<Card> cards=new ArrayList<Card>();	
 	
 	
 	
 	public Public(PublicEventsHandler handler,Position.Public position) {
+		super(position.getId());
 		this.handler=handler;
 		this.position=position;
-		this.id=position.getId();
+		
 	}
 	
 	public void setPosition(Position.Public position) {
@@ -75,11 +75,6 @@ public class Public extends Droppable{
 	public void deltCard(Card card) {
 		cards.add(card);
 		
-	}
-
-	@Override
-	public int getMyId() {		
-		return id;
 	}
 
 	@Override

@@ -23,11 +23,7 @@ import utils.Public;
 
 import IDmaker.IDMaker;
 import logic.client.Game;
-import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
-import client.gui.entities.GuiCard;
-import client.gui.entities.GuiPlayer;
-
 import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.TableView;
 
@@ -198,6 +194,7 @@ public class ClientController implements Observer {
 	}
 	public void enableUi(){
 		gui.setUiEnabled(true);
+		gui.popToast("Your Move");
 	}
 
 	public void playerTurn(int playerId) {

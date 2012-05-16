@@ -21,8 +21,6 @@ import android.widget.Toast;
 import client.controller.ClientController;
 import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
-import client.gui.entities.GuiCard;
-import client.gui.entities.GuiPlayer;
 import client.gui.entities.Table;
 import client.gui.entities.Table.Focus;
 
@@ -96,7 +94,7 @@ public class TableView extends SurfaceView {
 	
 	public void draggableMotion(String username, int id , int x , int y){
 		Draggable draggable = table.getDraggableById(id);
-		table.setFrontOrRear(draggable,Focus.FRONT);
+		//table.setFrontOrRear(draggable,Focus.FRONT);
 		
 		draggable.setCarrier(username);
 		draggable.setLocation(780-x, 460-y);
@@ -105,7 +103,7 @@ public class TableView extends SurfaceView {
 	
 	public void endDraggableMotion(int id){
 		Draggable draggable = table.getDraggableById(id);
-		table.setFrontOrRear(draggable,Focus.FRONT);
+		//table.setFrontOrRear(draggable,Focus.FRONT);
 		draggable.setCarrier("");
 		animationTask.redraw();
 	}
@@ -117,8 +115,6 @@ public class TableView extends SurfaceView {
 	public void drawMovement(final ArrayList<Card> cards, final int toId, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
 		ArrayList<Thread> drawingThreads = new ArrayList<Thread>();
 		//Card card;
-		
-		GuiCard gCard;
 		//final CountDownLatch cdl=new CountDownLatch(cards.size());
 		final Droppable destination=getDroppableById(toId);
 		for (final Card card : cards){
@@ -248,10 +244,10 @@ public class TableView extends SurfaceView {
 		animationTask.stopDrawing();
 						
 			destination.deltCard(card);			
-			GuiCard guiCard=new GuiCard(card);
+			//GuiCard guiCard=new GuiCard(card);
 			
-			guiCard.setLocation(destination.getX(), destination.getY());		
-			table.addDraggable(guiCard);
+			card.setLocation(destination.getX(), destination.getY());		
+			//table.addDraggable(card);
 		
 		animationTask.redraw();
 	}
@@ -304,7 +300,7 @@ public class TableView extends SurfaceView {
 		    			draggableInHand = table.getNearestDraggable(X, Y);
 		    			
 		    			if (draggableInHand!=null){
-		    				table.setFrontOrRear(draggableInHand, Focus.FRONT);
+		    				//table.setFrontOrRear(draggableInHand, Focus.FRONT);
 		    				if(draggableInHand.isMoveable()){
 		    					from=table.getNearestDroppable(X, Y);
 		    					draggableInHand.onClick();
@@ -329,7 +325,7 @@ public class TableView extends SurfaceView {
 		    				
 							Droppable droppable=table.getNearestDroppable(X, Y);
 							if (droppable!=null && from!=null){									
-								droppable.onDrop(ClientController.get().getMe(),from,((GuiCard)draggableInHand).getCard());
+								droppable.onDrop(ClientController.get().getMe(),from,((Card)draggableInHand));
 								
 							}
 							else{
@@ -387,7 +383,7 @@ public class TableView extends SurfaceView {
 
 	public void removeCards(ArrayList<utils.Card> cards, String from) {
 		for (utils.Card card : cards){
-			table.getDroppableById(IDMaker.getMaker().getId(from)).removeCard(card);
+			//table.getDroppableById(IDMaker.getMaker().getId(from)).removeCard(card);			
 			
 		}
 		
@@ -397,20 +393,21 @@ public class TableView extends SurfaceView {
 		return table.getDroppableById(id);
 	}
 	
-	public Draggable getDraggableById(Integer id) {
-		return table.getDraggableById(id);
-	}
+//	public Draggable getDraggableById(Integer id) {
+//		return table.getDraggableById(id);
+//	}
 
 	public void moveCard(Card card,int from,int to,Player byWhom){
 		ArrayList<Card> cards=new ArrayList<Card>();
 		System.out.println("card moved: "+card.getId());
-		cards.add(((GuiCard)(table.getDraggableById(card.getId()))).getCard());
+		cards.add(((Card)(table.getDraggableById(card.getId()))));
+		//cards.add(card);
 		moveCards(cards,from,to,byWhom);
 	}
 	
 	public void moveCards(ArrayList<Card> cards, int from, int to, Player byWhom) {		
 		Droppable destination=table.getDroppableById(to);
-		Droppable source=table.getDroppableById(from);
+		Droppable source=table.getDroppableById(from);		
 		for (Card card : cards){
 			if (from==-1){
 				//new card, create it
@@ -433,7 +430,7 @@ public class TableView extends SurfaceView {
 		
 	//}
 	public void addPlayer(Player newPlayer) {
-		table.addDroppable(new GuiPlayer(newPlayer));
+		table.addDroppable(newPlayer);
 		animationTask.redraw();
 		
 	}

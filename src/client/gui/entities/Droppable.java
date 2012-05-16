@@ -1,5 +1,6 @@
 package client.gui.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -10,7 +11,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import client.controller.ClientController;
 
-public abstract class Droppable{
+public abstract class Droppable implements Serializable{
 	/**
 	 *  **************************************************<br/>
 	 *  **************************************************<br/>
@@ -32,61 +33,53 @@ public abstract class Droppable{
 	//protected Stack<Card> cards = new Stack<Card>();
 	//protected ArrayList<Card> cards; 
 	public abstract int sensitivityRadius();
+	protected int id;
 	//protected Position position;
 	
 	public void onDrop(Player player,Droppable from, Card card){
 		from.removeCard(player,card);
 		card.setCoord(getX(), getY());
-		ClientController.sendAPI().cardAdded(card, from.getMyId(),getMyId(),player);
+		ClientController.sendAPI().cardAdded(card, from.getId(),id,player);
 		addCard(player,card);						
 		
 	}
 	
 	public void onCardAdded(Player byWhom, Card card) {
-		card.setCoord(getX(), getY());
+		card.setCoord(getX(),getY());
 		addCard(byWhom, card);
 	}
-	
+	@Override
+	public boolean equals(Object other) {
+		if (other == null || !(other instanceof Droppable)) { 
+            return false;
+        }
+        Droppable otherDroppable = (Droppable)other;
+        return this.id==otherDroppable.id;		
+	}
 	public abstract void deltCard(Card card);
-	public void addDraggable(Draggable draggable){}	
+	public abstract ArrayList<Card> getCards();
 	public abstract void addCard(Player player,Card card);	
 	public abstract void removeCard(Player player,Card card);
-	public void removeCard(Card card){}
-	public void removeDraggable(Draggable draggable){}
 	public abstract void draw(Canvas canvas,Context context);
-	public Droppable(){
+	public Droppable(int id){
+		this.id=id;
+		
 		//this.cards=new ArrayList<Card>();		
 		//this.point=new Point(190,175);
 		//this.myId=IDMaker.getMaker().getId(position);
 	}
-	//public Point getPoint() {
-	//	return point;
-	//}
-	
-	public abstract int getX();
-	public abstract int getY();
-	public abstract int cardsHolding();
-	public abstract boolean isEmpty();
-	//public Card peek(){
-	//	return cards.get(cards.size()-1);
-	//}
-	//public Stack<Card> getCards() {
-	//	return cards;
-	//}
-	//public ArrayList<Card> getCards() {
-	//	return cards;
-	//}
-	public abstract void clear();
-	public abstract int getMyId();
 
 	
-//	public Position getPosition() {
-//		return position;
-//	}
-//	public void setPosition(Position position) {
-//		this.position = position;
-//		this.myId=IDMaker.getMaker().getId(position);
-//	}
+	public abstract int getX();
+	public abstract int getY();	
+	public abstract int cardsHolding();
+	public abstract boolean isEmpty();
+
+	public abstract void clear();
+	public int getId(){
+		return id;
+	}
+
 	
 		
 }

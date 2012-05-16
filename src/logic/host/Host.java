@@ -4,7 +4,6 @@ package logic.host;
 import java.util.ArrayList;
 import java.util.Stack;
 
-import client.gui.entities.GuiPlayer;
 import utils.Player;
 import utils.Position;
 import communication.actions.Turn;

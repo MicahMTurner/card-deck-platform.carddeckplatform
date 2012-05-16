@@ -9,9 +9,7 @@ import utils.Player;
 import utils.Position;
 import utils.Public;
 import utils.StandartCard;
-import carddeckplatform.game.GameStatus;
 import client.controller.ClientController;
-import client.gui.entities.GuiPlayer;
 
 public class PublicHandler implements PublicEventsHandler{
 	private int cardsPlacedWhileTie=0;
@@ -43,7 +41,7 @@ public class PublicHandler implements PublicEventsHandler{
 					byWhom.endTurn();
 				}
 			}else{
-				Player otherPlayer=((GuiPlayer) ClientController.get().getZone(otherPublic.peek().getOwner())).getPlayer();
+				Player otherPlayer=((Player) ClientController.get().getZone(otherPublic.peek().getOwner()));
 				calculateRoundWinner(publicArea,otherPublic,byWhom,otherPlayer,card);
 				checkAndDeclareGameWinner(byWhom,otherPlayer);
 			}

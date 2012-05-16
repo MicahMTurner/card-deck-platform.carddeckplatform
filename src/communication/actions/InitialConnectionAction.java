@@ -8,7 +8,6 @@ import utils.Position;
 import carddeckplatform.game.GameStatus;
 import client.controller.ClientController;
 import client.dataBase.ClientDataBase;
-import client.gui.entities.GuiPlayer;
 import logic.client.Game;
 
 

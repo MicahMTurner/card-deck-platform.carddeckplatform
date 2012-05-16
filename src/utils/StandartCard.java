@@ -50,7 +50,5 @@ public  class StandartCard extends Card {
 		}
 		return 0;
 	}
-
-
 	
 }

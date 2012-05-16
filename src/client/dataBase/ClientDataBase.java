@@ -41,7 +41,7 @@ public class ClientDataBase {
 	 * factory
 	 */
 	public Game getGame(String gameName){
-		return games.get(gameName);
+		return (Game)new War();
 		//return loader.LoadPlugin(gameName);
 	}
 	

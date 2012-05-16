@@ -1,31 +1,39 @@
 package client.gui.entities;
 
 import java.io.Serializable;
-import java.util.Random;
+
 
 import utils.Point;
 
 import carddeckplatform.game.GameStatus;
 import client.controller.ClientController;
+import IDmaker.IDMaker;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.view.View;
+
 
 public abstract class Draggable implements Serializable{	
-	//private Droppable container;
+	
 	private String carrier = "";
 	private boolean moveable;
 	protected Point prevCoord;
-	//protected Point coord;
-	
+	protected int id;
 	protected boolean carried;
 	
-	//protected abstract void draw(Canvas canvas,Context context);
+	
 	public Draggable() {
-//		this.coord=new Point(0,0);
+		this.id=IDMaker.getMaker().getId();
 		this.prevCoord=new Point(0,0);
 	}
-	public abstract int sensitivityRadius();
+	@Override
+	public boolean equals(Object other) {
+		if (other == null || !(other instanceof Draggable)) { 
+            return false;
+        }
+        Draggable otherDraggable = (Draggable)other;
+        return this.id==otherDraggable.id;		
+	}
+	
 	public String getCarrier() {
 		return carrier;
 	}
@@ -35,20 +43,19 @@ public abstract class Draggable implements Serializable{
 		prevCoord.setY(getCoord().getY());
 	}
 	public void onDrag() {		
-		ClientController.sendAPI().dragMotion(GameStatus.username,getMyId(),getCoord());
+		ClientController.sendAPI().dragMotion(GameStatus.username,id,getCoord());
 	}
 	public void onRelease() {		
-		ClientController.sendAPI().dragMotion(GameStatus.username, getMyId(), getCoord());
-		ClientController.sendAPI().endDragMotion(getMyId());
+		ClientController.sendAPI().dragMotion(GameStatus.username, id, getCoord());
+		ClientController.sendAPI().endDragMotion(id);
 	}
 	public void invalidMove(){		
 			setLocation(prevCoord.getX(),prevCoord.getY());			
-			ClientController.sendAPI().dragMotion(GameStatus.username, getMyId(), getCoord());
+			ClientController.sendAPI().dragMotion(GameStatus.username, id, getCoord());
 			//ClientController.sendAPI().endDragMotion(getMyId());			
 			//angle=0;			
 		}
 	
-	public abstract Point getCoord();
 	
 	public int getX(){
 		return getCoord().getX();
@@ -60,7 +67,8 @@ public abstract class Draggable implements Serializable{
 		this.carrier = carrier;
 	}
 	public abstract void draw(Canvas canvas,Context context);
-
+	public abstract Point getCoord();
+	public abstract int sensitivityRadius();
 	public abstract void setLocation(int x, int y);		
 
 	public void setCarried(boolean carried) {
@@ -75,7 +83,9 @@ public abstract class Draggable implements Serializable{
 	public void setMoveable(boolean moveable) {
 		this.moveable = moveable;
 	}
-	public abstract int getMyId() ;
+	public int getId(){
+		return id;
+	}
 	
 	public void clearAnimation() {
 		this.carrier="";

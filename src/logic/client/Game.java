@@ -59,7 +59,15 @@ public abstract class Game {
 	}
 	
 	public utils.Position.Player nextInTurn(){
+		
+		ArrayList<Position.Player> availablePos=new ArrayList<Position.Player>();
+		for (Player player : players){
+			availablePos.add(player.getGlobalPosition());
+		}
 		utils.Position.Player next=turnsQueue.poll();
+		while (!availablePos.contains(next)){
+			next=turnsQueue.poll();
+		}
 		turnsQueue.add(next);
 		return next;		
 	}
