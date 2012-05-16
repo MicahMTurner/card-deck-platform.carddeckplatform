@@ -45,7 +45,6 @@ public class TableView extends SurfaceView {
 		public void stopDrawing(){
 			calls.clear();
 		}
-		
 		@Override
 		protected Long doInBackground(Integer... arg0) {
 			while(true){

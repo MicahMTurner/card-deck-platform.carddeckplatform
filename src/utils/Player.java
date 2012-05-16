@@ -35,7 +35,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 	
 	
 	public Player(String userName,Position.Player globalPosition, PlayerEventsHandler handler) {
-		super(globalPosition.getId());
+		super(globalPosition.getId(),globalPosition.sitMe(globalPosition));
 		this.userName=userName;
 		this.globalPosition=globalPosition;
 		this.position=globalPosition.sitMe(globalPosition);		
@@ -44,6 +44,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 		this.myTurn=false;
 		//addObserver(ClientController.get());
 	}
+	
 	public Position.Player getGlobalPosition() {
 		return globalPosition;
 	}

@@ -17,7 +17,7 @@ public class PublicHandler implements PublicEventsHandler{
 	
 	@Override
 	public boolean onCardAdded(Public publicArea,Player byWhom, Card card) {
-		
+		card.setCoord(publicArea.getX(), publicArea.getY());
 		if (War.tie && cardsPlacedWhileTie<2){
 			card.hide();
 			cardsPlacedWhileTie++;

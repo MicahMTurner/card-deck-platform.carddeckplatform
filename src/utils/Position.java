@@ -101,7 +101,7 @@ public interface Position extends Serializable{
 	  
 	public enum Public implements Position{
 		TOPRIGHT(6,6),TOPMIDRIGHT(6,6),TOPMID(6,6),TOPMIDLEFT(6,6),TOPLEFT(6,6),
-		RIGHT(6,6),MIDRIGHT(400,200),MID(6,6),MIDLEFT(270,200),LEFT(6,6),
+		RIGHT(6,6),MIDRIGHT(400,200),MID(200,300),MIDLEFT(270,200),LEFT(6,6),
 		BOTLEFT(6,6),BOTMIDLEFT(6,6),BOTMID(6,6),BOTMIDRIGHT(6,6),BOTRIGHT(6,6);
 		private final int x;
 		private final int y;
@@ -226,7 +226,7 @@ public interface Position extends Serializable{
 	 }  
 	  
 	public enum Button implements Position{
-		  TOPRIGHT(6,6),TOPLEFT(6,6),BOTLEFT(6,6),BOTRIGHT(6,6);
+		  TOPRIGHT(6,6),TOPLEFT(6,6),BOTLEFT(50,400),BOTRIGHT(6,6);
 		  private final int x;
 		  private final int y;
 		  private final int id;		
