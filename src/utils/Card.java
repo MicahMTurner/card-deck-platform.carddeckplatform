@@ -24,7 +24,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	private Position.Player owner;
 	private Point coord;
 	protected float angle = 0;
-	private Paint paint;
+//	private Paint paint;
 	
 	public Card(CardEventsHandler handler,String frontImg,String backImg) {
 		
@@ -34,7 +34,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		this.revealed=false;		
 		this.coord=new Point(0,0);
 		
-		paint = new Paint();
+	
 	}
 	
 	@Override
@@ -134,7 +134,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 			resizedBitmap = Bitmap.createBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.back), 0, 0, backImg.getScaledWidth(canvas) , backImg.getScaledHeight(canvas), matrix, true);
 			
 		}
-		canvas.drawBitmap(resizedBitmap, coord.getX()-resizedBitmap.getWidth()/2, coord.getY()-resizedBitmap.getHeight()/2, paint);
+		canvas.drawBitmap(resizedBitmap, coord.getX()-resizedBitmap.getWidth()/2, coord.getY()-resizedBitmap.getHeight()/2, new Paint());
 
 		// if the card is being carried by another player a hand and the name of the carrier would be drawn near the card's image.
         if(isCarried()){

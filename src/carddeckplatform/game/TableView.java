@@ -38,9 +38,7 @@ public class TableView extends SurfaceView {
 	
 	
 	public void redraw(){
-//		calls.add("xyz");
 		post(new Runnable() {
-			
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
