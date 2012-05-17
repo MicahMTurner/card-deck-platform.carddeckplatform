@@ -3,6 +3,8 @@ package client.gui.entities;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Stack;
 
 import utils.Card;
@@ -18,7 +20,8 @@ public class Table {
 	public enum Focus {FRONT, REAR}
 	
 	//private Stack<Draggable> draggables = new Stack<Draggable>();
-	private ArrayList<Droppable> droppables = new ArrayList<Droppable>();
+	private ArrayList<Droppable> droppables;
+	private Hashtable<Integer,Draggable>mappedDraggables;
 	private Bitmap img;
 	private Context context;
 	private int xDimention;
@@ -27,6 +30,8 @@ public class Table {
 
 	public Table(Context context){
 		this.context = context;
+		this.droppables= new ArrayList<Droppable>();
+		this.mappedDraggables= new Hashtable<Integer,Draggable>();
 	}
 //	public void addDraggable(Draggable draggable){
 //		synchronized (draggables) {
@@ -34,8 +39,12 @@ public class Table {
 //		}
 //	}
 	
-	public void addDroppable(Droppable dropable){
-		droppables.add(dropable);
+	public void addDroppable(Droppable droppable){
+		droppables.add(droppable);
+		//map all draggables and their id in given droppable
+		for (Draggable draggable : droppable.getCards()){
+			mappedDraggables.put(draggable.getId(),draggable);
+		}
 	}
 	
 	public void setTableImage(int drawable){
@@ -63,26 +72,22 @@ public class Table {
 //	}
 	
 	
-	public Draggable getDraggableById(int id){		
-		for (Droppable droppable : droppables){
-			for (Card card : droppable.getCards()){
-				if (card.getId()==id){
-					return card;
+	public Draggable getDraggableById(int id){	
+		Draggable answer=mappedDraggables.get(id);
+		if (answer==null){
+			//draggable wasn't mapped, refresh mapping table
+			for (Droppable droppable : droppables){
+				for (Draggable draggable : droppable.getCards()){
+					mappedDraggables.put(draggable.getId(), draggable);
+					if (draggable.getId()==id){
+						answer=draggable;
+					}
 				}
 			}
 		}
-		return null;
+		return answer;
 	}
-		
-//		for(Draggable draggable : draggables){	// TO CORRECT THE LOOP!!!
-//			if(draggable.getId()==id){
-//				answer=draggable;
-//				//changeDraggableDrawingOrder(draggable, g);
-//				break; 
-//			}
-//		}
-//		return answer;
-//	}
+
 	
 	public Droppable getDroppableById(int id){
 		for(Droppable d : droppables){
@@ -112,9 +117,19 @@ public class Table {
 	
 	public Draggable getNearestDraggable(int x, int y){
 		Draggable answer=null;
+		//get nearest container where draggable can be found at
 		Droppable nearestDroppable=getNearestDroppable(x, y);
 		if (nearestDroppable!=null){
-			answer=nearestDroppable.getCards().get(0);
+			double radius;
+			/*go over cards in found droppable and check if any card there is in radius
+			 *priority given to cards at the beginning of the droppable's list*/
+			for (Draggable draggable : nearestDroppable.getCards()){
+				radius=Math.sqrt( (double) (((draggable.getX()-x)*(draggable.getX()-x)) + (draggable.getY()-y)*(draggable.getY()-y)));
+				if (radius<=draggable.sensitivityRadius()){
+					answer=draggable;
+					break;
+				}
+			}			
 		}
 		return answer;
 	}
