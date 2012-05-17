@@ -18,8 +18,8 @@ public abstract class Draggable implements Serializable{
 	private boolean moveable;
 	protected Point prevCoord;
 	protected int id;
-	protected boolean carried;
-	
+	protected boolean carried=false;
+	protected boolean inHand=false;
 	
 	public Draggable() {
 		this.id=IDMaker.getMaker().getId();
@@ -41,17 +41,21 @@ public abstract class Draggable implements Serializable{
 		// save the current location in order to be able to return to this position if needed.
 		prevCoord.setX(getCoord().getX());
 		prevCoord.setY(getCoord().getY());
+		inHand = true;
+		//setCarried(true);
 	}
 	public void onDrag() {		
-		ClientController.sendAPI().dragMotion(GameStatus.username,id,getCoord());
+		
+		ClientController.sendAPI().dragMotion(GameStatus.username,id,MetricsConvertion.pointPxToRelative(getCoord()));
 	}
 	public void onRelease() {		
-		ClientController.sendAPI().dragMotion(GameStatus.username, id, getCoord());
+		ClientController.sendAPI().dragMotion(GameStatus.username, id, MetricsConvertion.pointPxToRelative(getCoord()));
 		ClientController.sendAPI().endDragMotion(id);
+		inHand = false;
 	}
 	public void invalidMove(){		
 			setLocation(prevCoord.getX(),prevCoord.getY());			
-			ClientController.sendAPI().dragMotion(GameStatus.username, id, getCoord());
+			ClientController.sendAPI().dragMotion(GameStatus.username, id, MetricsConvertion.pointPxToRelative(getCoord()));
 			//ClientController.sendAPI().endDragMotion(getMyId());			
 			//angle=0;			
 		}
@@ -77,6 +81,11 @@ public abstract class Draggable implements Serializable{
 	public boolean isCarried() {
 		return carried;
 	}
+	
+	public boolean isInHand(){
+		return inHand;
+	}
+	
 	public boolean isMoveable() {
 		return true;
 	}

@@ -13,6 +13,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import carddeckplatform.game.R;
 import client.gui.entities.Draggable;
+import client.gui.entities.MetricsConvertion;
 
 public abstract class Card extends Draggable implements Comparable<Card>{
 	
@@ -23,7 +24,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	private Position.Player owner;
 	private Point coord;
 	protected float angle = 0;
-	
+	private Paint paint;
 	
 	public Card(CardEventsHandler handler,String frontImg,String backImg) {
 		
@@ -32,6 +33,8 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		this.frontImg= frontImg;
 		this.revealed=false;		
 		this.coord=new Point(0,0);
+		
+		paint = new Paint();
 	}
 	
 	@Override
@@ -104,17 +107,34 @@ public abstract class Card extends Draggable implements Comparable<Card>{
     	Bitmap resizedBitmap=null;				
 		Matrix matrix = new Matrix();
 		matrix.postRotate(angle);
+		
+		Point p;
+		if(!isInHand()){
+			p = new Point(6,10);
+		}else{
+			p = new Point(9,15);
+		}
+		
+		p = MetricsConvertion.pointRelativeToPx(p);
+		//matrix.postScale(p.getX(), p.getY());
 		int resourceId;
 		if(revealed){		
 			resourceId=context.getResources().getIdentifier(frontImg, "drawable", "carddeckplatform.game");
 			Bitmap frontImg = BitmapFactory.decodeResource(context.getResources(), resourceId);	
+			
+			matrix.postScale((float)p.getX()/(float)frontImg.getWidth(), (float)p.getY()/(float)frontImg.getHeight());
+			
 			resizedBitmap = Bitmap.createBitmap(frontImg, 0, 0, frontImg.getScaledWidth(canvas) , frontImg.getScaledHeight(canvas), matrix, true);
 		}else{
 			resourceId=context.getResources().getIdentifier(backImg, "drawable", "carddeckplatform.game");
 			Bitmap backImg = BitmapFactory.decodeResource(context.getResources(), resourceId);
+			int w = backImg.getWidth();
+			int h = backImg.getHeight();
+			matrix.postScale((float)p.getX()/(float)backImg.getWidth(), (float)p.getY()/(float)backImg.getHeight());
 			resizedBitmap = Bitmap.createBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.back), 0, 0, backImg.getScaledWidth(canvas) , backImg.getScaledHeight(canvas), matrix, true);
+			
 		}
-		canvas.drawBitmap(resizedBitmap, coord.getX()-25, coord.getY()-20, new Paint());
+		canvas.drawBitmap(resizedBitmap, coord.getX()-resizedBitmap.getWidth()/2, coord.getY()-resizedBitmap.getHeight()/2, paint);
 
 		// if the card is being carried by another player a hand and the name of the carrier would be drawn near the card's image.
         if(isCarried()){

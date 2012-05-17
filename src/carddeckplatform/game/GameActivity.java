@@ -68,7 +68,7 @@ public class GameActivity extends Activity {
         Display display = getWindowManager().getDefaultDisplay();
         GameStatus.screenWidth = display.getWidth();
         GameStatus.screenHeight = display.getHeight();
-        
+        GameStatus.metrics = getApplicationContext().getResources().getDisplayMetrics();
 //        TableView dv = new TableView(this,null);
         
         // draw the view
