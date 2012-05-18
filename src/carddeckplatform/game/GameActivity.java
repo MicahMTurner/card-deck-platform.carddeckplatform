@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
+import javax.imageio.plugins.bmp.BMPImageWriteParam;
+
 import utils.Position;
 import utils.Public;
 import IDmaker.IDMaker;
@@ -59,6 +61,9 @@ public class GameActivity extends Activity {
 //        if(GameStatus.isServer)
 ////        	new SampleServer();
         ipshown=false;
+        
+        BitmapHolder.load(getApplicationContext());
+        
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); 
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);

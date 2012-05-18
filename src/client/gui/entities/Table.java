@@ -156,11 +156,11 @@ public class Table {
 		}
 		for (Droppable d: droppables){			
 			AbstractList<Card>cards=d.getCards();
-//			synchronized (cards){
+			synchronized (cards){
 				for (Card card : cards){
 					card.draw(canvas, context);
 				}
-//			}
+			}
 		}
 		
 		//synchronized (draggables){

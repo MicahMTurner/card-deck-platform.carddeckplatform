@@ -13,6 +13,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -43,6 +44,16 @@ public class TableView extends SurfaceView {
 			public void run() {
 				// TODO Auto-generated method stub
 				invalidate();
+			}
+		});
+	}
+	
+	public void redraw(final Rect rect){
+		post(new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				invalidate(rect);
 			}
 		});
 	}
@@ -115,7 +126,7 @@ public class TableView extends SurfaceView {
 		Draggable draggable = table.getDraggableById(id);
 		//table.setFrontOrRear(draggable,Focus.FRONT);
 		
-		draggable.setCarrier(username);
+		//draggable.setCarrier(username);
 		//draggable.setLocation(780-x, 460-y);
 		draggable.setLocation(x, y);
 		redraw();
@@ -369,8 +380,14 @@ public class TableView extends SurfaceView {
     			popToast("It's not your turn now!!");
   
     		}   		
-		
-    	redraw();
+    		if (draggableInHand!=null){
+    			int dragX = draggableInHand.getX();
+    			int dragY = draggableInHand.getY();
+    			Rect rect = new Rect(dragX-200, dragY-200, dragX+200, dragY+200);
+    			redraw(rect);
+    		}else
+    			redraw();
+    			
 		return true;
     }
     
