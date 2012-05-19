@@ -128,18 +128,18 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 			
 			matrix.postScale((float)p.getX()/(float)img.getWidth(), (float)p.getY()/(float)img.getHeight());
 			
-			resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getScaledWidth(canvas) , img.getScaledHeight(canvas), matrix, true);
+//			resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getScaledWidth(canvas) , img.getScaledHeight(canvas), matrix, true);
 		}else{
 			//resourceId=context.getResources().getIdentifier(backImg, "drawable", "carddeckplatform.game");
 			img = BitmapHolder.getBitmap("back");
 			int w = img.getWidth();
 			int h = img.getHeight();
 			matrix.postScale((float)p.getX()/(float)img.getWidth(), (float)p.getY()/(float)img.getHeight());
-			resizedBitmap = Bitmap.createBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.back), 0, 0, img.getScaledWidth(canvas) , img.getScaledHeight(canvas), matrix, true);
-			
+//			resizedBitmap = Bitmap.createBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.back), 0, 0, img.getScaledWidth(canvas) , img.getScaledHeight(canvas), matrix, true);
 		}
-		canvas.drawBitmap(resizedBitmap, coord.getX()-resizedBitmap.getWidth()/2, coord.getY()-resizedBitmap.getHeight()/2, null);
-
+//		canvas.drawBitmap(resizedBitmap, coord.getX()-resizedBitmap.getWidth()/2, coord.getY()-resizedBitmap.getHeight()/2, null);
+		canvas.drawBitmap(img, coord.getX(), coord.getY(), null);
+		
 		// if the card is being carried by another player a hand and the name of the carrier would be drawn near the card's image.
         if(isCarried()){
         	Paint paint = new Paint(); 		   
