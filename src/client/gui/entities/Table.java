@@ -13,6 +13,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 
 
@@ -146,22 +147,32 @@ public class Table {
 	
 
 	
-	public void draw(Canvas canvas){		
+	public void draw(Canvas canvas){	
+		
+		
+		canvas.drawColor(Color.TRANSPARENT);    	  
+        canvas.scale(1, 1);
+        
+        
 		Matrix matrix = new Matrix();
 		matrix.postScale((float) xDimention, (float) yDimention);
 		canvas.drawBitmap(android.graphics.Bitmap.createScaledBitmap(img, xDimention, yDimention,true),(float)0,(float)0, null);
-		
-		for(Droppable d : droppables){
-			d.draw(canvas, context);
+		synchronized (droppables) {
+			for(Droppable d : droppables){
+				d.draw(canvas, context);
+			}
 		}
-		for (Droppable d: droppables){			
-			AbstractList<Card>cards=d.getCards();
-			synchronized (cards){
-				for (Card card : cards){
-					card.draw(canvas, context);
+		synchronized (droppables) {
+			for (Droppable d: droppables){			
+				AbstractList<Card>cards=d.getCards();
+				synchronized (cards){
+					for (Card card : cards){
+						card.draw(canvas, context);
+					}
 				}
 			}
 		}
+		
 		
 		//synchronized (draggables){
 		//	for(Draggable d : draggables){
