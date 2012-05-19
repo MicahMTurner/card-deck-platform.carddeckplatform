@@ -537,6 +537,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 				} catch (InterruptedException e) {}
 		        c = null;
 		        try {
+		        	
 		            c = surfaceHolder.lockCanvas(null);
 		            synchronized (surfaceHolder) {
 //		            	System.out.println(c.getDensity());
