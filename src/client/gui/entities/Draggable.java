@@ -1,102 +1,100 @@
 package client.gui.entities;
 
 import java.io.Serializable;
-import java.util.Random;
+
 
 import utils.Point;
 
 import carddeckplatform.game.GameStatus;
 import client.controller.ClientController;
+import IDmaker.IDMaker;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.view.View;
 
-public abstract class Draggable implements Serializable{
-	//private Droppable container;
+
+public abstract class Draggable implements Serializable{	
+	
 	private String carrier = "";
 	private boolean moveable;
 	protected Point prevCoord;
-	protected Point coord;
-	protected float angle = 0;
-	protected boolean carried;
+	protected int id;
+	protected boolean carried=false;
+	protected boolean inHand=false;
 	
-	//protected abstract void draw(Canvas canvas,Context context);
 	public Draggable() {
-		this.coord=new Point(0,0);
+		this.id=IDMaker.getMaker().getId();
 		this.prevCoord=new Point(0,0);
 	}
-	public abstract int sensitivityRadius();
+	@Override
+	public boolean equals(Object other) {
+		if (other == null || !(other instanceof Draggable)) { 
+            return false;
+        }
+        Draggable otherDraggable = (Draggable)other;
+        return this.id==otherDraggable.id;		
+	}
+	
 	public String getCarrier() {
 		return carrier;
 	}
 	public void onClick() {		
 		// save the current location in order to be able to return to this position if needed.
-		prevCoord.setX(coord.getX());
-		prevCoord.setY(coord.getY());
+		prevCoord.setX(getCoord().getX());
+		prevCoord.setY(getCoord().getY());
+		inHand = true;
+		//setCarried(true);
 	}
 	public void onDrag() {		
-		ClientController.sendAPI().dragMotion(GameStatus.username,getMyId(),coord);
+		
+		ClientController.sendAPI().dragMotion(GameStatus.username,id,MetricsConvertion.pointPxToRelative(getCoord()));
 	}
 	public void onRelease() {		
-		ClientController.sendAPI().dragMotion(GameStatus.username, getMyId(), coord);
-		ClientController.sendAPI().endDragMotion(getMyId());
+		ClientController.sendAPI().dragMotion(GameStatus.username, id, MetricsConvertion.pointPxToRelative(getCoord()));
+		ClientController.sendAPI().endDragMotion(id);
+		inHand = false;
 	}
 	public void invalidMove(){		
-			coord.setX(prevCoord.getX());
-			coord.setY(prevCoord.getY());
-			ClientController.sendAPI().dragMotion(GameStatus.username, getMyId(), coord);
+			setLocation(prevCoord.getX(),prevCoord.getY());			
+			ClientController.sendAPI().dragMotion(GameStatus.username, id, MetricsConvertion.pointPxToRelative(getCoord()));
 			//ClientController.sendAPI().endDragMotion(getMyId());			
-			angle=0;			
+			//angle=0;			
 		}
 	
-	public  int getX(){
-		return coord.getX();
+	
+	public int getX(){
+		return getCoord().getX();
 	}
-	public  int getY(){
-		return coord.getY();
+	public int getY(){
+		return getCoord().getY();
 	}
 	public void setCarrier(String carrier) {
 		this.carrier = carrier;
 	}
 	public abstract void draw(Canvas canvas,Context context);
-	
-	
-	//public Droppable getContainer(){
-	//	return container;
-	//}
-	
-	//public void setContainer(Droppable container){
-	//	this.container = container;
-	//}
-		
-	public void setLocation(int x, int y){
-		coord.setX(x);
-		coord.setY(y);
-	}
-	
-	public void randomizeAngle(){
-		Random generator = new Random();
-		float randomIndex = generator.nextInt(20);
-		randomIndex -= 10;
-		angle = randomIndex;
-	}
-	
-	public void setAngle(float angle){
-		this.angle = angle%360;
-	}
+	public abstract Point getCoord();
+	public abstract int sensitivityRadius();
+	public abstract void setLocation(int x, int y);		
+
 	public void setCarried(boolean carried) {
 		this.carried = carried;
 	}
 	public boolean isCarried() {
 		return carried;
 	}
+	
+	public boolean isInHand(){
+		return inHand;
+	}
+	
 	public boolean isMoveable() {
 		return true;
 	}
 	public void setMoveable(boolean moveable) {
 		this.moveable = moveable;
 	}
-	public abstract int getMyId() ;
+	public int getId(){
+		return id;
+	}
 	
 	public void clearAnimation() {
 		this.carrier="";

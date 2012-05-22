@@ -1,40 +1,35 @@
 package utils;
 
+import handlers.PublicEventsHandler;
+
 import java.util.ArrayList;
 
-import IDmaker.IDMaker;
-import android.R;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import handlers.PublicEventsHandler;
 import client.gui.entities.Droppable;
 
 
 public class Public extends Droppable{	
 	private PublicEventsHandler handler;
-	private Position.Public position;
-	private ArrayList<Card> cards=new ArrayList<Card>();
-	private int id;
+	
+	private ArrayList<Card> cards=new ArrayList<Card>();	
 	
 	
 	
 	public Public(PublicEventsHandler handler,Position.Public position) {
+		super(position.getId(),position);
 		this.handler=handler;
-		this.position=position;
-		this.id=position.getId();
+		
 	}
 	
-	public void setPosition(Position.Public position) {
-		this.position = position;
-	}
-	
-	public Position.Public getPosition() {
-		return position;
-	}
+//	public void setPosition(Position.Public position) {
+//		this.position = position;
+//	}
+//	
 	
 	public int sensitivityRadius() {		
-		return 30;
+		return 1000;
 	}
 	
 	@Override
@@ -79,11 +74,6 @@ public class Public extends Droppable{
 	}
 
 	@Override
-	public int getMyId() {		
-		return id;
-	}
-
-	@Override
 	public int cardsHolding() {		
 		return cards.size();
 	}
@@ -101,11 +91,10 @@ public class Public extends Droppable{
 		return cards;
 	}
 	public Card peek(){
-		return cards.get(cards.size()-1);
-	}
-	
-	
-
-	
-
+		if (!cards.isEmpty()){
+			return cards.get(cards.size()-1);
+		}else{
+			return null;
+		}
+	}	
 }

@@ -6,37 +6,45 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Observable;
 
+import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+
 import IDmaker.IDMaker;
 
 import communication.link.ServerConnection;
 
 import client.controller.ClientController;
+import client.gui.entities.Draggable;
+import client.gui.entities.Droppable;
 
 
 
 
-public class Player extends Observable implements Serializable, Comparable<Player>{
+public class Player extends Droppable implements  Comparable<Player>{
 	private PlayerEventsHandler handler;
 	private String userName;
-	private ArrayList<Card>hand;
+	private ArrayList<Card> hand;
 	boolean myTurn;
-	Position.Player position;
-	Position.Player globalPosition;
-	int id;
+	//private Point coord;
+	private Position.Player position;
+	private Position.Player globalPosition;
+	
 	
 	
 	
 	
 	public Player(String userName,Position.Player globalPosition, PlayerEventsHandler handler) {
+		super(globalPosition.getId(),globalPosition.sitMe(globalPosition));
 		this.userName=userName;
 		this.globalPosition=globalPosition;
-		this.position=globalPosition.sitMe(globalPosition);
-		this.id=globalPosition.getId();
+		this.position=globalPosition.sitMe(globalPosition);		
 		this.handler=handler;
 		this.hand=new ArrayList<Card>();
 		this.myTurn=false;
-		addObserver(ClientController.get());
+		//addObserver(ClientController.get());
 	}
+	
 	public Position.Player getGlobalPosition() {
 		return globalPosition;
 	}
@@ -53,36 +61,33 @@ public class Player extends Observable implements Serializable, Comparable<Playe
 		return id;
 	}
 	public void addCard(Card card) {
-		card.setOwner(globalPosition);
+		card.setOwner(position);		
 		hand.add(card);		
-		handler.onCardAdded(this, card);
-		
+		handler.onCardAdded(this, card);		
 	}
-	public void remove(Card card) {
+	
+//	public void setCoord(Point coord) {
+//		this.coord = coord;
+//	}
+	private void removeCard(Card card) {
 		hand.remove(card);
 		handler.onCardRemoved(this, card);
 		
 	}
-	public void roundEnded(Player player) {
-		
-		
-	}
+
 	public boolean isMyTurn() {
 		return myTurn;
 	}
 	public void startTurn(){
-		myTurn=true;
-		setChanged();
-		notifyObservers(myTurn);
+		myTurn=true;		
+		ClientController.get().enableUi();
 	}
 	public void endTurn(){
-		myTurn=false;
-		setChanged();
-		notifyObservers(myTurn);
+		myTurn=false;		
 		ClientController.sendAPI().endTurn(globalPosition);
 	}
 	public void deltCard(Card card) {
-		card.setOwner(globalPosition);
+		card.setOwner(position);
 		hand.add(card);			
 	}
 	public int cardsHolding() {		
@@ -109,6 +114,40 @@ public class Player extends Observable implements Serializable, Comparable<Playe
 			position=this.globalPosition.getRelativePosition(devicePlayerGlobalPos);
 		}
 		
+	}
+	@Override
+	public int sensitivityRadius() {		
+		return 30;
+	}
+	@Override
+	public void addCard(Player player, Card card) {
+		addCard(card);
+		
+	}
+	@Override
+	public void removeCard(Player player, Card card) {
+		removeCard(card);
+	}
+	@Override
+	public void draw(Canvas canvas, Context context) {
+		canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), 0x7f02002e),getX()-28,getY()-27,null);
+		
+	}
+//	@Override
+//	public Point getCoord() {		
+//		return coord;
+//	}
+	@Override
+	public ArrayList<Card> getCards() {		
+		return hand;
+	}
+	@Override
+	public int getX() {		
+		return position.getX();
+	}
+	@Override
+	public int getY() {		
+		return position.getY();
 	}
 	
 }

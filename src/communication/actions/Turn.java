@@ -2,7 +2,6 @@ package communication.actions;
 
 
 import client.controller.ClientController;
-import client.gui.entities.GuiPlayer;
 import utils.Player;
 import utils.Position;
 

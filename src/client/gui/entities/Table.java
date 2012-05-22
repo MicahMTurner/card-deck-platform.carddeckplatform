@@ -1,6 +1,10 @@
 package client.gui.entities;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Stack;
 
 import utils.Card;
@@ -13,10 +17,11 @@ import android.graphics.Matrix;
 
 
 public class Table {
-	public enum GetMethod {KeepTheSame, PutInFront, PutInBack}
+	public enum Focus {FRONT, REAR}
 	
-	private Stack<Draggable> draggables = new Stack<Draggable>();
-	private ArrayList<Droppable> droppables = new ArrayList<Droppable>();
+	//private Stack<Draggable> draggables = new Stack<Draggable>();
+	private ArrayList<Droppable> droppables;
+	private Hashtable<Integer,Draggable>mappedDraggables;
 	private Bitmap img;
 	private Context context;
 	private int xDimention;
@@ -25,69 +30,114 @@ public class Table {
 
 	public Table(Context context){
 		this.context = context;
+		this.droppables= new ArrayList<Droppable>();
+		this.mappedDraggables= new Hashtable<Integer,Draggable>();
 	}
-	public void addDraggable(Draggable draggable){
-		synchronized (draggables) {
-			draggables.add(draggable);
-		}
-	}
+//	public void addDraggable(Draggable draggable){
+//		synchronized (draggables) {
+//			draggables.add(draggable);
+//		}
+//	}
 	
-	public void addDroppable(Droppable dropable){
-		droppables.add(dropable);
+	public void addDroppable(Droppable droppable){
+		droppables.add(droppable);
+		//map all draggables and their id in given droppable
+		for (Draggable draggable : droppable.getCards()){
+			mappedDraggables.put(draggable.getId(),draggable);
+		}
 	}
 	
 	public void setTableImage(int drawable){
 		img = BitmapFactory.decodeResource(context.getResources(), drawable); 
 	}
 	
+//	public void setFrontOrRear(Draggable draggable,Focus focus){
+//		draggables.remove(draggable);
+//		if (focus.equals(Focus.FRONT)){
+//			draggables.add(draggable);
+//		}else{
+//			draggables.add(0,draggable);
+//		}
+//	}
 	
-	private void changeDraggableDrawingOrder(Draggable draggable, GetMethod g){
-		Draggable tmp = draggable;
-		draggables.remove(draggable);
-		if(g==GetMethod.PutInFront){		
-			draggables.add(tmp);
-		}
-		else if(g==GetMethod.PutInBack){
-			draggables.add(0,tmp);
-		}
+//	private void changeDraggableDrawingOrder(Draggable draggable, GetMethod g){
+//		Draggable tmp = draggable;
+//		draggables.remove(draggable);
+//		if(g==GetMethod.PutInFront){		
+//			draggables.add(tmp);
+//		}
+//		else if(g==GetMethod.PutInBack){
+//			draggables.add(0,tmp);
+//		}
+//	}
+	
+
+	public void mappDraggable(Draggable draggable) {
+		mappedDraggables.put(draggable.getId(), draggable);
+		
 	}
 	
 	
-	public Draggable getDraggableById(int id, GetMethod g){
-		Draggable answer=null;
-		for(Draggable draggable : draggables){	// TO CORRECT THE LOOP!!!
-			if(draggable.getMyId()==id){
-				answer=draggable;
-				changeDraggableDrawingOrder(draggable, g);
-				break; 
-			}
-		}
+	public Draggable getDraggableById(int id){	
+		Draggable answer=mappedDraggables.get(id);
+//		if (answer==null){
+//			//draggable wasn't mapped, refresh mapping table
+//			for (Droppable droppable : droppables){
+//				for (Draggable draggable : droppable.getCards()){
+//					mappedDraggables.put(draggable.getId(), draggable);
+//					if (draggable.getId()==id){
+//						answer=draggable;
+//					}
+//				}
+//			}
+//		}
 		return answer;
 	}
+
 	
 	public Droppable getDroppableById(int id){
 		for(Droppable d : droppables){
-			if(d.getMyId()==id){
+			if(d.getId()==id){
 				return d;
 			}
 		}
 		return null;
 	}
 	
-	public Draggable getNearestDraggable(int x, int y, GetMethod g){
-		// go in reverse in order to get the most top draggable.
-		Draggable res = null;
-		for(int i=draggables.size()-1; i>=0; i--){	// TO CORRECT THE LOOP!!!
-			Draggable d = draggables.get(i);
-			double radius  = Math.sqrt( (double) (((d.getX()-x)*(d.getX()-x)) + (d.getY()-y)*(d.getY()-y)));
-			if(radius <= d.sensitivityRadius()){
-				// puts the draggable in the front.
-				res = d;
-				changeDraggableDrawingOrder(d, g);
-				break;
-			}
+//	public Draggable getNearestDraggable(int x, int y){
+//		// go in reverse in order to get the most top draggable.
+//		Draggable res = null;
+//		for(int i=draggables.size()-1; i>=0; i--){	// TO CORRECT THE LOOP!!!
+//			Draggable d = draggables.get(i);
+//			double radius  = Math.sqrt( (double) (((d.getX()-x)*(d.getX()-x)) + (d.getY()-y)*(d.getY()-y)));
+//			if(radius <= d.sensitivityRadius()){
+//				// puts the draggable in the front.
+//				res = d;
+//				//changeDraggableDrawingOrder(d, g);
+//				break;
+//			}
+//		}
+//		return res;
+//	}
+	
+	
+	public Draggable getNearestDraggable(int x, int y){
+		Draggable answer=null;
+		//get nearest container where draggable can be found at
+		Droppable nearestDroppable=getNearestDroppable(x, y);
+		if (nearestDroppable!=null){
+			double radius;
+			/*go over cards in found droppable and check if any card there is in radius
+			 *priority given to cards at the beginning of the droppable's list*/
+			for (Draggable draggable : nearestDroppable.getCards()){
+				radius=Math.sqrt( (double) (((draggable.getX()-x)*(draggable.getX()-x)) + (draggable.getY()-y)*(draggable.getY()-y)));
+				if (radius<=draggable.sensitivityRadius()){
+					answer=draggable;
+					break;
+				}
+			}			
 		}
-		return res;
+		return answer;
 	}
 	
 	public Droppable getNearestDroppable(int x, int y){
@@ -102,46 +152,27 @@ public class Table {
 	
 
 	
-	public void draw(Canvas canvas){
-		System.out.println("drawing table");
+	public void draw(Canvas canvas){		
 		Matrix matrix = new Matrix();
 		matrix.postScale((float) xDimention, (float) yDimention);
 		canvas.drawBitmap(android.graphics.Bitmap.createScaledBitmap(img, xDimention, yDimention,true),(float)0,(float)0, null);
+		
 		for(Droppable d : droppables){
 			d.draw(canvas, context);
 		}
-		
-		synchronized (draggables){
-			for(Draggable d : draggables){
-				d.draw(canvas, context);
-				//Bitmap resizedBitmap=null;
-				
-//				Matrix matrix = new Matrix();
-//				matrix.postRotate(angle);
-//				if(revealed)
-//					resizedBitmap = Bitmap.createBitmap(frontImg, 0, 0, frontImg.getScaledWidth(canvas) , frontImg.getScaledHeight(canvas), matrix, true);
-//				else
-//					resizedBitmap = Bitmap.createBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.back), 0, 0, frontImg.getScaledWidth(canvas) , frontImg.getScaledHeight(canvas), matrix, true);
-//				canvas.drawBitmap(resizedBitmap, getX()-25, getY()-20, new Paint());
-//				
-//				        
-//				
-//				
-//				// if the card is being carried by another player a hand and the name of the carrier would be drawn near the card's image.
-//		        if(isCarried){
-//		        	Paint paint = new Paint(); 		   
-//		        	// draws the name of the carrier.
-//		            paint.setColor(android.graphics.Color.BLACK); 
-//		            paint.setTextSize(20); 
-//		            canvas.drawText(carrier,getX()-25, getY()-20, paint);
-//		            // draws the hand.
-//		            canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.hand),getX()-30, getY()+20 , paint);
-//		        }        
-			//for(Iterator<Draggable> it = draggables.iterator(); it.hasNext();){
-					//Draggable d = it.next();
-					//d.draw(canvas,context);
-			}
+		for (Droppable d: droppables){			
+			AbstractList<Card>cards=d.getCards();			
+				for (Card card : cards){					
+					card.draw(canvas, context);
+					}	
 		}
+		
+		//synchronized (draggables){
+		//	for(Draggable d : draggables){
+		//		d.draw(canvas, context);
+
+		//	}
+		//}
 	}
 	
 	public int getxDimention() {
@@ -156,6 +187,7 @@ public class Table {
 	public void setyDimention(int yDimention) {
 		this.yDimention = yDimention;
 	}
+
 	
 	
 }

@@ -1,7 +1,6 @@
 package communication.messages;
 
 
-import client.gui.entities.GuiPlayer;
 import utils.Position;
 import communication.actions.Action;
 import communication.actions.Turn;
