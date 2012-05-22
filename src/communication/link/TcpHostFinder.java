@@ -83,6 +83,7 @@ public class TcpHostFinder implements HostFinder {
 //        s_serverAddress="Server IP: "+String.valueOf(intToIp(d.serverAddress,0)) + " " + String.valueOf(d.serverAddress);
 		
         // scans the network and try to find hosts
+        System.out.println("scanning ");
 		for(int i=1; i<254; i++){
 			try {
 				socket = new Socket();

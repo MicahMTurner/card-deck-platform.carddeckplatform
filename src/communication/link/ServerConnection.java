@@ -43,11 +43,7 @@ public class ServerConnection implements Runnable{
 			public void execute() {
 				try {
 					// creates a socket.
-					if (GameStatus.isServer){
-						socket = new Socket("127.0.0.1",9997);
-					}else{
-						socket = new Socket("192.168.2.103",9997);
-					}
+					socket = new Socket(GameStatus.hostIp, GameStatus.hostPort);
 					// creates an outputstream.
 					ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 					ObjectInputStream in = new ObjectInputStream(socket.getInputStream());

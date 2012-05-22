@@ -13,9 +13,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
 import client.controller.ClientController;
@@ -25,7 +27,7 @@ import client.gui.entities.Table;
 import client.gui.entities.Table.Focus;
 
 
-public class TableView extends SurfaceView {
+public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 	private Table table;
 	private Context cont; 
 	private Matrix translate;
@@ -36,15 +38,27 @@ public class TableView extends SurfaceView {
 	//private AnimationTask animationTask;
 	private boolean uiEnabled=false;
 	
+	static DrawThread drawThread;
+	
 	
 	public void redraw(){
-		post(new Runnable() {
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				invalidate();
-			}
-		});
+//		post(new Runnable() {
+//			@Override
+//			public void run() {
+//				// TODO Auto-generated method stub
+//				invalidate();
+//			}
+//		});
+	}
+	
+	public void redraw(final Rect rect){
+//		post(new Runnable() {
+//			@Override
+//			public void run() {
+//				// TODO Auto-generated method stub
+//				invalidate(rect);
+//			}
+//		});
 	}
 	
 	
@@ -100,10 +114,15 @@ public class TableView extends SurfaceView {
 		this.xDimention =  getMeasuredWidth();
 		this.yDimention = getMeasuredHeight();
 		cont = context;		
-		
 		table = new Table(context);
 		table.setTableImage(R.drawable.boardtest);
 	    setFocusable(true); //necessary for getting the touch events.
+	    
+	    //making the UI thread
+	    getHolder().addCallback(this);
+//	    SurfaceViewThread.threadSurfaceHolder = getHolder();
+//	    SurfaceViewThread.threadView = this;
+	    
 	}
 	
 	public void onMove(float dx,float dy){
@@ -115,7 +134,7 @@ public class TableView extends SurfaceView {
 		Draggable draggable = table.getDraggableById(id);
 		//table.setFrontOrRear(draggable,Focus.FRONT);
 		
-		draggable.setCarrier(username);
+		//draggable.setCarrier(username);
 		//draggable.setLocation(780-x, 460-y);
 		draggable.setLocation(x, y);
 		redraw();
@@ -295,8 +314,7 @@ public class TableView extends SurfaceView {
     @Override
     protected void onDraw(Canvas canvas) {
     	super.onDraw(canvas);//if you want another background color
-    	canvas.drawColor(Color.TRANSPARENT);    	  
-        canvas.scale(1, 1);
+    	System.out.println("TableView.onDraw()");
         // draws the table.
         table.draw(canvas);
     }
@@ -369,8 +387,14 @@ public class TableView extends SurfaceView {
     			popToast("It's not your turn now!!");
   
     		}   		
-		
-    	redraw();
+    		if (draggableInHand!=null){
+    			int dragX = draggableInHand.getX();
+    			int dragY = draggableInHand.getY();
+    			Rect rect = new Rect(dragX-200, dragY-200, dragX+200, dragY+200);
+    			redraw(rect);
+    		}else
+    			redraw();
+    			
 		return true;
     }
     
@@ -463,8 +487,107 @@ public class TableView extends SurfaceView {
 			addNewDraggable(card, destination);
 		}			
 	}
-	
-	
-	
+
+	@Override
+	public void surfaceChanged(SurfaceHolder holder, int format, int width,
+			int height) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void surfaceCreated(SurfaceHolder holder) {
+		System.out.println("TableView.surfaceCreated()");
+		drawThread = new DrawThread(holder);
+        drawThread.setName("drawThread");
+		drawThread.setRunning(true);
+		drawThread.start();
+//        SurfaceViewThread.running=true;
+//        surfaceThread.start();
+
+	}
+
+	@Override
+	public void surfaceDestroyed(SurfaceHolder holder) {
+		System.out.println("TableView.surfaceDestroyed()");
+		drawThread.setRunning(false);
+//		SurfaceViewThread.running=false;
+        try {
+        	drawThread.join();
+        } catch (InterruptedException e) {  
+        } 
+	}
+	class DrawThread extends Thread {
+	    private SurfaceHolder surfaceHolder;
+
+	    private boolean running = false;
+	    public void setRunning(boolean value){ running = value; }
+
+	    public DrawThread(SurfaceHolder surfaceHolder){
+	    	this.surfaceHolder = surfaceHolder;
+	    }
+
+		@Override
+		public void run() {
+		    Canvas c;
+		    while (running) {
+		    	try {
+		    		// Don't hog the entire CPU
+					Thread.sleep(1);
+				} catch (InterruptedException e) {}
+		        c = null;
+		        try {
+		        	
+		            c = surfaceHolder.lockCanvas(null);
+		            synchronized (surfaceHolder) {
+//		            	System.out.println(c.getDensity());
+		        		table.draw(c);// draw it
+		            }
+		        } finally {
+		            if (c != null) {
+		            	surfaceHolder.unlockCanvasAndPost(c);
+		            }
+		        }
+		    }		
+		}
+	}
 	
 }
+
+
+
+//class SurfaceViewThread extends Thread{
+//	static SurfaceHolder threadSurfaceHolder;
+//    static TableView threadView;
+//    static boolean running;
+//	
+//    @Override
+//    public void run (){
+//    	System.out.println("UI thread running");
+//        while(running){
+////        	threadView.invalidate();
+//        	
+//        	Canvas c = null;
+//            try {
+//                c = threadSurfaceHolder.lockCanvas(null);
+//                synchronized (threadSurfaceHolder) {
+//                	if(c.getDensity()!=0){
+//                		System.out.println("density:"+c.getDensity());
+//                		threadView.onDraw(c);
+//                	}
+//            		else
+//            			System.out.println("density problem");
+//                }
+//            } finally {
+//                // do this in a finally so that if an exception is thrown
+//                // during the above, we don't leave the Surface in an
+//                // inconsistent state
+//                if (c != null) {
+//                	threadSurfaceHolder.unlockCanvasAndPost(c);
+//                	System.out.println("drawed");
+//                }
+//            }
+//        }
+//    }
+//	
+//}
