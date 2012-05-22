@@ -16,7 +16,7 @@ public class BitmapHolder {
 				
 						
 	/**
-	 * get Client Data base instance
+	 * get Client Bitmap Holder instance
 	 */
 	public static BitmapHolder get(){
 		return BitmapHolderHolder.bitmapHolder;
