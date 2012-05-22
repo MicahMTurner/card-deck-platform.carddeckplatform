@@ -26,7 +26,7 @@ public class Free extends Game{
 
 	@Override
 	public int minPlayers() {
-		return 2;
+		return 1;
 	}
 
 	@Override
