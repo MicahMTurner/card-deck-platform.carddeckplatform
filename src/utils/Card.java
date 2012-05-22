@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import carddeckplatform.game.BitmapHolder;
 import carddeckplatform.game.R;
 import client.gui.entities.Draggable;
 import client.gui.entities.MetricsConvertion;
@@ -104,6 +105,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	
 	@Override
     public void draw(Canvas canvas,Context context) {
+		Bitmap img;
     	Bitmap resizedBitmap=null;				
 		Matrix matrix = new Matrix();
 		matrix.postRotate(angle);
@@ -119,23 +121,25 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		//matrix.postScale(p.getX(), p.getY());
 		int resourceId;
 		if(revealed){		
-			resourceId=context.getResources().getIdentifier(frontImg, "drawable", "carddeckplatform.game");
-			Bitmap frontImg = BitmapFactory.decodeResource(context.getResources(), resourceId);	
+//			resourceId=context.getResources().getIdentifier(frontImg, "drawable", "carddeckplatform.game");
+//			Bitmap frontImg = BitmapFactory.decodeResource(context.getResources(), resourceId);	
 			
-			matrix.postScale((float)p.getX()/(float)frontImg.getWidth(), (float)p.getY()/(float)frontImg.getHeight());
+			img = BitmapHolder.getBitmap(frontImg);
 			
-			resizedBitmap = Bitmap.createBitmap(frontImg, 0, 0, frontImg.getScaledWidth(canvas) , frontImg.getScaledHeight(canvas), matrix, true);
+			matrix.postScale((float)p.getX()/(float)img.getWidth(), (float)p.getY()/(float)img.getHeight());
+			
+//			resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getScaledWidth(canvas) , img.getScaledHeight(canvas), matrix, true);
 		}else{
-			resourceId=context.getResources().getIdentifier(backImg, "drawable", "carddeckplatform.game");
-			Bitmap backImg = BitmapFactory.decodeResource(context.getResources(), resourceId);
-			int w = backImg.getWidth();
-			int h = backImg.getHeight();
-			matrix.postScale((float)p.getX()/(float)backImg.getWidth(), (float)p.getY()/(float)backImg.getHeight());
-			resizedBitmap = Bitmap.createBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.back), 0, 0, backImg.getScaledWidth(canvas) , backImg.getScaledHeight(canvas), matrix, true);
-			
+			//resourceId=context.getResources().getIdentifier(backImg, "drawable", "carddeckplatform.game");
+			img = BitmapHolder.getBitmap("back");
+			int w = img.getWidth();
+			int h = img.getHeight();
+			matrix.postScale((float)p.getX()/(float)img.getWidth(), (float)p.getY()/(float)img.getHeight());
+//			resizedBitmap = Bitmap.createBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.back), 0, 0, img.getScaledWidth(canvas) , img.getScaledHeight(canvas), matrix, true);
 		}
-		canvas.drawBitmap(resizedBitmap, coord.getX()-resizedBitmap.getWidth()/2, coord.getY()-resizedBitmap.getHeight()/2, new Paint());
-
+//		canvas.drawBitmap(resizedBitmap, coord.getX()-resizedBitmap.getWidth()/2, coord.getY()-resizedBitmap.getHeight()/2, null);
+		canvas.drawBitmap(img, coord.getX(), coord.getY(), null);
+		
 		// if the card is being carried by another player a hand and the name of the carrier would be drawn near the card's image.
         if(isCarried()){
         	Paint paint = new Paint(); 		   

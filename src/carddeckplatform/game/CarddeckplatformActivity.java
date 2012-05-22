@@ -10,6 +10,7 @@ import java.util.Set;
 import communication.link.HostFinder;
 import communication.link.HostId;
 import communication.link.TcpHostFinder;
+import communication.link.TcpIdListener;
 
 import client.dataBase.ClientDataBase;
 
@@ -43,7 +44,7 @@ public class CarddeckplatformActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu);
-
+        
         //making some wifi
         WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
@@ -98,7 +99,7 @@ public class CarddeckplatformActivity extends Activity {
 			            	GameStatus.username = username.getText().toString();
 			            	//GameStatus.me=new Player(GameStatus.username,GameStatus.localIp);
 			                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
-			            	
+			                new Thread(new TcpIdListener(GameStatus.username, name)).start();
 			                new Thread(new Host(ClientDataBase.getDataBase().getGame(name))).start();
 			                
 			                startActivity(i);
@@ -134,7 +135,7 @@ public class CarddeckplatformActivity extends Activity {
 					public void onClick(View arg0) {
 						// TODO Auto-generated method stub
 						GameStatus.isServer = false;
-						GameStatus.hostIp = "192.168.2.125";
+						GameStatus.hostIp = "10.0.0.5";
 		            	GameStatus.username = username.getText().toString();
 		            	
 		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
