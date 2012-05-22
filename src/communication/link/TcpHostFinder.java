@@ -18,7 +18,7 @@ import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 import android.widget.TextView;
 
-public class TcpHostFinder implements HostFinder {
+public class TcpHostFinder extends HostFinder {
 	public String   s_dns1 ;
 	public String   s_dns2;     
 	public String   s_gateway;  
@@ -65,13 +65,12 @@ public class TcpHostFinder implements HostFinder {
 //		}
 	
 	@Override
-	public ArrayList<HostId> findHosts(){
+	public void findAvailableHosts(ArrayList<HostId> hosts){
 		Socket socket = null;
 		ObjectOutputStream out = null;
 		ObjectInputStream in = null;
-		HostId hostId = null;
+		HostId hostId = null;		
 		
-		ArrayList<HostId> hosts = new ArrayList<HostId>();
         d=wifii.getDhcpInfo();
 //        checkHosts();
 //        s_dns1="DNS 1: "+String.valueOf(intToIp(d.dns1,0)) + " " + String.valueOf(d.dns1);
@@ -107,7 +106,6 @@ public class TcpHostFinder implements HostFinder {
 				//System.out.println(intToIp(d.gateway,i) + " is not reachable");
 				//System.out.println(e.getMessage());
 			}
-		}		
-		return hosts;
+		}
 	}
 }
