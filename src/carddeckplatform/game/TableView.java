@@ -519,23 +519,17 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 	}
 	class DrawThread extends Thread {
 	    private SurfaceHolder surfaceHolder;
-
+	   
 	    private boolean running = false;
 	    public void setRunning(boolean value){ running = value; }
-
+	    
 	    public DrawThread(SurfaceHolder surfaceHolder){
 	    	this.surfaceHolder = surfaceHolder;
-	    	
 	    }
-	    public void rotateView(int degree){
-	    	Canvas c=surfaceHolder.lockCanvas();
-	    	if (c!=null){
-	    		c.rotate(degree);
-	    	}
-	    }
+
 		@Override
 		public void run() {
-		    Canvas c;		    
+		    Canvas c;
 		    while (running) {
 		    	try {
 		    		// Don't hog the entire CPU
@@ -547,6 +541,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 		            c = surfaceHolder.lockCanvas(null);
 		            synchronized (surfaceHolder) {
 //		            	System.out.println(c.getDensity());
+		            	
 		        		table.draw(c);// draw it
 		            }
 		        } finally {
