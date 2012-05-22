@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Stack;
 
+import carddeckplatform.game.GameStatus;
+
 import utils.Card;
 
 import android.content.Context;
@@ -155,20 +157,21 @@ public class Table {
 	
 	public void draw(Canvas canvas){		
 				
-		
+	if (canvas!=null){
 		canvas.drawColor(Color.TRANSPARENT);    	  
         canvas.scale(1, 1);
-        
-        
+
+        	canvas.rotate(180, GameStatus.screenWidth/2, GameStatus.screenHeight/2);
+
 		Matrix matrix = new Matrix();
 		matrix.postScale((float) xDimention, (float) yDimention);
-		canvas.drawBitmap(android.graphics.Bitmap.createScaledBitmap(img, xDimention, yDimention,true),(float)0,(float)0, null);
-		synchronized (droppables) {
+		//canvas.drawBitmap(android.graphics.Bitmap.createScaledBitmap(img, xDimention, yDimention,true),(float)0,(float)0, null);
+		//synchronized (droppables) {
 			for(Droppable d : droppables){
 				d.draw(canvas, context);
 			}
-		}
-		synchronized (droppables) {
+		//}
+		//synchronized (droppables) {
 			for (Droppable d: droppables){			
 				AbstractList<Card>cards=d.getCards();
 				synchronized (cards){
@@ -177,7 +180,7 @@ public class Table {
 					}
 				}
 			}
-		}
+		//}
 		
 		//synchronized (draggables){
 		//	for(Draggable d : draggables){
@@ -186,7 +189,7 @@ public class Table {
 		//	}
 		//}
 	}
-	
+	}
 	public int getxDimention() {
 		return xDimention;
 	}
