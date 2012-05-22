@@ -124,14 +124,14 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 //			resourceId=context.getResources().getIdentifier(frontImg, "drawable", "carddeckplatform.game");
 //			Bitmap frontImg = BitmapFactory.decodeResource(context.getResources(), resourceId);	
 			
-			img = BitmapHolder.getBitmap(frontImg);
+			img = BitmapHolder.get().getBitmap(frontImg,context);
 			
 			matrix.postScale((float)p.getX()/(float)img.getWidth(), (float)p.getY()/(float)img.getHeight());
 			
 //			resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getScaledWidth(canvas) , img.getScaledHeight(canvas), matrix, true);
 		}else{
 			//resourceId=context.getResources().getIdentifier(backImg, "drawable", "carddeckplatform.game");
-			img = BitmapHolder.getBitmap("back");
+			img = BitmapHolder.get().getBitmap("back",context);
 			int w = img.getWidth();
 			int h = img.getHeight();
 			matrix.postScale((float)p.getX()/(float)img.getWidth(), (float)p.getY()/(float)img.getHeight());

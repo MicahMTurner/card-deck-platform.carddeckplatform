@@ -62,7 +62,7 @@ public class GameActivity extends Activity {
 ////        	new SampleServer();
         ipshown=false;
         
-        BitmapHolder.load(getApplicationContext());
+        //BitmapHolder.load(getApplicationContext());
         
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); 
