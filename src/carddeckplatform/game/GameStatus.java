@@ -1,5 +1,7 @@
 package carddeckplatform.game;
 
+import android.util.DisplayMetrics;
+
 
 
 
@@ -13,6 +15,8 @@ public class GameStatus {
 	public static int idPort = 9998;
 	public static int screenWidth;
 	public static int screenHeight;
+	
+	public static DisplayMetrics metrics;
 	//public static Player me;
 	//public static Game game = new War();
 	//public static int localPort = 9998;

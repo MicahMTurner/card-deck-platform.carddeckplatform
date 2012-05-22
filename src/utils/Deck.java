@@ -8,11 +8,12 @@ import logic.client.AbstractDeck;
 
 public class Deck extends AbstractDeck{
 	private final int timesToShuffle=2;	
-	public Deck(CardEventsHandler handler,boolean shuffle) {		
+	public Deck(CardEventsHandler handler,boolean shuffle,Position.Button position) {
+		super(position);
 		for (StandartCard.Color color : StandartCard.Color.values()){
 			
 			for (int i=2;i<=14;i++){			
-				cards.add(new StandartCard(handler,color.getCode()+i+".png","back.png",i,color));							
+				addCard(null,new StandartCard(handler,color.getCode()+i,"back",i,color));							
 			}
 		}	
 		//check if shuffle requested

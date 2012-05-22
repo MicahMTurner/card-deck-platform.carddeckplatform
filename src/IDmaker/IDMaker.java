@@ -41,6 +41,9 @@ public class IDMaker {
 	public Integer getId(String name){
 		return names.get(name);
 	}
+	public int getIdByPos(Position position){
+		return positions.get(position);
+	}
 	public int getId(){		
 		return id++;
 	}

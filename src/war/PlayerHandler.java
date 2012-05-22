@@ -18,8 +18,9 @@ public class PlayerHandler implements PlayerEventsHandler{
 	}
 
 	@Override
-	public boolean onCardAdded(Player player, Card card) {		
-		return false;
+	public boolean onCardAdded(Player player, Card card) {
+		card.setCoord(player.getX(), player.getY());
+		return true;
 	}
 
 	@Override

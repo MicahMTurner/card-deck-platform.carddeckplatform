@@ -25,6 +25,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import client.controller.ClientController;
+import client.controller.PositionByCompass;
+import client.gui.entities.Droppable;
 import communication.link.ServerConnection;
 
 public class GameActivity extends Activity {
@@ -58,6 +60,7 @@ public class GameActivity extends Activity {
 //        if(GameStatus.isServer)
 ////        	new SampleServer();
         ipshown=false;
+        new PositionByCompass(getBaseContext());
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); 
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -67,7 +70,7 @@ public class GameActivity extends Activity {
         Display display = getWindowManager().getDefaultDisplay();
         GameStatus.screenWidth = display.getWidth();
         GameStatus.screenHeight = display.getHeight();
-        
+        GameStatus.metrics = getApplicationContext().getResources().getDisplayMetrics();
 //        TableView dv = new TableView(this,null);
         
         // draw the view
@@ -87,7 +90,7 @@ public class GameActivity extends Activity {
         
         
         //Position posistion=ClientController.getController().getPosition();
-        ArrayList<Public>publics=new ArrayList<Public>();
+        ArrayList<Droppable>publics=new ArrayList<Droppable>();
 
         //insert public areas into publics array
         ClientController.get().setLayouts(publics);
@@ -101,8 +104,8 @@ public class GameActivity extends Activity {
 
     }
     
-    private void buildLayout( ArrayList<Public> publics){
-    	for (Public publicZone : publics){
+    private void buildLayout( ArrayList<Droppable> publics){
+    	for (Droppable publicZone : publics){
     		//set public zone according to my position
     		publicZone.setPosition(publicZone.getPosition().getRelativePosition(ClientController.get().getMe().getGlobalPosition()));
     		tableview.addDroppable(publicZone);
@@ -159,6 +162,9 @@ public class GameActivity extends Activity {
     			return true;
     		case Menu.FIRST+2:
     			Toast.makeText(this, "Main Menu", 2000).show();
+    			ServerConnection.getConnection().closeConnection();
+    			//add new message - shut down server
+    			
     			finish();
     			return true;
     		default:

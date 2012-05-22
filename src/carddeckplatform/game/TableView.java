@@ -21,10 +21,9 @@ import android.widget.Toast;
 import client.controller.ClientController;
 import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
-import client.gui.entities.GuiCard;
-import client.gui.entities.GuiPlayer;
 import client.gui.entities.Table;
-import client.gui.entities.Table.GetMethod;
+import client.gui.entities.Table.Focus;
+
 
 public class TableView extends SurfaceView {
 	private Table table;
@@ -34,51 +33,70 @@ public class TableView extends SurfaceView {
 	private Droppable from=null;
 	private int xDimention;
 	private int yDimention;
-	private AnimationTask animationTask;
+	//private AnimationTask animationTask;
 	private boolean uiEnabled=false;
 	
-	private class AnimationTask extends AsyncTask<Integer, Integer, Long>{
-		private BlockingQueue<String> calls = new ArrayBlockingQueue<String>(10000);
-		public void redraw(){
-			calls.add("xyz");
-		}
-		
-		public void stopDrawing(){
-			calls.clear();
-		}
-		
-		@Override
-		protected Long doInBackground(Integer... arg0) {
-			while(true){
-				try {
-					calls.take();
-					onProgressUpdate(0);
-				} catch (InterruptedException ie) {				
-					ie.printStackTrace();
-				} catch (IllegalStateException ise){
-					stopDrawing();
-					redraw();
-				}
-				
+	
+	public void redraw(){
+		post(new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				invalidate();
 			}
-		}
-		@Override
-		protected void onProgressUpdate(Integer... Integ) {
-			CarddeckplatformActivity.h.post(new Runnable() {
-				
-				@Override
-				public void run() {					
-					invalidate();
-				}
-			});
-		}	
+		});
 	}
+	
+	
+//	private class AnimationTask extends AsyncTask<Integer, Integer, Long>{
+//		private BlockingQueue<String> calls = new ArrayBlockingQueue<String>(10000);
+//		public void redraw(){
+////			calls.add("xyz");
+//			post(new Runnable() {
+//				
+//				@Override
+//				public void run() {
+//					// TODO Auto-generated method stub
+//					invalidate();
+//				}
+//			});
+//		}
+//		
+//		public void stopDrawing(){
+//			calls.clear();
+//		}
+//		@Override
+//		protected Long doInBackground(Integer... arg0) {
+//			while(true){
+//				try {
+//					calls.take();
+//					onProgressUpdate(0);
+//				} catch (InterruptedException ie) {				
+//					ie.printStackTrace();
+//				} catch (IllegalStateException ise){
+//					stopDrawing();
+//					redraw();
+//				}
+//				
+//			}
+//		}
+//		@Override
+//		protected void onProgressUpdate(Integer... Integ) {
+//			CarddeckplatformActivity.h.post(new Runnable() {
+//				
+//				@Override
+//				public void run() {					
+//					invalidate();
+//				}
+//			});
+//		}	
+//	}
 	
 	public TableView(Context context,AttributeSet attrs) {
 		super(context, attrs);
 		translate=new Matrix();
-		animationTask = new AnimationTask();
-		animationTask.execute(0);
+//		animationTask = new AnimationTask();
+//		animationTask.execute(0);
 		this.xDimention =  getMeasuredWidth();
 		this.yDimention = getMeasuredHeight();
 		cont = context;		
@@ -94,33 +112,38 @@ public class TableView extends SurfaceView {
 	
 	
 	public void draggableMotion(String username, int id , int x , int y){
-		Draggable draggable = table.getDraggableById(id, GetMethod.PutInFront);
+		Draggable draggable = table.getDraggableById(id);
+		//table.setFrontOrRear(draggable,Focus.FRONT);
+		
 		draggable.setCarrier(username);
-		draggable.setLocation(780-x, 460-y);
-		animationTask.redraw();
+		//draggable.setLocation(780-x, 460-y);
+		draggable.setLocation(x, y);
+		redraw();
 	}
 	
 	public void endDraggableMotion(int id){
-		Draggable draggable = table.getDraggableById(id, GetMethod.PutInFront);
+		Draggable draggable = table.getDraggableById(id);
+		//table.setFrontOrRear(draggable,Focus.FRONT);
 		draggable.setCarrier("");
-		animationTask.redraw();
+		redraw();
 	}
 
 	
 	
 	
 	
-	public void drawMovement(final ArrayList<GuiCard> cards, final int toId, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
+	public void drawMovement(final ArrayList<Card> cards, final int toId, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
 		ArrayList<Thread> drawingThreads = new ArrayList<Thread>();
-		final CountDownLatch cdl=new CountDownLatch(cards.size());
+		//Card card;
+		//final CountDownLatch cdl=new CountDownLatch(cards.size());
 		final Droppable destination=getDroppableById(toId);
-		for (final GuiCard guiCard : cards){
+		for (final Card card : cards){
 			drawingThreads.add(	new Thread(new Runnable() {	
 						@Override
 						public void run() {
-							guiCard.getCard().setRevealed(revealedWhileMoving);
-							int x = guiCard.getX();
-							int y = guiCard.getY();
+							card.setRevealed(revealedWhileMoving);
+							int x = card.getCoord().getX();
+							int y = card.getCoord().getY();
 							final ArrayList<Point> vector = StaticFunctions.midLine(x, y, destination.getX(), destination.getY());
 							try {
 			        			Thread.sleep(initialDelay);
@@ -128,7 +151,7 @@ public class TableView extends SurfaceView {
 			        			e.printStackTrace();
 			        		}
 			            	for(int i=0; i<vector.size(); i++){
-			            		guiCard.getCard().setRevealed(revealedWhileMoving);
+			            		card.setRevealed(revealedWhileMoving);
 			            		final int index = i;
 					
 			            		try {
@@ -137,13 +160,13 @@ public class TableView extends SurfaceView {
 			            			e.printStackTrace();
 			            		}					
 			            		
-			            		guiCard.setLocation(vector.get(index).x, vector.get(index).y);
-			            		guiCard.setAngle(i*10);
-			            		animationTask.redraw();
+			            		card.setCoord(vector.get(index).x, vector.get(index).y);
+			            		card.setAngle(i*10);
+			            		redraw();
 			            	}
-			            	guiCard.setAngle(0);
-			            	guiCard.getCard().setRevealed(revealedAtEnd);
-			            	cdl.countDown();
+			            	card.setAngle(0);
+			            	card.setRevealed(revealedAtEnd);
+			            	//cdl.countDown();
 							
 						}
 					}));
@@ -152,11 +175,11 @@ public class TableView extends SurfaceView {
 		for (Thread drawingThread : drawingThreads){
 			drawingThread.start();
 		}
-		try {
-			cdl.await();
-		} catch (InterruptedException e) {		
-			e.printStackTrace();
-		}
+//		try {
+//			cdl.await();
+//		} catch (InterruptedException e) {		
+//			e.printStackTrace();
+//		}
 		//for (Thread drawingThread : drawingThreads){
 		//	try {
 		//		drawingThread.join();
@@ -172,7 +195,7 @@ public class TableView extends SurfaceView {
 //		new Thread(new Runnable() {	
 //			@Override
 //			public void run() {
-//				draggable.getCardLogic().setRevealed(revealedWhileMoving);
+//				//draggable..setRevealed(revealedWhileMoving);
 //				
 //				int x = draggable.getX();
 //				int y = draggable.getY();
@@ -184,7 +207,7 @@ public class TableView extends SurfaceView {
 //        			e.printStackTrace();
 //        		}
 //            	for(int i=0; i<vector.size(); i++){
-//            		draggable.getCardLogic().setRevealed(revealedWhileMoving);
+//            		//draggable.getCardLogic().setRevealed(revealedWhileMoving);
 //            		final int index = i;
 //		
 //            		try {
@@ -197,20 +220,20 @@ public class TableView extends SurfaceView {
 //            		
 //            		draggable.setLocation(vector.get(index).x, vector.get(index).y);
 //            		draggable.setAngle(i*10);
-//            		animationTask.redraw();
+//            		redraw()
 //            	}
 //            	draggable.setAngle(0);
-//            	draggable.getCardLogic().setRevealed(revealedAtEnd);
+//            	//draggable.getCardLogic().setRevealed(revealedAtEnd);
 //				
 //			}
 //		});
 //		drawingThread.start();
 //		
 //	}
-//	
-//	
-//	
-//	
+	
+	
+	
+	
 //	public void moveDraggable(Draggable draggable, Droppable droppable, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
 //		moveDraggable(draggable, droppable.getX(), droppable.getY(), initialDelay, delay, revealedWhileMoving, revealedAtEnd);
 //	}
@@ -233,19 +256,20 @@ public class TableView extends SurfaceView {
 //		}
 //		//invalidate();
 //		
-//		animationTask.redraw();
+//		redraw()
 //	}
 	
 
 	private void addNewDraggable(Card card,Droppable destination){
-		animationTask.stopDrawing();
+//		animationTask.stopDrawing();
 						
-			destination.deltCard(card);
-			GuiCard guiCard=new GuiCard(card);
-			guiCard.setLocation(destination.getX(), destination.getY());
-			table.addDraggable(guiCard);
+		destination.deltCard(card);			
+		//GuiCard guiCard=new GuiCard(card);
 		
-		animationTask.redraw();
+		card.setLocation(destination.getX(), destination.getY());		
+		//table.addDraggable(card);
+		table.mappDraggable(card);
+		redraw();
 	}
 	
 //	public void addDraggable(ArrayList<CardLogic> cardLogics,
@@ -293,9 +317,10 @@ public class TableView extends SurfaceView {
 	    		switch (eventAction ) { 
 	    		
 		    		case MotionEvent.ACTION_DOWN:{
-		    			draggableInHand = table.getNearestDraggable(X, Y, GetMethod.PutInFront);
+		    			draggableInHand = table.getNearestDraggable(X, Y);
+		    			
 		    			if (draggableInHand!=null){
-		    				
+		    				//table.setFrontOrRear(draggableInHand, Focus.FRONT);
 		    				if(draggableInHand.isMoveable()){
 		    					from=table.getNearestDroppable(X, Y);
 		    					draggableInHand.onClick();
@@ -320,7 +345,8 @@ public class TableView extends SurfaceView {
 		    				
 							Droppable droppable=table.getNearestDroppable(X, Y);
 							if (droppable!=null && from!=null){									
-								droppable.onDrop(ClientController.get().getMe(),from.getMyId(),((GuiCard)draggableInHand).getCard());
+								droppable.onDrop(ClientController.get().getMe(),from,((Card)draggableInHand));
+								
 							}
 							else{
 								draggableInHand.invalidMove();
@@ -344,7 +370,7 @@ public class TableView extends SurfaceView {
   
     		}   		
 		
-    	animationTask.redraw();
+    	redraw();
 		return true;
     }
     
@@ -377,7 +403,7 @@ public class TableView extends SurfaceView {
 
 	public void removeCards(ArrayList<utils.Card> cards, String from) {
 		for (utils.Card card : cards){
-			table.getDroppableById(IDMaker.getMaker().getId(from)).removeCard(card);
+			//table.getDroppableById(IDMaker.getMaker().getId(from)).removeCard(card);			
 			
 		}
 		
@@ -386,25 +412,33 @@ public class TableView extends SurfaceView {
 	public Droppable getDroppableById(Integer id) {
 		return table.getDroppableById(id);
 	}
+	
+//	public Draggable getDraggableById(Integer id) {
+//		return table.getDraggableById(id);
+//	}
 
-	public void moveCard(Card card,int from,int to){
+	public void moveCard(Card card,int from,int to,Player byWhom){
 		ArrayList<Card> cards=new ArrayList<Card>();
-		cards.add(card);
-		moveCards(cards,from,to);
+		System.out.println("card moved: "+card.getId());
+		cards.add(((Card)(table.getDraggableById(card.getId()))));
+		//cards.add(card);
+		moveCards(cards,from,to,byWhom);
 	}
 	
-	public void moveCards(ArrayList<Card> cards, int from, int to) {		
+	public void moveCards(ArrayList<Card> cards, int from, int to, Player byWhom) {		
 		Droppable destination=table.getDroppableById(to);
-		Droppable source=table.getDroppableById(from);
+		Droppable source=table.getDroppableById(from);		
 		for (Card card : cards){
 			if (from==-1){
 				//new card, create it
-				addNewDraggable(card, destination);				
+				System.out.println(GameStatus.username+": card id: "+card.getId());
+				addNewDraggable(card, destination);
+				
 			}else{
 				//move card from one zone to another
-					source.removeCard(card);
-					destination.addCard(null, card);
-					animationTask.redraw();
+					source.removeCard(byWhom,card);					
+					destination.onCardAdded(byWhom, card);
+					redraw();
 					//drawMovement(cards, destination.getPoint(), 1000, 10, revealWhileMoving, revealAtEnd);
 				}
 		}
@@ -412,13 +446,22 @@ public class TableView extends SurfaceView {
 	//public void revealedDraggable(int id){
 	//	GuiCard revealed=(GuiCard)table.getDraggableById(id, GetMethod.PutInFront);
 	//	revealed.getCard().setRevealed(true);
-	//	animationTask.redraw();
+	//	redraw()
 		
 	//}
 	public void addPlayer(Player newPlayer) {
-		table.addDroppable(new GuiPlayer(newPlayer));
-		animationTask.redraw();
+		table.addDroppable(newPlayer);
+		redraw();
 		
+	}
+
+	public void dealCards(ArrayList<Card> cards, int to) {
+		Droppable destination=table.getDroppableById(to);
+		for (Card card : cards){			
+			//new card, create it
+			System.out.println(GameStatus.username+": card id: "+card.getId());
+			addNewDraggable(card, destination);
+		}			
 	}
 	
 	
