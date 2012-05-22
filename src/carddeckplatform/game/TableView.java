@@ -268,7 +268,7 @@ public class TableView extends SurfaceView {
 		
 		card.setLocation(destination.getX(), destination.getY());		
 		//table.addDraggable(card);
-		
+		table.mappDraggable(card);
 		redraw();
 	}
 	

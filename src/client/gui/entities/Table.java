@@ -71,20 +71,26 @@ public class Table {
 //		}
 //	}
 	
+
+	public void mappDraggable(Draggable draggable) {
+		mappedDraggables.put(draggable.getId(), draggable);
+		
+	}
+	
 	
 	public Draggable getDraggableById(int id){	
 		Draggable answer=mappedDraggables.get(id);
-		if (answer==null){
-			//draggable wasn't mapped, refresh mapping table
-			for (Droppable droppable : droppables){
-				for (Draggable draggable : droppable.getCards()){
-					mappedDraggables.put(draggable.getId(), draggable);
-					if (draggable.getId()==id){
-						answer=draggable;
-					}
-				}
-			}
-		}
+//		if (answer==null){
+//			//draggable wasn't mapped, refresh mapping table
+//			for (Droppable droppable : droppables){
+//				for (Draggable draggable : droppable.getCards()){
+//					mappedDraggables.put(draggable.getId(), draggable);
+//					if (draggable.getId()==id){
+//						answer=draggable;
+//					}
+//				}
+//			}
+//		}
 		return answer;
 	}
 
@@ -155,12 +161,10 @@ public class Table {
 			d.draw(canvas, context);
 		}
 		for (Droppable d: droppables){			
-			AbstractList<Card>cards=d.getCards();
-//			synchronized (cards){
-				for (Card card : cards){
+			AbstractList<Card>cards=d.getCards();			
+				for (Card card : cards){					
 					card.draw(canvas, context);
-				}
-//			}
+					}	
 		}
 		
 		//synchronized (draggables){
@@ -183,6 +187,7 @@ public class Table {
 	public void setyDimention(int yDimention) {
 		this.yDimention = yDimention;
 	}
+
 	
 	
 }

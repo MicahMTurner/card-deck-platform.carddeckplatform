@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import client.controller.ClientController;
+import client.controller.PositionByCompass;
 import client.gui.entities.Droppable;
 import communication.link.ServerConnection;
 
@@ -59,6 +60,7 @@ public class GameActivity extends Activity {
 //        if(GameStatus.isServer)
 ////        	new SampleServer();
         ipshown=false;
+        new PositionByCompass(getBaseContext());
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); 
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
