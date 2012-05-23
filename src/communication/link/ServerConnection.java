@@ -8,6 +8,8 @@ import java.net.UnknownHostException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import communication.messages.Message;
+
 import carddeckplatform.game.GameStatus;
 //import communication.entities.Client;
 //import communication.entities.TcpClient;
@@ -36,6 +38,17 @@ public class ServerConnection implements Runnable{
 
 		private abstract class ActionForQueue{			
 			public abstract void execute();
+		}
+		private class SendMessageExecutor extends ActionForQueue{
+			private Message msg;
+			public SendMessageExecutor(Message msg) {
+				this.msg=msg;
+			}
+			@Override
+			public void execute() {
+				sender.send(msg);
+				
+			}
 		}
 		private class OpenConnectionExecutor extends ActionForQueue{
 
@@ -127,7 +140,8 @@ public class ServerConnection implements Runnable{
 		});			
 	}
 	
-	public Sender getMessageSender(){
-		return sender;
+
+	public void send(Message msg){
+		commandsQueue.add(new SendMessageExecutor(msg));
 	}
 }
