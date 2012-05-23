@@ -37,11 +37,16 @@ import android.widget.ViewFlipper;
 
 public class CarddeckplatformActivity extends Activity {
 	private ViewFlipper mFlipper;
-	public static Handler h = new Handler();
+	private TcpIdListener tcpIdListener;
+	private Host host;
+	//public static Handler h = new Handler();
+	
+
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	tcpIdListener=null;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu);
         
@@ -99,7 +104,10 @@ public class CarddeckplatformActivity extends Activity {
 			            	GameStatus.username = username.getText().toString();
 			            	//GameStatus.me=new Player(GameStatus.username,GameStatus.localIp);
 			                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
-			                new Thread(new TcpIdListener(GameStatus.username, name)).start();
+			                if (tcpIdListener==null){
+			                	tcpIdListener=new TcpIdListener(GameStatus.username, name);			                	
+			                }
+			                tcpIdListener.start();		                	
 			                new Thread(new Host(ClientDataBase.getDataBase().getGame(name))).start();
 			                
 			                startActivity(i);
@@ -206,7 +214,11 @@ public class CarddeckplatformActivity extends Activity {
     
     
     public void onWindowFocusChanged(boolean hasWindowFocus){
-    	
+    	if (hasWindowFocus){
+    		if (tcpIdListener!=null){
+    			tcpIdListener.stop();
+    		}
+    	}
     }
 }
 

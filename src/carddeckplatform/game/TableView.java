@@ -115,11 +115,12 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 		this.yDimention = getMeasuredHeight();
 		cont = context;		
 		table = new Table(context);
-		table.setTableImage(R.drawable.boardtest);
+		
 	    setFocusable(true); //necessary for getting the touch events.
 	    
 	    //making the UI thread
 	    getHolder().addCallback(this);
+	    table.setTableImage(R.drawable.boardtest);
 //	    SurfaceViewThread.threadSurfaceHolder = getHolder();
 //	    SurfaceViewThread.threadView = this;
 	    
@@ -136,14 +137,19 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 		
 		//draggable.setCarrier(username);
 		//draggable.setLocation(780-x, 460-y);
-		draggable.setLocation(x, y);
+		synchronized (draggable) {
+			draggable.setLocation(x, y);
+		}
+		
 		redraw();
 	}
 	
 	public void endDraggableMotion(int id){
 		Draggable draggable = table.getDraggableById(id);
-		//table.setFrontOrRear(draggable,Focus.FRONT);
-		draggable.setCarrier("");
+		synchronized (draggable) {
+			//table.setFrontOrRear(draggable,Focus.FRONT);
+			draggable.setCarrier("");
+		}
 		redraw();
 	}
 
@@ -306,8 +312,9 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 	     int heightMeasureSpec) {
 	    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	    setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight());
-	    table.setxDimention(getMeasuredWidth());
-	    table.setyDimention(getMeasuredHeight());
+	    table.setDimentions(getMeasuredWidth(),getMeasuredHeight());
+	    //table.setyDimention(getMeasuredHeight());
+	    //table.setxDimention(getMeasuredWidth());
 	}
 	
 	// the method that draws
