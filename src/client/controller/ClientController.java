@@ -275,6 +275,14 @@ public class ClientController implements Observer {
 		
 	}
 
+	public void positionUpdate(int playerId, utils.Position.Player newPosition) {
+		Player player=(Player) gui.getDroppableById(playerId);
+		Player swappedWith=(Player) getZone(newPosition);
+		game.positionUpdate(player,swappedWith);
+		gui.swapPositions(player,swappedWith);
+		
+	}
+
 	
 	
 	//---------------------------------------------------------------------//	

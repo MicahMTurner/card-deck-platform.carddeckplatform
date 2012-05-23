@@ -100,8 +100,23 @@ public abstract class Game {
 		players.add(createPlayer(userName, position));
 		
 	}
+
+	public void positionUpdate(Player player, Player swappedWith) {
+		swapGlobalPositions(player,swappedWith);
 		
+		//check if I moved
+		if (player.equals(getMe())){
+			for (Player p : players){
+				p.setRelativePosition(player.getGlobalPosition());
+			}
+		}
+	}
+
+	private void swapGlobalPositions(Player player, Player swappedWith) {
+		Position.Player temp=swappedWith.getGlobalPosition();
+		swappedWith.setGlobalPosition(player.getGlobalPosition());
+		player.setGlobalPosition(temp);
 		
-	
+	}
 
 }
