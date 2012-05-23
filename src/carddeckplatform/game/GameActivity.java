@@ -13,6 +13,8 @@ import utils.Public;
 import IDmaker.IDMaker;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
@@ -31,6 +33,7 @@ import client.gui.entities.Droppable;
 import communication.link.ServerConnection;
 
 public class GameActivity extends Activity {
+	private ProgressDialog progDialog;
 	boolean ipshown;//if ip dialog was shown at the beggining
 	TableView tableview;
 	public static String getLocalHostAddress() { 
@@ -86,24 +89,24 @@ public class GameActivity extends Activity {
         tableview.setyDimention(GameStatus.screenHeight);
         ClientController.get().setGui(tableview);
         
-        
-        //-------CONNECT TO SERVER(HOST)------//
-        ServerConnection.getConnection().openConnection();
-        
-        
-        
-        //Position posistion=ClientController.getController().getPosition();
-        ArrayList<Droppable>publics=new ArrayList<Droppable>();
-
-        //insert public areas into publics array
-        ClientController.get().setLayouts(publics);
-        
-        //ArrayList<Button>buttons=new ArrayList<Public>();
-        
-        //build the layout
-        buildLayout(publics);
-        
-        System.out.println("Layout was created");
+        initialize();
+//        //-------CONNECT TO SERVER(HOST)------//
+//        ServerConnection.getConnection().openConnection();
+//        
+//        
+//        
+//        //Position posistion=ClientController.getController().getPosition();
+//        ArrayList<Droppable>publics=new ArrayList<Droppable>();
+//
+//        //insert public areas into publics array
+//        ClientController.get().setLayouts(publics);
+//        
+//        //ArrayList<Button>buttons=new ArrayList<Public>();
+//        
+//        //build the layout
+//        buildLayout(publics);
+//        
+//        System.out.println("Layout was created");
 
     }
     
@@ -115,8 +118,78 @@ public class GameActivity extends Activity {
     	}
     	
     }
-   
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch(id) {
+        case 0:                      // Spinner
+        	progDialog= new ProgressDialog(this);
+          	progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+          	progDialog.setButton("Cancel", new DialogInterface.OnClickListener() {
+        			
+        			@Override
+        			public void onClick(DialogInterface arg0, int arg1) {
+        				ServerConnection.getConnection().closeConnection();
+        				finish();
+        				
+        			}
+        		});
+          	
+          	progDialog.setMessage("Connecting...");
+          	//progDialog.setContentView(R.layout.gamelistdialog); 
+            return progDialog;
+//        case 1:                      // Horizontal
+//            progDialog = new ProgressDialog(this);
+//            progDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+//            progDialog.setMax(maxBarValue);
+//            progDialog.setMessage("Dollars in checking account:");
+//            progThread = new ProgressThread(handler);
+//            progThread.start();
+//            return progDialog;
+        default:
+            return null;
+        }
+    }
+  @Override
+public void onBackPressed() {
 
+	 super.onBackPressed();
+	  ServerConnection.getConnection().closeConnection();
+	
+}
+  private void initialize(){    
+	  showDialog(0);
+	  new Thread(new ProgressBarThread(new ActionWhileWaiting() {
+		
+		@Override
+		public void execute() {
+			 //-------CONNECT TO SERVER(HOST)------//
+		      ServerConnection.getConnection().openConnection();
+		      progDialog.dismiss();
+		      
+		      
+		      //Position posistion=ClientController.getController().getPosition();
+		      ArrayList<Droppable>publics=new ArrayList<Droppable>();
+
+		      //insert public areas into publics array
+		      ClientController.get().setLayouts(publics);
+		      
+		      //ArrayList<Button>buttons=new ArrayList<Public>();
+		      
+		      //build the layout
+		      buildLayout(publics);
+		     
+			
+		}
+	})).start();
+	 
+  }
+	 
+	 
+      
+     
+    	   	
+    	
+    
 
 
 

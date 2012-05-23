@@ -6,12 +6,12 @@
     android:background="@drawable/woodtexture"
     android:orientation="horizontal" >
 
-    <FrameLayout
+    <!-- <FrameLayout
         android:id="@+id/tableBkground"
         android:layout_width="match_parent"
         android:layout_height="match_parent" 
          android:background="@drawable/boardtest"
-         >
+         >-->
          
            <carddeckplatform.game.TableView
         		android:id="@+id/TableView1"
@@ -20,12 +20,6 @@
         		android:layout_margin="5dp"
         		android:background="#00000000"
         		/>
-         
-
-		
-       
-        
-    </FrameLayout>
-
-
+                   
+    <!-- </FrameLayout>?-->
 </FrameLayout>

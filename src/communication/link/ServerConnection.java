@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import communication.messages.Message;
 
@@ -83,10 +84,12 @@ public class ServerConnection implements Runnable{
 
 		@Override
 		public void execute() {
-			try {				
-				sender.closeStream();
-				receiver.closeStream();
-				socket.close();
+			try {	
+				if (socket!=null){
+					sender.closeStream();
+					receiver.closeStream();
+					socket.close();
+				}
 			
 			} catch (IOException e) {		
 				e.printStackTrace();

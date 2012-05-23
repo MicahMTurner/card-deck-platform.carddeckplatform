@@ -12,37 +12,50 @@ public class TcpIdListener implements Runnable {
 
 	private String owner;
 	private String gameName;
+	private volatile boolean stop;
 	private ServerSocket serverSocket=null;
 	
 	
 	public TcpIdListener(String owner, String gameName){
 		this.owner = owner;
+		this.stop=false;
 		this.gameName = gameName;
+		serverSocket=null;
+	}
+	public void start(){
+		stop=false;
 		try {
 			serverSocket = new ServerSocket(GameStatus.idPort);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		new Thread(this).start();
+	}
+	public void stop(){
+		stop=true;
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		while(true){
-			try {
-				Socket clientSocket;
-				clientSocket = serverSocket.accept();
-				System.out.println("Got request from " + clientSocket.getLocalAddress().toString());
-				ObjectOutputStream out=new ObjectOutputStream(clientSocket.getOutputStream());
-				//ObjectInputStream in=new ObjectInputStream(clientSocket.getInputStream());
+		if (serverSocket!=null){
+			while(!stop){
+				try {
+					Socket clientSocket;
+					clientSocket = serverSocket.accept();
+					System.out.println("Got request from " + clientSocket.getLocalAddress().toString());
+					ObjectOutputStream out=new ObjectOutputStream(clientSocket.getOutputStream());
+				//	ObjectInputStream in=new ObjectInputStream(clientSocket.getInputStream());
 				
-				out.writeObject(new HostId("", owner, gameName));
-				out.close();
-				clientSocket.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+					out.writeObject(new HostId("", owner, gameName));
+					out.close();
+					clientSocket.close();
+				} catch (IOException e) {				
+					e.printStackTrace();
+				}
 			}
 		}
 	}

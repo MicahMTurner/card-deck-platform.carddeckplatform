@@ -29,10 +29,13 @@ public class Table {
 	private Context context;
 	private int xDimention;
 	private int yDimention;
+	//private Matrix matrix;
 	
 
 	public Table(Context context){
+		//this.matrix=new Matrix();		
 		this.context = context;
+		this.img=null;
 		this.droppables= new ArrayList<Droppable>();
 		this.mappedDraggables= new Hashtable<Integer,Draggable>();
 	}
@@ -51,7 +54,13 @@ public class Table {
 	}
 	
 	public void setTableImage(int drawable){
-		img = BitmapFactory.decodeResource(context.getResources(), drawable); 
+		//want to change the table image dynamically (already got dimensions)
+		if (img!=null){
+			img = android.graphics.Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), drawable), xDimention, yDimention,true);
+		}else{
+			//first time we set the table image, dimensions are still 0
+			img = BitmapFactory.decodeResource(context.getResources(), drawable);
+		}
 	}
 	
 //	public void setFrontOrRear(Draggable draggable,Focus focus){
@@ -158,20 +167,20 @@ public class Table {
 	public void draw(Canvas canvas){		
 				
 	if (canvas!=null){
-		canvas.drawColor(Color.TRANSPARENT);    	  
-        canvas.scale(1, 1);
+		//canvas.drawColor(Color.TRANSPARENT);    	  
+       // canvas.scale(1, 1);
 
         //canvas.rotate(50, GameStatus.screenWidth/2, GameStatus.screenHeight/2);
 
-		Matrix matrix = new Matrix();
-		matrix.postScale((float) xDimention, (float) yDimention);
-		//canvas.drawBitmap(android.graphics.Bitmap.createScaledBitmap(img, xDimention, yDimention,true),(float)0,(float)0, null);
-		//synchronized (droppables) {
+		
+		canvas.drawBitmap(img,(float)0,(float)0, null);
+		//canvas.save();
+		synchronized (droppables) {
 			for(Droppable d : droppables){
 				d.draw(canvas, context);
 			}
-		//}
-		//synchronized (droppables) {
+		}
+		synchronized (droppables) {
 			for (Droppable d: droppables){			
 				AbstractList<Card>cards=d.getCards();
 				synchronized (cards){
@@ -180,8 +189,8 @@ public class Table {
 					}
 				}
 			}
-		//}
-		
+		}
+		//canvas.restore();
 		//synchronized (draggables){
 		//	for(Draggable d : draggables){
 		//		d.draw(canvas, context);
@@ -190,19 +199,16 @@ public class Table {
 		//}
 	}
 	}
-	public int getxDimention() {
-		return xDimention;
-	}
-	public void setxDimention(int xDimention) {
+//	public int getxDimention() {
+//		return xDimention;
+//	}
+	public void setDimentions(int xDimention,int yDimention) {
 		this.xDimention = xDimention;
+		this.yDimention=yDimention;
+		img=android.graphics.Bitmap.createScaledBitmap(img, xDimention, yDimention,true);
 	}
-	public int getyDimention() {
-		return yDimention;
-	}
-	public void setyDimention(int yDimention) {
-		this.yDimention = yDimention;
-	}
-
-	
+//	public int getyDimention() {
+//		return yDimention;
+//	}	
 	
 }
