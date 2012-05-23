@@ -212,6 +212,12 @@ public class CarddeckplatformActivity extends Activity {
              });
     }
     
+    @Override
+    protected void onResume() {
+    	
+    	super.onResume();
+    	tcpIdListener.stop();
+    }
     
     public void onWindowFocusChanged(boolean hasWindowFocus){
     	if (hasWindowFocus){
