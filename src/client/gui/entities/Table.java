@@ -161,7 +161,7 @@ public class Table {
 		canvas.drawColor(Color.TRANSPARENT);    	  
         canvas.scale(1, 1);
 
-        //canvas.rotate(180, GameStatus.screenWidth/2, GameStatus.screenHeight/2);
+        //canvas.rotate(50, GameStatus.screenWidth/2, GameStatus.screenHeight/2);
 
 		Matrix matrix = new Matrix();
 		matrix.postScale((float) xDimention, (float) yDimention);

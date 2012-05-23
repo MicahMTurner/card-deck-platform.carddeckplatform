@@ -111,16 +111,16 @@ public class ClientController implements Observer {
 		
 		public void endTurn(Position.Player position){
 			gui.setUiEnabled(false);
-			ServerConnection.getConnection().getMessageSender().send(new EndTurnMessage(new EndTurnAction(position)));
+			ServerConnection.getConnection().send(new EndTurnMessage(new EndTurnAction(position)));
 		}
 		public void cardAdded(Card card,int from,int to,Player byWhom){			
-			ServerConnection.getConnection().getMessageSender().send(new Message(new CardAdded(card,from,to,byWhom)));
+			ServerConnection.getConnection().send(new Message(new CardAdded(card,from,to,byWhom)));
 		}
 		public void cardRemoved(ArrayList<Card> cards,String from){
-			ServerConnection.getConnection().getMessageSender().send(new Message(new CardRemoved(cards, from)));
+			ServerConnection.getConnection().send(new Message(new CardRemoved(cards, from)));
 		}
 		public void endRound(){
-			ServerConnection.getConnection().getMessageSender().send(new Message(new EndRoundAction()));
+			ServerConnection.getConnection().send(new Message(new EndRoundAction()));
 		}
 		public void cardRevealed(Card card){
 			//ServerConnection.getConnection().getMessageSender().send(new Message(new CardRevealAction()))
@@ -132,12 +132,12 @@ public class ClientController implements Observer {
 		}
 
 		public void dragMotion(String username, int id, Point coord) {
-			ServerConnection.getConnection().getMessageSender().send(new Message(
+			ServerConnection.getConnection().send(new Message(
 					new DraggableMotionAction(GameStatus.username,id, coord.getX(), coord.getY())));
 			
 		}
 		public void endDragMotion(int id){
-			ServerConnection.getConnection().getMessageSender().send(new Message(new EndDraggableMotionAction(id)));
+			ServerConnection.getConnection().send(new Message(new EndDraggableMotionAction(id)));
 			
 		}
 		
