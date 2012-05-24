@@ -1,11 +1,14 @@
 package client.gui.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
+import utils.Player;
 import utils.Point;
 
 import carddeckplatform.game.GameStatus;
+import carddeckplatform.game.StaticFunctions;
 import client.controller.ClientController;
 import IDmaker.IDMaker;
 import android.content.Context;
@@ -74,7 +77,7 @@ public abstract class Draggable implements Serializable{
 	public abstract Point getCoord();
 	public abstract int sensitivityRadius();
 	public abstract void setLocation(int x, int y);		
-
+	
 	public void setCarried(boolean carried) {
 		this.carried = carried;
 	}

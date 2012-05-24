@@ -2,7 +2,9 @@ package carddeckplatform.game;
 
 import java.util.ArrayList;
 
-import android.graphics.Point;
+import utils.Point;
+
+
 import android.os.Handler;
 
 

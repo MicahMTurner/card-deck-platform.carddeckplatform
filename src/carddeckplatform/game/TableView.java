@@ -138,7 +138,8 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 		//draggable.setCarrier(username);
 		//draggable.setLocation(780-x, 460-y);
 		synchronized (draggable) {
-			draggable.setLocation(x, y);
+			draggable.setLocation(GameStatus.screenWidth-x, GameStatus.screenHeight-y);
+
 		}
 		
 		redraw();
@@ -157,64 +158,62 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 	
 	
 	
-	public void drawMovement(final ArrayList<Card> cards, final int toId, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
-		ArrayList<Thread> drawingThreads = new ArrayList<Thread>();
-		//Card card;
-		//final CountDownLatch cdl=new CountDownLatch(cards.size());
-		final Droppable destination=getDroppableById(toId);
-		for (final Card card : cards){
-			drawingThreads.add(	new Thread(new Runnable() {	
-						@Override
-						public void run() {
-							card.setRevealed(revealedWhileMoving);
-							int x = card.getCoord().getX();
-							int y = card.getCoord().getY();
-							final ArrayList<Point> vector = StaticFunctions.midLine(x, y, destination.getX(), destination.getY());
-							try {
-			        			Thread.sleep(initialDelay);
-			        		} catch (InterruptedException e) {			        			
-			        			e.printStackTrace();
-			        		}
-			            	for(int i=0; i<vector.size(); i++){
-			            		card.setRevealed(revealedWhileMoving);
-			            		final int index = i;
-					
-			            		try {
-			            			Thread.sleep(delay);
-			            		} catch (InterruptedException e) {			            			
-			            			e.printStackTrace();
-			            		}					
-			            		
-			            		card.setCoord(vector.get(index).x, vector.get(index).y);
-			            		card.setAngle(i*10);
-			            		redraw();
-			            	}
-			            	card.setAngle(0);
-			            	card.setRevealed(revealedAtEnd);
-			            	//cdl.countDown();
-							
-						}
-					}));
-		
-		}
-		for (Thread drawingThread : drawingThreads){
-			drawingThread.start();
-		}
-//		try {
-//			cdl.await();
-//		} catch (InterruptedException e) {		
-//			e.printStackTrace();
+//	public void drawMovement(final ArrayList<Card> cards, final int toId, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
+//		ArrayList<Thread> drawingThreads = new ArrayList<Thread>();
+//		//Card card;
+//		//final CountDownLatch cdl=new CountDownLatch(cards.size());
+//		final Droppable destination=getDroppableById(toId);
+//		for (final Card card : cards){
+//			drawingThreads.add(	new Thread(new Runnable() {	
+//						@Override
+//						public void run() {
+//							card.setRevealed(revealedWhileMoving);
+//							int x = card.getCoord().getX();
+//							int y = card.getCoord().getY();
+//							final ArrayList<Point> vector = StaticFunctions.midLine(x, y, destination.getX(), destination.getY());
+//							try {
+//			        			Thread.sleep(initialDelay);
+//			        		} catch (InterruptedException e) {			        			
+//			        			e.printStackTrace();
+//			        		}
+//			            	for(int i=0; i<vector.size(); i++){
+//			            		card.setRevealed(revealedWhileMoving);
+//			            		final int index = i;
+//					
+//			            		try {
+//			            			Thread.sleep(delay);
+//			            		} catch (InterruptedException e) {			            			
+//			            			e.printStackTrace();
+//			            		}					
+//			            		
+//			            		card.setCoord(vector.get(index).x, vector.get(index).y);
+//			            		card.setAngle(i*10);
+//			            		redraw();
+//			            	}
+//			            	card.setAngle(0);
+//			            	card.setRevealed(revealedAtEnd);	
+//						}
+//					}));
+//		
 //		}
-		//for (Thread drawingThread : drawingThreads){
-		//	try {
-		//		drawingThread.join();
-		//	} catch (InterruptedException e) {
-		//		e.printStackTrace();
-		//	}
-		//}
-		
-		
-	}
+//		for (Thread drawingThread : drawingThreads){
+//			drawingThread.start();
+//		}
+////		try {
+////			cdl.await();
+////		} catch (InterruptedException e) {		
+////			e.printStackTrace();
+////		}
+//		//for (Thread drawingThread : drawingThreads){
+//		//	try {
+//		//		drawingThread.join();
+//		//	} catch (InterruptedException e) {
+//		//		e.printStackTrace();
+//		//	}
+//		//}
+//		
+//		
+//	}
 //	public void moveDraggable(final Draggable draggable, final int newX, final int newY, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
 //		Thread drawingThread=
 //		new Thread(new Runnable() {	

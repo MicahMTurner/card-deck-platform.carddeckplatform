@@ -66,9 +66,9 @@ public class PublicHandler implements PublicEventsHandler{
 
 	private void getCards(Public publicArea, Player player){
 		for (StandartCard card : ((ArrayList<StandartCard>)((ArrayList)publicArea.getCards()))){
-			player.addCard(card);
+			card.moveTo(publicArea,player,true,false);
 		}
-		publicArea.clear();
+		//publicArea.clear();
 	}
 	
 	
@@ -91,9 +91,9 @@ public class PublicHandler implements PublicEventsHandler{
 			else{
 				Player winner=getWinner(otherPublic, otherPlayer, byWhom, card);
 				//move cards from public areas to winner
-				ClientController.guiAPI().moveCards(publicArea.getCards(),winner.getId(), true, false);
+				//ClientController.guiAPI().moveCards(publicArea.getCards(),winner.getId(), true, false);
 				getCards(publicArea,winner);
-				ClientController.guiAPI().moveCards(otherPublic.getCards(),winner.getId(), true, false);					
+				//ClientController.guiAPI().moveCards(otherPublic.getCards(),winner.getId(), true, false);					
 				getCards(otherPublic,winner);
 				if (winner.equals(otherPlayer) && me.isMyTurn()){
 					me.endTurn();

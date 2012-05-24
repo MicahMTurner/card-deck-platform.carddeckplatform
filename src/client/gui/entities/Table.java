@@ -167,29 +167,36 @@ public class Table {
 	public void draw(Canvas canvas){		
 				
 	if (canvas!=null){
-		//canvas.drawColor(Color.TRANSPARENT);    	  
-       // canvas.scale(1, 1);
+		canvas.drawColor(Color.TRANSPARENT);    	  
+        canvas.scale(1, 1);
 
         //canvas.rotate(50, GameStatus.screenWidth/2, GameStatus.screenHeight/2);
-
-		
-		canvas.drawBitmap(img,(float)0,(float)0, null);
-		//canvas.save();
-		synchronized (droppables) {
+		try {
+			canvas.drawBitmap(img,(float)0,(float)0, null);
+			//canvas.save();
+			
 			for(Droppable d : droppables){
-				d.draw(canvas, context);
+				synchronized (d) {
+					d.draw(canvas, context);
+				}
 			}
-		}
-		synchronized (droppables) {
+			
 			for (Droppable d: droppables){			
 				AbstractList<Card>cards=d.getCards();
 				synchronized (cards){
 					for (Card card : cards){
-						card.draw(canvas, context);
+						synchronized (card){
+							card.draw(canvas, context);
+						}
 					}
 				}
 			}
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
+		
+		
+		
 		//canvas.restore();
 		//synchronized (draggables){
 		//	for(Draggable d : draggables){

@@ -26,9 +26,10 @@ public class GameActivity extends Activity {
 	private ProgressDialog progDialog;
 	private TableView tableview;	
 	private PositionByCompass posByComp;
+	private boolean livePosition=true;
 	
 	public GameActivity() {
-		posByComp=new PositionByCompass(getApplicationContext());
+		
 	}
 	
 	@Override
@@ -46,7 +47,7 @@ public class GameActivity extends Activity {
 	@Override
 	protected void onResume() {	
 		super.onResume();
-		posByComp.start();
+		//posByComp.start();
 	}
 	
     /** Called when the activity is first created. */
@@ -73,7 +74,7 @@ public class GameActivity extends Activity {
         tableview.setxDimention(GameStatus.screenWidth);
         tableview.setyDimention(GameStatus.screenHeight);
         ClientController.get().setGui(tableview);
-        
+        posByComp=new PositionByCompass(getApplicationContext());
         setupGame();
 
     }

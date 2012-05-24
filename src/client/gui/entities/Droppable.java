@@ -70,14 +70,20 @@ public abstract class Droppable implements Serializable{
 	public Droppable(int id,Position position){
 		this.id=id;
 		this.position=position;
+		
 		//this.cards=new ArrayList<Card>();		
 		//this.point=new Point(190,175);
 		//this.myId=IDMaker.getMaker().getId(position);
 	}
 
 	
-	public abstract int getX();
-	public abstract int getY();	
+	public int getX() {
+		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();		
+	}
+
+	public int getY() {
+		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();		
+	}
 	public abstract int cardsHolding();
 	public abstract boolean isEmpty();
 

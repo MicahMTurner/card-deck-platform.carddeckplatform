@@ -1,5 +1,7 @@
 package logic.client;
 
+import utils.AbstractDeck;
+
 /**
  * abstract factory to create all tools needed for card games
  * (cards,table etc...)

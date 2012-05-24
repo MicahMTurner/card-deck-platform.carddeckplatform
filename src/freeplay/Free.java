@@ -3,20 +3,26 @@ package freeplay;
 import java.util.ArrayList;
 import java.util.Queue;
 
+import communication.actions.DealCardAction;
+import communication.messages.Message;
+import communication.server.ConnectionsManager;
+
+import client.controller.ClientController;
 import client.gui.entities.Droppable;
 
+import utils.AbstractDeck;
+import utils.Card;
 import utils.Deck;
 import utils.Position;
 import utils.Position.Player;
 import utils.Public;
-import logic.client.AbstractDeck;
 import logic.client.Game;
 
 public class Free extends Game{
 
 	@Override
-	public AbstractDeck getDeck() {
-		return super.deck;
+	public Deck getDeck() {
+		return new Deck(new CardHandler(), true);
 	}
 
 	@Override
@@ -26,7 +32,7 @@ public class Free extends Game{
 
 	@Override
 	public int minPlayers() {
-		return 1;
+		return 2;
 	}
 
 	@Override
@@ -37,13 +43,18 @@ public class Free extends Game{
 
 	@Override
 	public void dealCards() {
-		// TODO Auto-generated method stub
-		
+		int size=deck.getSize();
+		ArrayList<Card>cards=new ArrayList<Card>();
+		for (int i=0;i<size;i++){
+			cards.add(deck.drawCard());
+		}
+		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(cards,false,false,-1,ClientController.get().getZone(Position.Button.BOTLEFT).getId())));
 	}
 
 	@Override
 	public void getLayouts(ArrayList<Droppable> droppables) {
-		droppables.add(new Deck(new CardHandler(), true,Position.Button.BOTLEFT));
+		droppables.add(new AbstractDeck(Position.Button.BOTLEFT));
+		//(new CardHandler(), true,));
 		droppables.add(new Public(new PublicHandler(), Position.Public.MID));
 	}
 
