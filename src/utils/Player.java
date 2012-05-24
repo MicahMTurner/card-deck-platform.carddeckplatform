@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
-import client.gui.entities.MetricsConvertion;
 
 
 
@@ -19,8 +18,6 @@ public class Player extends Droppable implements  Comparable<Player>{
 	private String userName;
 	private ArrayList<Card> hand;
 	boolean myTurn;
-	//private Point coord;
-	private Position.Player position;
 	private Position.Player globalPosition;
 	
 	
@@ -34,8 +31,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 		this.position=globalPosition.sitMe(globalPosition);		
 		this.handler=handler;
 		this.hand=new ArrayList<Card>();
-		this.myTurn=false;
-		//addObserver(ClientController.get());
+		this.myTurn=false;		
 	}
 	
 	public Position.Player getGlobalPosition() {
@@ -45,7 +41,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 		return handler;
 	}
 	public Position.Player getPosition() {
-		return position;
+		return (Position.Player)position;
 	}
 	public String getUserName() {
 		return userName;
@@ -54,7 +50,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 		return id;
 	}
 	public void addCard(Card card) {
-		card.setOwner(position);		
+		card.setOwner((Position.Player)position);		
 		hand.add(card);		
 		handler.onCardAdded(this, card);		
 	}
@@ -85,7 +81,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 		ClientController.sendAPI().endTurn(globalPosition);
 	}
 	public void deltCard(Card card) {
-		card.setOwner(position);
+		card.setOwner((Position.Player)position);
 		hand.add(card);	
 		card.setLocation(getX(), getY());
 	}
@@ -136,22 +132,10 @@ public class Player extends Droppable implements  Comparable<Player>{
 		canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), 0x7f02002e),getX()-28,getY()-27,null);
 		
 	}
-//	@Override
-//	public Point getCoord() {		
-//		return coord;
-//	}
+
 	@Override
 	public ArrayList<Card> getCards() {		
 		return hand;
 	}
-	@Override
-	public int getX() {
-		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();		
-	}
 
-	@Override
-	public int getY() {
-		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();		
-	}
-	
 }
