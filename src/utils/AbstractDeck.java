@@ -20,7 +20,7 @@ import client.gui.entities.MetricsConvertion;
 public class AbstractDeck extends Droppable{
 	
 	public AbstractDeck(Position.Button position) {
-		super(IDMaker.getMaker().getId(),position);
+		super(position.getId(),position);
 	}
 
 	//change to queue?
@@ -45,7 +45,8 @@ public class AbstractDeck extends Droppable{
 
 	@Override
 	public void deltCard(Card card) {
-		// TODO Auto-generated method stub
+		cards.add(card);
+		card.setLocation(getX(), getY());
 		
 	}
 

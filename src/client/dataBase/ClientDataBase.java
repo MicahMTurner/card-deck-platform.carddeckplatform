@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import freeplay.Free;
+import freeplay.FreePlay;
 
 import war.War;
 import logic.client.Game;
@@ -35,7 +35,7 @@ public class ClientDataBase {
 		games = new HashMap<String, Game>();
 		War war = new War();
 		games.put(war.toString(), war);
-		Free freePlay = new Free();
+		FreePlay freePlay = new FreePlay();
 		games.put(freePlay.toString(), freePlay);
 		//BlackJack blackJack=new BlackJack();
 		//games.put(blackJack.toString(), blackJack);
@@ -47,7 +47,7 @@ public class ClientDataBase {
 	public Game getGame(String gameName){
 		//return games.get(gameName);
 		//return loader.LoadPlugin(gameName);
-		return new Free();
+		return new FreePlay();
 	}
 	
 	public void addGame(String gameId){

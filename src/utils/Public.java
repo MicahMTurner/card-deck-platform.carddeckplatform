@@ -70,6 +70,7 @@ public class Public extends Droppable{
 	@Override
 	public void deltCard(Card card) {
 		cards.add(card);
+		card.setLocation(getX(), getY());
 		
 	}
 
