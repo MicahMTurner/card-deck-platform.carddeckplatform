@@ -5,9 +5,14 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Menu;
@@ -16,6 +21,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 import client.controller.ClientController;
+import client.controller.Gravity;
 import client.controller.PositionByCompass;
 import client.gui.entities.Droppable;
 import communication.link.ServerConnection;
@@ -26,7 +32,10 @@ public class GameActivity extends Activity {
 	private ProgressDialog progDialog;
 	private TableView tableview;	
 	private PositionByCompass posByComp;
+	private Gravity gravity;
 	private boolean livePosition=true;
+	
+
 	
 	public GameActivity() {
 		
@@ -57,6 +66,8 @@ public class GameActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); 
 
+        gravity = new Gravity(getApplicationContext());
+        gravity.start();
         
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         
@@ -237,11 +248,6 @@ public void onBackPressed() {
     	
     	}
 
-    }
-
-
-
-
-    
+    } 
 }
 
