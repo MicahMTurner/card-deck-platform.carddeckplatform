@@ -9,27 +9,26 @@ public interface Position extends Serializable{
 	public int getX();
 	public int getY();
 	public Position getRelativePosition(Player playerPos);
+	public Point getPoint();
 	
 	public enum Player implements Position{   
 		
-	    BOTTOM(300,400),LEFT(6,6),TOP(200,50),RIGHT(6,6);
-	    private final int x;
-		private final int y;
+	    BOTTOM(new Point(50,90)),LEFT(new Point(10,50)),TOP(new Point(50,10)),RIGHT(new Point(90,50));
+	    private final Point point;
 		private int id;		
 		
 		public int getId(){
 			return id;
 		}
-		private Player(int x,int y){
-			this.x=x;
-			this.y=y;
+		private Player(Point point){
+			this.point=point;
 			this.id=IDMaker.getMaker().getId(this);
 		}
 		public int getX(){
-			return x;
+			return point.getX();
 		}
 		public int getY(){
-			return y;
+			return point.getY();
 		}
 		
 	    public Player getRelativePosition(Player myPos){
@@ -97,33 +96,32 @@ public interface Position extends Serializable{
 			//swap(globalPosition,BOTTOM);
 			return BOTTOM;
 		}
+		@Override
+		public Point getPoint() {
+			return point;
+		}
 	}  
 	  
 	public enum Public implements Position{
-		TOPRIGHT(6,6),TOPMIDRIGHT(6,6),TOPMID(6,6),TOPMIDLEFT(6,6),TOPLEFT(6,6),
-		RIGHT(6,6),MIDRIGHT(400,200),MID(200,300),MIDLEFT(270,200),LEFT(6,6),
-		BOTLEFT(6,6),BOTMIDLEFT(6,6),BOTMID(6,6),BOTMIDRIGHT(6,6),BOTRIGHT(6,6);
-		private final int x;
-		private final int y;
+		TOP(new Point(50,30)),TOPMID(new Point(50,40)),MID(new Point(50,50)),TOPMIDLEFT(new Point(40,40)),
+		TOPMIDRIGHT(new Point(60,40)),RIGHT(new Point(70,50)),MIDRIGHT(new Point(60,50)),MIDLEFT(new Point(40,50))
+		,LEFT(new Point(30,50)),
+		BOTMIDLEFT(new Point(40,60)),BOTMID(new Point(50,60)),BOTMIDRIGHT(new Point(60,60)),BOT(new Point(50,70));
+		private final Point point;
 		private int id;		
-		private void swap (Public a,Public b){
-			int temp=a.id;
-			a.id=b.id;
-			b.id=temp;
-		}
+
 		public int getId(){
 			return id;
 		}
-		private Public(int x,int y){
-			this.x=x;
-			this.y=y;
+		private Public(Point point){
+			this.point=point;
 			this.id=IDMaker.getMaker().getId(this);
 		}
 		public int getX(){
-			return x;
+			return point.getX();
 		}
 		public int getY(){
-			return y;
+			return point.getY();
 		}
 		public Position.Public getRelativePosition(Position.Player playerPos){
 			Public answer=this;
@@ -158,11 +156,7 @@ public interface Position extends Serializable{
 		private Public getTopRelative(Public publicPos) {
 			Public answer=publicPos;
 			switch(publicPos){
-				case TOPRIGHT:{
-					//swap(publicPos,TOPRIGHT);
-					answer=BOTLEFT;
-					break;
-				}
+				
 				case TOPMIDRIGHT:{	
 					//swap(publicPos,TOPMIDRIGHT);
 					answer=BOTMIDLEFT;
@@ -171,11 +165,6 @@ public interface Position extends Serializable{
 				case TOPMIDLEFT:{
 					//swap(publicPos,TOPMIDLEFT);
 					answer=BOTMIDRIGHT;
-					break;
-				}
-				case TOPLEFT:{
-					//swap(publicPos,TOPLEFT);
-					answer=BOTRIGHT;
 					break;
 				}
 				case RIGHT:{
@@ -193,11 +182,6 @@ public interface Position extends Serializable{
 					answer=MIDRIGHT;
 					break;					
 				}
-				case BOTRIGHT:{
-					//swap(publicPos,BOTRIGHT);
-					answer=TOPLEFT;
-					break;
-				}
 				case BOTMIDRIGHT:{
 					//swap(publicPos,BOTMIDRIGHT);
 					answer=TOPMIDLEFT;
@@ -213,37 +197,34 @@ public interface Position extends Serializable{
 					answer=TOPMIDRIGHT;
 					break;
 				}
-				case BOTLEFT:{
-					//swap(publicPos,BOTLEFT);
-					answer=TOPRIGHT;
-					break;
-				}
 				default:{}
 				
 			}
 			return answer;			
 		}
+		@Override
+		public Point getPoint() {
+			return point;
+		}
 	 }  
 	  
 	public enum Button implements Position{
-		  TOPRIGHT(6,6),TOPLEFT(6,6),BOTLEFT(50,400),BOTRIGHT(6,6);
-		  private final int x;
-		  private final int y;
+		  TOPRIGHT(new Point(90,10)),TOPLEFT(new Point(10,10)),BOTLEFT(new Point(10,90)),BOTRIGHT(new Point(90,90));
+		  private final Point point;
 		  private final int id;		
 			
 		  public int getId(){
 			  return id;
 		  }
-		  private Button(int x,int y){
-				this.x=x;
-				this.y=y;
+		  private Button(Point point){
+				this.point=point;
 				this.id=IDMaker.getMaker().getId(this);
 			}
 			public int getX(){
-				return x;
+				return point.getX();
 			}
 			public int getY(){
-				return y;
+				return point.getY();
 			}
 			
 		  public Button getRelativePosition(Player myPos){
@@ -298,6 +279,10 @@ public interface Position extends Serializable{
 			 	default:{}
 			 }
 			return answer;
+		}
+		@Override
+		public Point getPoint() {
+			return point;
 		}
 	 }
 	

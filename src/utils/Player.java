@@ -2,21 +2,14 @@ package utils;
 
 import handlers.PlayerEventsHandler;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Observable;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-
-import IDmaker.IDMaker;
-
-import communication.link.ServerConnection;
-
 import client.controller.ClientController;
-import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
+import client.gui.entities.MetricsConvertion;
 
 
 
@@ -132,7 +125,6 @@ public class Player extends Droppable implements  Comparable<Player>{
 	@Override
 	public void addCard(Player player, Card card) {
 		addCard(card);
-		
 	}
 	@Override
 	public void removeCard(Player player, Card card) {
@@ -151,13 +143,14 @@ public class Player extends Droppable implements  Comparable<Player>{
 	public ArrayList<Card> getCards() {		
 		return hand;
 	}
-	@Override
-	public int getX() {		
-		return position.getX();
-	}
-	@Override
-	public int getY() {		
-		return position.getY();
-	}
+//	@Override
+//	public int getX() {
+//		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();		
+//	}
+//
+//	@Override
+//	public int getY() {
+//		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();		
+//	}
 	
 }

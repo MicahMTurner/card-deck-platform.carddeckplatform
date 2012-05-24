@@ -10,13 +10,13 @@ import communication.messages.Message;
 import communication.server.ConnectionsManager;
 
 
+import utils.AbstractDeck;
 import utils.Card;
 import utils.Deck;
 import utils.Player;
 import utils.Position;
 import utils.Public;
 
-import logic.client.AbstractDeck;
 import logic.client.Game;
 
 
@@ -87,8 +87,8 @@ public class War extends Game{
 	}
 
 	@Override
-	public AbstractDeck getDeck() {		
-		return new Deck(new CardHandler(),true,null);
+	public Deck getDeck() {		
+		return new Deck(new CardHandler(),true);
 	}	
 	
 }

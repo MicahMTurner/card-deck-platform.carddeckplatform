@@ -62,7 +62,7 @@ public class PositionByCompass implements SensorEventListener{
 		mSensorManager=(SensorManager)(context.getSystemService(Context.SENSOR_SERVICE));		
 		accelerometer=mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-		
+		tasks=null;
 		execService=Executors.newSingleThreadScheduledExecutor();
 	}
 	
@@ -76,7 +76,9 @@ public class PositionByCompass implements SensorEventListener{
 	}
 	public void stop(){
 		mSensorManager.unregisterListener(this);
-		tasks.cancel(true);
+		if (tasks!=null){
+			tasks.cancel(true);
+		}
 	}
 
 		

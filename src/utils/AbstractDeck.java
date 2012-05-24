@@ -1,4 +1,4 @@
-package logic.client;
+package utils;
 
 
 import java.util.AbstractList;
@@ -13,13 +13,11 @@ import android.graphics.Canvas;
 import IDmaker.IDMaker;
 
 import client.gui.entities.Droppable;
-
-import utils.Card;
-import utils.Player;
-import utils.Position;
+import client.gui.entities.MetricsConvertion;
 
 
-public abstract class AbstractDeck extends Droppable{
+
+public class AbstractDeck extends Droppable{
 	
 	public AbstractDeck(Position.Button position) {
 		super(IDMaker.getMaker().getId(),position);
@@ -33,35 +31,12 @@ public abstract class AbstractDeck extends Droppable{
 		return cards;
 	}
 		
-	/**
-	 * 	pick card in random place and swap with card in random place 
-	 *	do that size of deck times (or maybe twice the size?)
-	 *  @param timesToShuffle how many times user wants to shuffle
-	 */
-	public void shuffle(int timesToShuffle){
-		Random random=new Random();
-		int limit=cards.size();
-		int randomPlace;
-		for (int j=0;j<timesToShuffle;j++){
-			for (int i=0;i<limit;i++){
-				randomPlace=random.nextInt(limit);
-				swap(i,randomPlace);
-				cards.get(i);
-			}
-		}
-	}
+
 
 	public int getSize(){
 		return cards.size();
 	}
-	private void swap(int i, int randomPlace) {
-		Collections.swap(cards,i,randomPlace);
-	}
-
-	public Card drawCard() {
-		return cards.pop();
-		
-	}
+	
 
 	@Override
 	public int sensitivityRadius() {
@@ -91,15 +66,15 @@ public abstract class AbstractDeck extends Droppable{
 		
 	}
 
-	@Override
-	public int getX() {
-		return 100;
-	}
-
-	@Override
-	public int getY() {
-		return 100;
-	}
+//	@Override
+//	public int getX() {
+//		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();		
+//	}
+//
+//	@Override
+//	public int getY() {
+//		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();		
+//	}
 
 	@Override
 	public int cardsHolding() {

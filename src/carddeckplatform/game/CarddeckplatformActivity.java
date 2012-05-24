@@ -143,7 +143,7 @@ public class CarddeckplatformActivity extends Activity {
 					public void onClick(View arg0) {
 						// TODO Auto-generated method stub
 						GameStatus.isServer = false;
-						GameStatus.hostIp = "10.0.0.5";
+						GameStatus.hostIp = "192.168.43.45";
 		            	GameStatus.username = username.getText().toString();
 		            	
 		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
@@ -212,12 +212,12 @@ public class CarddeckplatformActivity extends Activity {
              });
     }
     
-    @Override
-    protected void onResume() {
-    	
-    	super.onResume();
-    	tcpIdListener.stop();
-    }
+//    @Override
+//    protected void onResume() {
+//    	
+//    	super.onResume();
+//    	tcpIdListener.stop();
+//    }
     
     public void onWindowFocusChanged(boolean hasWindowFocus){
     	if (hasWindowFocus){
