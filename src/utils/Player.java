@@ -86,7 +86,8 @@ public class Player extends Droppable implements  Comparable<Player>{
 	}
 	public void deltCard(Card card) {
 		card.setOwner(position);
-		hand.add(card);			
+		hand.add(card);	
+		card.setLocation(getX(), getY());
 	}
 	public int cardsHolding() {		
 		return hand.size();
@@ -143,14 +144,14 @@ public class Player extends Droppable implements  Comparable<Player>{
 	public ArrayList<Card> getCards() {		
 		return hand;
 	}
-//	@Override
-//	public int getX() {
-//		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();		
-//	}
-//
-//	@Override
-//	public int getY() {
-//		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();		
-//	}
+	@Override
+	public int getX() {
+		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();		
+	}
+
+	@Override
+	public int getY() {
+		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();		
+	}
 	
 }

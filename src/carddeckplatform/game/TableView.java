@@ -290,7 +290,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 		destination.deltCard(card);			
 		//GuiCard guiCard=new GuiCard(card);
 		
-		card.setLocation(destination.getX(), destination.getY());		
+		
 		//table.addDraggable(card);
 		table.mappDraggable(card);
 		redraw();
