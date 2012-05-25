@@ -133,7 +133,7 @@ public class Table {
 //	}
 	
 	
-	public Draggable getNearestDraggable(int x, int y){
+	public Draggable getNearestDraggable(float x, float y){
 		Draggable answer=null;
 		//get nearest container where draggable can be found at
 		Droppable nearestDroppable=getNearestDroppable(x, y);
@@ -152,7 +152,7 @@ public class Table {
 		return answer;
 	}
 	
-	public Droppable getNearestDroppable(int x, int y){
+	public Droppable getNearestDroppable(float x, float y){
 		for(Droppable d : droppables){
 			double radius  = Math.sqrt( (double) (((d.getX()-x)*(d.getX()-x)) + (d.getY()-y)*(d.getY()-y)));
 			if(radius <= d.sensitivityRadius()){
