@@ -21,7 +21,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 import client.controller.ClientController;
-import client.controller.Gravity;
+import client.controller.AutoHide;
 import client.controller.PositionByCompass;
 import client.gui.entities.Droppable;
 import communication.link.ServerConnection;
@@ -32,7 +32,7 @@ public class GameActivity extends Activity {
 	private ProgressDialog progDialog;
 	private TableView tableview;	
 	private PositionByCompass posByComp;
-	private Gravity gravity;
+	private AutoHide gravity;
 	private boolean livePosition=true;
 	
 
@@ -45,18 +45,21 @@ public class GameActivity extends Activity {
 	protected void onPause() {	
 		super.onPause();
 		posByComp.stop();
+		//gravity.stop();
 	}
 	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		posByComp.stop();
+		//gravity.stop();
 	}
 	
 	@Override
 	protected void onResume() {	
 		super.onResume();
 		//posByComp.start();
+		//gravity.start();
 	}
 	
     /** Called when the activity is first created. */
@@ -66,8 +69,8 @@ public class GameActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); 
 
-        gravity = new Gravity(getApplicationContext());
-        gravity.start();
+        gravity = new AutoHide(getApplicationContext());
+        
         
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         
@@ -163,6 +166,7 @@ public void onBackPressed() {
 		      setupLayout();
 		      //start live position feature 
 		      //posByComp.start();
+		      gravity.start();
 		     
 			
 		}

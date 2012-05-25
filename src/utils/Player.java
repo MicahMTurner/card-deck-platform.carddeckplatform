@@ -117,7 +117,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 	}
 	@Override
 	public int sensitivityRadius() {		
-		return 30;
+		return 50;
 	}
 	@Override
 	public void addCard(Player player, Card card) {
