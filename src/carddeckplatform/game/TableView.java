@@ -171,7 +171,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 							card.setRevealed(revealedWhileMoving);
 							float x = card.getCoord().getX();
 							float y = card.getCoord().getY();
-							final ArrayList<Point> vector = StaticFunctions.midLine((int)x, (int)y, (int)destination.getX(),(int) destination.getY());
+							final ArrayList<Point> vector = StaticFunctions.midLine((int) x, (int)y, (int)destination.getX(),(int) destination.getY());
 							try {
 			        			Thread.sleep(initialDelay);
 			        		} catch (InterruptedException e) {			        			
