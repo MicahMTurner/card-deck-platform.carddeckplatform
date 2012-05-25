@@ -67,10 +67,14 @@ public class AutoHide implements SensorEventListener {
      //get orientation from rotation matrix
      SensorManager.getOrientation(mRotationMatrix, mValuesOrientation);
      //calculate angle plus convert from radians to degrees
-     double angle=-(mValuesOrientation[1]*(180/Math.PI));
-     System.out.println("test: "+angle);
+     double angle1=-(mValuesOrientation[1]*(180/Math.PI));
+     double angle2=-(mValuesOrientation[2]*(180/Math.PI));
+     //System.out.println("test: "+angle);
      
-     if (angle<27 && cardsInHand!=ClientController.get().getMe().cardsHolding()){
+     if ((angle1<27 && angle2<27) && cardsInHand!=ClientController.get().getMe().cardsHolding()){
+    	 
+    	 System.out.println("hide");
+    	 
     	 ArrayList<Card>myCards=ClientController.get().getMe().getCards();
     	 cardsInHand=myCards.size();
     	 //angel is almost horizontal, hide your cards
@@ -80,14 +84,18 @@ public class AutoHide implements SensorEventListener {
     		 }
     		 card.hide();    		 
     	 }
-     }else if (angle>=30 && !revealedCards.isEmpty()){
+     }else if ((angle1>=30 || angle2>=30) && !revealedCards.isEmpty()){
     	 //angel is back to normal, reveal your cards again
+    	 
+    	 System.out.println("reveale");
     	 for (Card card : revealedCards){
     		 card.reveal();    		
     	 }
     	 revealedCards.clear();
     	 cardsInHand=0;
      }
+     else
+    	 System.out.println("idle");
 
 //		float x = event.values[0];
 //		
