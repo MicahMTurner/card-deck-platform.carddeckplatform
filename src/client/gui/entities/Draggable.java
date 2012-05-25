@@ -61,10 +61,10 @@ public abstract class Draggable implements Serializable{
 		}
 	
 	
-	public int getX(){
+	public float getX(){
 		return getCoord().getX();
 	}
-	public int getY(){
+	public float getY(){
 		return getCoord().getY();
 	}
 	public void setCarrier(String carrier) {
@@ -73,7 +73,7 @@ public abstract class Draggable implements Serializable{
 	public abstract void draw(Canvas canvas,Context context);
 	public abstract Point getCoord();
 	public abstract int sensitivityRadius();
-	public abstract void setLocation(int x, int y);		
+	public abstract void setLocation(float x, float y);		
 
 	public void setCarried(boolean carried) {
 		this.carried = carried;

@@ -28,7 +28,8 @@ import client.gui.entities.Table;
 import client.gui.entities.Table.Focus;
 
 
-public class TableView extends SurfaceView implements SurfaceHolder.Callback,OnGestureListener {
+
+public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 	private Table table;
 	private Context cont; 
 	private Matrix translate;
@@ -132,7 +133,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,OnG
 	}
 	
 	
-	public void draggableMotion(String username, int id , int x , int y){
+	public void draggableMotion(String username, int id , float x , float y){
 		Draggable draggable = table.getDraggableById(id);
 		//table.setFrontOrRear(draggable,Focus.FRONT);
 		
@@ -168,9 +169,9 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,OnG
 						@Override
 						public void run() {
 							card.setRevealed(revealedWhileMoving);
-							int x = card.getCoord().getX();
-							int y = card.getCoord().getY();
-							final ArrayList<Point> vector = StaticFunctions.midLine(x, y, destination.getX(), destination.getY());
+							float x = card.getCoord().getX();
+							float y = card.getCoord().getY();
+							final ArrayList<Point> vector = StaticFunctions.midLine((int)x, (int)y, (int)destination.getX(),(int) destination.getY());
 							try {
 			        			Thread.sleep(initialDelay);
 			        		} catch (InterruptedException e) {			        			
@@ -508,8 +509,8 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,OnG
 	 *****************************************************************************************************************************/
 	// events when touching the screen
     public boolean onTouchEvent(MotionEvent event) {    	
-    		int X = (int)event.getX(); 
-            int Y = (int)event.getY(); 
+    		float X = event.getX(); 
+            float Y = event.getY(); 
     		int eventAction = event.getAction();    		
     		if(uiEnabled){
 	    		switch (eventAction ) { 
@@ -568,52 +569,15 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,OnG
   
     		}   		
     		if (draggableInHand!=null){
-    			int dragX = draggableInHand.getX();
-    			int dragY = draggableInHand.getY();
-    			Rect rect = new Rect(dragX-200, dragY-200, dragX+200, dragY+200);
-    			redraw(rect);
+    			float dragX = draggableInHand.getX();
+    			float dragY = draggableInHand.getY();
+//    			Rect rect = new Rect(dragX-200, dragY-200, dragX+200, dragY+200);
+//    			redraw(rect);
     		}else
     			redraw();
     			
 		return true;
     }
-	@Override
-	public boolean onDown(MotionEvent e) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-			float velocityY) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void onLongPress(MotionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-			float distanceY) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void onShowPress(MotionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean onSingleTapUp(MotionEvent e) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
+    	
 }
 

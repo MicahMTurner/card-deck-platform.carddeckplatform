@@ -50,7 +50,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		return 30;
 	}
 	@Override
-	public void setLocation(int x, int y){
+	public void setLocation(float x, float y){
 		coord.setX(x);
 		coord.setY(y);
 	}

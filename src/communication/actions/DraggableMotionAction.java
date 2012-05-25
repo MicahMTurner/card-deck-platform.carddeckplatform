@@ -8,10 +8,10 @@ public class DraggableMotionAction implements Action {
 
 	private String username;
 	private int cardId;
-	private int x; 
-	private int y;
+	private float x; 
+	private float y;
 	
-	public DraggableMotionAction( String username, int cardId, int x, int y) {
+	public DraggableMotionAction( String username, int cardId, float x, float y) {
 		this.username = username;
 		this.cardId = cardId;
 		this.x = x;
