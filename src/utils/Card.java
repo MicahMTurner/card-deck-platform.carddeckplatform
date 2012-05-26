@@ -3,6 +3,7 @@ package utils;
 
 import handlers.CardEventsHandler;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import android.content.Context;
@@ -13,7 +14,9 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import carddeckplatform.game.BitmapHolder;
 import carddeckplatform.game.R;
+import carddeckplatform.game.StaticFunctions;
 import client.gui.entities.Draggable;
+import client.gui.entities.Droppable;
 import client.gui.entities.MetricsConvertion;
 
 public abstract class Card extends Draggable implements Comparable<Card>{
@@ -34,8 +37,6 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		this.frontImg= frontImg;
 		this.revealed=false;		
 		this.coord=new Point(0,0);
-		
-	
 	}
 	
 	@Override
@@ -54,13 +55,46 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		coord.setX(x);
 		coord.setY(y);
 	}
+	public void moveTo(final Droppable source,final Droppable destination, final boolean revealedWhileMoving, final boolean revealedAtEnd) {
+		new Thread(new Runnable() {	
+			@Override
+			public void run() {
+				setRevealed(revealedWhileMoving);
+				float x = coord.getX();
+				float y = coord.getY();
+				final ArrayList<Point> vector = StaticFunctions.midLine((int)x, (int)y, (int)destination.getX(), (int)destination.getY());
+				try {
+        			Thread.sleep(1000);
+        		} catch (InterruptedException e) {			        			
+        			e.printStackTrace();
+        		}
+            	for(int i=0; i<vector.size(); i++){
+            		setRevealed(revealedWhileMoving);
+            		final int index = i;
+		
+            		try {
+            			Thread.sleep(10);
+            		} catch (InterruptedException e) {			            			
+            			e.printStackTrace();
+            		}					
+            		
+            		setCoord(vector.get(index).x, vector.get(index).y);
+            		setAngle(i*10);            		
+            	}
+            	setAngle(0);
+            	setRevealed(revealedAtEnd);	
+            	source.removeCard(null, Card.this);
+            	destination.addCard(null, Card.this);
+			}
+		}).start();
+	}
 	
 	public Point getCoord() {
-		return coord;
+		return new Point(coord);
 	}
-	public void setCoord(int x,int y) {
-		coord.setX(x);
-		coord.setY(y);
+	public void setCoord(float x,float y) {
+			coord.setX(x);
+			coord.setY(y);
 	}
 	public void setAngle(float angle) {
 		this.angle = angle%360;
@@ -127,18 +161,18 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 			img = BitmapHolder.get().getBitmap(frontImg,context);
 			
 			matrix.postScale((float)p.getX()/(float)img.getWidth(), (float)p.getY()/(float)img.getHeight());
-			//resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getWidth() , img.getHeight(), matrix, true);
+			resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getWidth() , img.getHeight(), matrix, true);
 
 		}else{
 			//resourceId=context.getResources().getIdentifier(backImg, "drawable", "carddeckplatform.game");
-			img = BitmapHolder.get().getBitmap("back",context);
+			img = BitmapHolder.get().getBitmap(backImg,context);
 //			int w = img.getWidth();
 //			int h = img.getHeight();
 			matrix.postScale((float)p.getX()/(float)img.getWidth(), (float)p.getY()/(float)img.getHeight());
-			//resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getWidth() , img.getHeight(), matrix, true);
+			resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getWidth() , img.getHeight(), matrix, true);
 		}
-//		canvas.drawBitmap(resizedBitmap, coord.getX()-resizedBitmap.getWidth()/2, coord.getY()-resizedBitmap.getHeight()/2, null);
-		canvas.drawBitmap(img, coord.getX(), coord.getY(), null);
+		canvas.drawBitmap(resizedBitmap, coord.getX()-resizedBitmap.getWidth()/2, coord.getY()-resizedBitmap.getHeight()/2, null);
+//		canvas.drawBitmap(img, coord.getX(), coord.getY(), null);
 		
 		// if the card is being carried by another player a hand and the name of the carrier would be drawn near the card's image.
         if(isCarried()){

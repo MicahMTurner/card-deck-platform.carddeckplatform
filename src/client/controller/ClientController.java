@@ -153,9 +153,9 @@ public class ClientController implements Observer {
 	 */
 	public class GuiAPI{
 		private GuiAPI() {}
-		public void moveCards(ArrayList<Card> cards,int toId,boolean revealWhileMoving,boolean revealAtEnd){
-			gui.drawMovement(cards, toId,1000,10,revealWhileMoving,revealAtEnd);	
-		}
+//		public void moveCards(ArrayList<Card> cards,int toId,boolean revealWhileMoving,boolean revealAtEnd){
+//			//gui.drawMovement(cards, toId,1000,10,revealWhileMoving,revealAtEnd);	
+//		}
 	}
 	
 	//---------Controller functionality-----------//
@@ -254,7 +254,7 @@ public class ClientController implements Observer {
 
 	public void dealCards(ArrayList<Card> cards, int from, int to,boolean revealWhileMoving,boolean revealAtEnd) {
 		gui.dealCards(cards, to);
-		ClientController.guiAPI().moveCards(cards, to, revealWhileMoving, revealAtEnd);
+		//ClientController.guiAPI().moveCards(cards, to, revealWhileMoving, revealAtEnd);
 		
 	}
 
@@ -272,6 +272,14 @@ public class ClientController implements Observer {
 			}
 		}
 		//if(arg0 instanceof Player)
+		
+	}
+
+	public void positionUpdate(int playerId, utils.Position.Player newPosition) {
+		Player player=(Player) gui.getDroppableById(playerId);
+		Player swappedWith=(Player) getZone(newPosition);
+		game.positionUpdate(player,swappedWith);
+		gui.swapPositions(player,swappedWith);
 		
 	}
 

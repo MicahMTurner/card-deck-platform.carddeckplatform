@@ -49,6 +49,6 @@ public  class StandartCard extends Card {
 			return 1;
 		}
 		return 0;
-	}
+	}	
 	
 }

@@ -2,20 +2,12 @@ package utils;
 
 import handlers.PlayerEventsHandler;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Observable;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-
-import IDmaker.IDMaker;
-
-import communication.link.ServerConnection;
-
 import client.controller.ClientController;
-import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
 
 
@@ -26,8 +18,6 @@ public class Player extends Droppable implements  Comparable<Player>{
 	private String userName;
 	private ArrayList<Card> hand;
 	boolean myTurn;
-	//private Point coord;
-	private Position.Player position;
 	private Position.Player globalPosition;
 	
 	
@@ -41,8 +31,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 		this.position=globalPosition.sitMe(globalPosition);		
 		this.handler=handler;
 		this.hand=new ArrayList<Card>();
-		this.myTurn=false;
-		//addObserver(ClientController.get());
+		this.myTurn=false;		
 	}
 	
 	public Position.Player getGlobalPosition() {
@@ -52,7 +41,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 		return handler;
 	}
 	public Position.Player getPosition() {
-		return position;
+		return (Position.Player)position;
 	}
 	public String getUserName() {
 		return userName;
@@ -61,7 +50,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 		return id;
 	}
 	public void addCard(Card card) {
-		card.setOwner(position);		
+		card.setOwner((Position.Player)position);		
 		hand.add(card);		
 		handler.onCardAdded(this, card);		
 	}
@@ -74,7 +63,12 @@ public class Player extends Droppable implements  Comparable<Player>{
 		handler.onCardRemoved(this, card);
 		
 	}
-
+	
+	public void setGlobalPosition(Position.Player globalPosition) {
+		this.globalPosition = globalPosition;
+		
+	}
+	
 	public boolean isMyTurn() {
 		return myTurn;
 	}
@@ -87,8 +81,9 @@ public class Player extends Droppable implements  Comparable<Player>{
 		ClientController.sendAPI().endTurn(globalPosition);
 	}
 	public void deltCard(Card card) {
-		card.setOwner(position);
-		hand.add(card);			
+		card.setOwner((Position.Player)position);
+		hand.add(card);	
+		card.setLocation(getX(), getY());
 	}
 	public int cardsHolding() {		
 		return hand.size();
@@ -110,19 +105,23 @@ public class Player extends Droppable implements  Comparable<Player>{
 	}
 	
 	public void setRelativePosition(utils.Position.Player devicePlayerGlobalPos) {
-		if (!(this.globalPosition.equals(devicePlayerGlobalPos))){
-			position=this.globalPosition.getRelativePosition(devicePlayerGlobalPos);
+		Position.Player newPos=this.globalPosition.getRelativePosition(devicePlayerGlobalPos);;
+		
+		if (!(this.globalPosition.equals(devicePlayerGlobalPos))){			
+			for (Card card : hand){
+				CardTransformation.get().transform(card,position,newPos);
+			}
+			position=newPos;
 		}
 		
 	}
 	@Override
 	public int sensitivityRadius() {		
-		return 30;
+		return 50;
 	}
 	@Override
 	public void addCard(Player player, Card card) {
 		addCard(card);
-		
 	}
 	@Override
 	public void removeCard(Player player, Card card) {
@@ -133,21 +132,10 @@ public class Player extends Droppable implements  Comparable<Player>{
 		canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), 0x7f02002e),getX()-28,getY()-27,null);
 		
 	}
-//	@Override
-//	public Point getCoord() {		
-//		return coord;
-//	}
+
 	@Override
 	public ArrayList<Card> getCards() {		
 		return hand;
 	}
-	@Override
-	public int getX() {		
-		return position.getX();
-	}
-	@Override
-	public int getY() {		
-		return position.getY();
-	}
-	
+
 }

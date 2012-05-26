@@ -24,6 +24,8 @@ public class ServerConnection implements Runnable{
 	private CountDownLatch cdl = new CountDownLatch(1);
 	private  LinkedBlockingQueue<ActionForQueue> commandsQueue;
 	private volatile boolean stopped;
+	private Connector connector;
+	
 	
 	//---Singleton implementation---//
 		private static class ServerConnectionHolder
@@ -62,8 +64,8 @@ public class ServerConnection implements Runnable{
 					ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 					ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 				
-					sender = new TcpSender(out);
-					receiver = new TcpReceiver(in);
+					sender = new Sender(out);
+					receiver = new Receiver(in);
 					receiver.initializeMode();
 					sender.initializeMode();
 					new Thread(receiver).start();

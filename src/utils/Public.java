@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import client.gui.entities.Droppable;
+import client.gui.entities.MetricsConvertion;
 
 
 public class Public extends Droppable{	
@@ -51,16 +52,15 @@ public class Public extends Droppable{
 		handler.onRoundEnd(this,player);
 	}
 
-	@Override
-	public int getX() {
-		return position.getX();		
-	}
-
-	@Override
-	public int getY() {
-		return position.getY();
-		
-	}
+//	@Override
+//	public int getX() {
+//		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();		
+//	}
+//
+//	@Override
+//	public int getY() {
+//		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();		
+//	}
 
 	@Override
 	public void draw(Canvas canvas,Context context) {
@@ -70,6 +70,7 @@ public class Public extends Droppable{
 	@Override
 	public void deltCard(Card card) {
 		cards.add(card);
+		card.setLocation(getX(), getY());
 		
 	}
 
