@@ -322,7 +322,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
     	super.onDraw(canvas);//if you want another background color
     	System.out.println("TableView.onDraw()");
         // draws the table.
-        table.draw(canvas);
+        table.draw(canvas,draggableInHand);
     }
     
     
@@ -548,7 +548,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 		            synchronized (surfaceHolder) {
 //		            	System.out.println(c.getDensity());
 		            	
-		        		table.draw(c);// draw it
+		        		table.draw(c,draggableInHand);// draw it
 		            }
 		        } finally {
 		            if (c != null) {
