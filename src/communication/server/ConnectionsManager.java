@@ -9,9 +9,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import carddeckplatform.game.GameEnvironment;
+
 import utils.Player;
 import utils.Position;
-import carddeckplatform.game.GameStatus;
 import communication.actions.InitialConnectionAction;
 import communication.messages.InitialMessage;
 import communication.messages.Message;
@@ -38,7 +39,7 @@ public class ConnectionsManager {
 	private ConnectionsManager() {
 		connections = new ArrayList<Connection>();
 		try {
-			serverSocket = new ServerSocket(GameStatus.hostPort);
+			serverSocket = new ServerSocket(GameEnvironment.getGameEnvironment().getTcpInfo().getHostPort());
 		} catch (IOException e) {			
 			e.printStackTrace();
 		}
@@ -89,7 +90,7 @@ public class ConnectionsManager {
 	public void connectPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo){
 		try {				
 			Socket clientSocket;
-			System.out.println("Listening to port " + GameStatus.hostPort + " Waiting for messages...");
+			System.out.println("Listening to port " + GameEnvironment.getGameEnvironment().getTcpInfo().getHostPort() + " Waiting for messages...");
 			
 			clientSocket = serverSocket.accept();
 			

@@ -61,7 +61,8 @@ public class CarddeckplatformActivity extends Activity {
         		(ipAddress >> 16 & 0xff),
         		(ipAddress >> 24 & 0xff));
         
-        GameStatus.localIp = ipStr;
+        //GameStatus.localIp = ipStr;
+        GameEnvironment.getGameEnvironment().getTcpInfo().setLocalIp(ipStr);
         //*********************************************
         //making widgets
         //*********************************************
@@ -99,13 +100,12 @@ public class CarddeckplatformActivity extends Activity {
 						
 						@Override
 						public void onClick(View v) {							
-			            	GameStatus.isServer = true;
-			            	GameStatus.hostIp = "127.0.0.1";
-			            	GameStatus.username = username.getText().toString();
-			            	//GameStatus.me=new Player(GameStatus.username,GameStatus.localIp);
+							GameEnvironment.getGameEnvironment().getPlayerInfo().setServer(true);							
+							GameEnvironment.getGameEnvironment().getTcpInfo().setHostIp("127.0.0.1");			
+							GameEnvironment.getGameEnvironment().getPlayerInfo().setUsername(username.getText().toString());
 			                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
 			                if (tcpIdListener==null){
-			                	tcpIdListener=new TcpIdListener(GameStatus.username, name);			                	
+			                	tcpIdListener = new TcpIdListener(GameEnvironment.getGameEnvironment().getPlayerInfo().getUsername() , name);
 			                }
 			                tcpIdListener.start();		                	
 			                new Thread(new Host(ClientDataBase.getDataBase().getGame(name))).start();
@@ -123,7 +123,8 @@ public class CarddeckplatformActivity extends Activity {
         
         joinBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
-            	GameStatus.isServer = false;
+            	//GameStatus.isServer = false;
+            	GameEnvironment.getGameEnvironment().getPlayerInfo().setServer(false);
             	//making dialog to get ip
             	//GameStatus.me=new Player(GameStatus.username,GameStatus.localIp);
             	final Dialog dialog = new Dialog(CarddeckplatformActivity.this);
@@ -142,9 +143,9 @@ public class CarddeckplatformActivity extends Activity {
 					@Override
 					public void onClick(View arg0) {
 						// TODO Auto-generated method stub
-						GameStatus.isServer = false;
-						GameStatus.hostIp = "192.168.2.108";
-		            	GameStatus.username = username.getText().toString();
+						GameEnvironment.getGameEnvironment().getPlayerInfo().setServer(false);
+						GameEnvironment.getGameEnvironment().getTcpInfo().setHostIp("192.168.2.108");
+		            	GameEnvironment.getGameEnvironment().getPlayerInfo().setUsername(username.getText().toString());
 		            	
 		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
 		                startActivity(i);
@@ -160,9 +161,11 @@ public class CarddeckplatformActivity extends Activity {
     					@Override
     					public void onClick(View arg0) {
     						// TODO Auto-generated method stub
-    						GameStatus.isServer = false;
-    						GameStatus.hostIp = hostId.getAddress();
-    		            	GameStatus.username = username.getText().toString();
+    		            	
+    		            	GameEnvironment.getGameEnvironment().getPlayerInfo().setServer(false);
+    						GameEnvironment.getGameEnvironment().getTcpInfo().setHostIp(hostId.getAddress());
+    		            	GameEnvironment.getGameEnvironment().getPlayerInfo().setUsername(username.getText().toString());
+    		            	
     		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
     		                startActivity(i);
     		                dialog.dismiss();

@@ -71,30 +71,34 @@ public class AutoHide implements SensorEventListener {
      double angle2=-(mValuesOrientation[2]*(180/Math.PI));
      double angle0=-(mValuesOrientation[0]*(180/Math.PI));
      //System.out.println("test: "+angle1);
+     try {
+    	 if ((angle1<17 && angle2<17) && cardsInHand!=ClientController.get().getMe().cardsHolding()){
+        	 
+    	    	// System.out.println("hide");
+    	    	 
+    	    	 ArrayList<Card>myCards=ClientController.get().getMe().getCards();
+    	    	 cardsInHand=myCards.size();
+    	    	 //angel is almost horizontal, hide your cards
+    	    	 for (Card card : myCards){
+    	    		 if (card.isRevealed() && !revealedCards.contains(card)){
+    	    			 revealedCards.add(card);    			 
+    	    		 }
+    	    		 card.hide();    		 
+    	    	 }
+    	     }else if ((angle1>=20 || angle2>=20) && !revealedCards.isEmpty()){
+    	    	 //angel is back to normal, reveal your cards again
+    	    	 
+    	    	 //System.out.println("reveale");
+    	    	 for (Card card : revealedCards){
+    	    		 card.reveal();    		
+    	    	 }
+    	    	 revealedCards.clear();
+    	    	 cardsInHand=0;
+    	     }
+	} catch (Exception e) {
+		// TODO: handle exception
+	}
      
-     if ((angle1<17 && angle2<17) && cardsInHand!=ClientController.get().getMe().cardsHolding()){
-    	 
-    	// System.out.println("hide");
-    	 
-    	 ArrayList<Card>myCards=ClientController.get().getMe().getCards();
-    	 cardsInHand=myCards.size();
-    	 //angel is almost horizontal, hide your cards
-    	 for (Card card : myCards){
-    		 if (card.isRevealed() && !revealedCards.contains(card)){
-    			 revealedCards.add(card);    			 
-    		 }
-    		 card.hide();    		 
-    	 }
-     }else if ((angle1>=20 || angle2>=20) && !revealedCards.isEmpty()){
-    	 //angel is back to normal, reveal your cards again
-    	 
-    	 //System.out.println("reveale");
-    	 for (Card card : revealedCards){
-    		 card.reveal();    		
-    	 }
-    	 revealedCards.clear();
-    	 cardsInHand=0;
-     }
 
 //		float x = event.values[0];
 //		
