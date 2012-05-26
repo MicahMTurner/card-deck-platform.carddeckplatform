@@ -1,28 +1,53 @@
 package communication.link;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
+
+import client.controller.ClientController;
+
 //import com.google.gson.Gson;
 
-import communication.messages.*;
+import communication.messages.InitialMessage;
+import communication.messages.Message;
 
-public abstract class Sender {	
-	public abstract void send(Message msg);
+public class Sender{
+	
+	private ObjectOutputStream out = null;
+	
+	
+	
+	public Sender(ObjectOutputStream out){
+		this.out=out;
+	}
+	
+	
 
-	//public abstract boolean openConnection();
-	public abstract boolean closeStream();
 
-	public abstract void initializeMode();
-	
-//	public static String parseMessage(Message msg){
-//		// TODO Auto-generated method stub
-//		String className = msg.messageType;
-//		MessageContainer mc = new MessageContainer();
-//		Gson gson = new Gson();
-//		mc.className = className;
-//		mc.classJson = gson.toJson(msg);
-//		return gson.toJson(mc);
-//	}
-	
-	
-	 
-	
+	public void send(Message msg) {
+		// sends the message.
+		System.out.println("Sending message");
+		try {
+			out.writeObject(msg);
+		} catch (IOException e) {			
+			e.printStackTrace();
+		}
+		System.out.println("Message sent");
+	}
+
+	public boolean closeStream() {
+		try {
+			out.close();
+		} catch (IOException e) {			
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	public void initializeMode() {
+		send(new InitialMessage(ClientController.get().getMe()));
+		
+	}	
+
 }
