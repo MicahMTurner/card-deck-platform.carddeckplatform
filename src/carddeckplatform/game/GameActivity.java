@@ -45,21 +45,21 @@ public class GameActivity extends Activity {
 	protected void onPause() {	
 		super.onPause();
 		posByComp.stop();
-		//gravity.stop();
+		gravity.stop();
 	}
 	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		posByComp.stop();
-		//gravity.stop();
+		gravity.stop();
 	}
 	
 	@Override
 	protected void onResume() {	
 		super.onResume();
 		//posByComp.start();
-		//gravity.start();
+		gravity.start();
 	}
 	
     /** Called when the activity is first created. */
