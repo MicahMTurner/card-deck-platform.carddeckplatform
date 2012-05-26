@@ -141,7 +141,11 @@ public class Table {
 			double radius;
 			/*go over cards in found droppable and check if any card there is in radius
 			 *priority given to cards at the beginning of the droppable's list*/
-			for (Draggable draggable : nearestDroppable.getCards()){
+			AbstractList<Card>nearestDroppableCards=nearestDroppable.getCards();
+			int size=nearestDroppableCards.size()-1;
+			Draggable draggable;
+			for (int i=size;i>-1;i--){
+				draggable=nearestDroppableCards.get(i);
 				radius=Math.sqrt( (double) (((draggable.getX()-x)*(draggable.getX()-x)) + (draggable.getY()-y)*(draggable.getY()-y)));
 				if (radius<=draggable.sensitivityRadius()){
 					answer=draggable;
@@ -164,16 +168,14 @@ public class Table {
 	
 
 	
-	public void draw(Canvas canvas){		
+	public void draw(Canvas canvas, Draggable inHand){		
 				
 	if (canvas!=null){
 		canvas.drawColor(Color.TRANSPARENT);    	  
         canvas.scale(1, 1);
-
-        //canvas.rotate(50, GameStatus.screenWidth/2, GameStatus.screenHeight/2);
+        
 		try {
-			canvas.drawBitmap(img,(float)0,(float)0, null);
-			//canvas.save();
+			canvas.drawBitmap(img,(float)0,(float)0, null);			
 			
 			for(Droppable d : droppables){
 				synchronized (d) {
@@ -186,10 +188,15 @@ public class Table {
 				synchronized (cards){
 					for (Card card : cards){
 						synchronized (card){
-							card.draw(canvas, context);
+							if (inHand==null || (inHand!=null && !inHand.equals(card))){
+								card.draw(canvas, context);
+							}
 						}
 					}
 				}
+			}
+			if (inHand!=null){
+				inHand.draw(canvas, context);
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
