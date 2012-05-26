@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import carddeckplatform.game.GameStatus;
+import carddeckplatform.game.GameEnvironment;
 
 public class TcpConnector implements Connector {
 
@@ -24,7 +24,7 @@ public class TcpConnector implements Connector {
 	@Override
 	public Streams connect() {
 		try {
-			socket = new Socket(GameStatus.hostIp,GameStatus.hostPort);
+			socket = new Socket(GameEnvironment.getGameEnvironment().getTcpInfo().getHostIp(), GameEnvironment.getGameEnvironment().getTcpInfo().getHostPort());
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
 			

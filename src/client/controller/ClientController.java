@@ -24,7 +24,7 @@ import utils.Public;
 import IDmaker.IDMaker;
 import logic.client.Game;
 import client.gui.entities.Droppable;
-import carddeckplatform.game.GameStatus;
+import carddeckplatform.game.GameEnvironment;
 import carddeckplatform.game.TableView;
 
 
@@ -133,7 +133,7 @@ public class ClientController implements Observer {
 
 		public void dragMotion(String username, int id, Point coord) {
 			ServerConnection.getConnection().send(new Message(
-					new DraggableMotionAction(GameStatus.username,id, coord.getX(), coord.getY())));
+					new DraggableMotionAction(GameEnvironment.getGameEnvironment().getPlayerInfo().getUsername(),id, coord.getX(), coord.getY())));
 			
 		}
 		public void endDragMotion(int id){

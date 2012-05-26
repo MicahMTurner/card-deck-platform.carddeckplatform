@@ -75,9 +75,10 @@ public class GameActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         
         Display display = getWindowManager().getDefaultDisplay();
-        GameStatus.screenWidth = display.getWidth();
-        GameStatus.screenHeight = display.getHeight();
-        GameStatus.metrics = getApplicationContext().getResources().getDisplayMetrics();
+        GameEnvironment.getGameEnvironment().getDeviceInfo().setScreenWidth(display.getWidth());
+        GameEnvironment.getGameEnvironment().getDeviceInfo().setScreenHeight(display.getHeight());
+        
+        //GameStatus.metrics = getApplicationContext().getResources().getDisplayMetrics();
         
         // draw the view
         setContentView(R.layout.game);
@@ -85,8 +86,8 @@ public class GameActivity extends Activity {
         // necessary to transparent background!!!!
         tableview.setZOrderOnTop(true);        
         tableview.getHolder().setFormat(PixelFormat.TRANSPARENT);
-        tableview.setxDimention(GameStatus.screenWidth);
-        tableview.setyDimention(GameStatus.screenHeight);
+        tableview.setxDimention(GameEnvironment.getGameEnvironment().getDeviceInfo().getScreenWidth());
+        tableview.setyDimention(GameEnvironment.getGameEnvironment().getDeviceInfo().getScreenHeight());
         ClientController.get().setGui(tableview);
         posByComp=new PositionByCompass(getApplicationContext());
         setupGame();
@@ -211,7 +212,7 @@ public void onBackPressed() {
     	menu.add(0, Menu.FIRST, Menu.NONE, "Restart").setIcon(R.drawable.restart);
     	menu.add(0, Menu.FIRST+1, Menu.NONE, "Ranking").setIcon(R.drawable.rank);
     	menu.add(0, Menu.FIRST+2, Menu.NONE, "Main Menu").setIcon(R.drawable.exit);
-    	if (GameStatus.isServer){
+    	if (GameEnvironment.getGameEnvironment().getPlayerInfo().isServer()){
     		menu.add(0, Menu.FIRST+3, Menu.NONE, "Stop Live Position").setIcon(R.drawable.exit);
     	}    	
     	
