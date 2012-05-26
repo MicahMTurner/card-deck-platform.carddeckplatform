@@ -16,7 +16,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -26,7 +25,6 @@ import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
 import client.gui.entities.Table;
 import client.gui.entities.Table.Focus;
-
 
 
 public class TableView extends SurfaceView implements SurfaceHolder.Callback {
@@ -140,7 +138,8 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 		//draggable.setCarrier(username);
 		//draggable.setLocation(780-x, 460-y);
 		synchronized (draggable) {
-			draggable.setLocation(x, y);
+			draggable.setLocation(GameStatus.screenWidth-x, GameStatus.screenHeight-y);
+
 		}
 		
 		redraw();
@@ -159,64 +158,62 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 	
 	
 	
-	public void drawMovement(final ArrayList<Card> cards, final int toId, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
-		ArrayList<Thread> drawingThreads = new ArrayList<Thread>();
-		//Card card;
-		//final CountDownLatch cdl=new CountDownLatch(cards.size());
-		final Droppable destination=getDroppableById(toId);
-		for (final Card card : cards){
-			drawingThreads.add(	new Thread(new Runnable() {	
-						@Override
-						public void run() {
-							card.setRevealed(revealedWhileMoving);
-							float x = card.getCoord().getX();
-							float y = card.getCoord().getY();
-							final ArrayList<Point> vector = StaticFunctions.midLine((int) x, (int)y, (int)destination.getX(),(int) destination.getY());
-							try {
-			        			Thread.sleep(initialDelay);
-			        		} catch (InterruptedException e) {			        			
-			        			e.printStackTrace();
-			        		}
-			            	for(int i=0; i<vector.size(); i++){
-			            		card.setRevealed(revealedWhileMoving);
-			            		final int index = i;
-					
-			            		try {
-			            			Thread.sleep(delay);
-			            		} catch (InterruptedException e) {			            			
-			            			e.printStackTrace();
-			            		}					
-			            		
-			            		card.setCoord(vector.get(index).x, vector.get(index).y);
-			            		card.setAngle(i*10);
-			            		redraw();
-			            	}
-			            	card.setAngle(0);
-			            	card.setRevealed(revealedAtEnd);
-			            	//cdl.countDown();
-							
-						}
-					}));
-		
-		}
-		for (Thread drawingThread : drawingThreads){
-			drawingThread.start();
-		}
-//		try {
-//			cdl.await();
-//		} catch (InterruptedException e) {		
-//			e.printStackTrace();
+//	public void drawMovement(final ArrayList<Card> cards, final int toId, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
+//		ArrayList<Thread> drawingThreads = new ArrayList<Thread>();
+//		//Card card;
+//		//final CountDownLatch cdl=new CountDownLatch(cards.size());
+//		final Droppable destination=getDroppableById(toId);
+//		for (final Card card : cards){
+//			drawingThreads.add(	new Thread(new Runnable() {	
+//						@Override
+//						public void run() {
+//							card.setRevealed(revealedWhileMoving);
+//							int x = card.getCoord().getX();
+//							int y = card.getCoord().getY();
+//							final ArrayList<Point> vector = StaticFunctions.midLine(x, y, destination.getX(), destination.getY());
+//							try {
+//			        			Thread.sleep(initialDelay);
+//			        		} catch (InterruptedException e) {			        			
+//			        			e.printStackTrace();
+//			        		}
+//			            	for(int i=0; i<vector.size(); i++){
+//			            		card.setRevealed(revealedWhileMoving);
+//			            		final int index = i;
+//					
+//			            		try {
+//			            			Thread.sleep(delay);
+//			            		} catch (InterruptedException e) {			            			
+//			            			e.printStackTrace();
+//			            		}					
+//			            		
+//			            		card.setCoord(vector.get(index).x, vector.get(index).y);
+//			            		card.setAngle(i*10);
+//			            		redraw();
+//			            	}
+//			            	card.setAngle(0);
+//			            	card.setRevealed(revealedAtEnd);	
+//						}
+//					}));
+//		
 //		}
-		//for (Thread drawingThread : drawingThreads){
-		//	try {
-		//		drawingThread.join();
-		//	} catch (InterruptedException e) {
-		//		e.printStackTrace();
-		//	}
-		//}
-		
-		
-	}
+//		for (Thread drawingThread : drawingThreads){
+//			drawingThread.start();
+//		}
+////		try {
+////			cdl.await();
+////		} catch (InterruptedException e) {		
+////			e.printStackTrace();
+////		}
+//		//for (Thread drawingThread : drawingThreads){
+//		//	try {
+//		//		drawingThread.join();
+//		//	} catch (InterruptedException e) {
+//		//		e.printStackTrace();
+//		//	}
+//		//}
+//		
+//		
+//	}
 //	public void moveDraggable(final Draggable draggable, final int newX, final int newY, final long initialDelay, final long delay, final boolean revealedWhileMoving, final boolean revealedAtEnd){
 //		Thread drawingThread=
 //		new Thread(new Runnable() {	
@@ -293,7 +290,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 		destination.deltCard(card);			
 		//GuiCard guiCard=new GuiCard(card);
 		
-		card.setLocation(destination.getX(), destination.getY());		
+		
 		//table.addDraggable(card);
 		table.mappDraggable(card);
 		redraw();
@@ -325,7 +322,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
     	super.onDraw(canvas);//if you want another background color
     	System.out.println("TableView.onDraw()");
         // draws the table.
-        table.draw(canvas);
+        table.draw(canvas,draggableInHand);
     }
     
     
@@ -335,7 +332,77 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
     public boolean isUiEnabled() {
 		return uiEnabled;
 	}
- 
+ // events when touching the screen
+    public boolean onTouchEvent(MotionEvent event) {    	
+    		int X = (int)event.getX(); 
+            int Y = (int)event.getY(); 
+    		int eventAction = event.getAction();    		
+    		if(uiEnabled){
+	    		switch (eventAction ) { 
+	    		
+		    		case MotionEvent.ACTION_DOWN:{
+		    			draggableInHand = table.getNearestDraggable(X, Y);
+		    			
+		    			if (draggableInHand!=null){
+		    				//table.setFrontOrRear(draggableInHand, Focus.FRONT);
+		    				if(draggableInHand.isMoveable()){
+		    					from=table.getNearestDroppable(X, Y);
+		    					draggableInHand.onClick();
+		    				}else{		    					
+		    					popToast("You cannot move this card");
+		    					draggableInHand=null;		    					
+		    				}
+		    			}		    			
+		    			break;
+		    		}
+		    		case MotionEvent.ACTION_MOVE:{
+		    			if(draggableInHand!=null){		    		
+		    				draggableInHand.setLocation(X, Y);
+		    				draggableInHand.onDrag();
+		    			}
+		    			break;
+		    		}
+		    		case MotionEvent.ACTION_UP:{
+		    			if(draggableInHand!=null){
+		    				draggableInHand.setLocation(X, Y);
+		    				draggableInHand.onRelease();		    				
+		    				
+							Droppable droppable=table.getNearestDroppable(X, Y);
+							if (droppable!=null && from!=null){									
+								droppable.onDrop(ClientController.get().getMe(),from,((Card)draggableInHand));
+								
+							}
+							else{
+								draggableInHand.invalidMove();
+							}							
+		    				draggableInHand = null;
+		    			}
+		    			
+		    			//Droppable droppable2=table.getNearestDroppable(X, Y);
+						//if (droppable2!=null){									
+						//	droppable2.onClick();							
+							
+						//}		    			
+		    			break;
+		    		}
+	    		}//end if enabdles
+    		}
+    		else{
+    			//GUI is not enabled
+    		
+    			popToast("It's not your turn now!!");
+  
+    		}   		
+    		if (draggableInHand!=null){
+    			int dragX =(int) draggableInHand.getX();
+    			int dragY =(int) draggableInHand.getY();
+    			Rect rect = new Rect(dragX-200, dragY-200, dragX+200, dragY+200);
+    			redraw(rect);
+    		}else
+    			redraw();
+    			
+		return true;
+    }
     
     public void popToast(final String displayMessage){
     	this.post(new Runnable() {
@@ -426,11 +493,6 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 			addNewDraggable(card, destination);
 		}			
 	}
-	/*****************************************************************************************************************************
-	 * 
-	 * 				Surface-Holder implemented methods
-	 * 
-	 *****************************************************************************************************************************/
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
@@ -461,12 +523,6 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
         } catch (InterruptedException e) {  
         } 
 	}
-	/*****************************************************************************************************************************
-	 * 
-	 * 				class DrawThread
-	 * 
-	 *****************************************************************************************************************************/
-
 	class DrawThread extends Thread {
 	    private SurfaceHolder surfaceHolder;
 	   
@@ -492,7 +548,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 		            synchronized (surfaceHolder) {
 //		            	System.out.println(c.getDensity());
 		            	
-		        		table.draw(c);// draw it
+		        		table.draw(c,draggableInHand);// draw it
 		            }
 		        } finally {
 		            if (c != null) {
@@ -502,82 +558,47 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback {
 		    }		
 		}
 	}
-	/*****************************************************************************************************************************
-	 * 
-	 * 				Gestures Listener implemented methods
-	 * 
-	 *****************************************************************************************************************************/
-	// events when touching the screen
-    public boolean onTouchEvent(MotionEvent event) {    	
-    		float X = event.getX(); 
-            float Y = event.getY(); 
-    		int eventAction = event.getAction();    		
-    		if(uiEnabled){
-	    		switch (eventAction ) { 
-	    		
-		    		case MotionEvent.ACTION_DOWN:{
-		    			draggableInHand = table.getNearestDraggable(X, Y);
-		    			
-		    			if (draggableInHand!=null){
-		    				//table.setFrontOrRear(draggableInHand, Focus.FRONT);
-		    				if(draggableInHand.isMoveable()){
-		    					from=table.getNearestDroppable(X, Y);
-		    					draggableInHand.onClick();
-		    				}else{		    					
-		    					popToast("You cannot move this card");
-		    					draggableInHand=null;		    					
-		    				}
-		    			}		    			
-		    			break;
-		    		}
-		    		case MotionEvent.ACTION_MOVE:{
-		    			if(draggableInHand!=null){		    		
-		    				draggableInHand.setLocation(X, Y);
-		    				draggableInHand.onDrag();
-		    			}
-		    			break;
-		    		}
-		    		case MotionEvent.ACTION_UP:{
-		    			if(draggableInHand!=null){
-		    				draggableInHand.setLocation(X, Y);
-		    				draggableInHand.onRelease();		    				
-		    				
-							Droppable droppable=table.getNearestDroppable(X, Y);
-							if (droppable!=null && from!=null){									
-								droppable.onDrop(ClientController.get().getMe(),from,((Card)draggableInHand));
-								
-							}
-							else{
-								draggableInHand.invalidMove();
-							}							
-		    				draggableInHand = null;
-		    			}
-		    			
-		    			//Droppable droppable2=table.getNearestDroppable(X, Y);
-						//if (droppable2!=null){									
-						//	droppable2.onClick();							
-							
-						//}		    			
-		    			break;
-		    		}
-	    		}//end if enabdles
-    		}
-    		else{
-    			//GUI is not enabled
-    		
-    			popToast("It's not your turn now!!");
-  
-    		}   		
-    		if (draggableInHand!=null){
-    			float dragX = draggableInHand.getX();
-    			float dragY = draggableInHand.getY();
-//    			Rect rect = new Rect(dragX-200, dragY-200, dragX+200, dragY+200);
-//    			redraw(rect);
-    		}else
-    			redraw();
-    			
-		return true;
-    }
-    	
+	public void swapPositions(Player player, Player swappedWith) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }
 
+
+
+//class SurfaceViewThread extends Thread{
+//	static SurfaceHolder threadSurfaceHolder;
+//    static TableView threadView;
+//    static boolean running;
+//	
+//    @Override
+//    public void run (){
+//    	System.out.println("UI thread running");
+//        while(running){
+////        	threadView.invalidate();
+//        	
+//        	Canvas c = null;
+//            try {
+//                c = threadSurfaceHolder.lockCanvas(null);
+//                synchronized (threadSurfaceHolder) {
+//                	if(c.getDensity()!=0){
+//                		System.out.println("density:"+c.getDensity());
+//                		threadView.onDraw(c);
+//                	}
+//            		else
+//            			System.out.println("density problem");
+//                }
+//            } finally {
+//                // do this in a finally so that if an exception is thrown
+//                // during the above, we don't leave the Surface in an
+//                // inconsistent state
+//                if (c != null) {
+//                	threadSurfaceHolder.unlockCanvasAndPost(c);
+//                	System.out.println("drawed");
+//                }
+//            }
+//        }
+//    }
+//	
+//}

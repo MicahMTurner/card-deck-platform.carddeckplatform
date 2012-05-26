@@ -6,6 +6,8 @@ import java.util.Queue;
 
 import client.gui.entities.Droppable;
 
+import utils.AbstractDeck;
+import utils.Deck;
 import utils.Player;
 import utils.Position;
 import utils.Public;
@@ -21,12 +23,12 @@ public abstract class Game {
 	protected ArrayList<Public> publics=new ArrayList<Public>();
 	//private ToolsFactory tools=new DefaultTools();
 	//private Player.Position currentTurn;
-	protected AbstractDeck deck;	
+	protected Deck deck;	
 	
 	 
 
 	//protected abstract Player createPlayer(String userName, Position.Player position);
-	public abstract AbstractDeck getDeck();
+	public abstract Deck getDeck();
 
 	//the order of the players turns 
 	public abstract Queue<utils.Position.Player> setTurns();
@@ -100,8 +102,23 @@ public abstract class Game {
 		players.add(createPlayer(userName, position));
 		
 	}
+
+	public void positionUpdate(Player player, Player swappedWith) {
+		swapGlobalPositions(player,swappedWith);
 		
+		//check if I moved
+		if (player.equals(getMe())){
+			for (Player p : players){
+				p.setRelativePosition(player.getGlobalPosition());
+			}
+		}
+	}
+
+	private void swapGlobalPositions(Player player, Player swappedWith) {
+		Position.Player temp=swappedWith.getGlobalPosition();
+		swappedWith.setGlobalPosition(player.getGlobalPosition());
+		player.setGlobalPosition(temp);
 		
-	
+	}
 
 }

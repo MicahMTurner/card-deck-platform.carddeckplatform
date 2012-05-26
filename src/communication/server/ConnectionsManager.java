@@ -92,7 +92,7 @@ public class ConnectionsManager {
 			System.out.println("Listening to port " + GameStatus.hostPort + " Waiting for messages...");
 			
 			clientSocket = serverSocket.accept();
-
+			
 			System.out.println("connection request from from " + clientSocket.getRemoteSocketAddress().toString());
 			
 			ObjectOutputStream out=new ObjectOutputStream(clientSocket.getOutputStream());
