@@ -25,9 +25,9 @@ public class AutoHide implements SensorEventListener {
 	
 	public void start(){
 		sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 
-                SensorManager.SENSOR_DELAY_FASTEST);
+                SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), 
-                SensorManager.SENSOR_DELAY_FASTEST);
+        		SensorManager.SENSOR_DELAY_NORMAL);
 	}
 	
 	public void stop(){
@@ -69,11 +69,12 @@ public class AutoHide implements SensorEventListener {
      //calculate angle plus convert from radians to degrees
      double angle1=-(mValuesOrientation[1]*(180/Math.PI));
      double angle2=-(mValuesOrientation[2]*(180/Math.PI));
-     //System.out.println("test: "+angle);
+     double angle0=-(mValuesOrientation[0]*(180/Math.PI));
+     //System.out.println("test: "+angle1);
      
-     if ((angle1<27 && angle2<27) && cardsInHand!=ClientController.get().getMe().cardsHolding()){
+     if ((angle1<17 && angle2<17) && cardsInHand!=ClientController.get().getMe().cardsHolding()){
     	 
-    	 System.out.println("hide");
+    	// System.out.println("hide");
     	 
     	 ArrayList<Card>myCards=ClientController.get().getMe().getCards();
     	 cardsInHand=myCards.size();
@@ -84,18 +85,16 @@ public class AutoHide implements SensorEventListener {
     		 }
     		 card.hide();    		 
     	 }
-     }else if ((angle1>=30 || angle2>=30) && !revealedCards.isEmpty()){
+     }else if ((angle1>=20 || angle2>=20) && !revealedCards.isEmpty()){
     	 //angel is back to normal, reveal your cards again
     	 
-    	 System.out.println("reveale");
+    	 //System.out.println("reveale");
     	 for (Card card : revealedCards){
     		 card.reveal();    		
     	 }
     	 revealedCards.clear();
     	 cardsInHand=0;
      }
-     else
-    	 System.out.println("idle");
 
 //		float x = event.values[0];
 //		

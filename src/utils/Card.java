@@ -37,8 +37,6 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		this.frontImg= frontImg;
 		this.revealed=false;		
 		this.coord=new Point(0,0);
-		
-	
 	}
 	
 	@Override
@@ -167,7 +165,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 
 		}else{
 			//resourceId=context.getResources().getIdentifier(backImg, "drawable", "carddeckplatform.game");
-			img = BitmapHolder.get().getBitmap("back",context);
+			img = BitmapHolder.get().getBitmap(backImg,context);
 //			int w = img.getWidth();
 //			int h = img.getHeight();
 			matrix.postScale((float)p.getX()/(float)img.getWidth(), (float)p.getY()/(float)img.getHeight());
