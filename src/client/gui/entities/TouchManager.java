@@ -20,6 +20,7 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 	private boolean angleFlag = true;
 	private boolean scaleFlag = true;
 	private boolean multitouchFlag = true;
+	private boolean ismultitouch = false;
 	public TouchManager(Context context,final TouchHandler handler,int maxNumberOfTouchPoints) {
 		this.maxNumberOfTouchPoints=maxNumberOfTouchPoints;
 		this.points=new Point[maxNumberOfTouchPoints];
@@ -81,8 +82,21 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 
 	
 	
-	private static float getDegreesFromRadians(float angle) {
+	public static float getDegreesFromRadians(float angle) {
+		while(angle<0){
+			angle+=Math.PI*2;
+		}
+		while(angle>Math.PI*2)
+			angle-=Math.PI*2;
+		
 		return (float)(angle * 180.0 / Math.PI);
+	}
+	
+	public void resetAngle(){
+		this.angle=0;
+	}
+	public void resetScale(){
+		this.scale=1;
 	}
 	
 	
@@ -112,6 +126,7 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 	 */
 	
 	public void update(MotionEvent event) {
+			
 		   int actionCode = event.getAction() & MotionEvent.ACTION_MASK;
 
 		   if (actionCode == MotionEvent.ACTION_POINTER_UP || actionCode == MotionEvent.ACTION_UP) {
@@ -124,7 +139,7 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 						int index = event.getPointerId(i);
 
 						Point newPoint = new Point(event.getX(i), event.getY(i));
-
+						try{
 						if (points[index] == null)
 							points[index] = newPoint;
 						else {
@@ -139,6 +154,11 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 							if (Point.subtract(points[index], newPoint).getLength() < 64)
 								points[index].set(newPoint);
 						}
+						}catch(ArrayIndexOutOfBoundsException e){
+							e.printStackTrace();
+							System.out.println(index);
+							
+						}
 					}
 					else {
 					   previousPoints[i] = points[i] = null;
@@ -151,10 +171,18 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 	
 	
 	public boolean onTouchEvent(MotionEvent event){
+		if(event.getPointerCount()>maxNumberOfTouchPoints)
+			return true;
 		update(event);
 		boolean flag=gestures.onTouchEvent(event);
-		if(event.getPointerCount()>1)
-			this.multitouchFlag=onMultiTouch();
+		if(event.getPointerCount()>1){
+			this.multitouchFlag=onMultiTouch(event);
+		}
+		if(event.getPointerCount()==1 && event.getAction()==MotionEvent.ACTION_UP && multitouchFlag){
+			handler.onFling(event, event, 0, 0);
+			ismultitouch=false;
+		
+		}
 		return multitouchFlag || flag;
 	}
 	
@@ -170,8 +198,10 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 	 *************************************************************************************/
 	@Override
 	public boolean onDoubleTap(MotionEvent event) {
+		System.out.println("TouchManager.onDoubleTap()");
 		if(!isValidSingleTap(event))
 			return true;
+		System.out.println("TouchManager.onDoubleTap()");
 		return handler.onDoubleTap(event);
 	}
 
@@ -208,37 +238,60 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
+		multitouchFlag=false;
 		if(!isValidSingleTap(e1) || !isValidSingleTap(e2))
 			return true;
+		
 		return handler.onFling(e1, e2, velocityX, velocityY);
 	}
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
-		if(!isValidSingleTap(e1))
+		if(!isValidSingleTap(e1) || !isValidSingleTap(e2))
 			return true;
 		return handler.onScroll(e1, e2, distanceX, distanceY);
+	}
+	@Override
+	public boolean onDown(MotionEvent event) {
+		if(!isValidSingleTap(event))
+			return true;
+		multitouchFlag=true;
+		return handler.onDown(event);
+		
 	}
 	/*************************************************************************************
 	 * 
 	 *	handlers for multi touch and touch 
 	 *************************************************************************************/
 	
-	public boolean onMultiTouch() {
-		Point current = getVector(0, 1);
-		Point previous = getPreviousVector(0, 1);
+	private boolean onMultiTouch(MotionEvent event) {
+		Point current =null,previous =null;
+		synchronized (points) {
+			synchronized (previousPoints) {
+				for(int i=0;i<maxNumberOfTouchPoints;i++){
+					if(points[i]==null||previousPoints[i]==null)
+						return true;
+				}
+				current = getVector(0, 1);
+				previous = getPreviousVector(0, 1);
+			}
+			
+		}
 		float currentDistance = current.getLength();
 		float previousDistance = previous.getLength();
-
-		if (previousDistance != 0) {
-			scale *= currentDistance / previousDistance;
+		synchronized (previous) {
+			if (previousDistance != 0) {
+				scale *= currentDistance / previousDistance;
+			}
+			angle -= Point.getSignedAngleBetween(current, previous);
 		}
+		
 
-		angle -= Point.getSignedAngleBetween(current, previous);
+		
 		if(angleFlag)
-			handler.onRotate(getDegreesFromRadians(angle));
+			angleFlag=handler.onRotate(event,angle);
 		if(scaleFlag)
-			handler.onPinch(currentDistance, previousDistance, scale);
+			scaleFlag=handler.onPinch(event,currentDistance, previousDistance, scale);
 		
 		return angleFlag ||scaleFlag;
 	}
@@ -249,10 +302,7 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 	 *************************************************************************************/
 
 	
-	@Override
-	public boolean onDown(MotionEvent event) {
-		return false;
-	}
+	
 
 	@Override
 	public void onShowPress(MotionEvent arg0) {

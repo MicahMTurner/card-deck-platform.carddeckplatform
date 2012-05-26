@@ -21,7 +21,7 @@ public interface TouchHandler {
 
 	public boolean onSingleTapUp(MotionEvent arg0);
 	
-	public boolean onRotate(float angleDegrees);
+	public boolean onRotate(MotionEvent arg0,float angleRadians);
 	
-	public boolean onPinch(float currentDistance,float previousDistance,float scale);
+	public boolean onPinch(MotionEvent arg0,float currentDistance,float previousDistance,float scale);
 }
