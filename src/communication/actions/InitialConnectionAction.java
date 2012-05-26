@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import utils.Player;
 import utils.Position;
 
-import carddeckplatform.game.GameStatus;
+import carddeckplatform.game.GameEnvironment;
 import client.controller.ClientController;
 import client.dataBase.ClientDataBase;
 import logic.client.Game;
@@ -30,7 +30,7 @@ public class InitialConnectionAction implements Action{
 		
 		//create my instance		
 		
-		game.addMe(GameStatus.username, position);
+		game.addMe(GameEnvironment.getGameEnvironment().getPlayerInfo().getUsername(), position);
 		
 		ClientController.get().addPlayer(game.getMe());
 		

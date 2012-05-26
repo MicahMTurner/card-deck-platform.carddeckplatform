@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import carddeckplatform.game.GameStatus;
+import carddeckplatform.game.GameEnvironment;
 
 public class TcpIdListener implements Runnable {
 
@@ -25,7 +25,7 @@ public class TcpIdListener implements Runnable {
 	public void start(){
 		stop=false;
 		try {
-			serverSocket = new ServerSocket(GameStatus.idPort);
+			serverSocket = new ServerSocket(GameEnvironment.getGameEnvironment().getTcpInfo().getIdPort());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
