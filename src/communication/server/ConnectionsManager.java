@@ -14,6 +14,7 @@ import carddeckplatform.game.GameEnvironment;
 import utils.Player;
 import utils.Position;
 import communication.actions.InitialConnectionAction;
+import communication.link.Streams;
 import communication.messages.InitialMessage;
 import communication.messages.Message;
 
@@ -87,27 +88,57 @@ public class ConnectionsManager {
 		}
 	}
 	
-	public void connectPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo){
-		try {				
-			Socket clientSocket;
-			System.out.println("Listening to port " + GameEnvironment.getGameEnvironment().getTcpInfo().getHostPort() + " Waiting for messages...");
-			
-			clientSocket = serverSocket.accept();
-			
-			System.out.println("connection request from from " + clientSocket.getRemoteSocketAddress().toString());
-			
-			ObjectOutputStream out=new ObjectOutputStream(clientSocket.getOutputStream());
-			ObjectInputStream in=new ObjectInputStream(clientSocket.getInputStream());
+	
+	public void connectHostingPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo){
+		Acceptor acceptor = new TcpAcceptor(serverSocket);
+		Streams s = acceptor.accept();
+		addConnection(s, position, gameId, playersInfo);
+	}
+	
+	
+	
+	public void connectPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo){			
+		Acceptor acceptor = new TcpAcceptor(serverSocket);
+		Streams s = acceptor.accept();
+		
+		addConnection(s, position, gameId, playersInfo);
+		
+		
+		
+		
+		
+//		try {				
+//			Socket clientSocket;
+//			//System.out.println("Listening to port " + GameStatus.hostPort + " Waiting for messages...");
+//			
+//			clientSocket = serverSocket.accept();
+//			
+//			System.out.println("connection request from from " + clientSocket.getRemoteSocketAddress().toString());
+//			
+//			ObjectOutputStream out=new ObjectOutputStream(clientSocket.getOutputStream());
+//			ObjectInputStream in=new ObjectInputStream(clientSocket.getInputStream());
+//			
+//			Connection connection = new Connection(position,in, out);
+//			connections.add(connection);
+//			sendTo(new InitialMessage(new InitialConnectionAction(gameId,position,playersInfo)),position);
+//			connection.getInitialMessage();			
+//		    new Thread(connection).start();	
+//		    
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+	}
+	
+	public void addConnection(Streams s, Position.Player position,String gameId,ArrayList<Player> playersInfo){
+			ObjectOutputStream out=s.getOut();
+			ObjectInputStream in=s.getIn();
 			
 			Connection connection = new Connection(position,in, out);
 			connections.add(connection);
 			sendTo(new InitialMessage(new InitialConnectionAction(gameId,position,playersInfo)),position);
 			connection.getInitialMessage();			
 		    new Thread(connection).start();	
-		    
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
 	}
 	
 }

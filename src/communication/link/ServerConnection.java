@@ -59,10 +59,7 @@ public class ServerConnection implements Runnable{
 			public void execute() {
 				
 				connector = new TcpConnector(GameEnvironment.getGameEnvironment().getTcpInfo().getHostIp(),GameEnvironment.getGameEnvironment().getTcpInfo().getHostPort());
-			
-				
-				Streams s = connector.connect();
-				
+				Streams s = connector.connect();	
 				ObjectOutputStream out = s.getOut();
 				ObjectInputStream in = s.getIn();
 				
