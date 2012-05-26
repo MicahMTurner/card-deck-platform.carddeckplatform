@@ -132,8 +132,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		// draggable.setCarrier(username);
 		// draggable.setLocation(780-x, 460-y);
 		synchronized (draggable) {
-			draggable.setLocation(GameStatus.screenWidth - x,
-					GameStatus.screenHeight - y);
+			draggable.setLocation(GameEnvironment.getGameEnvironment().getDeviceInfo().getScreenWidth()-x, GameEnvironment.getGameEnvironment().getDeviceInfo().getScreenHeight()-y);
 
 		}
 
@@ -465,8 +464,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		for (Card card : cards) {
 			if (from == -1) {
 				// new card, create it
-				System.out.println(GameStatus.username + ": card id: "
-						+ card.getId());
+				//System.out.println(GameStatus.username+": card id: "+card.getId());
 				addNewDraggable(card, destination);
 
 			} else {
@@ -497,8 +495,8 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		Droppable destination = table.getDroppableById(to);
 		for (Card card : cards) {
 			// new card, create it
-			System.out.println(GameStatus.username + ": card id: "
-					+ card.getId());
+//			System.out.println(GameStatus.username + ": card id: "
+//					+ card.getId());
 			addNewDraggable(card, destination);
 		}
 	}

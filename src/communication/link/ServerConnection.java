@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import communication.messages.Message;
 
-import carddeckplatform.game.GameStatus;
+import carddeckplatform.game.GameEnvironment;
 //import communication.entities.Client;
 //import communication.entities.TcpClient;
 
@@ -57,31 +57,24 @@ public class ServerConnection implements Runnable{
 
 			@Override
 			public void execute() {
-				try {
-					// creates a socket.
-					socket = new Socket(GameStatus.hostIp, GameStatus.hostPort);
-					// creates an outputstream.
-					ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-					ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 				
-					sender = new Sender(out);
-					receiver = new Receiver(in);
-					receiver.initializeMode();
-					sender.initializeMode();
-					new Thread(receiver).start();
-					cdl.countDown();
+				connector = new TcpConnector(GameEnvironment.getGameEnvironment().getTcpInfo().getHostIp(),GameEnvironment.getGameEnvironment().getTcpInfo().getHostPort());
+				Streams s = connector.connect();	
+				ObjectOutputStream out = s.getOut();
+				ObjectInputStream in = s.getIn();
 				
-				} catch (UnknownHostException e) {
-					System.out.println(e.getMessage());
-					e.printStackTrace();
-					
-				} catch (IOException e) {				
-					e.printStackTrace();			
-				}
+				sender = new Sender(out);
+				receiver = new Receiver(in);
+				receiver.initializeMode();
+				sender.initializeMode();
+				new Thread(receiver).start();
+				cdl.countDown();
+			}		
 				
-			}
-			
+		
 		}
+			
+		
 	private class CloseConnectionExecutor extends ActionForQueue{
 
 		@Override
@@ -102,7 +95,7 @@ public class ServerConnection implements Runnable{
 	}
 		
 	
-	
+		
 	
 	
 	private ServerConnection(){
