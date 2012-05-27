@@ -1,10 +1,36 @@
 package carddeckplatform.game;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.UUID;
+
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothServerSocket;
+import android.os.Handler;
+
 public class GameEnvironment {
+	public enum ConnectionType{TCP , BLUETOOTH}
+	
 	private DeviceInfo deviceInfo;
 	private TcpInfo tcpInfo;
 	private BluetoothInfo bluetoothInfo;
 	private PlayerInfo playerInfo;
+	private ConnectionType connectionType;
+	
+	private Handler handler;
+	
+	public Handler getHandler() {
+		return handler;
+	}
+	
+	public void setConnectionType(ConnectionType connectionType) {
+		this.connectionType = connectionType;
+	}
+	
+	public ConnectionType getConnectionType() {
+		return connectionType;
+	}
 	
 	public DeviceInfo getDeviceInfo() {
 		return deviceInfo;
@@ -43,6 +69,8 @@ public class GameEnvironment {
 		tcpInfo = new TcpInfo();
 		bluetoothInfo = new BluetoothInfo();
 		playerInfo = new PlayerInfo();
+		
+		handler = new Handler();
 	}
 	
 	public class DeviceInfo{
@@ -69,6 +97,22 @@ public class GameEnvironment {
 		private String localIp;
 		private int hostPort = 9997;
 		private int idPort = 9998;
+		
+		private ServerSocket tcpServerSocket;
+		
+		public void initServerSocket(){
+			try {
+				tcpServerSocket = new ServerSocket(hostPort);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		public ServerSocket getServerSocket(){
+			return tcpServerSocket;
+		}
+		
 		public String getHostIp() {
 			return hostIp;
 		}
@@ -92,7 +136,38 @@ public class GameEnvironment {
 	}
 	
 	public class BluetoothInfo{
+		private UUID appUUID;
+		private BluetoothDevice hostDevice;
+		private BluetoothServerSocket bluetoothServerSocket;
 		
+		public void initServerSocket(){
+			BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+			try {
+				bluetoothServerSocket = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("bebe", appUUID);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		public BluetoothServerSocket getServerSocket(){
+			return bluetoothServerSocket;
+		}
+		
+		public UUID getUUID(){
+			return appUUID;
+		}
+		
+		public BluetoothDevice getHostDevice() {
+			return hostDevice;
+		}
+		
+		public void setHostDevice(BluetoothDevice hostDevice) {
+			this.hostDevice = hostDevice;
+		}
+		
+		public BluetoothInfo(){
+			appUUID = new UUID(0x0000110100001000L,0x800000805F9B34FBL);
+		}
 	}
 	
 	public class PlayerInfo{
