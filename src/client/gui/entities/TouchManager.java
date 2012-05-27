@@ -283,13 +283,13 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 			if (previousDistance != 0) {
 				scale *= currentDistance / previousDistance;
 			}
-			angle -= Point.getSignedAngleBetween(current, previous);
+//			angle -= Point.getSignedAngleBetween(current, previous);
 		}
 		
 
 		
 		if(angleFlag)
-			angleFlag=handler.onRotate(event,angle);
+			angleFlag=handler.onRotate(event,-Point.getSignedAngleBetween(current, previous));
 		if(scaleFlag)
 			scaleFlag=handler.onPinch(event,currentDistance, previousDistance, scale);
 		
