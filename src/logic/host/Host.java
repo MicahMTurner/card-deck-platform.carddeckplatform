@@ -21,27 +21,12 @@ public class Host implements Runnable{
 	//public static ArrayList<Player> playersInfo = new ArrayList<Player>();	
 	
 	private Stack<Position.Player> availablePositions;
-	private ArrayList<PlayersInfo> playersInfo;
+	//private ArrayList<PlayersInfo> playersInfo;
 	private static Game game;
 
 	//synchronized private boolean startGameFlag=false;
 	int playersRdy=0;
-	private class PlayersInfo implements Comparable<String>{
-		private String name;
-		private float azimute;
-		private Position.Player position;
-		
-		
-		@Override
-		public int compareTo(String another) {
-			if (name.equals(another)){
-				return 0;
-			}
-			return 1;
-		}
-		
-		
-	}
+
 
 			
 	public Host(Game game) {	
@@ -52,7 +37,7 @@ public class Host implements Runnable{
 		availablePositions.add(Position.Player.BOTTOM);
 		
 		Host.game=game;
-		this.playersInfo=new ArrayList<Host.PlayersInfo>();
+		//this.playersInfo=new ArrayList<Host.PlayersInfo>();
 		
 	}
 	public static void addPlayer(Player playerInfo){
