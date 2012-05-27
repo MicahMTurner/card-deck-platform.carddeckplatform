@@ -12,6 +12,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.animation.Interpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 import client.controller.ClientController;
 import client.gui.entities.Draggable;
@@ -624,13 +626,20 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	}
 
 	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float arg2,
-			float arg3) {
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+			float velocityY) {
 		System.out.println("TableView.onFling()");
-		float X = e2.getX();
-		float Y = e2.getY();
+		
+		
 		if (uiEnabled) {
 			if (draggableInHand != null) {
+				touchmanager.resetAngle();
+				touchmanager.resetScale();
+				float X = e2.getX();
+				float Y = e2.getY();
+				final float distanceTimeFactor = 0.4f;
+	            final float totalDx = (distanceTimeFactor * velocityX / 2);
+	            final float totalDy = (distanceTimeFactor * velocityY / 2);
 				draggableInHand.setLocation(X, Y);
 				draggableInHand.onRelease();
 
@@ -683,8 +692,15 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	@Override
 	public boolean onRotate(MotionEvent event, float angleRadians) {
 		// TODO Auto-generated method stub
-		System.out.println("TableView.onRotate()" + "::"
-				+ TouchManager.getDegreesFromRadians(angleRadians));
+		if (uiEnabled) {
+			if (draggableInHand != null) {
+				draggableInHand.setAngle( TouchManager.getDegreesFromRadians(angleRadians));
+				redraw();
+			}
+		} else
+			popToast("It's not your turn now!!");
+//		System.out.println("TableView.onRotate()" + "::"
+//				+ TouchManager.getDegreesFromRadians(angleRadians));
 		return true;
 	}
 
@@ -695,5 +711,46 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		// System.out.println(scale);
 		return true;
 	}
-
+//	public void onAnimateMove(float dx, float dy, long duration) {
+//		
+//		 Matrix animateStart;
+//         Interpolator animateInterpolator;
+//         
+//         float totalAnimDx;
+//         float totalAnimDy;
+//        animateStart = new Matrix(translate);
+//        animateInterpolator = new OvershootInterpolator();
+//        long startTime= System.currentTimeMillis();
+//        long endTime = startTime + duration;
+//        totalAnimDx = dx;
+//        totalAnimDy = dy;
+//        post(new Runnable() {
+//            @Override
+//            public void run() {
+//                onAnimateStep();
+//            }
+//        });
+//    }
+//
+//    private void onAnimateStep() {
+//        long curTime = System.currentTimeMillis();
+//        float percentTime = (float) (curTime - startTime)
+//                / (float) (endTime - startTime);
+//        float percentDistance = animateInterpolator
+//                .getInterpolation(percentTime);
+//        float curDx = percentDistance * totalAnimDx;
+//        float curDy = percentDistance * totalAnimDy;
+//        translate.set(animateStart);
+//        onMove(curDx, curDy);
+//
+//        //Log.v(DEBUG_TAG, "We're " + percentDistance + " of the way there!");
+//        if (percentTime < 1.0f) {
+//            post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    onAnimateStep();
+//                }
+//            });
+//        }
+//    }
 }

@@ -55,6 +55,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		coord.setX(x);
 		coord.setY(y);
 	}
+	
 	public void moveTo(final Droppable source,final Droppable destination, final boolean revealedWhileMoving, final boolean revealedAtEnd) {
 		new Thread(new Runnable() {	
 			@Override
@@ -96,6 +97,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 			coord.setX(x);
 			coord.setY(y);
 	}
+	@Override
 	public void setAngle(float angle) {
 		this.angle = angle%360;
 	}
