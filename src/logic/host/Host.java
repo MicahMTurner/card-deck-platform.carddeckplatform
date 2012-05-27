@@ -67,7 +67,7 @@ public class Host implements Runnable{
 	}
 	
 	public void waitForPlayers(){
-		//ConnectionsManager.getConnectionsManager().connectHostingPlayer(availablePositions.pop(),game.toString(),game.getPlayers());
+		ConnectionsManager.getConnectionsManager().connectHostingPlayer(availablePositions.pop(),game.toString(),game.getPlayers());
 		while(ConnectionsManager.getConnectionsManager().getNumberOfConnections()<game.minPlayers()){
 			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions.pop(),game.toString(),game.getPlayers());
 	    }

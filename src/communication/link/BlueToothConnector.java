@@ -18,12 +18,12 @@ public class BlueToothConnector implements Connector {
 	private BluetoothDevice device;
 	private UUID destinationId;
 	
-	public BlueToothConnector(BluetoothDevice device, UUID destinationId) throws Exception{
+	public BlueToothConnector(BluetoothDevice device, UUID destinationId){
 		
 		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (mBluetoothAdapter == null) {
 		    // Device does not support Bluetooth
-			throw new Exception("Bluetooth is not supported.");
+			//throw new Exception("Bluetooth is not supported.");
 		}
 		this.device = device;
 		this.destinationId = destinationId;

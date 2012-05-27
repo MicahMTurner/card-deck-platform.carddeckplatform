@@ -14,6 +14,7 @@ import communication.messages.Message;
 import carddeckplatform.game.GameEnvironment;
 //import communication.entities.Client;
 //import communication.entities.TcpClient;
+import carddeckplatform.game.GameEnvironment.ConnectionType;
 
 
 public class ServerConnection implements Runnable{
@@ -57,8 +58,11 @@ public class ServerConnection implements Runnable{
 
 			@Override
 			public void execute() {
-				
-				connector = new TcpConnector(GameEnvironment.getGameEnvironment().getTcpInfo().getHostIp(),GameEnvironment.getGameEnvironment().getTcpInfo().getHostPort());
+				// uses TCP if specified or if the current player is the hosting player.
+				if(GameEnvironment.getGameEnvironment().getConnectionType()==ConnectionType.TCP || GameEnvironment.getGameEnvironment().getPlayerInfo().isServer())
+					connector = new TcpConnector(GameEnvironment.getGameEnvironment().getTcpInfo().getHostIp(),GameEnvironment.getGameEnvironment().getTcpInfo().getHostPort());
+				else if(GameEnvironment.getGameEnvironment().getConnectionType()==ConnectionType.BLUETOOTH)
+					connector = new BlueToothConnector(GameEnvironment.getGameEnvironment().getBluetoothInfo().getHostDevice(), GameEnvironment.getGameEnvironment().getBluetoothInfo().getUUID());
 				Streams s = connector.connect();	
 				ObjectOutputStream out = s.getOut();
 				ObjectInputStream in = s.getIn();
@@ -67,6 +71,7 @@ public class ServerConnection implements Runnable{
 				receiver = new Receiver(in);
 				receiver.initializeMode();
 				sender.initializeMode();
+				//GameEnvironment.getGameEnvironment().getHandler().post(receiver);
 				new Thread(receiver).start();
 				cdl.countDown();
 			}		
