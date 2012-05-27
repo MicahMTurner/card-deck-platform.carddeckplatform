@@ -45,7 +45,7 @@ public class AbstractDeck extends Droppable{
 
 	@Override
 	public void deltCard(Card card) {
-		cards.add(card);
+		cards.push(card);
 		card.setLocation(getX(), getY());
 		
 	}

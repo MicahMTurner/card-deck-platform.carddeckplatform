@@ -18,6 +18,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 	private String userName;
 	private ArrayList<Card> hand;
 	boolean myTurn;
+	Float azimute;
 	private Position.Player globalPosition;
 	
 	
@@ -26,12 +27,14 @@ public class Player extends Droppable implements  Comparable<Player>{
 	
 	public Player(String userName,Position.Player globalPosition, PlayerEventsHandler handler) {
 		super(globalPosition.getId(),globalPosition.sitMe(globalPosition));
+		this.azimute=null;
 		this.userName=userName;
 		this.globalPosition=globalPosition;
 		this.position=globalPosition.sitMe(globalPosition);		
 		this.handler=handler;
 		this.hand=new ArrayList<Card>();
-		this.myTurn=false;		
+		this.myTurn=false;	
+		
 	}
 	
 	public Position.Player getGlobalPosition() {
@@ -112,8 +115,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 				CardTransformation.get().transform(card,position,newPos);
 			}
 			position=newPos;
-		}
-		
+		}		
 	}
 	@Override
 	public int sensitivityRadius() {		
@@ -136,6 +138,18 @@ public class Player extends Droppable implements  Comparable<Player>{
 	@Override
 	public ArrayList<Card> getCards() {		
 		return hand;
+	}
+
+	public void setAzimute(double newAzimute) {
+		if (azimute!=null){
+			if (Math.abs(azimute-newAzimute)>80){
+				//	send live-position message
+				
+			}
+		}
+	}
+	public Float getAzimute() {
+		return azimute;
 	}
 
 }

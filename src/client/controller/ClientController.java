@@ -172,7 +172,7 @@ public class ClientController implements Observer {
 	}
 	
 	public void addPlayer(Player newPlayer) {
-		newPlayer.setRelativePosition(game.getMe().getGlobalPosition());
+		
 		game.addPlayer(newPlayer);
 		gui.addPlayer(newPlayer);
 		

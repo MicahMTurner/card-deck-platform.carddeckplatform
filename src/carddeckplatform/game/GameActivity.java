@@ -158,15 +158,16 @@ public void onBackPressed() {
 	  new Thread(new ProgressBarThread(new ActionWhileWaiting() {
 		
 		@Override
-		public void execute() {
-			 //-------CONNECT TO SERVER(HOST)------//
-		      ServerConnection.getConnection().openConnection();
-		      progDialog.dismiss();
-		      //setup all layout prefs
-		      setupLayout();
-		      //start live position feature 
-		      //posByComp.start();
-		      gravity.start();
+		public void execute() {	
+			//start live position feature
+			posByComp.start();
+			//-------CONNECT TO SERVER(HOST)------//
+		    ServerConnection.getConnection().openConnection();
+		    progDialog.dismiss();
+		    //setup all layout prefs
+		    setupLayout();
+		          
+		    gravity.start();
 		     
 			
 		}

@@ -1,9 +1,12 @@
 package client.controller;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
+import carddeckplatform.game.GameStatus;
 import utils.Position;
 import communication.actions.LivePositionChangedAction;
 import communication.link.ServerConnection;
@@ -18,16 +21,18 @@ public class PositionByCompass implements SensorEventListener{
 	private Sensor accelerometer;
 	private Sensor magnetometer;
 	private SensorManager mSensorManager;
-	private float azimut;
+	private Double azimut;
 	private float[] mGravity;
 	private float[] mGeomagnetic;
 	private LivePosition sendLivePosition;
 	private ScheduledExecutorService execService;
 	private ScheduledFuture<?> tasks;
+	private CountDownLatch cdl;
+	private boolean waitingForAgreement=false;
 	
 	private class LivePosition implements Runnable{	
-		float previousRead;
-		public LivePosition(float initialRead) {
+		double previousRead;
+		public LivePosition(double initialRead) {
 			this.previousRead=initialRead;
 		}
 		@Override
@@ -64,6 +69,13 @@ public class PositionByCompass implements SensorEventListener{
 		magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 		tasks=null;
 		execService=Executors.newSingleThreadScheduledExecutor();
+		azimut=null;
+		cdl=new CountDownLatch(1);
+		try {
+			cdl.await();
+		} catch (InterruptedException e) {			
+			e.printStackTrace();
+		}
 	}
 	
 	public void start(){
@@ -73,6 +85,7 @@ public class PositionByCompass implements SensorEventListener{
 			sendLivePosition=new LivePosition(azimut);
 		}
 		tasks=execService.scheduleAtFixedRate(sendLivePosition, 0, 4, TimeUnit.SECONDS);
+		
 	}
 	public void stop(){
 		mSensorManager.unregisterListener(this);
@@ -87,11 +100,15 @@ public class PositionByCompass implements SensorEventListener{
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
+		
 		    if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
 		      mGravity = event.values;
 		    if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
 		      mGeomagnetic = event.values;
 		    if (mGravity != null && mGeomagnetic != null) {
+		    	if (azimut==null){
+		    		cdl.countDown();
+		    	}
 		      float R[] = new float[9];
 		      float I[] = new float[9];
 		      boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
@@ -99,10 +116,25 @@ public class PositionByCompass implements SensorEventListener{
 		        float orientation[] = new float[3];
 		        //orientation contains: azimut, pitch and roll
 		        SensorManager.getOrientation(R, orientation);
-		        azimut = orientation[0]; 
-		        System.out.println(azimut*(180/Math.PI));
+		        azimut = (orientation[0]*(180/Math.PI)); 
+		        GameStatus.playerInfo.setAzimute(azimut);
+		        System.out.println(azimut);
 		      }
 		    }
+	}
+	public static Position.Player translatePositionByAzimute(double azimute){
+		Position.Player answer=null;		
+		if (5<azimute && azimute<10){
+			answer=Position.Player.TOP;
+			
+		}else if (5<azimute && azimute<10){
+			answer=Position.Player.TOP;
+		}else if (5<azimute && azimute<10){
+			answer=Position.Player.TOP;
+		}else{
+			answer=Position.Player.TOP;
+		}
+		return answer;
 	}
 		    		
 	}
