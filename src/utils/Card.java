@@ -101,6 +101,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	public void setAngle(float angle) {
 		this.angle = angle%360;
 	}
+	@Override
 	public float getAngle() {
 		return angle;
 	}

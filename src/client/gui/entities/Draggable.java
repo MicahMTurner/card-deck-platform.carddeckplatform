@@ -78,6 +78,7 @@ public abstract class Draggable implements Serializable{
 	public abstract int sensitivityRadius();
 	public abstract void setLocation(float x, float y);		
 	public abstract void setAngle(float angle);
+	public abstract float getAngle();
 	public void setCarried(boolean carried) {
 		this.carried = carried;
 	}
