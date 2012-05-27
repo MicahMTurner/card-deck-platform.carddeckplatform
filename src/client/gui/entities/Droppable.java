@@ -77,11 +77,11 @@ public abstract class Droppable implements Serializable{
 	}
 
 	
-	public int getX() {
+	public float getX() {
 		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();		
 	}
 
-	public int getY() {
+	public float getY() {
 		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();		
 	}
 	public abstract int cardsHolding();

@@ -7,6 +7,7 @@ import java.util.Stack;
 import utils.Player;
 import utils.Position;
 import communication.actions.Turn;
+import communication.link.Streams;
 import communication.messages.Message;
 import communication.server.ConnectionsManager;
 import logic.client.Game;
@@ -49,8 +50,9 @@ public class Host implements Runnable{
 	public static void playerLost(Position.Player position){
 		game.playerLost(position);
 	}
+	
 	public void waitForPlayers(){
-		
+		ConnectionsManager.getConnectionsManager().connectHostingPlayer(availablePositions.pop(),game.toString(),game.getPlayers());
 		while(ConnectionsManager.getConnectionsManager().getNumberOfConnections()<game.minPlayers()){
 			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions.pop(),game.toString(),game.getPlayers());
 	    }

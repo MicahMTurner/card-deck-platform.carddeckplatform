@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import utils.Player;
 import utils.Position;
 
-import carddeckplatform.game.GameStatus;
+import carddeckplatform.game.GameEnvironment;
 import client.controller.ClientController;
-import client.controller.PositionByCompass;
 import client.dataBase.ClientDataBase;
 import logic.client.Game;
 
@@ -16,12 +15,12 @@ public class InitialConnectionAction implements Action{
 	
 	private String gameId;
 	private Position.Player position;
-	private ArrayList<Player> newPlayers;
+	private ArrayList<Player> newPlayersInfo;
 	
-	public InitialConnectionAction(String gameId, Position.Player position, ArrayList<Player> newPlayers) {		
+	public InitialConnectionAction(String gameId, Position.Player position, ArrayList<Player> newPlayersInfo) {		
 		this.gameId=gameId;
 		this.position=position;
-		this.newPlayers=newPlayers;
+		this.newPlayersInfo=newPlayersInfo;
 	}
 
 	@Override
@@ -30,14 +29,8 @@ public class InitialConnectionAction implements Action{
 		ClientController.get().setGame(game);
 		
 		//create my instance		
-		if (newPlayers.get(0).getAzimute()==null){
-			game.addMe(GameStatus.username, position);
-		}else{
-			//start live position
-			
-			//add me
-			game.addMe(GameStatus.username, PositionByCompass.translatePositionByAzimute(GameStatus.playerInfo.getAzimute()));
-		}
+		
+		game.addMe(GameEnvironment.getGameEnvironment().getPlayerInfo().getUsername(), position);
 		
 		ClientController.get().addPlayer(game.getMe());
 		
@@ -45,9 +38,7 @@ public class InitialConnectionAction implements Action{
 		
 		
 		
-		for (Player newPlayer : newPlayers){
-		
-			newPlayer.setRelativePosition(game.getMe().getGlobalPosition());
+		for (Player newPlayer : newPlayersInfo){			
 			ClientController.get().addPlayer(newPlayer);
 		}		
 		

@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import carddeckplatform.game.CarddeckplatformActivity;
 import carddeckplatform.game.GameActivity;
-import carddeckplatform.game.GameStatus;
 import carddeckplatform.game.R;
 import android.app.Activity;
 import android.content.Intent;

@@ -51,18 +51,19 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		return 30;
 	}
 	@Override
-	public void setLocation(int x, int y){
+	public void setLocation(float x, float y){
 		coord.setX(x);
 		coord.setY(y);
 	}
+	
 	public void moveTo(final Droppable source,final Droppable destination, final boolean revealedWhileMoving, final boolean revealedAtEnd) {
 		new Thread(new Runnable() {	
 			@Override
 			public void run() {
 				setRevealed(revealedWhileMoving);
-				int x = coord.getX();
-				int y = coord.getY();
-				final ArrayList<Point> vector = StaticFunctions.midLine(x, y, destination.getX(), destination.getY());
+				float x = coord.getX();
+				float y = coord.getY();
+				final ArrayList<Point> vector = StaticFunctions.midLine((int)x, (int)y, (int)destination.getX(), (int)destination.getY());
 				try {
         			Thread.sleep(1000);
         		} catch (InterruptedException e) {			        			
@@ -92,13 +93,15 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	public Point getCoord() {
 		return new Point(coord);
 	}
-	public void setCoord(int x,int y) {
+	public void setCoord(float x,float y) {
 			coord.setX(x);
 			coord.setY(y);
 	}
+	@Override
 	public void setAngle(float angle) {
 		this.angle = angle%360;
 	}
+	@Override
 	public float getAngle() {
 		return angle;
 	}

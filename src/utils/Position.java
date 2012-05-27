@@ -6,8 +6,8 @@ import java.util.Collections;
 import IDmaker.IDMaker;
 
 public interface Position extends Serializable{
-	public int getX();
-	public int getY();
+	public float getX();
+	public float getY();
 	public Position getRelativePosition(Player playerPos);
 	public Point getPoint();
 	
@@ -24,10 +24,10 @@ public interface Position extends Serializable{
 			this.point=point;
 			this.id=IDMaker.getMaker().getId(this);
 		}
-		public int getX(){
+		public float getX(){
 			return point.getX();
 		}
-		public int getY(){
+		public float getY(){
 			return point.getY();
 		}
 		
@@ -117,10 +117,10 @@ public interface Position extends Serializable{
 			this.point=point;
 			this.id=IDMaker.getMaker().getId(this);
 		}
-		public int getX(){
+		public float getX(){
 			return point.getX();
 		}
-		public int getY(){
+		public float getY(){
 			return point.getY();
 		}
 		public Position.Public getRelativePosition(Position.Player playerPos){
@@ -220,10 +220,10 @@ public interface Position extends Serializable{
 				this.point=point;
 				this.id=IDMaker.getMaker().getId(this);
 			}
-			public int getX(){
+			public float getX(){
 				return point.getX();
 			}
-			public int getY(){
+			public float getY(){
 				return point.getY();
 			}
 			
