@@ -4,36 +4,33 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 import carddeckplatform.game.GameEnvironment;
 
+import android.bluetooth.BluetoothServerSocket;
+import android.bluetooth.BluetoothSocket;
 import communication.link.Streams;
 
-public class TcpAcceptor implements Acceptor {
+public class BluetoothAcceptor implements Acceptor {
 	
-	
-	
-	public TcpAcceptor(){
-
+	public BluetoothAcceptor(){
 	}
 	
 	@Override
 	public Streams accept() {
+		// TODO Auto-generated method stub
+		BluetoothSocket clientSocket;
 		try {
-			Socket clientSocket;
-			clientSocket = GameEnvironment.getGameEnvironment().getTcpInfo().getServerSocket().accept();
-			
+			//clientSocket = serverSocket.accept();
+			clientSocket = GameEnvironment.getGameEnvironment().getBluetoothInfo().getServerSocket().accept();
 			ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
 			
 			return new Streams(out, in);
-			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// TODO: handle exception
 		}
-			
 		return null;
 	}
+
 }

@@ -9,7 +9,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothServerSocket;
+
 import carddeckplatform.game.GameEnvironment;
+import carddeckplatform.game.GameEnvironment.ConnectionType;
 
 import utils.Player;
 import utils.Position;
@@ -20,6 +24,7 @@ import communication.messages.Message;
 
 public class ConnectionsManager {
 	private ServerSocket serverSocket=null;
+	private BluetoothServerSocket bluetoothServerSocket=null;
 
 	//-------Singleton implementation--------//
 	private static class ConnectionsManagerHolder
@@ -39,11 +44,17 @@ public class ConnectionsManager {
 	
 	private ConnectionsManager() {
 		connections = new ArrayList<Connection>();
-		try {
-			serverSocket = new ServerSocket(GameEnvironment.getGameEnvironment().getTcpInfo().getHostPort());
-		} catch (IOException e) {			
-			e.printStackTrace();
-		}
+//		try {
+//			if(GameEnvironment.getGameEnvironment().getConnectionType()==ConnectionType.TCP || GameEnvironment.getGameEnvironment().getPlayerInfo().isServer()){
+//				serverSocket = new ServerSocket(GameEnvironment.getGameEnvironment().getTcpInfo().getHostPort());
+//			}
+//			else if(GameEnvironment.getGameEnvironment().getConnectionType()==ConnectionType.BLUETOOTH){
+//				
+//				bluetoothServerSocket = GameEnvironment.getGameEnvironment().getBluetoothInfo().bluetoothServerSocket;
+//			}	
+//		} catch (IOException e) {			
+//			e.printStackTrace();
+//		}
 	}
 	
 	public int getNumberOfConnections(){
@@ -88,47 +99,45 @@ public class ConnectionsManager {
 		}
 	}
 	
-	
+	/**
+	 * connects the hosting player. Will always use TCP connection. 
+	 * @param position
+	 * @param gameId
+	 * @param playersInfo
+	 */
 	public void connectHostingPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo){
-		Acceptor acceptor = new TcpAcceptor(serverSocket);
+		Acceptor acceptor = new TcpAcceptor();
 		Streams s = acceptor.accept();
 		addConnection(s, position, gameId, playersInfo);
 	}
 	
 	
-	
+	/**
+	 * connects players. Will use either TCP or BLUETOOTH.
+	 * @param position
+	 * @param gameId
+	 * @param playersInfo
+	 */
 	public void connectPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo){			
-		Acceptor acceptor = new TcpAcceptor(serverSocket);
+		Acceptor acceptor=null;
+		// accept connections according to the connection type specified by the user.
+		if(GameEnvironment.getGameEnvironment().getConnectionType()==ConnectionType.TCP)
+			acceptor = new TcpAcceptor();
+		else if(GameEnvironment.getGameEnvironment().getConnectionType()==ConnectionType.BLUETOOTH)
+			acceptor = new BluetoothAcceptor();
+		
 		Streams s = acceptor.accept();
 		
 		addConnection(s, position, gameId, playersInfo);
-		
-		
-		
-		
-		
-//		try {				
-//			Socket clientSocket;
-//			//System.out.println("Listening to port " + GameStatus.hostPort + " Waiting for messages...");
-//			
-//			clientSocket = serverSocket.accept();
-//			
-//			System.out.println("connection request from from " + clientSocket.getRemoteSocketAddress().toString());
-//			
-//			ObjectOutputStream out=new ObjectOutputStream(clientSocket.getOutputStream());
-//			ObjectInputStream in=new ObjectInputStream(clientSocket.getInputStream());
-//			
-//			Connection connection = new Connection(position,in, out);
-//			connections.add(connection);
-//			sendTo(new InitialMessage(new InitialConnectionAction(gameId,position,playersInfo)),position);
-//			connection.getInitialMessage();			
-//		    new Thread(connection).start();	
-//		    
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 	}
 	
+	/**
+	 * adds a new connection to the connections list.
+	 * @param s
+	 * @param position
+	 * @param gameId
+	 * @param playersInfo
+	 */
 	public void addConnection(Streams s, Position.Player position,String gameId,ArrayList<Player> playersInfo){
 			ObjectOutputStream out=s.getOut();
 			ObjectInputStream in=s.getIn();
@@ -138,6 +147,8 @@ public class ConnectionsManager {
 			sendTo(new InitialMessage(new InitialConnectionAction(gameId,position,playersInfo)),position);
 			connection.getInitialMessage();			
 		    new Thread(connection).start();	
+			
+			//GameEnvironment.getGameEnvironment().getHandler().post(connection);
 
 	}
 	
