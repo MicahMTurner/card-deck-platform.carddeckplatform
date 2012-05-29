@@ -10,13 +10,13 @@ import communication.messages.Message;
 
 public class Connection implements Runnable {
 	
-	private Position.Player id;
+	private int id;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private volatile boolean stop;
 	
 	
-	public Connection(Position.Player id, ObjectInputStream in, ObjectOutputStream out){
+	public Connection(int id, ObjectInputStream in, ObjectOutputStream out){
 		this.id = id;
 		this.in = in;
 		this.out = out;
@@ -36,7 +36,7 @@ public class Connection implements Runnable {
 		}
 	}
 	
-	public Position.Player getId(){
+	public int getId(){
 		return id;
 	}
 	public void getInitialMessage(){

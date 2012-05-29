@@ -1,6 +1,6 @@
 package client.gui.entities;
 
-import carddeckplatform.game.GameEnvironment;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import utils.Point;
 import android.content.Context;
 import android.content.res.Resources;
@@ -37,8 +37,8 @@ public class MetricsConvertion {
 		
 		double x = p.getX();
 		double y = p.getY();
-		double width = GameEnvironment.getGameEnvironment().getDeviceInfo().getScreenWidth();
-		double height = GameEnvironment.getGameEnvironment().getDeviceInfo().getScreenHeight();
+		double width = GameEnvironment.get().getDeviceInfo().getScreenWidth();
+		double height = GameEnvironment.get().getDeviceInfo().getScreenHeight();
 		
 		Point newP = new Point((int)((x/width)*100.0), (int)((y/height)*100.0));
 		return newP;
@@ -47,8 +47,8 @@ public class MetricsConvertion {
 	public static Point pointRelativeToPx(Point p){
 		double x = p.getX();
 		double y = p.getY();
-		double width = GameEnvironment.getGameEnvironment().getDeviceInfo().getScreenWidth();
-		double height = GameEnvironment.getGameEnvironment().getDeviceInfo().getScreenHeight();
+		double width = GameEnvironment.get().getDeviceInfo().getScreenWidth();
+		double height = GameEnvironment.get().getDeviceInfo().getScreenHeight();
 		
 		Point newP = new Point((int)((x*width)/100.0), (int)((y*height)/100.0));
 		return newP;

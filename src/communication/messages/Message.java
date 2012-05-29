@@ -18,7 +18,7 @@ public class Message implements Serializable {
 		
 	}
 	
-	public void actionOnServer(Position.Player id){
+	public void actionOnServer(int id){
 		
 		ConnectionsManager.getConnectionsManager().sendToAllExcptMe(this, id);
 	}

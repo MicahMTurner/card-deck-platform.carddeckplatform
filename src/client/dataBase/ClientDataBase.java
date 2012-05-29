@@ -47,7 +47,8 @@ public class ClientDataBase {
 	public Game getGame(String gameName){
 		//return games.get(gameName);
 		//return loader.LoadPlugin(gameName);
-		return new FreePlay();
+		//return new FreePlay();
+		return new War();
 	}
 	
 	public void addGame(String gameId){

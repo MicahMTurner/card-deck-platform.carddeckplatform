@@ -25,7 +25,7 @@ public class InitialMessage extends Message {
 	}
 
 	@Override
-	public void actionOnServer(Position.Player id){	
+	public void actionOnServer(int id){			
 		Host.addPlayer(newPlayer);
 		ConnectionsManager.getConnectionsManager().sendToAllExcptMe(new Message(new AddPlayerAction(newPlayer)), id);
 		

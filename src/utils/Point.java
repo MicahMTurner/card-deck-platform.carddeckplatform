@@ -61,11 +61,11 @@ public class Point implements Serializable {
 		return (float)Math.sqrt(x * x + y * y);
 	}
 
-	public Point set(Point other) {
-		x = other.getX();
-		y = other.getY();
-		return this;
-	}
+//	public Point set(Point other) {
+//		x = other.getX();
+//		y = other.getY();
+//		return this;
+//	}
 
 	public Point set(float x, float y) {
 		this.x = x;

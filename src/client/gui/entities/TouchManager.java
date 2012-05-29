@@ -144,7 +144,7 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 							points[index] = newPoint;
 						else {
 							if (previousPoints[index] != null) {
-								previousPoints[index].set(points[index]);
+								previousPoints[index]=(points[index]);
 							}
 							else {
 								previousPoints[index] = new Point(newPoint);
@@ -152,7 +152,7 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 							}
 
 							if (Point.subtract(points[index], newPoint).getLength() < 64)
-								points[index].set(newPoint);
+								points[index]=(newPoint);
 						}
 						}catch(ArrayIndexOutOfBoundsException e){
 							e.printStackTrace();

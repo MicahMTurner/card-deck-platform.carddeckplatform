@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import carddeckplatform.game.GameEnvironment;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
 import communication.link.Streams;
 
@@ -22,7 +22,7 @@ public class TcpAcceptor implements Acceptor {
 	public Streams accept() {
 		try {
 			Socket clientSocket;
-			clientSocket = GameEnvironment.getGameEnvironment().getTcpInfo().getServerSocket().accept();
+			clientSocket = GameEnvironment.get().getTcpInfo().getServerSocket().accept();
 			
 			ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());

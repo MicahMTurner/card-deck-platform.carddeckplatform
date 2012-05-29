@@ -4,6 +4,8 @@ package utils;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.Stack;
 
@@ -17,14 +19,14 @@ import client.gui.entities.MetricsConvertion;
 
 
 
-public class AbstractDeck extends Droppable{
+public class DeckArea extends Droppable{
 	
-	public AbstractDeck(Position.Button position) {
+	public DeckArea(Position.Button position) {
 		super(position.getId(),position);
 	}
 
 	//change to queue?
-	public Stack<Card> cards = new Stack<Card>();
+	public LinkedList<Card> cards = new LinkedList<Card>();
 	
 	@Override
 	public AbstractList<Card> getCards() {
@@ -37,7 +39,7 @@ public class AbstractDeck extends Droppable{
 		return cards.size();
 	}
 	
-
+	
 	@Override
 	public int sensitivityRadius() {
 		return 30;
@@ -53,7 +55,9 @@ public class AbstractDeck extends Droppable{
 	@Override
 	public void addCard(Player player, Card card) {
 		card.setLocation(getX(), getY());
-		cards.push(card);
+		card.setAngle(0);
+		cards.addFirst(card);
+		
 	}
 
 	@Override
@@ -92,4 +96,5 @@ public class AbstractDeck extends Droppable{
 		cards.clear();
 		
 	}
+
 }

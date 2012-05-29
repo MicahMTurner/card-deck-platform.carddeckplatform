@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import utils.Card;
 import utils.Player;
+import utils.Position;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -15,6 +16,7 @@ import android.view.SurfaceView;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.controller.ClientController;
 import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
@@ -134,7 +136,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		// draggable.setCarrier(username);
 		// draggable.setLocation(780-x, 460-y);
 		synchronized (draggable) {
-			draggable.setLocation(GameEnvironment.getGameEnvironment().getDeviceInfo().getScreenWidth()-x, GameEnvironment.getGameEnvironment().getDeviceInfo().getScreenHeight()-y);
+			draggable.setLocation(GameEnvironment.get().getDeviceInfo().getScreenWidth()-x, GameEnvironment.get().getDeviceInfo().getScreenHeight()-y);
 		}
 
 		redraw();
@@ -572,7 +574,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		}
 	}
 
-	public void swapPositions(Player player, Player swappedWith) {
+	public void swapPositions(Player player, Position.Player swappedWith) {
 		// TODO Auto-generated method stub
 
 	}
@@ -756,4 +758,8 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 //            });
 //        }
 //    }
+
+	public Droppable getDroppableByPosition(Position position) {		
+		return table.getDroppableByPosition(position);
+	}
 }

@@ -3,34 +3,38 @@ package utils;
 import handlers.PlayerEventsHandler;
 
 import java.util.ArrayList;
+import communication.link.ServerConnection;
+import communication.messages.SwapRequestMessage;
+
+
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
+import client.controller.LivePosition;
 import client.gui.entities.Droppable;
 
 
 
 
 public class Player extends Droppable implements  Comparable<Player>{
-	private PlayerEventsHandler handler;
-	private String userName;
+	private PlayerEventsHandler handler;	
 	private ArrayList<Card> hand;
 	boolean myTurn;
-	Float azimute;
+	private PlayerInfo playerInfo;
 	private Position.Player globalPosition;
 	
 	
 	
 	
 	
-	public Player(String userName,Position.Player globalPosition, PlayerEventsHandler handler) {
-		super(globalPosition.getId(),globalPosition.sitMe(globalPosition));
-		this.azimute=null;
-		this.userName=userName;
+	public Player(PlayerInfo playerInfo,Position.Player globalPosition,int uniqueId, PlayerEventsHandler handler) {
+		super(uniqueId,Position.Player.BOTTOM);
+		this.playerInfo=playerInfo;		
 		this.globalPosition=globalPosition;
-		this.position=globalPosition.sitMe(globalPosition);		
+		this.position=Position.Player.BOTTOM;	
 		this.handler=handler;
 		this.hand=new ArrayList<Card>();
 		this.myTurn=false;	
@@ -47,7 +51,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 		return (Position.Player)position;
 	}
 	public String getUserName() {
-		return userName;
+		return playerInfo.getUsername();
 	}
 	public int getId() {
 		return id;
@@ -140,16 +144,11 @@ public class Player extends Droppable implements  Comparable<Player>{
 		return hand;
 	}
 
-	public void setAzimute(double newAzimute) {
-		if (azimute!=null){
-			if (Math.abs(azimute-newAzimute)>80){
-				//	send live-position message
-				
-			}
-		}
-	}
-	public Float getAzimute() {
-		return azimute;
+//	public void setAzimute(double newAzimute) {
+//		playerInfo.setAzimute(globalPosition,newAzimute);
+//	}
+	public Double getAzimute() {
+		return playerInfo.getAzimute();
 	}
 
 }

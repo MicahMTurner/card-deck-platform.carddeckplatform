@@ -28,7 +28,7 @@ public class Deck{
 	
 	/**
 	 * 	pick card in random place and swap with card in random place 
-	 *	do that size of deck times (or maybe twice the size?)
+	 *	do that size of deck times multiple time to shuffle.
 	 *  @param timesToShuffle how many times user wants to shuffle
 	 */
 	public void shuffle(int timesToShuffle){

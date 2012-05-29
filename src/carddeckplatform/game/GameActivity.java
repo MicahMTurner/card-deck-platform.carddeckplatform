@@ -20,63 +20,69 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.controller.ClientController;
 import client.controller.AutoHide;
-import client.controller.PositionByCompass;
+import client.controller.LivePosition;
 import client.gui.entities.Droppable;
 import communication.link.ServerConnection;
 
 public class GameActivity extends Activity {
 	private final int SPINNERPROGBAR=0;
-	
+	private static Context context;
 	private ProgressDialog progDialog;
-	private TableView tableview;	
-	private PositionByCompass posByComp;
-	private AutoHide gravity;
-	private boolean livePosition=true;
+	private TableView tableview;
+	//private boolean disableLivePosition;
+	
+	//private LivePosition posByComp;
+	
 	
 
 	
 	public GameActivity() {
 		
 	}
+	public static Context getContext(){
+		return context;
+	}
 	
 	@Override
 	protected void onPause() {	
 		super.onPause();
-		posByComp.stop();
-		gravity.stop();
+		LivePosition.get().stop();
+		AutoHide.get().stop();
 	}
 	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		posByComp.stop();
-		gravity.stop();
+		LivePosition.get().stop();
+		AutoHide.get().stop();
 	}
 	
 	@Override
 	protected void onResume() {	
 		super.onResume();
 		//posByComp.start();
-		gravity.start();
+		//AutoHide.get().start();
+		
 	}
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState); 
+        //disableLivePosition=false;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); 
 
-        gravity = new AutoHide(getApplicationContext());
-        
-        
+        //gravity = new AutoHide(getApplicationContext());
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        
-        Display display = getWindowManager().getDefaultDisplay();
-        GameEnvironment.getGameEnvironment().getDeviceInfo().setScreenWidth(display.getWidth());
-        GameEnvironment.getGameEnvironment().getDeviceInfo().setScreenHeight(display.getHeight());
+        context=getApplicationContext();
+        Display display = getWindowManager().getDefaultDisplay();        
+        GameEnvironment.get().getDeviceInfo().setScreenWidth(display.getWidth());
+        GameEnvironment.get().getDeviceInfo().setScreenHeight(display.getHeight());
+        GameEnvironment.get().getDeviceInfo().setRotationAngle(display.getRotation());
         
         //GameStatus.metrics = getApplicationContext().getResources().getDisplayMetrics();
         
@@ -86,10 +92,9 @@ public class GameActivity extends Activity {
         // necessary to transparent background!!!!
         tableview.setZOrderOnTop(true);        
         tableview.getHolder().setFormat(PixelFormat.TRANSPARENT);
-        tableview.setxDimention(GameEnvironment.getGameEnvironment().getDeviceInfo().getScreenWidth());
-        tableview.setyDimention(GameEnvironment.getGameEnvironment().getDeviceInfo().getScreenHeight());
-        ClientController.get().setGui(tableview);
-        posByComp=new PositionByCompass(getApplicationContext());
+        tableview.setxDimention(GameEnvironment.get().getDeviceInfo().getScreenWidth());
+        tableview.setyDimention(GameEnvironment.get().getDeviceInfo().getScreenHeight());
+        ClientController.get().setGui(tableview);       
         setupGame();
 
     }
@@ -160,15 +165,18 @@ public void onBackPressed() {
 		
 		@Override
 		public void execute() {	
-			//start live position feature
-			posByComp.start();
+			
+			if (GameEnvironment.get().getPlayerInfo().isServer()){
+				//start live position feature
+				//LivePosition.get().start();
+			}
 			//-------CONNECT TO SERVER(HOST)------//
 		    ServerConnection.getConnection().openConnection();
 		    progDialog.dismiss();
 		    //setup all layout prefs
 		    setupLayout();
 		          
-		    gravity.start();
+		    AutoHide.get().start();
 		     
 			
 		}
@@ -213,7 +221,7 @@ public void onBackPressed() {
     	menu.add(0, Menu.FIRST, Menu.NONE, "Restart").setIcon(R.drawable.restart);
     	menu.add(0, Menu.FIRST+1, Menu.NONE, "Ranking").setIcon(R.drawable.rank);
     	menu.add(0, Menu.FIRST+2, Menu.NONE, "Main Menu").setIcon(R.drawable.exit);
-    	if (GameEnvironment.getGameEnvironment().getPlayerInfo().isServer()){
+    	if (GameEnvironment.get().getPlayerInfo().isServer()){
     		menu.add(0, Menu.FIRST+3, Menu.NONE, "Stop Live Position").setIcon(R.drawable.exit);
     	}    	
     	
@@ -237,8 +245,9 @@ public void onBackPressed() {
     			
     			finish();
     			return true;
-    		case Menu.FIRST+3:{
-    			posByComp.stop();
+    		case Menu.FIRST+3:{    			
+    			LivePosition.get().stop();
+    			
     			item.setTitle("Start Live Position");
     			item.setIcon(R.drawable.rank);
     			return true;
