@@ -136,11 +136,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		// draggable.setCarrier(username);
 		// draggable.setLocation(780-x, 460-y);
 		synchronized (draggable) {
-			draggable.setLocation(GameEnvironment.get().getDeviceInfo()
-					.getScreenWidth()
-					- x, GameEnvironment.get().getDeviceInfo()
-					.getScreenHeight()
-					- y);
+			draggable.setLocation(x, y);
 		}
 
 		redraw();
