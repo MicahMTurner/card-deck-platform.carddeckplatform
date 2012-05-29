@@ -11,6 +11,7 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import client.gui.entities.Droppable;
+import client.gui.entities.MetricsConvertion;
 
 
 public class Public extends Droppable{	
@@ -33,7 +34,8 @@ public class Public extends Droppable{
 	
 	public Shape getShape(float x,float y) {		
 //		return 1000;
-		return new Circle(x+1000, y+1000, 1000);
+		Point point =MetricsConvertion.pointRelativeToPx(new Point(x, y));
+		return new Circle(point.getX()+1000, point.getY()+1000, 1000);
 	}
 	
 	@Override
