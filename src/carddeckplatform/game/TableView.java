@@ -692,11 +692,10 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 
 	@Override
 	public boolean onRotate(MotionEvent event, float angleRadians) {
-		// TODO Auto-generated method stub
 		if (uiEnabled) {
 			if (draggableInHand != null) {
 				float angle=draggableInHand.getAngle()+TouchManager.getDegreesFromRadians(angleRadians);
-				System.out.println(angle+"::"+TouchManager.getDegreesFromRadians(angleRadians));
+//				System.out.println(angle+"::"+TouchManager.getDegreesFromRadians(angleRadians));
 				while(angle>360)
 					angle-=360;
 				draggableInHand.setAngle(angle);
@@ -704,8 +703,6 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 			}
 		} else
 			popToast("It's not your turn now!!");
-//		System.out.println("TableView.onRotate()" + "::"
-//				+ TouchManager.getDegreesFromRadians(angleRadians));
 		return true;
 	}
 

@@ -20,7 +20,9 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 	private boolean angleFlag = true;
 	private boolean scaleFlag = true;
 	private boolean multitouchFlag = true;
-	private boolean ismultitouch = false;
+	private int firstFingerIndex=-1;
+	private boolean isFirstFingerLiftUp=false;
+	
 	public TouchManager(Context context,final TouchHandler handler,int maxNumberOfTouchPoints) {
 		this.maxNumberOfTouchPoints=maxNumberOfTouchPoints;
 		this.points=new Point[maxNumberOfTouchPoints];
@@ -115,7 +117,7 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 	boolean isValidSingleTap(MotionEvent event){
 		if(event.getPointerCount()>1)
 			return false;
-		if(event.getPointerId(0)!=0)
+		if(event.getPointerId(0)!=firstFingerIndex)
 			return false;
 		return true;
 	}
@@ -132,12 +134,21 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 		   if (actionCode == MotionEvent.ACTION_POINTER_UP || actionCode == MotionEvent.ACTION_UP) {
 			   int index = event.getAction() >> MotionEvent.ACTION_POINTER_ID_SHIFT;
 			   previousPoints[index] = points[index] = null;
+			   if(index==firstFingerIndex){
+				   isFirstFingerLiftUp=true;
+				   System.out.println("firstFingerIndex  up:"+index);
+			   }
 		   }
 		   else {
 				for(int i = 0; i < maxNumberOfTouchPoints; ++i) {
 					if (i < event.getPointerCount()) {
 						int index = event.getPointerId(i);
-
+						if(index>maxNumberOfTouchPoints)
+							continue;
+						if(this.firstFingerIndex==-1){
+							firstFingerIndex=index;
+							System.out.println("firstFingerIndex down:"+index);
+						}
 						Point newPoint = new Point(event.getX(i), event.getY(i));
 						try{
 						if (points[index] == null)
@@ -178,10 +189,9 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 		if(event.getPointerCount()>1){
 			this.multitouchFlag=onMultiTouch(event);
 		}
-		if(event.getPointerCount()==1 && event.getAction()==MotionEvent.ACTION_UP && multitouchFlag){
-			handler.onFling(event, event, 0, 0);
-			ismultitouch=false;
-		
+		if(isFirstFingerLiftUp){//in case the first finger lifted up and on fling wasn't called cause of multi touch  or no velocity on up event
+			onFling(event, event, 0, 0);
+			firstFingerIndex=-1;
 		}
 		return multitouchFlag || flag;
 	}
@@ -238,10 +248,14 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
-		multitouchFlag=false;
-		if(!isValidSingleTap(e1) || !isValidSingleTap(e2))
-			return true;
+		System.out.println("TouchManager.onFling()");
+//		if(!isValidSingleTap(e2))
+//			return true;
 		
+		if(isFirstFingerLiftUp)
+			isFirstFingerLiftUp=false;
+		
+		firstFingerIndex=-1;
 		return handler.onFling(e1, e2, velocityX, velocityY);
 	}
 	@Override
@@ -255,7 +269,6 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 	public boolean onDown(MotionEvent event) {
 		if(!isValidSingleTap(event))
 			return true;
-		multitouchFlag=true;
 		return handler.onDown(event);
 		
 	}
