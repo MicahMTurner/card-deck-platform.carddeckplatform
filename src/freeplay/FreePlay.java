@@ -34,7 +34,7 @@ public class FreePlay extends Game{
 
 	@Override
 	public int minPlayers() {
-		return 1;
+		return 2;
 	}
 
 	@Override
