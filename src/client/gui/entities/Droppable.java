@@ -51,12 +51,7 @@ public abstract class Droppable implements Serializable{
 		
 	}
 	public boolean isContain(float x,float y){
-//		return shape.contains(x, y);
-		double radius  = Math.sqrt( (double) (((getX()-x)*(getX()-x)) + (getY()-y)*(getY()-y)));
-		if(radius <= 50){
-			return true;
-		}
-		return false;
+		return shape.contains(x, y);
 	}
 	
 	
