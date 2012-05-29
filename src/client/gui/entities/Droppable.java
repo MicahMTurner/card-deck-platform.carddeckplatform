@@ -5,6 +5,8 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import org.newdawn.slick.geom.Shape;
+
 import utils.Card;
 import utils.Player;
 import utils.Point;
@@ -34,7 +36,8 @@ public abstract class Droppable implements Serializable{
 	//public Stack<GuiCard>guiCards=new Stack<GuiCard>(); 
 	//protected Stack<Card> cards = new Stack<Card>();
 	//protected ArrayList<Card> cards; 
-	public abstract int sensitivityRadius();
+	public abstract Shape getShape(float x,float y);
+	protected transient Shape shape;
 	protected int id;
 	
 	protected Position position;
@@ -43,9 +46,22 @@ public abstract class Droppable implements Serializable{
 		from.removeCard(player,card);
 		//card.setCoord(getX(), getY());
 		ClientController.sendAPI().cardAdded(card, from.getId(),id,player);
-		addCard(player,card);						
+		addCard(player,card);
+
 		
 	}
+	public boolean isContain(float x,float y){
+//		return shape.contains(x, y);
+		double radius  = Math.sqrt( (double) (((getX()-x)*(getX()-x)) + (getY()-y)*(getY()-y)));
+		if(radius <= 50){
+			return true;
+		}
+		return false;
+	}
+	
+	
+	
+	
 	public Position getPosition(){
 		return position;
 	}
@@ -70,7 +86,7 @@ public abstract class Droppable implements Serializable{
 	public Droppable(int id,Position position){
 		this.id=id;
 		this.position=position;
-		
+		this.shape=getShape(position.getX(), position.getY());
 		//this.cards=new ArrayList<Card>();		
 		//this.point=new Point(190,175);
 		//this.myId=IDMaker.getMaker().getId(position);

@@ -4,11 +4,13 @@ import handlers.PublicEventsHandler;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Shape;
+
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import client.gui.entities.Droppable;
-import client.gui.entities.MetricsConvertion;
 
 
 public class Public extends Droppable{	
@@ -29,8 +31,9 @@ public class Public extends Droppable{
 //	}
 //	
 	
-	public int sensitivityRadius() {		
-		return 1000;
+	public Shape getShape(float x,float y) {		
+//		return 1000;
+		return new Circle(x+1000, y+1000, 1000);
 	}
 	
 	@Override

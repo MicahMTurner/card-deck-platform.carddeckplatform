@@ -118,6 +118,7 @@ public strictfp class Circle extends Ellipse {
 	 */
     public boolean contains(float x, float y) 
     { 
+    	System.out.println(getX()+"::"+getY());
         return (x - getX()) * (x - getX()) + (y - getY()) * (y - getY()) < getRadius() * getRadius(); 
     }
     
