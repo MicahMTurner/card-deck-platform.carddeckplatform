@@ -1,6 +1,7 @@
 package carddeckplatform.game;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import android.app.Activity;
 import android.app.Dialog;
@@ -20,6 +21,8 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
+import carddeckplatform.game.dialogs.ActionWhileWaiting;
+import carddeckplatform.game.dialogs.ProgressBarThread;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.controller.ClientController;
 import client.controller.AutoHide;
@@ -171,7 +174,13 @@ public void onBackPressed() {
 				//LivePosition.get().start();
 			}
 			//-------CONNECT TO SERVER(HOST)------//
-		    ServerConnection.getConnection().openConnection();
+			
+			try {
+				ServerConnection.getConnection().openConnection();
+			} catch (IOException e) {			
+				e.printStackTrace();
+			}
+			
 		    progDialog.dismiss();
 		    //setup all layout prefs
 		    setupLayout();

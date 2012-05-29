@@ -30,15 +30,10 @@ public class TcpConnector implements Connector {
 			
 			return new Streams(out, in);
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// creates an outputstream.
-		
-		
 		return null;
 	}
 	@Override
