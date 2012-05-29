@@ -2,8 +2,6 @@ package client.gui.entities;
 
 
 import utils.Point;
-
-
 import android.content.Context;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -136,18 +134,18 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 			   previousPoints[index] = points[index] = null;
 			   if(index==firstFingerIndex){
 				   isFirstFingerLiftUp=true;
-				   System.out.println("firstFingerIndex  up:"+index);
+//				   System.out.println("firstFingerIndex  up:"+index);
 			   }
 		   }
 		   else {
 				for(int i = 0; i < maxNumberOfTouchPoints; ++i) {
 					if (i < event.getPointerCount()) {
 						int index = event.getPointerId(i);
-						if(index>maxNumberOfTouchPoints)
+						if(index>=maxNumberOfTouchPoints)
 							continue;
 						if(this.firstFingerIndex==-1){
 							firstFingerIndex=index;
-							System.out.println("firstFingerIndex down:"+index);
+//							System.out.println("firstFingerIndex down:"+index);
 						}
 						Point newPoint = new Point(event.getX(i), event.getY(i));
 						try{

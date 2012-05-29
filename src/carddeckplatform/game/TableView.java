@@ -336,6 +336,9 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 
 	// events when touching the screen
 	public boolean onTouchEvent(MotionEvent event) {
+		
+		System.out.println(event.getX()+"::"+event.getY());
+//		return true;
 		 touchmanager.onTouchEvent(event);
 
 //		int X = (int) event.getX();

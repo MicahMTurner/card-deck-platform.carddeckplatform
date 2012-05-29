@@ -8,6 +8,9 @@ import communication.messages.SwapRequestMessage;
 
 
 
+import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Shape;
+
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -122,8 +125,9 @@ public class Player extends Droppable implements  Comparable<Player>{
 		}		
 	}
 	@Override
-	public int sensitivityRadius() {		
-		return 50;
+	public Shape getShape(float x,float y) {		
+//		return 50;
+		return new Circle(x+50, y+50, 50);
 	}
 	@Override
 	public void addCard(Player player, Card card) {

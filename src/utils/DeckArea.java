@@ -9,6 +9,9 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.Stack;
 
+import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Shape;
+
 import android.content.Context;
 import android.graphics.Canvas;
 
@@ -41,8 +44,9 @@ public class DeckArea extends Droppable{
 	
 	
 	@Override
-	public int sensitivityRadius() {
-		return 30;
+	public Shape getShape(float x,float y) {
+//		return 30;
+		return new Circle(x+30, y+30, 30);
 	}
 
 	@Override
