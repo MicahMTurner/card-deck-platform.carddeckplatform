@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+
 import communication.actions.CardAdded;
 import communication.actions.CardRemoved;
 import communication.actions.DraggableMotionAction;
@@ -16,6 +17,7 @@ import communication.messages.EndTurnMessage;
 import communication.messages.Message;
 
 import utils.Card;
+import utils.Pair;
 import utils.Player;
 import utils.Point;
 import utils.Position;
@@ -24,8 +26,8 @@ import utils.Public;
 import IDmaker.IDMaker;
 import logic.client.Game;
 import client.gui.entities.Droppable;
-import carddeckplatform.game.GameEnvironment;
 import carddeckplatform.game.TableView;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
 
 public class ClientController implements Observer {
@@ -133,7 +135,7 @@ public class ClientController implements Observer {
 
 		public void dragMotion(String username, int id, Point coord) {
 			ServerConnection.getConnection().send(new Message(
-					new DraggableMotionAction(GameEnvironment.getGameEnvironment().getPlayerInfo().getUsername(),id, coord.getX(), coord.getY())));
+					new DraggableMotionAction(GameEnvironment.get().getPlayerInfo().getUsername(),id, coord.getX(), coord.getY())));
 			
 		}
 		public void endDragMotion(int id){
@@ -162,7 +164,8 @@ public class ClientController implements Observer {
 
 	
 	public Droppable getZone(Position pos){
-		return gui.getDroppableById(IDMaker.getMaker().getIdByPos(pos.getRelativePosition(getMe().getGlobalPosition())));
+		//return gui.getDroppableById(IDMaker.getMaker().getIdByPos(pos.getRelativePosition(getMe().getGlobalPosition())));
+		return gui.getDroppableByPosition((pos.getRelativePosition(getMe().getGlobalPosition())));
 	}
 	public void setLayouts(ArrayList<Droppable> publics) {
 		game.getLayouts(publics);	
@@ -172,7 +175,7 @@ public class ClientController implements Observer {
 	}
 	
 	public void addPlayer(Player newPlayer) {
-		
+		newPlayer.setRelativePosition(game.getMe().getGlobalPosition());
 		game.addPlayer(newPlayer);
 		gui.addPlayer(newPlayer);
 		
@@ -197,9 +200,9 @@ public class ClientController implements Observer {
 		gui.popToast("Your Move");
 	}
 
-	public void playerTurn(int playerId) {
+	public void playerTurn(Position.Player playerPosition) {
 		Player me=game.getMe();
-		if (playerId==me.getId()){
+		if (playerPosition.equals(me.getGlobalPosition())){
 			me.startTurn();
 		}
 		//glow player icon/name		
@@ -277,9 +280,20 @@ public class ClientController implements Observer {
 
 	public void positionUpdate(int playerId, utils.Position.Player newPosition) {
 		Player player=(Player) gui.getDroppableById(playerId);
-		Player swappedWith=(Player) getZone(newPosition);
-		game.positionUpdate(player,swappedWith);
-		gui.swapPositions(player,swappedWith);
+		
+		game.positionUpdate(player,newPosition);
+		gui.swapPositions(player,newPosition);
+		
+	}
+
+	public void positionUpdate2(
+			ArrayList<Pair<utils.Position.Player, utils.Position.Player>> movingList) {
+		//contains player to move
+		Player player;
+		for (Pair<Position.Player, Position.Player> pair : movingList){
+			player=(Player) getZone(pair.getFirst());			
+					game.positionUpdate(player,pair.getSecond());
+		}
 		
 	}
 

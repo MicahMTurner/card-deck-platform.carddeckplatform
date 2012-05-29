@@ -1,6 +1,6 @@
 package logic.client;
 
-import utils.AbstractDeck;
+import utils.DeckArea;
 
 /**
  * abstract factory to create all tools needed for card games
@@ -11,7 +11,7 @@ import utils.AbstractDeck;
  */
 public interface ToolsFactory {
 	
-	public AbstractDeck createCards();
+	public DeckArea createCards();
 	//public Table createTable();
 	
 }

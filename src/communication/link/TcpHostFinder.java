@@ -11,7 +11,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 
-import carddeckplatform.game.GameEnvironment;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import android.content.Context;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
@@ -85,7 +85,7 @@ public class TcpHostFinder extends HostFinder {
 		for(int i=1; i<254; i++){
 			try {
 				socket = new Socket();
-				SocketAddress sockaddr = new InetSocketAddress(intToIp(d.gateway,i), GameEnvironment.getGameEnvironment().getTcpInfo().getIdPort());
+				SocketAddress sockaddr = new InetSocketAddress(intToIp(d.gateway,i), GameEnvironment.get().getTcpInfo().getIdPort());
 				socket.connect(sockaddr, 10);
 				System.out.println(intToIp(d.gateway,i) + " is reachable");
 				if(!socket.isConnected())

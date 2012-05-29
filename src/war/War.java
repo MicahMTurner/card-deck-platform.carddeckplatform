@@ -1,5 +1,7 @@
 package war;
 
+import handlers.PlayerEventsHandler;
+
 import java.util.ArrayList;
 import java.util.Queue;
 
@@ -10,7 +12,7 @@ import communication.messages.Message;
 import communication.server.ConnectionsManager;
 
 
-import utils.AbstractDeck;
+import utils.DeckArea;
 import utils.Card;
 import utils.Deck;
 import utils.Player;
@@ -79,16 +81,16 @@ public class War extends Game{
 		publics.add(new Public(new PublicHandler(),Position.Public.MIDRIGHT));
 	}
 
-	@Override
-	public Player createPlayer(String userName,
-			utils.Position.Player position) {
-		
-		return new Player(userName,position,new PlayerHandler());
-	}
+	
 
 	@Override
 	public Deck getDeck() {		
 		return new Deck(new CardHandler(),true);
+	}
+
+	@Override
+	public PlayerEventsHandler getPlayerHandler() {
+		return new PlayerHandler();
 	}	
 	
 }

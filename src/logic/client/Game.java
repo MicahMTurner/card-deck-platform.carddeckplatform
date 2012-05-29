@@ -1,12 +1,18 @@
 package logic.client;
 
+import handlers.PlayerEventsHandler;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+
+
+import carddeckplatform.game.gameEnvironment.PlayerInfo;
+import client.controller.ClientController;
 import client.gui.entities.Droppable;
 
-import utils.AbstractDeck;
+import utils.DeckArea;
 import utils.Deck;
 import utils.Player;
 import utils.Position;
@@ -48,7 +54,7 @@ public abstract class Game {
 	@Override	
 	public abstract String toString();
 	//the game create player according to his hander
-	public abstract Player createPlayer(String userName,utils.Position.Player position);	
+	public abstract PlayerEventsHandler getPlayerHandler();	
 
 	public String getClassName(){
 		return getClass().getName();
@@ -94,31 +100,50 @@ public abstract class Game {
 		return players;
 	}	
 	//player lost so we remove him from the list
-	public void playerLost(Position.Player position){		
-		turnsQueue.remove(position);
+	public void playerLost(int id){		
+		turnsQueue.remove(id);
 	}
 	// 
-	public void addMe(String userName, utils.Position.Player position) {
-		players.add(createPlayer(userName, position));
+	public void addMe(PlayerInfo playerInfo, utils.Position.Player position,int uniqueId) {
+		players.add(new Player(playerInfo,position,uniqueId,getPlayerHandler()));
 		
 	}
 
-	public void positionUpdate(Player player, Player swappedWith) {
-		swapGlobalPositions(player,swappedWith);
-		
-		//check if I moved
-		if (player.equals(getMe())){
-			for (Player p : players){
-				p.setRelativePosition(player.getGlobalPosition());
-			}
+	public void positionUpdate(Player player, Position.Player newPosition) {
+		Player swappedWith=(Player) ClientController.get().getZone(newPosition);
+		if (swappedWith==null){
+			player.setGlobalPosition(newPosition);
+		}else{			
+			swapGlobalPositions(player,swappedWith);
+			
 		}
+		setRelativePositions(player,swappedWith);
+
+	}
+	private void setRelativePositions(Player player,Player swappedWith){
+		//check if I moved
+				if (player.equals(getMe()) || swappedWith.equals(getMe())){
+					
+					for (int i=1;i<players.size();i++){				
+						players.get(i).setRelativePosition(player.getGlobalPosition());
+					}
+				}else{
+					//other person moved
+					player.setRelativePosition(getMe().getGlobalPosition());
+					//check if swapped with existing player
+					if (swappedWith!=null){
+						//true, set existing player relative position
+						swappedWith.setRelativePosition(getMe().getGlobalPosition());
+					}
+					
+					
+				}
 	}
 
 	private void swapGlobalPositions(Player player, Player swappedWith) {
 		Position.Player temp=swappedWith.getGlobalPosition();
 		swappedWith.setGlobalPosition(player.getGlobalPosition());
 		player.setGlobalPosition(temp);
-		
 	}
 
 }

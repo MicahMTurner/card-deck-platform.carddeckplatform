@@ -9,6 +9,7 @@ import java.util.Stack;
 
 
 import utils.Card;
+import utils.Position;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -223,5 +224,14 @@ public class Table {
 //	public int getyDimention() {
 //		return yDimention;
 //	}	
+
+	public Droppable getDroppableByPosition(Position position) {
+		for(Droppable d : droppables){
+			if(d.getPosition().equals(position)){
+				return d;
+			}
+		}
+		return null;
+	}
 	
 }

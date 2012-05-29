@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 
-import carddeckplatform.game.GameEnvironment;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
@@ -22,7 +22,7 @@ public class BluetoothAcceptor implements Acceptor {
 		BluetoothSocket clientSocket;
 		try {
 			//clientSocket = serverSocket.accept();
-			clientSocket = GameEnvironment.getGameEnvironment().getBluetoothInfo().getServerSocket().accept();
+			clientSocket = GameEnvironment.get().getBluetoothInfo().getServerSocket().accept();
 			ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
 			

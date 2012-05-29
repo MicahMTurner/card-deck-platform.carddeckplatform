@@ -7,7 +7,7 @@ import logic.host.Host;
 
 public class LoseMessage extends Message{
 	@Override
-	public void actionOnServer(Position.Player id){
+	public void actionOnServer(int id){
 		Host.playerLost(id);
 	}
 	

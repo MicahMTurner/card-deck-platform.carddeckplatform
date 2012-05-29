@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import utils.Player;
 import utils.Point;
 
-import carddeckplatform.game.GameEnvironment;
 import carddeckplatform.game.StaticFunctions;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.controller.ClientController;
 import IDmaker.IDMaker;
 import android.content.Context;
@@ -49,16 +49,16 @@ public abstract class Draggable implements Serializable{
 	}
 	public void onDrag() {		
 		
-		ClientController.sendAPI().dragMotion(GameEnvironment.getGameEnvironment().getPlayerInfo().getUsername(),id,MetricsConvertion.pointPxToRelative(getCoord()));
+		ClientController.sendAPI().dragMotion(GameEnvironment.get().getPlayerInfo().getUsername(),id,MetricsConvertion.pointPxToRelative(getCoord()));
 	}
 	public void onRelease() {		
-		ClientController.sendAPI().dragMotion(GameEnvironment.getGameEnvironment().getPlayerInfo().getUsername(), id, MetricsConvertion.pointPxToRelative(getCoord()));
+		ClientController.sendAPI().dragMotion(GameEnvironment.get().getPlayerInfo().getUsername(), id, MetricsConvertion.pointPxToRelative(getCoord()));
 		ClientController.sendAPI().endDragMotion(id);
 		inHand = false;
 	}
 	public void invalidMove(){		
 			setLocation(prevCoord.getX(),prevCoord.getY());			
-			ClientController.sendAPI().dragMotion(GameEnvironment.getGameEnvironment().getPlayerInfo().getUsername(), id, MetricsConvertion.pointPxToRelative(getCoord()));
+			ClientController.sendAPI().dragMotion(GameEnvironment.get().getPlayerInfo().getUsername(), id, MetricsConvertion.pointPxToRelative(getCoord()));
 			//ClientController.sendAPI().endDragMotion(getMyId());			
 			//angle=0;			
 		}

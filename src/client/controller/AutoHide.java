@@ -2,6 +2,9 @@ package client.controller;
 
 import java.util.ArrayList;
 
+import carddeckplatform.game.GameActivity;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
+
 import utils.Card;
 
 import android.content.Context;
@@ -9,19 +12,46 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.view.Display;
+import android.view.Surface;
 
 public class AutoHide implements SensorEventListener {
 	private SensorManager sensorManager;
-	private Sensor gravitySensor;
 	private final float[] mValuesMagnet      = new float[3];
 	private final float[] mValuesAccel       = new float[3];
 	private final float[] mValuesOrientation = new float[3];
 	private final float[] mRotationMatrix    = new float[9];	
 	private ArrayList<Card>revealedCards;
+
 	private int cardsInHand;
 	
+	//-------Singleton implementation--------//
+	private static class AutoHideHolder
+	{
+		private final static AutoHide autoHide=new AutoHide(GameActivity.getContext());
+	}
+			
+					
+	/**
+	 * get AutoHide instance
+	 */
+	public static AutoHide get(){
+		return AutoHideHolder.autoHide;
+	}
 	
-	private ArrayList<Card> hiddenCards;
+	
+	
+	
+	private AutoHide(Context context){
+		  
+		sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+//        if (sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY) != null){
+//        	gravitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+//        }
+        this.revealedCards=new ArrayList<Card>();
+        this.cardsInHand=0;
+	}
+	
 	
 	public void start(){
 		sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 
@@ -32,17 +62,6 @@ public class AutoHide implements SensorEventListener {
 	
 	public void stop(){
 		sensorManager.unregisterListener(this);
-	}
-	
-	
-	public AutoHide(Context context){
-		  
-		sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-//        if (sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY) != null){
-//        	gravitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
-//        }
-        this.revealedCards=new ArrayList<Card>();
-        this.cardsInHand=0;
 	}
 	
 	@Override
@@ -67,12 +86,17 @@ public class AutoHide implements SensorEventListener {
      //get orientation from rotation matrix
      SensorManager.getOrientation(mRotationMatrix, mValuesOrientation);
      //calculate angle plus convert from radians to degrees
-     double angle1=-(mValuesOrientation[1]*(180/Math.PI));
-     double angle2=-(mValuesOrientation[2]*(180/Math.PI));
-     double angle0=-(mValuesOrientation[0]*(180/Math.PI));
+     double angle;
+     if (GameEnvironment.get().getDeviceInfo().getRotationAngle()==Surface.ROTATION_90){
+    	 angle=-(mValuesOrientation[2]*(180/Math.PI));
+     }else{
+    	 angle=-(mValuesOrientation[1]*(180/Math.PI));
+     }
+     
+    
      //System.out.println("test: "+angle1);
-     try {
-    	 if ((angle1<17 && angle2<17) && cardsInHand!=ClientController.get().getMe().cardsHolding()){
+   //  try {
+    	 if ((angle<17) && cardsInHand!=ClientController.get().getMe().cardsHolding()){
         	 
     	    	// System.out.println("hide");
     	    	 
@@ -85,7 +109,7 @@ public class AutoHide implements SensorEventListener {
     	    		 }
     	    		 card.hide();    		 
     	    	 }
-    	     }else if ((angle1>=20 || angle2>=20) && !revealedCards.isEmpty()){
+    	     }else if ((angle>=20) && !revealedCards.isEmpty()){
     	    	 //angel is back to normal, reveal your cards again
     	    	 
     	    	 //System.out.println("reveale");
@@ -95,9 +119,9 @@ public class AutoHide implements SensorEventListener {
     	    	 revealedCards.clear();
     	    	 cardsInHand=0;
     	     }
-	} catch (Exception e) {
+	//} catch (Exception e) {
 		// TODO: handle exception
-	}
+	//}
      
 
 //		float x = event.values[0];

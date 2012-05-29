@@ -12,7 +12,8 @@ import communication.link.HostId;
 import communication.link.TcpHostFinder;
 import communication.link.TcpIdListener;
 
-import carddeckplatform.game.GameEnvironment.ConnectionType;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
+import carddeckplatform.game.gameEnvironment.GameEnvironment.ConnectionType;
 import client.dataBase.ClientDataBase;
 
 import logic.host.Host;
@@ -53,10 +54,10 @@ public class CarddeckplatformActivity extends Activity {
         boolean useBluetooth = prefs.getBoolean("useBluetooth", true);
         
         if(!useBluetooth){
-        	GameEnvironment.getGameEnvironment().setConnectionType(ConnectionType.TCP);
+        	GameEnvironment.get().setConnectionType(ConnectionType.TCP);
         }
         else{
-        	GameEnvironment.getGameEnvironment().setConnectionType(ConnectionType.BLUETOOTH);
+        	GameEnvironment.get().setConnectionType(ConnectionType.BLUETOOTH);
         }
 	}
 	
@@ -83,7 +84,7 @@ public class CarddeckplatformActivity extends Activity {
         
         
         //GameStatus.localIp = ipStr;
-        GameEnvironment.getGameEnvironment().getTcpInfo().setLocalIp(ipStr);
+        GameEnvironment.get().getTcpInfo().setLocalIp(ipStr);
         //*********************************************
         //making widgets
         //*********************************************
@@ -123,24 +124,24 @@ public class CarddeckplatformActivity extends Activity {
 						
 						@Override
 						public void onClick(View v) {							
-							GameEnvironment.getGameEnvironment().getPlayerInfo().setServer(true);							
-							GameEnvironment.getGameEnvironment().getTcpInfo().setHostIp("127.0.0.1");			
-							GameEnvironment.getGameEnvironment().getPlayerInfo().setUsername(username.getText().toString());
+							GameEnvironment.get().getPlayerInfo().setServer(true);							
+							GameEnvironment.get().getTcpInfo().setHostIp("127.0.0.1");			
+							GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
 			                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
 			                
 			                //GameEnvironment.getGameEnvironment().getHandler().post(new Host(ClientDataBase.getDataBase().getGame(name)));
 			                
 			                // always use the tcp server socket since we always need it to connect the hosting player.
-			                GameEnvironment.getGameEnvironment().getTcpInfo().initServerSocket();
+			                GameEnvironment.get().getTcpInfo().initServerSocket();
 			                // if in tcp mode start id listener.
-			                if(GameEnvironment.getGameEnvironment().getConnectionType()==ConnectionType.TCP){    	
+			                if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){    	
 			                	if (tcpIdListener==null){
-				                	tcpIdListener = new TcpIdListener(GameEnvironment.getGameEnvironment().getPlayerInfo().getUsername() , name);
+				                	tcpIdListener = new TcpIdListener(GameEnvironment.get().getPlayerInfo().getUsername() , name);
 				                }
 				                tcpIdListener.start();
 			                }
-			                else if(GameEnvironment.getGameEnvironment().getConnectionType()==ConnectionType.BLUETOOTH)
-			                	GameEnvironment.getGameEnvironment().getBluetoothInfo().initServerSocket();
+			                else if(GameEnvironment.get().getConnectionType()==ConnectionType.BLUETOOTH)
+			                	GameEnvironment.get().getBluetoothInfo().initServerSocket();
 			                	// in bluetooth mode there is no need for host id listener.
 			                
 			                // starts the host thread.
@@ -160,7 +161,7 @@ public class CarddeckplatformActivity extends Activity {
         joinBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
             	//GameStatus.isServer = false;
-            	GameEnvironment.getGameEnvironment().getPlayerInfo().setServer(false);
+            	GameEnvironment.get().getPlayerInfo().setServer(false);
             	//making dialog to get ip
             	//GameStatus.me=new Player(GameStatus.username,GameStatus.localIp);
             	final Dialog dialog = new Dialog(CarddeckplatformActivity.this);
@@ -180,9 +181,9 @@ public class CarddeckplatformActivity extends Activity {
 					@Override
 					public void onClick(View arg0) {
 						// TODO Auto-generated method stub
-						GameEnvironment.getGameEnvironment().getPlayerInfo().setServer(false);
-						GameEnvironment.getGameEnvironment().getTcpInfo().setHostIp("192.168.2.108");
-		            	GameEnvironment.getGameEnvironment().getPlayerInfo().setUsername(username.getText().toString());
+						GameEnvironment.get().getPlayerInfo().setServer(false);
+						GameEnvironment.get().getTcpInfo().setHostIp("192.168.2.104");
+		            	GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
 		            	
 		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
 		                startActivity(i);
@@ -194,7 +195,7 @@ public class CarddeckplatformActivity extends Activity {
             	HostFinder hostFinder = new TcpHostFinder((WifiManager) getSystemService(Context.WIFI_SERVICE));
             	hosts = hostFinder.findHosts();
             	
-            	if(GameEnvironment.getGameEnvironment().getConnectionType()==ConnectionType.TCP){
+            	if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){
 	            	for(final HostId hostId : hosts){
 	            		hostBtn = new Button(getApplicationContext());
 	            		hostBtn.setText("Play " + hostId.getGameName() + " with " + hostId.getOwner());
@@ -203,9 +204,9 @@ public class CarddeckplatformActivity extends Activity {
 	    					public void onClick(View arg0) {
 	    						// TODO Auto-generated method stub
 	    		            	
-	    		            	GameEnvironment.getGameEnvironment().getPlayerInfo().setServer(false);
-	    						GameEnvironment.getGameEnvironment().getTcpInfo().setHostIp(hostId.getAddress());
-	    		            	GameEnvironment.getGameEnvironment().getPlayerInfo().setUsername(username.getText().toString());
+	    		            	GameEnvironment.get().getPlayerInfo().setServer(false);
+	    						GameEnvironment.get().getTcpInfo().setHostIp(hostId.getAddress());
+	    		            	GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
 	    		            	
 	    		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
 	    		                startActivity(i);
@@ -214,7 +215,7 @@ public class CarddeckplatformActivity extends Activity {
 	                	});
 	            		ll.addView(hostBtn);
 	            	}
-            	}else if(GameEnvironment.getGameEnvironment().getConnectionType()==ConnectionType.BLUETOOTH){
+            	}else if(GameEnvironment.get().getConnectionType()==ConnectionType.BLUETOOTH){
             		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             		if (mBluetoothAdapter == null) {
                         // Device does not support Bluetooth
@@ -237,9 +238,9 @@ public class CarddeckplatformActivity extends Activity {
 	    					public void onClick(View arg0) {
 	    						// TODO Auto-generated method stub
 	    		            	
-	    		            	GameEnvironment.getGameEnvironment().getPlayerInfo().setServer(false);
-	    						GameEnvironment.getGameEnvironment().getBluetoothInfo().setHostDevice(device);
-	    		            	GameEnvironment.getGameEnvironment().getPlayerInfo().setUsername(username.getText().toString());
+	    		            	GameEnvironment.get().getPlayerInfo().setServer(false);
+	    						GameEnvironment.get().getBluetoothInfo().setHostDevice(device);
+	    		            	GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
 	    		            	
 	    		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
 	    		                startActivity(i);

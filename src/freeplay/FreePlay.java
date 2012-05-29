@@ -1,5 +1,7 @@
 package freeplay;
 
+import handlers.PlayerEventsHandler;
+
 import java.util.ArrayList;
 import java.util.Queue;
 
@@ -10,7 +12,7 @@ import communication.server.ConnectionsManager;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
 
-import utils.AbstractDeck;
+import utils.DeckArea;
 import utils.Card;
 import utils.Deck;
 import utils.Position;
@@ -53,7 +55,7 @@ public class FreePlay extends Game{
 
 	@Override
 	public void getLayouts(ArrayList<Droppable> droppables) {
-		droppables.add(new AbstractDeck(Position.Button.BOTLEFT));
+		droppables.add(new DeckArea(Position.Button.BOTLEFT));
 		//(new CardHandler(), true,));
 		droppables.add(new Public(new PublicHandler(), Position.Public.MID));
 	}
@@ -64,9 +66,8 @@ public class FreePlay extends Game{
 	}
 
 	@Override
-	public utils.Player createPlayer(String userName, Player position) {
-		
-		return new utils.Player(userName, position, new PlayerHandler());
+	public PlayerEventsHandler getPlayerHandler() {		
+		return new PlayerHandler();
 	}
 
 }

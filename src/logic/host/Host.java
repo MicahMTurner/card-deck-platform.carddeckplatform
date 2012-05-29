@@ -47,8 +47,8 @@ public class Host implements Runnable{
 	public static Position.Player nextInTurn(){
 		return game.nextInTurn();
 	}
-	public static void playerLost(Position.Player position){
-		game.playerLost(position);
+	public static void playerLost(int id){
+		game.playerLost(id);
 	}
 	
 	public void waitForPlayers(){
