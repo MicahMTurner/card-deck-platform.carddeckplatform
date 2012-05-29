@@ -139,7 +139,6 @@ public class Table {
 	
 	public Draggable getNearestDraggable(float x, float y){
 		Droppable d=this.droppables.get(0);
-		System.out.println("D-Place:"+d.getX()+"::"+d.getY());
 		Draggable answer=null;
 		//get nearest container where draggable can be found at
 		Droppable nearestDroppable=getNearestDroppable(x, y);
@@ -177,7 +176,6 @@ public class Table {
 		Line line= new Line(x1, y1, x2, y2);
 		this.line=line;
 		for (Droppable d : droppables) {
-			System.out.println(d.isIntersect(line)+"::"+d.getX()+"::"+d.getY());
 			if(d.isIntersect(line))
 				return d;
 		}		
