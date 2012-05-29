@@ -5,6 +5,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Shape;
 
 import utils.Card;
@@ -52,6 +53,9 @@ public abstract class Droppable implements Serializable{
 	}
 	public boolean isContain(float x,float y){
 		return shape.contains(x, y);
+	}
+	public boolean isIntersect(Line line){
+		return line.intersects(shape)||shape.contains(line);
 	}
 	
 	

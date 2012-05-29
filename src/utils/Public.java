@@ -10,6 +10,8 @@ import org.newdawn.slick.geom.Shape;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import client.gui.entities.Droppable;
 import client.gui.entities.MetricsConvertion;
 
@@ -35,7 +37,7 @@ public class Public extends Droppable{
 	public Shape getShape(float x,float y) {		
 //		return 1000;
 		Point point =MetricsConvertion.pointRelativeToPx(new Point(x, y));
-		return new Circle(point.getX()+1000, point.getY()+1000, 1000);
+		return new Circle(point.getX()-28, point.getY()-27, 50);
 	}
 	
 	@Override
@@ -69,6 +71,9 @@ public class Public extends Droppable{
 
 	@Override
 	public void draw(Canvas canvas,Context context) {
+		Paint paint=new Paint();
+		paint.setColor(Color.BLUE);
+		canvas.drawCircle(shape.getCenterX(), shape.getCenterY(), 50, paint);
 		canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), 0x7f02002e),getX()-28,getY()-27,null);
 	}
 
