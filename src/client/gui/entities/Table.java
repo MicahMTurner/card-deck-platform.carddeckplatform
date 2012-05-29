@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Stack;
 
+import org.newdawn.slick.geom.Line;
+
 
 import utils.Card;
 import utils.Position;
@@ -17,10 +19,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 
 
 public class Table {
 	public enum Focus {FRONT, REAR}
+	Line line=null;//needed for DEBUG fling
 	
 	//private Stack<Draggable> draggables = new Stack<Draggable>();
 	private ArrayList<Droppable> droppables;
@@ -169,6 +173,16 @@ public class Table {
 		}
 		return null;
 	}
+	public Droppable getNearestDroppable(float x1,float y1,float x2,float y2){
+		Line line= new Line(x1, y1, x2, y2);
+		this.line=line;
+		for (Droppable d : droppables) {
+			System.out.println(d.isIntersect(line)+"::"+d.getX()+"::"+d.getY());
+			if(d.isIntersect(line))
+				return d;
+		}		
+		return null;
+	}
 	
 
 	
@@ -201,6 +215,12 @@ public class Table {
 			}
 			if (inHand!=null){
 				inHand.draw(canvas, context);
+			}
+			
+			if(this.line!=null){
+				Paint paint= new Paint();
+				paint.setColor(Color.RED);
+				canvas.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2(), paint);
 			}
 		} catch (Exception e) {
 			// TODO: handle exception

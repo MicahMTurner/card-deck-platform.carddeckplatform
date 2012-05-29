@@ -188,7 +188,7 @@ public class TouchManager implements GestureDetector.OnGestureListener,
 			this.multitouchFlag=onMultiTouch(event);
 		}
 		if(isFirstFingerLiftUp){//in case the first finger lifted up and on fling wasn't called cause of multi touch  or no velocity on up event
-			onFling(event, event, 0, 0);
+			onFling(event, event, 1, 1);
 			firstFingerIndex=-1;
 		}
 		return multitouchFlag || flag;

@@ -136,7 +136,11 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		// draggable.setCarrier(username);
 		// draggable.setLocation(780-x, 460-y);
 		synchronized (draggable) {
-			draggable.setLocation(GameEnvironment.get().getDeviceInfo().getScreenWidth()-x, GameEnvironment.get().getDeviceInfo().getScreenHeight()-y);
+			draggable.setLocation(GameEnvironment.get().getDeviceInfo()
+					.getScreenWidth()
+					- x, GameEnvironment.get().getDeviceInfo()
+					.getScreenHeight()
+					- y);
 		}
 
 		redraw();
@@ -336,77 +340,77 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 
 	// events when touching the screen
 	public boolean onTouchEvent(MotionEvent event) {
-		
-		System.out.println(event.getX()+"::"+event.getY());
-//		return true;
-		 touchmanager.onTouchEvent(event);
 
-//		int X = (int) event.getX();
-//		int Y = (int) event.getY();
-//		int eventAction = event.getAction();
-//		if (uiEnabled) {
-//			switch (eventAction) {
-//
-//			case MotionEvent.ACTION_DOWN: {
-//				draggableInHand = table.getNearestDraggable(X, Y);
-//
-//				if (draggableInHand != null) {
-//					// table.setFrontOrRear(draggableInHand, Focus.FRONT);
-//					if (draggableInHand.isMoveable()) {
-//						from = table.getNearestDroppable(X, Y);
-//						draggableInHand.onClick();
-//					} else {
-//						popToast("You cannot move this card");
-//						draggableInHand = null;
-//					}
-//				}
-//				break;
-//			}
-//			case MotionEvent.ACTION_MOVE: {
-//				if (draggableInHand != null) {
-//					draggableInHand.setLocation(X, Y);
-//					draggableInHand.onDrag();
-//				}
-//				break;
-//			}
-//			case MotionEvent.ACTION_UP: {
-//				if (draggableInHand != null) {
-//					draggableInHand.setLocation(X, Y);
-//					draggableInHand.onRelease();
-//
-//					Droppable droppable = table.getNearestDroppable(X, Y);
-//					if (droppable != null && from != null) {
-//						droppable.onDrop(ClientController.get().getMe(), from,
-//								((Card) draggableInHand));
-//
-//					} else {
-//						draggableInHand.invalidMove();
-//					}
-//					draggableInHand = null;
-//				}
-//
-//				// Droppable droppable2=table.getNearestDroppable(X, Y);
-//				// if (droppable2!=null){
-//				// droppable2.onClick();
-//
-//				// }
-//				break;
-//			}
-//			}// end if enabdles
-//		} else {
-//			// GUI is not enabled
-//
-//			popToast("It's not your turn now!!");
-//
-//		}
-//		if (draggableInHand != null) {
-//			int dragX = (int) draggableInHand.getX();
-//			int dragY = (int) draggableInHand.getY();
-//			Rect rect = new Rect(dragX - 200, dragY - 200, dragX + 200,
-//					dragY + 200);
-//			redraw(rect);
-//		} else
-//			redraw();
+		System.out.println(event.getX() + "::" + event.getY());
+		// return true;
+		touchmanager.onTouchEvent(event);
+
+		// int X = (int) event.getX();
+		// int Y = (int) event.getY();
+		// int eventAction = event.getAction();
+		// if (uiEnabled) {
+		// switch (eventAction) {
+		//
+		// case MotionEvent.ACTION_DOWN: {
+		// draggableInHand = table.getNearestDraggable(X, Y);
+		//
+		// if (draggableInHand != null) {
+		// // table.setFrontOrRear(draggableInHand, Focus.FRONT);
+		// if (draggableInHand.isMoveable()) {
+		// from = table.getNearestDroppable(X, Y);
+		// draggableInHand.onClick();
+		// } else {
+		// popToast("You cannot move this card");
+		// draggableInHand = null;
+		// }
+		// }
+		// break;
+		// }
+		// case MotionEvent.ACTION_MOVE: {
+		// if (draggableInHand != null) {
+		// draggableInHand.setLocation(X, Y);
+		// draggableInHand.onDrag();
+		// }
+		// break;
+		// }
+		// case MotionEvent.ACTION_UP: {
+		// if (draggableInHand != null) {
+		// draggableInHand.setLocation(X, Y);
+		// draggableInHand.onRelease();
+		//
+		// Droppable droppable = table.getNearestDroppable(X, Y);
+		// if (droppable != null && from != null) {
+		// droppable.onDrop(ClientController.get().getMe(), from,
+		// ((Card) draggableInHand));
+		//
+		// } else {
+		// draggableInHand.invalidMove();
+		// }
+		// draggableInHand = null;
+		// }
+		//
+		// // Droppable droppable2=table.getNearestDroppable(X, Y);
+		// // if (droppable2!=null){
+		// // droppable2.onClick();
+		//
+		// // }
+		// break;
+		// }
+		// }// end if enabdles
+		// } else {
+		// // GUI is not enabled
+		//
+		// popToast("It's not your turn now!!");
+		//
+		// }
+		// if (draggableInHand != null) {
+		// int dragX = (int) draggableInHand.getX();
+		// int dragY = (int) draggableInHand.getY();
+		// Rect rect = new Rect(dragX - 200, dragY - 200, dragX + 200,
+		// dragY + 200);
+		// redraw(rect);
+		// } else
+		// redraw();
 
 		return true;
 	}
@@ -470,7 +474,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		for (Card card : cards) {
 			if (from == -1) {
 				// new card, create it
-				//System.out.println(GameStatus.username+": card id: "+card.getId());
+				// System.out.println(GameStatus.username+": card id: "+card.getId());
 				addNewDraggable(card, destination);
 
 			} else {
@@ -501,8 +505,8 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		Droppable destination = table.getDroppableById(to);
 		for (Card card : cards) {
 			// new card, create it
-//			System.out.println(GameStatus.username + ": card id: "
-//					+ card.getId());
+			// System.out.println(GameStatus.username + ": card id: "
+			// + card.getId());
 			addNewDraggable(card, destination);
 		}
 	}
@@ -633,24 +637,29 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
 		System.out.println("TableView.onFling()");
-		
-		
+
 		if (uiEnabled) {
 			if (draggableInHand != null) {
 				touchmanager.resetAngle();
 				touchmanager.resetScale();
-				float X = e2.getX();
-				float Y = e2.getY();
+				float x = e2.getX();
+				float y = e2.getY();
 				final float distanceTimeFactor = 0.4f;
-	            final float totalDx = (distanceTimeFactor * velocityX / 2);
-	            final float totalDy = (distanceTimeFactor * velocityY / 2);
-				draggableInHand.setLocation(X, Y);
+				final float totalDx = (distanceTimeFactor * velocityX / 2);
+				final float totalDy = (distanceTimeFactor * velocityY / 2);
+				draggableInHand.setLocation(x, y);
 				draggableInHand.onRelease();
 
-				Droppable droppable = table.getNearestDroppable(X, Y);
+				Droppable droppable = table.getNearestDroppable(
+						draggableInHand.getX(), draggableInHand.getY(), x
+								+ totalDx, y + totalDy);
+				
+
 				if (droppable != null && from != null) {
+					draggableInHand.moveTo(from, droppable, true, true);
 					droppable.onDrop(ClientController.get().getMe(), from,
 							((Card) draggableInHand));
+					this.from = null;
 
 				} else {
 					draggableInHand.invalidMove();
@@ -697,10 +706,11 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	public boolean onRotate(MotionEvent event, float angleRadians) {
 		if (uiEnabled) {
 			if (draggableInHand != null) {
-				float angle=draggableInHand.getAngle()+TouchManager.getDegreesFromRadians(angleRadians);
-//				System.out.println(angle+"::"+TouchManager.getDegreesFromRadians(angleRadians));
-				while(angle>360)
-					angle-=360;
+				float angle = draggableInHand.getAngle()
+						+ TouchManager.getDegreesFromRadians(angleRadians);
+				// System.out.println(angle+"::"+TouchManager.getDegreesFromRadians(angleRadians));
+				while (angle > 360)
+					angle -= 360;
 				draggableInHand.setAngle(angle);
 				redraw();
 			}
@@ -716,50 +726,51 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		// System.out.println(scale);
 		return true;
 	}
-//	public void onAnimateMove(float dx, float dy, long duration) {
-//		
-//		 Matrix animateStart;
-//         Interpolator animateInterpolator;
-//         
-//         float totalAnimDx;
-//         float totalAnimDy;
-//        animateStart = new Matrix(translate);
-//        animateInterpolator = new OvershootInterpolator();
-//        long startTime= System.currentTimeMillis();
-//        long endTime = startTime + duration;
-//        totalAnimDx = dx;
-//        totalAnimDy = dy;
-//        post(new Runnable() {
-//            @Override
-//            public void run() {
-//                onAnimateStep();
-//            }
-//        });
-//    }
-//
-//    private void onAnimateStep() {
-//        long curTime = System.currentTimeMillis();
-//        float percentTime = (float) (curTime - startTime)
-//                / (float) (endTime - startTime);
-//        float percentDistance = animateInterpolator
-//                .getInterpolation(percentTime);
-//        float curDx = percentDistance * totalAnimDx;
-//        float curDy = percentDistance * totalAnimDy;
-//        translate.set(animateStart);
-//        onMove(curDx, curDy);
-//
-//        //Log.v(DEBUG_TAG, "We're " + percentDistance + " of the way there!");
-//        if (percentTime < 1.0f) {
-//            post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    onAnimateStep();
-//                }
-//            });
-//        }
-//    }
 
-	public Droppable getDroppableByPosition(Position position) {		
+	// public void onAnimateMove(float dx, float dy, long duration) {
+	//
+	// Matrix animateStart;
+	// Interpolator animateInterpolator;
+	//
+	// float totalAnimDx;
+	// float totalAnimDy;
+	// animateStart = new Matrix(translate);
+	// animateInterpolator = new OvershootInterpolator();
+	// long startTime= System.currentTimeMillis();
+	// long endTime = startTime + duration;
+	// totalAnimDx = dx;
+	// totalAnimDy = dy;
+	// post(new Runnable() {
+	// @Override
+	// public void run() {
+	// onAnimateStep();
+	// }
+	// });
+	// }
+	//
+	// private void onAnimateStep() {
+	// long curTime = System.currentTimeMillis();
+	// float percentTime = (float) (curTime - startTime)
+	// / (float) (endTime - startTime);
+	// float percentDistance = animateInterpolator
+	// .getInterpolation(percentTime);
+	// float curDx = percentDistance * totalAnimDx;
+	// float curDy = percentDistance * totalAnimDy;
+	// translate.set(animateStart);
+	// onMove(curDx, curDy);
+	//
+	// //Log.v(DEBUG_TAG, "We're " + percentDistance + " of the way there!");
+	// if (percentTime < 1.0f) {
+	// post(new Runnable() {
+	// @Override
+	// public void run() {
+	// onAnimateStep();
+	// }
+	// });
+	// }
+	// }
+
+	public Droppable getDroppableByPosition(Position position) {
 		return table.getDroppableByPosition(position);
 	}
 }
