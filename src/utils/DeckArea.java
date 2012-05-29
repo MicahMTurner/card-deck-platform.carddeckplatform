@@ -46,7 +46,8 @@ public class DeckArea extends Droppable{
 	@Override
 	public Shape getShape(float x,float y) {
 //		return 30;
-		return new Circle(x+30, y+30, 30);
+		Point point =MetricsConvertion.pointRelativeToPx(new Point(x, y));
+		return new Circle(point.getX()+30, point.getY()+30, 30);
 	}
 
 	@Override

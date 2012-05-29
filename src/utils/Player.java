@@ -18,6 +18,7 @@ import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.controller.LivePosition;
 import client.gui.entities.Droppable;
+import client.gui.entities.MetricsConvertion;
 
 
 
@@ -127,7 +128,8 @@ public class Player extends Droppable implements  Comparable<Player>{
 	@Override
 	public Shape getShape(float x,float y) {		
 //		return 50;
-		return new Circle(x+50, y+50, 50);
+		Point point =MetricsConvertion.pointRelativeToPx(new Point(x, y));
+		return new Circle(point.getX()+50, point.getY()+50, 50);
 	}
 	@Override
 	public void addCard(Player player, Card card) {
