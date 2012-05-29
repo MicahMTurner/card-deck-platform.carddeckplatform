@@ -1,4 +1,5 @@
-package carddeckplatform.game;
+package carddeckplatform.game.dialogs;
+
 
 public class ProgressBarThread implements Runnable{
 	ActionWhileWaiting action;

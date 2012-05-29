@@ -1,4 +1,4 @@
-package carddeckplatform.game;
+package carddeckplatform.game.dialogs;
 
 public interface ActionWhileWaiting {
 

@@ -63,9 +63,10 @@ public class ServerConnection implements Runnable{
 					connector = new TcpConnector(GameEnvironment.get().getTcpInfo().getHostIp(),GameEnvironment.get().getTcpInfo().getHostPort());
 				else if(GameEnvironment.get().getConnectionType()==ConnectionType.BLUETOOTH)
 					connector = new BlueToothConnector(GameEnvironment.get().getBluetoothInfo().getHostDevice(), GameEnvironment.get().getBluetoothInfo().getUUID());
-				Streams s = connector.connect();	
-				ObjectOutputStream out = s.getOut();
-				ObjectInputStream in = s.getIn();
+				Streams stream = connector.connect();
+				if (stream!=null){
+				ObjectOutputStream out = stream.getOut();
+				ObjectInputStream in = stream.getIn();
 				
 				sender = new Sender(out);
 				receiver = new Receiver(in);
@@ -73,6 +74,8 @@ public class ServerConnection implements Runnable{
 				sender.initializeMode();
 				//GameEnvironment.getGameEnvironment().getHandler().post(receiver);
 				new Thread(receiver).start();
+				
+				}
 				cdl.countDown();
 			}		
 				
@@ -110,11 +113,14 @@ public class ServerConnection implements Runnable{
 	}
 	//---Public methods---//
 	
-	public void openConnection(){
+	public void openConnection() throws IOException{
 		//this.stopped=false;
 		commandsQueue.add(new OpenConnectionExecutor());
 		try {
 			cdl.await();
+			if (sender==null || receiver==null){
+				throw new IOException("Host is unreachable");
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
