@@ -6,33 +6,20 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
+/**
+ * Performs metrics conversions.
+ * used create a singular coordinate system and convert points that came from other coordinate system.
+ * @author Irzh
+ *
+ */
 public class MetricsConvertion {
-//	/**
-//	 * This method convets dp unit to equivalent device specific value in pixels. 
-//	 * 
-//	 * @param dp A value in dp(Device independent pixels) unit. Which we need to convert into pixels
-//	 * @param context Context to get resources and device specific display metrics
-//	 * @return A float value to represent Pixels equivalent to dp according to device
-//	 */
-//	public static float convertDpToPixel(float dp){	
-//		DisplayMetrics metrics = GameStatus.metrics;
-//	    float px = dp * (metrics.densityDpi/160f);
-//	    return px;
-//	}
-//	/**
-//	 * This method converts device specific pixels to device independent pixels.
-//	 * 
-//	 * @param px A value in px (pixels) unit. Which we need to convert into dp
-//	 * @param context Context to get resources and device specific display metrics
-//	 * @return A float value to represent db equivalent to px value
-//	 */
-//	public static float convertPixelToDp(float px){
-//	    DisplayMetrics metrics = GameStatus.metrics;
-//	    float dp = px / (metrics.densityDpi / 160f);
-//	    return dp;
-//
-//	}
+	private static double metrics=100;
 	
+	/**
+	 * converts relative point to point in pixels.
+	 * @param p
+	 * @return
+	 */
 	public static Point pointPxToRelative(Point p){
 		
 		double x = p.getX();
@@ -40,17 +27,52 @@ public class MetricsConvertion {
 		double width = GameEnvironment.get().getDeviceInfo().getScreenWidth();
 		double height = GameEnvironment.get().getDeviceInfo().getScreenHeight();
 		
-		Point newP = new Point((int)((x/width)*100.0), (int)((y/height)*100.0));
+		Point newP = new Point((int)((x/width)*metrics), (int)((y/height)*metrics));
 		return newP;
 	}
 	
+	/**
+	 * converts point in pixels to relative point.
+	 * @param p
+	 * @return
+	 */
 	public static Point pointRelativeToPx(Point p){
 		double x = p.getX();
 		double y = p.getY();
 		double width = GameEnvironment.get().getDeviceInfo().getScreenWidth();
 		double height = GameEnvironment.get().getDeviceInfo().getScreenHeight();
 		
-		Point newP = new Point((int)((x*width)/100.0), (int)((y*height)/100.0));
+		Point newP = new Point((int)((x*width)/metrics), (int)((y*height)/metrics));
 		return newP;
+	}
+	
+	/**
+	 * get RELATIVE point that represents the relative coordinate system of the top player and convert it to bottom
+	 * player's (me) relative coordinate system.
+	 * @param p
+	 * @return	Point in  
+	 */
+	public static Point fromTop(Point p){
+		return new Point((float)(metrics-p.getX()) , (float)(metrics-p.getY()));
+	}
+	
+	/**
+	 * get RELATIVE point that represents the relative coordinate system of the right player and convert it to bottom
+	 * player's (me) relative coordinate system.
+	 * @param p
+	 * @return	Point in  
+	 */
+	public static Point fromRight(Point p){
+		return new Point((float)(p.getY()) , (float)(metrics-p.getX()));
+	}
+	
+	/**
+	 * get RELATIVE point that represents the relative coordinate system of the left player and convert it to bottom
+	 * player's (me) relative coordinate system.
+	 * @param p
+	 * @return	Point in  
+	 */
+	public static Point fromLeft(Point p){
+		return new Point((float)(metrics-p.getY()) , (float)(p.getX()));
 	}
 }
