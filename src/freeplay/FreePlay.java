@@ -50,7 +50,7 @@ public class FreePlay extends Game{
 		for (int i=0;i<size;i++){
 			cards.add(deck.drawCard());
 		}
-		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(cards,false,false,-1,ClientController.get().getZone(Position.Button.BOTLEFT).getId())));
+		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(cards,Position.Button.BOTLEFT.getId())));
 	}
 
 	@Override

@@ -42,8 +42,7 @@ public class TcpConnector implements Connector {
 			socket.close();
 			in.close();
 			out.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException e) {			
 			e.printStackTrace();
 		}
 	}

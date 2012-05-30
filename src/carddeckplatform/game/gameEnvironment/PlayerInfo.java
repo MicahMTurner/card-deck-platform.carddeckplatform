@@ -53,7 +53,7 @@ public class PlayerInfo implements Serializable{
 			this.azimut=newAzimut;
 		
 		}
-		public double getAzimute() {
+		public Double getAzimute() {
 			return azimut;
 		}
 		

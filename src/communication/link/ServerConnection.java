@@ -22,7 +22,7 @@ public class ServerConnection implements Runnable{
 	//private Client client;
 	private Sender sender;
 	private Receiver receiver;
-	private CountDownLatch cdl = new CountDownLatch(1);
+	private CountDownLatch cdl;
 	private  LinkedBlockingQueue<ActionForQueue> commandsQueue;
 	private volatile boolean stopped;
 	private Connector connector;
@@ -65,15 +65,15 @@ public class ServerConnection implements Runnable{
 					connector = new BlueToothConnector(GameEnvironment.get().getBluetoothInfo().getHostDevice(), GameEnvironment.get().getBluetoothInfo().getUUID());
 				Streams stream = connector.connect();
 				if (stream!=null){
-				ObjectOutputStream out = stream.getOut();
-				ObjectInputStream in = stream.getIn();
+					ObjectOutputStream out = stream.getOut();
+					ObjectInputStream in = stream.getIn();
 				
-				sender = new Sender(out);
-				receiver = new Receiver(in);
-				receiver.initializeMode();
-				sender.initializeMode();
-				//GameEnvironment.getGameEnvironment().getHandler().post(receiver);
-				new Thread(receiver).start();
+					sender = new Sender(out);
+					receiver = new Receiver(in);
+					receiver.initializeMode();
+					sender.initializeMode();
+					//GameEnvironment.getGameEnvironment().getHandler().post(receiver);
+					new Thread(receiver).start();
 				
 				}
 				cdl.countDown();
@@ -87,16 +87,18 @@ public class ServerConnection implements Runnable{
 
 		@Override
 		public void execute() {
-			try {	
-				if (socket!=null){
-					sender.closeStream();
-					receiver.closeStream();
-					socket.close();
-				}
-			
-			} catch (IOException e) {		
-				e.printStackTrace();
-			}
+			receiver.stop();
+			connector.disconnect();			
+//			try {	
+//				if (socket!=null){
+//					sender.closeStream();
+//					receiver.closeStream();
+//					socket.close();
+//				}
+//			
+//			} catch (IOException e) {		
+//				e.printStackTrace();
+//			}
 			
 		}
 		
@@ -114,7 +116,7 @@ public class ServerConnection implements Runnable{
 	//---Public methods---//
 	
 	public void openConnection() throws IOException{
-		//this.stopped=false;
+		 cdl = new CountDownLatch(1);
 		commandsQueue.add(new OpenConnectionExecutor());
 		try {
 			cdl.await();
@@ -136,8 +138,8 @@ public class ServerConnection implements Runnable{
 		}		
 	}
 	
-	public void closeConnection(){		
-		commandsQueue.add(new CloseConnectionExecutor());		
+	public void closeConnection(){	
+		commandsQueue.add(new CloseConnectionExecutor());
 	}
 	
 	public void shutDown(){

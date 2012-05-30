@@ -6,14 +6,17 @@ import java.util.Collections;
 import IDmaker.IDMaker;
 
 public interface Position extends Serializable{
+	
 	final int ELEMENTSINCYCLE=4;
 	final int TOPDEVIATION=2;
 	final int RIGHTDEVIATION=1;
 	final int LEFTDEVIATION=3;
+	
 	public float getX();
 	public float getY();
 	public Position getRelativePosition(Player playerPos);
 	public Point getPoint();
+	
 	public enum Player implements Position{   
 		
 	    BOTTOM(new Point(50,90)),LEFT(new Point(10,50)),TOP(new Point(50,10)),RIGHT(new Point(90,50));
@@ -54,35 +57,6 @@ public interface Position extends Serializable{
 			return answer;
 	    }
 
-		
-//		private Player getTopRelative(Player playerPos) {
-//			Player answer=playerPos;
-//			switch(playerPos){
-//				case BOTTOM:{
-//					
-//					//swap(playerPos,TOP);
-//					answer=TOP;
-//					break;
-//				}
-//				case LEFT:{
-//					//swap(playerPos,RIGHT);					
-//					answer=RIGHT;
-//				}
-//				case RIGHT:{
-//					//swap(playerPos,LEFT);					
-//					answer=LEFT;
-//				}
-//				case TOP:{
-//					answer=BOTTOM;
-//				}
-//			}
-//			return answer;
-//		}
-
-//		public utils.Position.Player sitMe(utils.Position.Player globalPosition) {
-//			//swap(globalPosition,BOTTOM);
-//			return BOTTOM;
-//		}
 		@Override
 		public Point getPoint() {
 			return point;
@@ -135,57 +109,7 @@ public interface Position extends Serializable{
 			}
 			return answer;
 		}
-	
-//
-//		private Public getTopRelative(Public publicPos) {
-//			Public answer=publicPos;
-//			switch(publicPos){
-//				
-//				case TOPMIDRIGHT:{	
-//					//swap(publicPos,TOPMIDRIGHT);
-//					answer=BOTMIDLEFT;
-//					break;
-//				}
-//				case TOPMIDLEFT:{
-//					//swap(publicPos,TOPMIDLEFT);
-//					answer=BOTMIDRIGHT;
-//					break;
-//				}
-//				case RIGHT:{
-//					//swap(publicPos,RIGHT);
-//					answer=LEFT;
-//					break;
-//				}
-//				case MIDRIGHT:{
-//					//swap(publicPos,MIDLEFT);					
-//					answer=MIDLEFT;
-//					break;					
-//				}
-//				case MIDLEFT:{
-//					//swap(publicPos,MIDRIGHT);					
-//					answer=MIDRIGHT;
-//					break;					
-//				}
-//				case BOTMIDRIGHT:{
-//					//swap(publicPos,BOTMIDRIGHT);
-//					answer=TOPMIDLEFT;
-//					break;
-//				}
-//				case BOTMID:{
-//					//swap(publicPos,BOTMID);
-//					answer=TOPMID;
-//					break;
-//				}
-//				case BOTMIDLEFT:{
-//					//swap(publicPos,BOTMIDLEFT);
-//					answer=TOPMIDRIGHT;
-//					break;
-//				}
-//				default:{}
-//				
-//			}
-//			return answer;			
-//		}
+
 		@Override
 		public Point getPoint() {
 			return point;
@@ -231,34 +155,9 @@ public interface Position extends Serializable{
 			return answer;
 		  }
 
-//		private Button getTopRelative(Button buttonPos) {
-//			 Button answer=buttonPos;
-//			 switch(buttonPos){
-//			 	case TOPRIGHT:{
-//			 		answer=BOTLEFT;
-//			 		break;
-//			 	}
-//			 	case TOPLEFT:{
-//			 		answer=BOTRIGHT;
-//			 		break;
-//			 	}
-//			 	case BOTRIGHT:{
-//			 		answer=TOPLEFT;
-//			 		break;
-//			 	}
-//			 	case BOTLEFT:{
-//			 		answer=TOPRIGHT;
-//			 		break;
-//			 	}
-//			 	default:{}
-//			 }
-//			return answer;
-//		}
 		@Override
 		public Point getPoint() {
 			return point;
 		}
 	 }
-	
-
 }  

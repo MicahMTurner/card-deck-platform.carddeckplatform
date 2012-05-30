@@ -28,7 +28,11 @@ public class Host implements Runnable{
 	int playersRdy=0;
 
 
-			
+	public void shutDown(){
+		game.getPlayers().clear();
+		availablePositions.clear();
+		ConnectionsManager.getConnectionsManager().shutDown();
+	}
 	public Host(Game game) {	
 		availablePositions=new Stack<Position.Player>();
 		availablePositions.add(Position.Player.RIGHT);
@@ -84,6 +88,7 @@ public class Host implements Runnable{
 		
 		
 	}
+	
 	
 
 	

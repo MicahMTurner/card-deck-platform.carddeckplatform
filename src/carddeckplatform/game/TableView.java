@@ -465,19 +465,19 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		Droppable destination = table.getDroppableById(to);
 		Droppable source = table.getDroppableById(from);
 		for (Card card : cards) {
-			if (from == -1) {
-				// new card, create it
-				//System.out.println(GameStatus.username+": card id: "+card.getId());
-				addNewDraggable(card, destination);
-
-			} else {
+//			if (from == -1) {
+//				// new card, create it
+//				//System.out.println(GameStatus.username+": card id: "+card.getId());
+//				addNewDraggable(card, destination);
+//
+//			} else {
 				// move card from one zone to another
 				source.removeCard(byWhom, card);
 				destination.onCardAdded(byWhom, card);
 				redraw();
 				// drawMovement(cards, destination.getPoint(), 1000, 10,
 				// revealWhileMoving, revealAtEnd);
-			}
+			//}
 		}
 	}
 
@@ -497,9 +497,6 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	public void dealCards(ArrayList<Card> cards, int to) {
 		Droppable destination = table.getDroppableById(to);
 		for (Card card : cards) {
-			// new card, create it
-//			System.out.println(GameStatus.username + ": card id: "
-//					+ card.getId());
 			addNewDraggable(card, destination);
 		}
 	}

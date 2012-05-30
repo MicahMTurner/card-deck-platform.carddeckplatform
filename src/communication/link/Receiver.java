@@ -9,7 +9,7 @@ import client.controller.ClientController;
 import communication.messages.Message;
 
 public class Receiver implements Runnable{
-	
+	private volatile boolean stop;
 	private ObjectInputStream in;
 	
 	//private Handler h = new Handler();
@@ -18,15 +18,18 @@ public class Receiver implements Runnable{
 //	public TcpReceiver(int port){
 //		this.port = port;
 //	}
-	public Receiver(){}
+	public Receiver(){
+		this.stop=false;
+	}
 	public Receiver(ObjectInputStream in){
+		this.stop=false;
 		this.in = in;
 	}
 	
 	@Override
 	public void run() {
 		
-		while(true){
+		while(!stop){
 			try {		
 				
 				//System.out.println("Wait for message");
@@ -37,20 +40,20 @@ public class Receiver implements Runnable{
 				//System.out.println("message executed");
 			} catch (IOException e) {
 				//stream got closed
-				System.out.println("stream got closed");
+				//System.out.println("stream got closed");
 				try {
 					in.close();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (Exception e2){
-					
+					//check if stream closed unwillingly
+					if (!stop){
+						ClientController.get().playerLeft();
+						stop=true;
+					}
+				} catch (IOException e1) {					
+					e1.printStackTrace();					
 				}
-				break;
 				
 				//System.out.println(e.getMessage());
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
+			} catch (ClassNotFoundException e) {				
 				e.printStackTrace();
 			}
 		}
@@ -81,6 +84,9 @@ public class Receiver implements Runnable{
 		}
 		
 		
+	}
+	public void stop() {
+		stop=true;		
 	}
 
 }
