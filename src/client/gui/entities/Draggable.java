@@ -104,4 +104,8 @@ public abstract class Draggable implements Serializable{
 		this.carrier="";
 		
 	}
+	public abstract void moveTo(final Droppable source,final Droppable destination, final boolean revealedWhileMoving, final boolean revealedAtEnd);
+	
+	
+	
 }

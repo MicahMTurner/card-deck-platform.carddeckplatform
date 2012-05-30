@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.view.animation.OvershootInterpolator;
 import carddeckplatform.game.BitmapHolder;
 import carddeckplatform.game.R;
 import carddeckplatform.game.StaticFunctions;
@@ -55,7 +56,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		coord.setX(x);
 		coord.setY(y);
 	}
-	
+	@Override
 	public void moveTo(final Droppable source,final Droppable destination, final boolean revealedWhileMoving, final boolean revealedAtEnd) {
 		new Thread(new Runnable() {	
 			@Override
@@ -89,6 +90,10 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 			}
 		}).start();
 	}
+	
+	
+	
+	
 	
 	public Point getCoord() {
 		return new Point(coord);

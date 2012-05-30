@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Stack;
 
+import org.newdawn.slick.geom.Line;
+
 
 import utils.Card;
 import utils.Position;
@@ -17,10 +19,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 
 
 public class Table {
 	public enum Focus {FRONT, REAR}
+	Line line=null;//needed for DEBUG fling
 	
 	//private Stack<Draggable> draggables = new Stack<Draggable>();
 	private ArrayList<Droppable> droppables;
@@ -134,6 +138,7 @@ public class Table {
 	
 	
 	public Draggable getNearestDraggable(float x, float y){
+		Droppable d=this.droppables.get(0);
 		Draggable answer=null;
 		//get nearest container where draggable can be found at
 		Droppable nearestDroppable=getNearestDroppable(x, y);
@@ -158,11 +163,22 @@ public class Table {
 	
 	public Droppable getNearestDroppable(float x, float y){
 		for(Droppable d : droppables){
-			double radius  = Math.sqrt( (double) (((d.getX()-x)*(d.getX()-x)) + (d.getY()-y)*(d.getY()-y)));
-			if(radius <= d.sensitivityRadius()){
+//			double radius  = Math.sqrt( (double) (((d.getX()-x)*(d.getX()-x)) + (d.getY()-y)*(d.getY()-y)));
+//			if(radius <= d.getShape()){
+//				return d;
+//			}
+			if(d.isContain(x, y))
 				return d;
-			}
 		}
+		return null;
+	}
+	public Droppable getNearestDroppable(float x1,float y1,float x2,float y2){
+		Line line= new Line(x1, y1, x2, y2);
+		this.line=line;
+		for (Droppable d : droppables) {
+			if(d.isIntersect(line))
+				return d;
+		}		
 		return null;
 	}
 	
@@ -197,6 +213,12 @@ public class Table {
 			}
 			if (inHand!=null){
 				inHand.draw(canvas, context);
+			}
+			
+			if(this.line!=null){
+				Paint paint= new Paint();
+				paint.setColor(Color.RED);
+				canvas.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2(), paint);
 			}
 		} catch (Exception e) {
 			// TODO: handle exception

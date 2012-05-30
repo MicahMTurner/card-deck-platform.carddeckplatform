@@ -8,6 +8,9 @@ import communication.messages.SwapRequestMessage;
 
 
 
+import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Shape;
+
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -15,6 +18,7 @@ import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.controller.LivePosition;
 import client.gui.entities.Droppable;
+import client.gui.entities.MetricsConvertion;
 
 
 
@@ -122,8 +126,10 @@ public class Player extends Droppable implements  Comparable<Player>{
 		}		
 	}
 	@Override
-	public int sensitivityRadius() {		
-		return 50;
+	public Shape getShape(float x,float y) {		
+//		return 50;
+		Point point =MetricsConvertion.pointRelativeToPx(new Point(x, y));
+		return new Circle(point.getX()+50, point.getY()+50, 50);
 	}
 	@Override
 	public void addCard(Player player, Card card) {

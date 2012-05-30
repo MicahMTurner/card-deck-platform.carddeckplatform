@@ -7,6 +7,8 @@ package carddeckplatform.game;
 import java.util.ArrayList;
 import java.util.Set;
 
+import org.newdawn.slick.geom.Circle;
+
 import communication.link.HostFinder;
 import communication.link.HostId;
 import communication.link.TcpHostFinder;
@@ -69,7 +71,6 @@ public class CarddeckplatformActivity extends Activity {
     	//host=null;    	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu);
-        
         
         //making some wifi
         WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
