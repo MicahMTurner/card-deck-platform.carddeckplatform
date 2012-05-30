@@ -53,9 +53,7 @@ public class TcpIdListener implements Runnable {
 					out.writeObject(new HostId("", owner, gameName));
 					out.close();
 					clientSocket.close();
-				} catch (IOException e) {				
-					e.printStackTrace();
-				}
+				} catch (IOException e) {}
 			}
 		}
 	}

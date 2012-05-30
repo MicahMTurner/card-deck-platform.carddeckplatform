@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import logic.host.Host;
+
 import utils.Position;
 import communication.messages.Message;
 
@@ -52,7 +54,13 @@ public class Connection implements Runnable {
 		
 	}
 	public void cancelConnection(){
-		stop=true;
+		try {
+			in.close();
+			out.close();
+		} catch (IOException e) {			
+			e.printStackTrace();
+		}
+		//stop=true;
 	}
 	
 	@Override
@@ -68,9 +76,9 @@ public class Connection implements Runnable {
 				} catch (ClassNotFoundException e) {					
 					e.printStackTrace();
 				}	
-			} catch (IOException e) {				
-				e.printStackTrace();
-				return;
+			} catch (IOException e) {
+				ConnectionsManager.getConnectionsManager().connectionLost(this);
+				stop=true;			
 			}
 		}
 		

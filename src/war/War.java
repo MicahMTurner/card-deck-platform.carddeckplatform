@@ -70,7 +70,7 @@ public class War extends Game{
 			
 		}
 		for (int i=0;i<players.size();i++){
-			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(playersCards.get(i),false,false,-1,players.get(i).getId())));
+			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(playersCards.get(i),players.get(i).getId())));
 		}
 		
 	}

@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+
 
 import communication.actions.CardAdded;
 import communication.actions.CardRemoved;
@@ -26,6 +31,7 @@ import utils.Public;
 import IDmaker.IDMaker;
 import logic.client.Game;
 import client.gui.entities.Droppable;
+import carddeckplatform.game.GameActivity;
 import carddeckplatform.game.TableView;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
@@ -255,12 +261,10 @@ public class ClientController implements Observer {
 		return game.getMe();
 	}
 
-	public void dealCards(ArrayList<Card> cards, int from, int to,boolean revealWhileMoving,boolean revealAtEnd) {
+	public void dealCards(ArrayList<Card> cards, int to) {
 		gui.dealCards(cards, to);
-		//ClientController.guiAPI().moveCards(cards, to, revealWhileMoving, revealAtEnd);
-		
 	}
-
+	 
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (arg1!=null){
@@ -294,6 +298,31 @@ public class ClientController implements Observer {
 			player=(Player) getZone(pair.getFirst());			
 					game.positionUpdate(player,pair.getSecond());
 		}
+		
+	}
+
+	public void playerLeft() {
+		gui.post(
+				new Runnable() {					
+					@Override
+					public void run() {
+						//create an alert dialog
+						AlertDialog.Builder builder = new AlertDialog.Builder(gui.getContext());			
+						builder.setMessage("Player has left the game").setCancelable(false).setTitle("Game Over");
+						builder.setNeutralButton("Ok", new OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								((Activity)(gui.getContext())).finish();
+								
+							}
+						});
+						
+						builder.create().show();
+						
+					}
+				}
+			);
 		
 	}
 

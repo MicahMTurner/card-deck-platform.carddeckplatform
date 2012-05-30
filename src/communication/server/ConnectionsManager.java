@@ -18,6 +18,7 @@ import carddeckplatform.game.gameEnvironment.GameEnvironment.ConnectionType;
 import utils.Player;
 import utils.Position;
 import communication.actions.InitialConnectionAction;
+import communication.actions.PlayerLeftAction;
 import communication.link.Streams;
 import communication.messages.InitialMessage;
 import communication.messages.Message;
@@ -150,6 +151,15 @@ public class ConnectionsManager {
 			
 			//GameEnvironment.getGameEnvironment().getHandler().post(connection);
 
+	}
+	public void connectionLost(Connection connection){
+		connections.remove(connection);		
+		sendToAllExcptMe(new Message(new PlayerLeftAction()), connection.getId());		
+	}
+	public void shutDown(){
+		for (Connection connection : connections){
+			connection.cancelConnection();
+		}
 	}
 	
 }

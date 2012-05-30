@@ -7,24 +7,18 @@ import utils.Card;
 import client.controller.ClientController;
 
 public class DealCardAction implements Action{
-	private int from;
 	private int to;
 	private ArrayList<Card>cards=new ArrayList<Card>();
-	private boolean revealWhileMoving;
-	private boolean revealAtEnd;
 	
-	public DealCardAction(ArrayList<Card> cards,boolean revealWhileMoving,boolean revealAtEnd,int from,int to) {
+	public DealCardAction(ArrayList<Card> cards,int to) {
 		for(Card card : cards){
 			this.cards.add(card);
 		}
-		this.revealAtEnd=revealAtEnd;
-		this.revealWhileMoving=revealWhileMoving;
-		this.from=from;
 		this.to=to;
 	}
 	@Override
 	public void execute() {
-		ClientController.get().dealCards(cards, from, to,revealWhileMoving,revealAtEnd);
+		ClientController.get().dealCards(cards,to);
 		
 		
 	}

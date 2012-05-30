@@ -3,17 +3,22 @@ package carddeckplatform.game;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import logic.host.Host;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Menu;
@@ -22,19 +27,25 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 import carddeckplatform.game.dialogs.ActionWhileWaiting;
+import carddeckplatform.game.dialogs.ConnectionErrorAlertDialog;
 import carddeckplatform.game.dialogs.ProgressBarThread;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
+import carddeckplatform.game.gameEnvironment.GameEnvironment.ConnectionType;
 import client.controller.ClientController;
 import client.controller.AutoHide;
 import client.controller.LivePosition;
+import client.dataBase.ClientDataBase;
 import client.gui.entities.Droppable;
 import communication.link.ServerConnection;
+import communication.link.TcpIdListener;
 
 public class GameActivity extends Activity {
 	private final int SPINNERPROGBAR=0;
 	private static Context context;
 	private ProgressDialog progDialog;
 	private TableView tableview;
+	private TcpIdListener tcpIdListener;
+	private Host host;
 	//private boolean disableLivePosition;
 	
 	//private LivePosition posByComp;
@@ -42,9 +53,7 @@ public class GameActivity extends Activity {
 	
 
 	
-	public GameActivity() {
-		
-	}
+
 	public static Context getContext(){
 		return context;
 	}
@@ -58,9 +67,16 @@ public class GameActivity extends Activity {
 	
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();
+		super.onDestroy();		
 		LivePosition.get().stop();
 		AutoHide.get().stop();
+		if (host!=null){
+			host.shutDown();
+			host=null;
+		}
+		if (tcpIdListener!=null){
+			tcpIdListener.stop();
+		}
 	}
 	
 	@Override
@@ -75,6 +91,8 @@ public class GameActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); 
+        host=null;
+        tcpIdListener=null;       
         //disableLivePosition=false;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); 
@@ -98,11 +116,26 @@ public class GameActivity extends Activity {
         tableview.setxDimention(GameEnvironment.get().getDeviceInfo().getScreenWidth());
         tableview.setyDimention(GameEnvironment.get().getDeviceInfo().getScreenHeight());
         ClientController.get().setGui(tableview);       
-        setupGame();
+        //setupGame();
+        
+        new GameSetup().execute(getIntent().getStringExtra("gameName"));
 
     }
     
-    private void buildLayout( ArrayList<Droppable> publics){
+    private void initialServer(String gameName) {
+    	  if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){
+    		  //if in tcp mode start id listener.
+   			  tcpIdListener = new TcpIdListener(GameEnvironment.get().getPlayerInfo().getUsername() , gameName);
+    		  tcpIdListener.start();
+    	  }
+    	  else if(GameEnvironment.get().getConnectionType()==ConnectionType.BLUETOOTH){
+    		// in blue-tooth mode there is no need for host id listener.
+          	GameEnvironment.get().getBluetoothInfo().initServerSocket();
+    	  }
+    	  host=new Host(ClientDataBase.getDataBase().getGame(gameName));
+    	  new Thread(host).start();		
+	}
+	private void buildLayout( ArrayList<Droppable> publics){
     	for (Droppable publicZone : publics){
     		//set public zone according to my position
     		publicZone.setPosition(publicZone.getPosition().getRelativePosition(ClientController.get().getMe().getGlobalPosition()));
@@ -113,42 +146,33 @@ public class GameActivity extends Activity {
     @Override
     protected Dialog onCreateDialog(int id) {
         switch(id) {
-        //spinner
-        case SPINNERPROGBAR:
-        	progDialog= new ProgressDialog(this);
-          	progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-          	progDialog.setButton("Cancel", new DialogInterface.OnClickListener() {
+        	//spinner
+        	case SPINNERPROGBAR:{
+        		progDialog= new ProgressDialog(this);
+        		progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        		progDialog.setButton("Cancel", new DialogInterface.OnClickListener() {
         			
         			@Override
         			public void onClick(DialogInterface arg0, int arg1) {
         				ServerConnection.getConnection().closeConnection();
-        				finish();
-        				
+        				finish();        				
         			}
         		});
           	
-          	progDialog.setMessage("Connecting...");
-          	//progDialog.setContentView(R.layout.gamelistdialog); 
-            return progDialog;
-//        case 1:                      // Horizontal
-//            progDialog = new ProgressDialog(this);
-//            progDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-//            progDialog.setMax(maxBarValue);
-//            progDialog.setMessage("Dollars in checking account:");
-//            progThread = new ProgressThread(handler);
-//            progThread.start();
-//            return progDialog;
+        		progDialog.setMessage("Connecting...");          	 
+        		return progDialog;
+        	}
         default:
-            return null;
+            return super.onCreateDialog(id);
         }
     }
+    
   @Override
-public void onBackPressed() {
-
-	 super.onBackPressed();
-	  ServerConnection.getConnection().closeConnection();
-	
+  public void onBackPressed() {
+	  super.onBackPressed();
+	  ServerConnection.getConnection().closeConnection();	
 }
+  
   private void setupLayout(){
 	  //Position posistion=ClientController.getController().getPosition();
       ArrayList<Droppable>publics=new ArrayList<Droppable>();
@@ -159,38 +183,67 @@ public void onBackPressed() {
       //ArrayList<Button>buttons=new ArrayList<Public>();
       
       //build the layout
-      buildLayout(publics);
+      buildLayout(publics);      
   }
   
-  private void setupGame(){    
-	  showDialog(SPINNERPROGBAR);
-	  new Thread(new ProgressBarThread(new ActionWhileWaiting() {
-		
-		@Override
-		public void execute() {	
+  private class GameSetup extends AsyncTask<String, Void, String>{
+
+	@Override
+	protected String doInBackground(String... params) {
+		if (GameEnvironment.get().getPlayerInfo().isServer()){
+	        initialServer(params[0]);
+	    }
+		return setupGame();
+	}
+	
+	@Override
+	protected void onPreExecute() {
+		showDialog(SPINNERPROGBAR);	
+	}
+	
+	@Override
+	protected void onPostExecute(String result) {
+		progDialog.dismiss();
+		if (result!=null){
+			//create an alert dialog
+			AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this);			
+			builder.setMessage(result).setCancelable(false).setTitle("Connection Error");
+			builder.setNeutralButton("Back", new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					GameActivity.this.finish();
+					
+				}
+			});
 			
-			if (GameEnvironment.get().getPlayerInfo().isServer()){
-				//start live position feature
-				//LivePosition.get().start();
-			}
-			//-------CONNECT TO SERVER(HOST)------//
-			
-			try {
-				ServerConnection.getConnection().openConnection();
-			} catch (IOException e) {			
-				e.printStackTrace();
-			}
-			
-		    progDialog.dismiss();
-		    //setup all layout prefs
-		    setupLayout();
-		          
-		    AutoHide.get().start();
-		     
-			
+			builder.create().show();			
 		}
-	})).start();
-	 
+	}
+	
+	  
+	  
+  }
+  private String setupGame(){  
+	  
+		if (GameEnvironment.get().getPlayerInfo().isServer()){
+			//start live position feature
+			//LivePosition.get().start();
+		}
+		//-------CONNECT TO SERVER(HOST)------//
+			
+		try {
+			ServerConnection.getConnection().openConnection();			
+			
+			//progDialog.dismiss();		    
+		    //setup all layout prefs
+		    setupLayout();		          
+		    AutoHide.get().start();
+		} catch (IOException e) {
+			return e.getMessage();
+		}
+		return null;
+		
   }
 	 
 	 

@@ -45,15 +45,14 @@ import android.widget.ViewFlipper;
 
 public class CarddeckplatformActivity extends Activity {
 	private ViewFlipper mFlipper;
-	private TcpIdListener tcpIdListener;
-	private Host host;
+
 	
 
 	private void getPrefs() {
         // Get the xml/preferences.xml preferences
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         
-        boolean useBluetooth = prefs.getBoolean("useBluetooth", true);
+        boolean useBluetooth = prefs.getBoolean("useBluetooth", false);
         
         if(!useBluetooth){
         	GameEnvironment.get().setConnectionType(ConnectionType.TCP);
@@ -64,11 +63,12 @@ public class CarddeckplatformActivity extends Activity {
 	}
 	
 	
-	
+
     /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-    	tcpIdListener=null;
+    public void onCreate(final Bundle savedInstanceState) {
+    	//tcpIdListener=null;
+    	//host=null;    	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu);
         
@@ -118,9 +118,9 @@ public class CarddeckplatformActivity extends Activity {
             	Set<String> games = ClientDataBase.getDataBase().getGamesNames();
             	
             	LinearLayout ll = (LinearLayout)dialog.findViewById(R.id.gameListLayout);
-            	for(final String name : games){
+            	for(final String gameName : games){
             		Button gameBtn = new Button(getApplicationContext());
-            		gameBtn.setText(name);
+            		gameBtn.setText(gameName);
             		gameBtn.setOnClickListener(new OnClickListener() {
 						
 						@Override
@@ -129,25 +129,10 @@ public class CarddeckplatformActivity extends Activity {
 							GameEnvironment.get().getTcpInfo().setHostIp("127.0.0.1");			
 							GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
 			                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
-			                
-			                //GameEnvironment.getGameEnvironment().getHandler().post(new Host(ClientDataBase.getDataBase().getGame(name)));
-			                
 			                // always use the tcp server socket since we always need it to connect the hosting player.
 			                GameEnvironment.get().getTcpInfo().initServerSocket();
-			                // if in tcp mode start id listener.
-			                if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){    	
-			                	if (tcpIdListener==null){
-				                	tcpIdListener = new TcpIdListener(GameEnvironment.get().getPlayerInfo().getUsername() , name);
-				                }
-				                tcpIdListener.start();
-			                }
-			                else if(GameEnvironment.get().getConnectionType()==ConnectionType.BLUETOOTH)
-			                	GameEnvironment.get().getBluetoothInfo().initServerSocket();
-			                	// in bluetooth mode there is no need for host id listener.
-			                
-			                // starts the host thread.
-			                new Thread(new Host(ClientDataBase.getDataBase().getGame(name))).start();
-			                
+
+			                i.putExtra("gameName", gameName);
 			                startActivity(i);
 			                
 			                dialog.dismiss();
@@ -181,9 +166,9 @@ public class CarddeckplatformActivity extends Activity {
             	hostBtn.setOnClickListener(new OnClickListener(){
 					@Override
 					public void onClick(View arg0) {
-						// TODO Auto-generated method stub
+						
 						GameEnvironment.get().getPlayerInfo().setServer(false);
-						GameEnvironment.get().getTcpInfo().setHostIp("192.168.2.104");
+						GameEnvironment.get().getTcpInfo().setHostIp("192.168.2.115");
 		            	GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
 		            	
 		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
@@ -203,7 +188,7 @@ public class CarddeckplatformActivity extends Activity {
 	            		hostBtn.setOnClickListener(new OnClickListener(){
 	    					@Override
 	    					public void onClick(View arg0) {
-	    						// TODO Auto-generated method stub
+	    						
 	    		            	
 	    		            	GameEnvironment.get().getPlayerInfo().setServer(false);
 	    						GameEnvironment.get().getTcpInfo().setHostIp(hostId.getAddress());
@@ -237,7 +222,7 @@ public class CarddeckplatformActivity extends Activity {
            	             hostBtn.setOnClickListener(new OnClickListener(){
 	    					@Override
 	    					public void onClick(View arg0) {
-	    						// TODO Auto-generated method stub
+	    						
 	    		            	
 	    		            	GameEnvironment.get().getPlayerInfo().setServer(false);
 	    						GameEnvironment.get().getBluetoothInfo().setHostDevice(device);
@@ -266,20 +251,12 @@ public class CarddeckplatformActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
 				Intent i = new Intent(getBaseContext(), PrefsActivity.class);
 				startActivity(i);
 			}
 		});
         
-    }
-    
-    public void onWindowFocusChanged(boolean hasWindowFocus){
-    	if (hasWindowFocus){
-    		if (tcpIdListener!=null){
-    			tcpIdListener.stop();
-    		}
-    	}
     }
 }
 
