@@ -4,6 +4,8 @@ package carddeckplatform.game;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.annotation.PostConstruct;
+
 import logic.host.Host;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -116,19 +118,28 @@ public class GameActivity extends Activity {
 
     }
     
-    private void initialServer(String gameName) {
-    	  if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){
-    		  //if in tcp mode start id listener.
-   			  tcpIdListener = new TcpIdListener(GameEnvironment.get().getPlayerInfo().getUsername() , gameName);
-    		  tcpIdListener.start();
-    	  }
-    	  else if(GameEnvironment.get().getConnectionType()==ConnectionType.BLUETOOTH){
-    		// in blue-tooth mode there is no need for host id listener.
-          	GameEnvironment.get().getBluetoothInfo().initServerSocket();
-    	  }
-    	  host=new Host(ClientDataBase.getDataBase().getGame(gameName));
-    	  new Thread(host).start();		
+    private void initialServer(final String gameName) {
+    	// added by Michael: bluetooth throws exception if the server socket isn't instantiated from main thread or handler.
+    	GameEnvironment.get().getHandler().post(new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){
+		    		  //if in tcp mode start id listener.
+		   			  tcpIdListener = new TcpIdListener(GameEnvironment.get().getPlayerInfo().getUsername() , gameName);
+		    		  tcpIdListener.start();
+		    	  }
+		    	  else if(GameEnvironment.get().getConnectionType()==ConnectionType.BLUETOOTH){
+		    		// in blue-tooth mode there is no need for host id listener.
+		          	GameEnvironment.get().getBluetoothInfo().initServerSocket();
+		    	  }
+		    	  host=new Host(ClientDataBase.getDataBase().getGame(gameName));
+		    	  new Thread(host).start();		
+			}
+		});
+    	  
 	}
+    
 	private void buildLayout( ArrayList<Droppable> publics){
     	for (Droppable publicZone : publics){
     		//set public zone according to my position
@@ -190,10 +201,10 @@ public class GameActivity extends Activity {
 		return setupGame();
 	}
 	
-	@Override
-	protected void onPreExecute() {
+	@Override						
+	protected void onPreExecute() {	
 		showDialog(SPINNERPROGBAR);	
-	}
+	}								
 	
 	@Override
 	protected void onPostExecute(String result) {
