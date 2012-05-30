@@ -12,7 +12,6 @@ import android.bluetooth.BluetoothSocket;
 import communication.link.Streams;
 
 public class BluetoothAcceptor implements Acceptor {
-	
 	public BluetoothAcceptor(){
 	}
 	
