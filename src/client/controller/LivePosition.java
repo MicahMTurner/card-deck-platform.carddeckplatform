@@ -51,10 +51,9 @@ public class LivePosition implements SensorEventListener{
 		@Override
 		public void run() {			
 			GameEnvironment.get().getPlayerInfo().setAzimute(azimut);
-			//System.out.println("releasing thread with azimute: "+ azimut);
+			System.out.println("releasing thread with azimute: "+ azimut);
 			cdl.countDown();
-		}
-			
+		}	
 	}
 	
 	private class SwapAgreementManager{
@@ -255,7 +254,7 @@ public class LivePosition implements SensorEventListener{
 					//System.out.println("waiting: "+System.currentTimeMillis());
 					//tasks=execService.scheduleAtFixedRate(new SetPosition(), 1, 2, TimeUnit.SECONDS);
 					timer.schedule(new SetPosition(),1000,4000);
-					System.out.println("locking thread.");
+					//System.out.println("locking thread.");
 					cdl.await();
 				} catch (InterruptedException e) {			
 					e.printStackTrace();
@@ -314,7 +313,7 @@ public class LivePosition implements SensorEventListener{
 		        if (azimut<0){
 		        	azimut+=360;
 		        }
-		        System.out.println("azimut: "+azimut);
+		        //System.out.println("azimut: "+azimut);
 		      }
 		      
 		    }

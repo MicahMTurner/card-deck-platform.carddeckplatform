@@ -33,10 +33,10 @@ public class Public extends Droppable{
 //		this.position = position;
 //	}
 //	
-	
-	public Shape getShape(float x,float y) {		
+	@Override
+	public Shape getNewShapeInstance() {		
 //		return 1000;
-		Point point =MetricsConvertion.pointRelativeToPx(new Point(x, y));
+		Point point =MetricsConvertion.pointRelativeToPx(new Point(getX(),getY()));
 		return new Circle(point.getX()-28, point.getY()-27, 50);
 	}
 	

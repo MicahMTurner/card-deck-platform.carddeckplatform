@@ -1,8 +1,12 @@
 package logic.host;
 
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Stack;
+
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
 import utils.Player;
 import utils.Position;
@@ -23,15 +27,24 @@ public class Host implements Runnable{
 	private Stack<Position.Player> availablePositions;
 	//private ArrayList<PlayersInfo> playersInfo;
 	private static Game game;
-
+	private volatile boolean shutDown;
 	//synchronized private boolean startGameFlag=false;
 	int playersRdy=0;
 
 
 	public void shutDown(){
+		shutDown=true;
 		game.getPlayers().clear();
 		availablePositions.clear();
 		ConnectionsManager.getConnectionsManager().shutDown();
+//		ServerSocket ss=GameEnvironment.get().getTcpInfo().getServerSocket();
+//		if (ss!=null){
+//			try {
+//				ss.close();
+//			} catch (IOException e) {				
+//				e.printStackTrace();
+//			}
+//		}
 	}
 	public Host(Game game) {	
 		availablePositions=new Stack<Position.Player>();
@@ -39,7 +52,7 @@ public class Host implements Runnable{
 		availablePositions.add(Position.Player.LEFT);
 		availablePositions.add(Position.Player.TOP);
 		availablePositions.add(Position.Player.BOTTOM);
-		
+		shutDown=false;
 		Host.game=game;
 		//this.playersInfo=new ArrayList<Host.PlayersInfo>();
 		
@@ -55,35 +68,41 @@ public class Host implements Runnable{
 		game.playerLost(id);
 	}
 	
-	public void waitForPlayers(){
+	public void waitForPlayers() throws Exception{
 		ConnectionsManager.getConnectionsManager().connectHostingPlayer(availablePositions.pop(),game.toString(),game.getPlayers());
 		while(ConnectionsManager.getConnectionsManager().getNumberOfConnections()<game.minPlayers()){
 			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions.pop(),game.toString(),game.getPlayers());
+			if (shutDown){
+				throw new Exception("server shutting down");
+			}
 	    }
-		//TODO send to GUI enable start game button
-		
-		
 	}
 	
 	@Override
 	public void run() {
 
-		waitForPlayers();
-		System.out.println("got all players");
-		game.initiate();		
+		try {
+			waitForPlayers();
 		
-		System.out.println("game initiated");
-		game.dealCards();		
+			System.out.println("got all players");
+			game.initiate();		
 		
-		System.out.println("cards dealt");
-		// send the turn action if the game is turned base card game.
-		Position.Player next=game.nextInTurn();
-		if (next!=null){
-			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(next)));
-		}else{
-			for (Player player: game.getPlayers()){
-				ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(player.getGlobalPosition())));
+			System.out.println("game initiated");
+			game.dealCards();		
+		
+			System.out.println("cards dealt");
+			// send the turn action if the game is turned base card game.
+			Position.Player next=game.nextInTurn();
+			if (next!=null){
+				ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(next)));
+			}else{
+				for (Player player: game.getPlayers()){
+					ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(player.getGlobalPosition())));
+				}
 			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		

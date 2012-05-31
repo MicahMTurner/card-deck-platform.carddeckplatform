@@ -29,8 +29,7 @@ public class TcpAcceptor implements Acceptor {
 			
 			return new Streams(out, in);
 			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException e) {			
 			e.printStackTrace();
 		}
 			

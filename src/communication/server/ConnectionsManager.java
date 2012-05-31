@@ -128,8 +128,9 @@ public class ConnectionsManager {
 			acceptor = new BluetoothAcceptor();
 		
 		Streams s = acceptor.accept();
-		
-		addConnection(s, position, gameId, playersInfo);
+		if (s!=null){
+			addConnection(s, position, gameId, playersInfo);
+		}
 	}
 	
 	/**
@@ -159,6 +160,15 @@ public class ConnectionsManager {
 	public void shutDown(){
 		for (Connection connection : connections){
 			connection.cancelConnection();
+		}
+		//close server socket
+		ServerSocket ss=GameEnvironment.get().getTcpInfo().getServerSocket();
+		if (ss!=null){
+			try {
+				ss.close();
+			} catch (IOException e) {				
+				e.printStackTrace();
+			}
 		}
 	}
 	
