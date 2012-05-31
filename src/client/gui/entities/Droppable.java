@@ -46,7 +46,7 @@ public abstract class Droppable implements Serializable{
 		return new Rectangle(getX() - (size.getX() / 2), getY() - (size.getY() / 2), size.getX() , size.getY());
 	}
 	
-	protected transient Shape shape;
+	//protected transient Shape shape;
 	protected int id;
 	protected Position position;
 
@@ -62,10 +62,22 @@ public abstract class Droppable implements Serializable{
 		
 	}
 	public boolean isContain(float x,float y){
-		return shape.contains(x, y);
+		//return shape.contains(x, y);
+		return getShape().contains(x, y);
+		
 	}
 	public boolean isIntersect(Line line){
-		return line.intersects(shape)||shape.contains(line);
+//		try {
+		//return line.intersects(shape)||shape.contains(line);
+		return line.intersects(getShape())||getShape().contains(line);
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//			// TODO: handle exception
+//			this.shape=getShape();
+//			return line.intersects(shape)||shape.contains(line);
+//		}
+		
+		
 	}
 	
 	
@@ -100,7 +112,7 @@ public abstract class Droppable implements Serializable{
 		this.id=id;
 		this.scale = scale;
 		this.position=position;
-		this.shape=getShape();
+		//this.shape=getShape();
 		//this.cards=new ArrayList<Card>();		
 		//this.point=new Point(190,175);
 		//this.myId=IDMaker.getMaker().getId(position);
