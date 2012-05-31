@@ -31,7 +31,7 @@ public class Public extends Droppable{
 		
 		this.image = "playerarea";
 		
-		BitmapHolder.get().scaleBitmap(image, this.scale);
+		//BitmapHolder.get().scaleBitmap(image, this.scale);
 	}
 	
 //	public void setPosition(Position.Public position) {

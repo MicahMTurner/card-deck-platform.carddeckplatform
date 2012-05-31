@@ -151,11 +151,8 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	
 	@Override
     public void draw(Canvas canvas,Context context) {
-		Bitmap img;
-    	Bitmap resizedBitmap=null;				
+		Bitmap img;			
 		Matrix matrix = new Matrix();
-		matrix.postRotate(angle);
-		
 		Point p;
 		if(!isInHand()){
 			p = scale;
@@ -164,27 +161,18 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		}
 		
 		p = MetricsConvertion.pointRelativeToPx(p);
-		//matrix.postScale(p.getX(), p.getY());
-		int resourceId;
-		if(revealed){		
-//			resourceId=context.getResources().getIdentifier(frontImg, "drawable", "carddeckplatform.game");
-//			Bitmap frontImg = BitmapFactory.decodeResource(context.getResources(), resourceId);	
-			
+		if(revealed){				
 			img = BitmapHolder.get().getBitmap(frontImg);
-			
-			matrix.postScale((float)p.getX()/(float)img.getWidth(), (float)p.getY()/(float)img.getHeight());
-			resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getWidth() , img.getHeight(), matrix, true);
-
 		}else{
-			//resourceId=context.getResources().getIdentifier(backImg, "drawable", "carddeckplatform.game");
 			img = BitmapHolder.get().getBitmap(backImg);
-//			int w = img.getWidth();
-//			int h = img.getHeight();
-			matrix.postScale((float)p.getX()/(float)img.getWidth(), (float)p.getY()/(float)img.getHeight());
-			resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getWidth() , img.getHeight(), matrix, true);
 		}
-		canvas.drawBitmap(resizedBitmap, coord.getX()-resizedBitmap.getWidth()/2, coord.getY()-resizedBitmap.getHeight()/2, null);
-//		canvas.drawBitmap(img, coord.getX(), coord.getY(), null);
+		
+		// transformations.
+		matrix.postScale((float)p.getX()/(float)img.getWidth(), (float)p.getY()/(float)img.getHeight());
+		matrix.postTranslate(coord.getX()-img.getWidth()/2, coord.getY()-img.getHeight()/2);
+		matrix.postRotate(angle , getX(), getY());
+		
+		canvas.drawBitmap(img, matrix, null);
 		
 		// if the card is being carried by another player a hand and the name of the carrier would be drawn near the card's image.
         if(isCarried()){

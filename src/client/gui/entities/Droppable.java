@@ -16,6 +16,7 @@ import utils.Position;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import carddeckplatform.game.BitmapHolder;
 import client.controller.ClientController;
 
@@ -110,7 +111,16 @@ public abstract class Droppable implements Serializable{
 	
 	public void draw(Canvas canvas,Context context){
 		Bitmap img = BitmapHolder.get().getBitmap(image);
-		canvas.drawBitmap(img,getX()-(img.getWidth() / 2),getY()-(img.getHeight() / 2),null);
+		Matrix matrix = new Matrix();
+		
+		Point absScale = MetricsConvertion.pointRelativeToPx(scale);
+		
+		
+		matrix.postScale((float)absScale.getX()/(float)img.getWidth(), (float)absScale.getY()/(float)img.getHeight());
+		matrix.postTranslate(getX()-absScale.getX()/2, getY()-absScale.getY()/2);
+		
+		canvas.drawBitmap(img, matrix, null);
+		//canvas.drawBitmap(img,getX()-(img.getWidth() / 2),getY()-(img.getHeight() / 2),null);
 	}
 	
 	public Droppable(int id,Position position, Point scale){
