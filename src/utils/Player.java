@@ -38,7 +38,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 	
 	
 	public Player(PlayerInfo playerInfo,Position.Player globalPosition,int uniqueId, PlayerEventsHandler handler) {
-		super(uniqueId,Position.Player.BOTTOM, new Point(10,13));
+		super(uniqueId,Position.Player.BOTTOM, new Point(40,13));
 		this.playerInfo=playerInfo;		
 		this.globalPosition=globalPosition;
 		this.position=Position.Player.BOTTOM;	
@@ -47,7 +47,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 		this.myTurn=false;	
 		
 		this.image = "playerarea";
-		BitmapHolder.get().scaleBitmap(image, this.scale);
+		//BitmapHolder.get().scaleBitmap(image, this.scale);
 	}
 	
 	public Position.Player getGlobalPosition() {
