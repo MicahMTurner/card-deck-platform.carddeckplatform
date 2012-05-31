@@ -123,7 +123,7 @@ public class GameActivity extends Activity {
     	GameEnvironment.get().getHandler().post(new Runnable() {
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
+
 				if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){
 		    		  //if in tcp mode start id listener.
 		   			  tcpIdListener = new TcpIdListener(GameEnvironment.get().getPlayerInfo().getUsername() , gameName);
@@ -183,7 +183,7 @@ public class GameActivity extends Activity {
       ArrayList<Droppable>publics=new ArrayList<Droppable>();
 
       //insert public areas into publics array
-      ClientController.get().setLayouts(publics);
+      publics=ClientController.get().getLayouts();
       
       //ArrayList<Button>buttons=new ArrayList<Public>();
       
@@ -238,9 +238,8 @@ public class GameActivity extends Activity {
 		//-------CONNECT TO SERVER(HOST)------//
 			
 		try {
-			ServerConnection.getConnection().openConnection();			
-			
-			//progDialog.dismiss();		    
+			ServerConnection.getConnection().openConnection();					
+			   
 		    //setup all layout prefs
 		    setupLayout();		          
 		    AutoHide.get().start();

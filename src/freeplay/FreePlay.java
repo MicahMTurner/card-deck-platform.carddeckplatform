@@ -53,12 +53,19 @@ public class FreePlay extends Game{
 		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(cards,Position.Button.BOTLEFT.getId())));
 	}
 
+	
 	@Override
-	public void getLayouts(ArrayList<Droppable> droppables) {
+	public void setLayouts(ArrayList<Droppable> publics) {
 		droppables.add(new DeckArea(Position.Button.BOTLEFT));
-		//(new CardHandler(), true,));
-		droppables.add(new Public(new PublicHandler(), Position.Public.MID));
+		droppables.add(new Public(new PublicHandler(), Position.Public.MID));		
 	}
+	
+//	@Override
+//	public void getLayouts(ArrayList<Droppable> droppables) {
+//		droppables.add(new DeckArea(Position.Button.BOTLEFT));
+//		//(new CardHandler(), true,));
+//		droppables.add(new Public(new PublicHandler(), Position.Public.MID));
+//	}
 
 	@Override
 	public String toString() {

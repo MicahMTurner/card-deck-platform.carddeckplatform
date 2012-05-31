@@ -36,19 +36,19 @@ public class PlayerInfo implements Serializable{
 		public void setUsername(String username) {
 			this.username = username;
 		}
-		public void setAzimute(double newAzimut) {
+		public void setAzimute(Double newAzimut) {
 			
 			if (azimut!=null){
-//				if (!(LivePosition.translatePositionByAzimute(azimut).equals(LivePosition.translatePositionByAzimute(newAzimut-LivePosition.SAFETYDISTANCE)))
-//						&& !(LivePosition.translatePositionByAzimute(azimut).
-//						equals(LivePosition.translatePositionByAzimute(newAzimut+LivePosition.SAFETYDISTANCE)))){
-//					
-//					//get new position player want to swap to
-//					Position.Player newPosition=LivePosition.translatePositionByAzimute(newAzimut);					
-//						
-//					//send swap-position request message		
-//					ServerConnection.getConnection().send(new SwapRequestMessage(ClientController.get().getMe().getGlobalPosition(),newPosition));
-//				}			
+				if (!(ClientController.get().getMe().getGlobalPosition().equals(LivePosition.translatePositionByAzimute(newAzimut-LivePosition.SAFETYDISTANCE)))
+						&& !(ClientController.get().getMe().getGlobalPosition().
+						equals(LivePosition.translatePositionByAzimute(newAzimut+LivePosition.SAFETYDISTANCE)))){
+					
+					//get new position player want to swap to
+					Position.Player newPosition=LivePosition.translatePositionByAzimute(newAzimut);					
+						
+					//send swap-position request message		
+					ServerConnection.getConnection().send(new SwapRequestMessage(ClientController.get().getMe().getGlobalPosition(),newPosition));
+				}			
 			}
 			this.azimut=newAzimut;
 		

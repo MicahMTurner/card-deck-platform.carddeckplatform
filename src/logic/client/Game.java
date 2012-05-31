@@ -26,7 +26,7 @@ public abstract class Game {
 	//i'm first in the list
 	protected ArrayList<Player> players = new ArrayList<Player>();
 	protected Queue<utils.Position.Player> turnsQueue=new LinkedList<utils.Position.Player>();
-	protected ArrayList<Public> publics=new ArrayList<Public>();
+	protected ArrayList<Droppable> droppables=new ArrayList<Droppable>();
 	//private ToolsFactory tools=new DefaultTools();
 	//private Player.Position currentTurn;
 	protected Deck deck;	
@@ -47,7 +47,7 @@ public abstract class Game {
 	public abstract void dealCards();	
 	
 	
-	public abstract void getLayouts(ArrayList<Droppable>publics);
+	public abstract void setLayouts(ArrayList<Droppable>publics);
 	/**
 	 * game id
 	 */
@@ -55,7 +55,9 @@ public abstract class Game {
 	public abstract String toString();
 	//the game create player according to his hander
 	public abstract PlayerEventsHandler getPlayerHandler();	
-
+	public ArrayList<Droppable>getLayouts(){
+		return droppables;
+	}
 	public String getClassName(){
 		return getClass().getName();
 	}
@@ -71,6 +73,7 @@ public abstract class Game {
 	
 	public Game() {
 		turnsQueue=setTurns();
+		setLayouts(droppables);
 	}
 	//return the next player
 	public utils.Position.Player nextInTurn(){
@@ -111,21 +114,27 @@ public abstract class Game {
 
 	public void positionUpdate(Player player, Position.Player newPosition) {
 		Player swappedWith=(Player) ClientController.get().getZone(newPosition);
+		Position.Player oldPosition=getMe().getGlobalPosition();
 		if (swappedWith==null){
 			player.setGlobalPosition(newPosition);
 		}else{			
 			swapGlobalPositions(player,swappedWith);
 			
 		}
-		setRelativePositions(player,swappedWith);
+		setRelativePositions(player,swappedWith,oldPosition);
 
 	}
-	private void setRelativePositions(Player player,Player swappedWith){
+	private void setRelativePositions(Player player,Player swappedWith, Position.Player oldPosition){
 		//check if I moved
 				if (player.equals(getMe()) || swappedWith.equals(getMe())){
 					
 					for (int i=1;i<players.size();i++){				
 						players.get(i).setRelativePosition(player.getGlobalPosition());
+					}
+					//re arrange droppables
+					for (Droppable droppalbe : droppables){
+			    		//set public zone according to my position
+						droppalbe.setPosition(droppalbe.getPosition().reArrangeRelativePosition(oldPosition, getMe().getGlobalPosition()));
 					}
 				}else{
 					//other person moved

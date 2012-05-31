@@ -76,10 +76,15 @@ public class War extends Game{
 	}
 
 	@Override
-	public void getLayouts(ArrayList<Droppable> publics){//,ArrayList<Button>buttons) {
+	public void setLayouts(ArrayList<Droppable> publics) {
 		publics.add(new Public(new PublicHandler(),Position.Public.MIDLEFT));
-		publics.add(new Public(new PublicHandler(),Position.Public.MIDRIGHT));
+		publics.add(new Public(new PublicHandler(),Position.Public.MIDRIGHT));		
 	}
+//	@Override
+//	public void getLayouts(ArrayList<Droppable> publics){//,ArrayList<Button>buttons) {
+//		publics.add(new Public(new PublicHandler(),Position.Public.MIDLEFT));
+//		publics.add(new Public(new PublicHandler(),Position.Public.MIDRIGHT));
+//	}
 
 	
 

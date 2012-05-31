@@ -7,14 +7,16 @@ import IDmaker.IDMaker;
 
 public interface Position extends Serializable{
 	
-	final int ELEMENTSINCYCLE=4;
-	final int TOPDEVIATION=2;
-	final int RIGHTDEVIATION=1;
-	final int LEFTDEVIATION=3;
+	final public int ELEMENTSINCYCLE=4;
+	final public int TOPDEVIATION=2;
+	final public int RIGHTDEVIATION=1;
+	final public int LEFTDEVIATION=3;	
+	
 	
 	public float getX();
 	public float getY();
 	public Position getRelativePosition(Player playerPos);
+	public Position reArrangeRelativePosition(Player oldPlayerPos, Player newPlayerPos);
 	public Point getPoint();
 	
 	public enum Player implements Position{   
@@ -22,6 +24,10 @@ public interface Position extends Serializable{
 	    BOTTOM(new Point(50,90)),LEFT(new Point(10,50)),TOP(new Point(50,10)),RIGHT(new Point(90,50));
 	    private final Point point;
 		private int id;		
+		final public int ELEMENTSINCYCLE=4;
+		final public int TOPDEVIATION=2;
+		final public int RIGHTDEVIATION=1;
+		final public int LEFTDEVIATION=3;
 		
 		public int getId(){
 			return id;
@@ -61,6 +67,13 @@ public interface Position extends Serializable{
 		public Point getPoint() {
 			return point;
 		}
+		@Override
+		/**
+		 * can't rearrange player position
+		 */
+		public Position reArrangeRelativePosition(Player oldPlayerPos, Player newPlayerPos) {
+			return this;
+		}
 	}  
 	  
 	public enum Public implements Position{
@@ -71,7 +84,11 @@ public interface Position extends Serializable{
 		private final Point point;
 		private final int ROWS=4;
 		private int id;		
-
+		final public int ELEMENTSINCYCLE=4;		
+		final public int TOPDEVIATION=2;
+		final public int RIGHTDEVIATION=1;
+		final public int LEFTDEVIATION=3;
+		final public int ELEMENTS=13;
 		public int getId(){
 			return id;
 		}
@@ -103,7 +120,7 @@ public interface Position extends Serializable{
 						answer=Public.values()[((this.ordinal()+LEFTDEVIATION)%
 								ELEMENTSINCYCLE)+(ELEMENTSINCYCLE*(int)(this.ordinal()/ROWS))];
 						break;
-					}
+					}					
 					default:{}
 				}
 			}
@@ -114,13 +131,47 @@ public interface Position extends Serializable{
 		public Point getPoint() {
 			return point;
 		}
+		public Position reArrangeRelativePosition(Player oldPlayerPos,	Player newPlayerPos) {
+			if (!this.equals(MID)){
+				int different= this.ordinal()-getDeviation(oldPlayerPos);
+				if (different<0){
+					different=ELEMENTSINCYCLE+different;
+				}			
+				return Public.values()[(different%ELEMENTSINCYCLE)].getRelativePosition(newPlayerPos);
+			}else{
+				return this;
+			}
+		}
+		private int getDeviation(Player oldPlayerPos) {
+			int deviation=0;
+			switch (oldPlayerPos){
+				case TOP:{
+					deviation=TOPDEVIATION;
+					break;
+				}
+				case RIGHT:{
+					deviation=RIGHTDEVIATION;
+					break;
+				}
+				case LEFT:{
+					deviation=LEFTDEVIATION;
+					break;
+				}
+				default:{}
+			}
+			return deviation;
+		}
 	 }  
 	  
 	public enum Button implements Position{
-		  TOPRIGHT(new Point(90,10)),BOTRIGHT(new Point(90,90)),BOTLEFT(new Point(10,90)),TOPLEFT(new Point(10,10));
-		  private final Point point;
-		  private final int id;		
-			
+		TOPRIGHT(new Point(90,10)),BOTRIGHT(new Point(90,90)),BOTLEFT(new Point(10,90)),TOPLEFT(new Point(10,10));
+		private final Point point;
+		private final int id;		
+		final public int ELEMENTSINCYCLE=4;
+		final public int TOPDEVIATION=2;
+		final public int RIGHTDEVIATION=1;
+		final public int LEFTDEVIATION=3;
+		
 		  public int getId(){
 			  return id;
 		  }
@@ -155,6 +206,33 @@ public interface Position extends Serializable{
 			return answer;
 		  }
 
+		@Override
+		public Position reArrangeRelativePosition(Player oldPlayerPos,	Player newPlayerPos) {
+			int different= this.ordinal()+getDeviation(oldPlayerPos);
+			if (different<0){
+				different=ELEMENTSINCYCLE-different;
+			}
+			return Button.values()[(different%ELEMENTSINCYCLE)].getRelativePosition(newPlayerPos);
+		}
+		private int getDeviation(Player oldPlayerPos) {
+			int deviation=0;
+			switch (oldPlayerPos){
+				case TOP:{
+					deviation=TOPDEVIATION;
+					break;
+				}
+				case RIGHT:{
+					deviation=RIGHTDEVIATION;
+					break;
+				}
+				case LEFT:{
+					deviation=LEFTDEVIATION;
+					break;
+				}
+				default:{}
+			}
+			return deviation;
+		}
 		@Override
 		public Point getPoint() {
 			return point;

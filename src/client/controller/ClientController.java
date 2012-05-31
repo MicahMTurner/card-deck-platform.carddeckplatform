@@ -173,8 +173,8 @@ public class ClientController implements Observer {
 		//return gui.getDroppableById(IDMaker.getMaker().getIdByPos(pos.getRelativePosition(getMe().getGlobalPosition())));
 		return gui.getDroppableByPosition((pos.getRelativePosition(getMe().getGlobalPosition())));
 	}
-	public void setLayouts(ArrayList<Droppable> publics) {
-		game.getLayouts(publics);	
+	public ArrayList<Droppable> getLayouts() {
+		return game.getLayouts();	
 	}
 	public void cardMoved(Card card,int from, int to, Player byWhom){
 		gui.moveCard(card, from, to,byWhom);		
@@ -296,9 +296,8 @@ public class ClientController implements Observer {
 		Player player;
 		for (Pair<Position.Player, Position.Player> pair : movingList){
 			player=(Player) getZone(pair.getFirst());			
-					game.positionUpdate(player,pair.getSecond());
+					game.positionUpdate(player,pair.getSecond());			
 		}
-		
 	}
 
 	public void playerLeft() {

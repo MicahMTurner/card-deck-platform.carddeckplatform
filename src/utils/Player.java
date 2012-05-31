@@ -126,9 +126,9 @@ public class Player extends Droppable implements  Comparable<Player>{
 		}		
 	}
 	@Override
-	public Shape getShape(float x,float y) {		
+	public Shape getNewShapeInstance() {		
 //		return 50;
-		Point point =MetricsConvertion.pointRelativeToPx(new Point(x, y));
+		Point point =MetricsConvertion.pointRelativeToPx(new Point(getX(), getY()));
 		return new Circle(point.getX()+50, point.getY()+50, 50);
 	}
 	@Override
