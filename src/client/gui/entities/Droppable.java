@@ -40,18 +40,23 @@ public abstract class Droppable implements Serializable{
 	//public Stack<GuiCard>guiCards=new Stack<GuiCard>(); 
 	//protected Stack<Card> cards = new Stack<Card>();
 	//protected ArrayList<Card> cards; 
-	
-	public Shape getShape() {		
-		Point size = MetricsConvertion.pointRelativeToPx(this.scale);
-		return new Rectangle(getX() - (size.getX() / 2), getY() - (size.getY() / 2), size.getX() , size.getY());
-	}
-	
-	//protected transient Shape shape;
+	protected transient Shape shape=null;
 	protected int id;
 	protected Position position;
 
 	protected Point scale;
 	protected String image;
+	
+	
+	public Shape getShape() {		
+		if(shape==null){
+			Point size = MetricsConvertion.pointRelativeToPx(this.scale);
+			shape = new Rectangle(getX() - (size.getX() / 2), getY() - (size.getY() / 2), size.getX() , size.getY());
+		}
+		return shape;
+	}
+	
+	
 	
 	public void onDrop(Player player,Droppable from, Card card){
 		from.removeCard(player,card);
