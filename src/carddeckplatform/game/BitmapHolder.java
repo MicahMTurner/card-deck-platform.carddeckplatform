@@ -47,45 +47,48 @@ public class BitmapHolder {
 		return img;
 	}
 	
+	/**
+	 * change the size of an image.
+	 * @param bitmapName
+	 * @param scale
+	 */
 	public void scaleBitmap(String bitmapName, Point scale){
 		Matrix matrix = new Matrix();
 		Bitmap img = getBitmap(bitmapName);
-		
+		// the image wasn't found.
+		if(img==null)
+			return;
 		// convert scale to match the display size.
 		scale = MetricsConvertion.pointRelativeToPx(scale);
+		// if the image is already scaled do nothing.
+		if(img.getWidth() == scale.getX() && img.getHeight() == scale.getY())
+			return;
 		
+		Bitmap newBitmap;
+		matrix.postScale((float)scale.getX()/(float)img.getWidth(), (float)scale.getY()/(float)img.getHeight());
+		newBitmap = Bitmap.createBitmap(img, 0, 0, img.getWidth() , img.getHeight(), matrix, true);
 		
+		replaceBitmap(bitmapName, newBitmap);
+	}
+	
+	
+	public void rotateBitmap(String bitmapName, float angle){
+		Matrix matrix = new Matrix();
+		Bitmap img = getBitmap(bitmapName);
 		// the image wasn't found.
 		if(img==null)
 			return;
 		
-		Bitmap resizedBitmap;
-		matrix.postScale((float)scale.getX()/(float)img.getWidth(), (float)scale.getY()/(float)img.getHeight());
-		resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getWidth() , img.getHeight(), matrix, true);
+		Bitmap newBitmap;
+		matrix.postRotate(angle);
+		newBitmap = Bitmap.createBitmap(img, 0, 0, img.getWidth() , img.getHeight(), matrix, true);
 		
-		bitmaps.remove(bitmapName);
-		
-		bitmaps.put(bitmapName, resizedBitmap);
+		replaceBitmap(bitmapName, newBitmap);
 	}
 	
-//	static public void load(Context context){
-//		String[] colors = {"c", "s" , "d" , "h"};
-//		int resourceId;
-//		String id;
-//		for(int i=0; i<4; i++)
-//			for(int j=2; j<=14; j++){
-//				id = colors[i] + String.valueOf(j);
-//				resourceId = context.getResources().getIdentifier(id, "drawable", "carddeckplatform.game");
-//				Bitmap frontImg = BitmapFactory.decodeResource(context.getResources(), resourceId);
-//				
-//				bitmaps.put(id, frontImg);
-//			}
-//		
-//		resourceId = context.getResources().getIdentifier("back", "drawable", "carddeckplatform.game");
-//		Bitmap frontImg = BitmapFactory.decodeResource(context.getResources(), resourceId);
-//		
-//		bitmaps.put("back", frontImg);
-//	}
-	
+	private void replaceBitmap(String bitmapName , Bitmap img){
+		bitmaps.remove(bitmapName);
+		bitmaps.put(bitmapName, img);
+	}
 	
 }

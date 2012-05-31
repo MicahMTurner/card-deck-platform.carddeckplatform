@@ -9,6 +9,7 @@ import java.util.UUID;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
+import android.graphics.Paint;
 import android.os.Handler;
 import android.view.SurfaceView;
 
@@ -22,6 +23,7 @@ public class GameEnvironment {
 	private PlayerInfo playerInfo;
 	private ConnectionType connectionType;	
 	private Handler handler;
+	private Paint paint;
 	
 	/*---Singleton implementation---*/
 	private static class GameEnvironmentHolder
@@ -44,8 +46,12 @@ public class GameEnvironment {
 		playerInfo = new PlayerInfo();
 		
 		handler = new Handler();
+		paint = new Paint();
 	}
 
+	public Paint getPaint(){
+		return paint;
+	}
 	
 	public Handler getHandler() {
 		return handler;

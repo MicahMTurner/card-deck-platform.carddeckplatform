@@ -188,13 +188,14 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		
 		// if the card is being carried by another player a hand and the name of the carrier would be drawn near the card's image.
         if(isCarried()){
-        	Paint paint = new Paint(); 		   
+        	Point absScale = MetricsConvertion.pointRelativeToPx(scale);
+        	Paint paint = GameEnvironment.get().getPaint();   
         	// draws the name of the carrier.
             paint.setColor(android.graphics.Color.BLACK); 
             paint.setTextSize(20); 
-            canvas.drawText(getCarrier(),getX()-25, getY()-20, paint);
+            canvas.drawText(getCarrier(),getX()-absScale.getX() / 2, getY()-absScale.getY() / 2, paint);
             // draws the hand.
-            canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.hand),getX()-30, getY()+20 , paint);
+            canvas.drawBitmap(BitmapHolder.get().getBitmap("hand"),getX()-absScale.getX(), getY() - absScale.getY()/2 , paint);
         } 
        
 	}

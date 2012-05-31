@@ -136,6 +136,8 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		// draggable.setCarrier(username);
 		// draggable.setLocation(780-x, 460-y);
 		synchronized (draggable) {
+			draggable.setCarried(true);
+			draggable.setCarrier(username);
 			draggable.setLocation(x, y);
 		}
 
@@ -146,6 +148,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		Draggable draggable = table.getDraggableById(id);
 		synchronized (draggable) {
 			// table.setFrontOrRear(draggable,Focus.FRONT);
+			draggable.setCarried(false);
 			draggable.setCarrier("");
 		}
 		redraw();

@@ -86,7 +86,7 @@ public class TcpHostFinder extends HostFinder {
 			try {
 				socket = new Socket();
 				SocketAddress sockaddr = new InetSocketAddress(intToIp(d.gateway,i), GameEnvironment.get().getTcpInfo().getIdPort());
-				socket.connect(sockaddr, 10);
+				socket.connect(sockaddr, 20);
 				System.out.println(intToIp(d.gateway,i) + " is reachable");
 				if(!socket.isConnected())
 					continue;
