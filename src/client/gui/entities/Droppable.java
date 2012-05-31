@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 import utils.Card;
@@ -13,7 +14,9 @@ import utils.Player;
 import utils.Point;
 import utils.Position;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import carddeckplatform.game.BitmapHolder;
 import client.controller.ClientController;
 
 public abstract class Droppable implements Serializable{
@@ -37,17 +40,25 @@ public abstract class Droppable implements Serializable{
 	//public Stack<GuiCard>guiCards=new Stack<GuiCard>(); 
 	//protected Stack<Card> cards = new Stack<Card>();
 	//protected ArrayList<Card> cards; 
-	//public abstract Shape getShape();
-	//protected transient Shape shape;
+	
+	public Shape getShape() {		
+		Point size = MetricsConvertion.pointRelativeToPx(this.scale);
+		return new Rectangle(getX() - (size.getX() / 2), getY() - (size.getY() / 2), size.getX() , size.getY());
+	}
+	
+	protected transient Shape shape;
 	protected int id;
-	protected Shape shape;
 	protected Position position;
-	protected abstract Shape getNewShapeInstance();
+
+	protected Point scale;
+	protected String image;
+	
 	public void onDrop(Player player,Droppable from, Card card){
 		from.removeCard(player,card);
 		//card.setCoord(getX(), getY());
 		ClientController.sendAPI().cardAdded(card, from.getId(),id,player);
 		addCard(player,card);
+
 		
 	}
 	public boolean isContain(float x,float y){
@@ -79,12 +90,20 @@ public abstract class Droppable implements Serializable{
 	public abstract AbstractList<Card> getCards();
 	public abstract void addCard(Player player,Card card);	
 	public abstract void removeCard(Player player,Card card);
-	public abstract void draw(Canvas canvas,Context context);
 	
-	public Droppable(int id,Position position){
+	public void draw(Canvas canvas,Context context){
+		Bitmap img = BitmapHolder.get().getBitmap(image);
+		canvas.drawBitmap(img,getX()-(img.getWidth() / 2),getY()-(img.getHeight() / 2),null);
+	}
+	
+	public Droppable(int id,Position position, Point scale){
 		this.id=id;
+		this.scale = scale;
 		this.position=position;
-		this.shape=getNewShapeInstance();
+		this.shape=getShape();
+		//this.cards=new ArrayList<Card>();		
+		//this.point=new Point(190,175);
+		//this.myId=IDMaker.getMaker().getId(position);
 	}
 
 	
@@ -97,15 +116,13 @@ public abstract class Droppable implements Serializable{
 	}
 	public abstract int cardsHolding();
 	public abstract boolean isEmpty();
-
 	public abstract void clear();
 	public int getId(){
 		return id;
 	}
+	
 	public void setPosition(Position relativePosition) {
-		this.position=relativePosition;
-		this.shape.setX(getX());
-		this.shape.setY(getY());
+	this.position=relativePosition;
 		
 	}
 

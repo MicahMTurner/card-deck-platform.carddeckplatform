@@ -12,6 +12,7 @@ import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.controller.ClientController;
 import IDmaker.IDMaker;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 
@@ -23,6 +24,10 @@ public abstract class Draggable implements Serializable{
 	protected int id;
 	protected boolean carried=false;
 	protected boolean inHand=false;
+	protected Point scale;
+	
+	protected String frontImg;
+	protected String backImg;
 	
 	public Draggable() {
 		this.id=IDMaker.getMaker().getId();

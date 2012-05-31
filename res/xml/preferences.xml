@@ -19,7 +19,15 @@
                         android:key="useBluetooth" />
         </PreferenceCategory>
         
-         
+        <PreferenceCategory
+                android:title="Live position">
+                <CheckBoxPreference
+                    
+                        android:title="Use live position"
+                        android:defaultValue="false"
+                        android:summary="If selected the application uses live position."
+                        android:key="useLivePosition" />
+        </PreferenceCategory>
         
         
 </PreferenceScreen>

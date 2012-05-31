@@ -1,9 +1,14 @@
 package carddeckplatform.game;
 
 import java.util.HashMap;
+
+import client.gui.entities.MetricsConvertion;
+
+import utils.Point;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 
 public class BitmapHolder {
 	private HashMap<String, Bitmap> bitmaps;
@@ -26,14 +31,41 @@ public class BitmapHolder {
 		this.bitmaps=new HashMap<String, Bitmap>();
 	}
 		
-	public Bitmap getBitmap(String bitmapName,Context context){
+	public Bitmap getBitmap(String bitmapName){
+		Context context = GameActivity.getContext();
 		Bitmap img=bitmaps.get(bitmapName);
-		if (img==null){			
-			int resourceId=context.getResources().getIdentifier(bitmapName, "drawable", "carddeckplatform.game");
-			img = BitmapFactory.decodeResource(context.getResources(), resourceId);
-			bitmaps.put(bitmapName, img);
+		try {
+			if (img==null){			
+				int resourceId=context.getResources().getIdentifier(bitmapName, "drawable", "carddeckplatform.game");
+				img = BitmapFactory.decodeResource(context.getResources(), resourceId);
+				bitmaps.put(bitmapName, img);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
+		
 		return img;
+	}
+	
+	public void scaleBitmap(String bitmapName, Point scale){
+		Matrix matrix = new Matrix();
+		Bitmap img = getBitmap(bitmapName);
+		
+		// convert scale to match the display size.
+		scale = MetricsConvertion.pointRelativeToPx(scale);
+		
+		
+		// the image wasn't found.
+		if(img==null)
+			return;
+		
+		Bitmap resizedBitmap;
+		matrix.postScale((float)scale.getX()/(float)img.getWidth(), (float)scale.getY()/(float)img.getHeight());
+		resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getWidth() , img.getHeight(), matrix, true);
+		
+		bitmaps.remove(bitmapName);
+		
+		bitmaps.put(bitmapName, resizedBitmap);
 	}
 	
 //	static public void load(Context context){
