@@ -16,6 +16,7 @@ import android.view.animation.OvershootInterpolator;
 import carddeckplatform.game.BitmapHolder;
 import carddeckplatform.game.R;
 import carddeckplatform.game.StaticFunctions;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
 import client.gui.entities.MetricsConvertion;
@@ -23,12 +24,13 @@ import client.gui.entities.MetricsConvertion;
 public abstract class Card extends Draggable implements Comparable<Card>{
 	
 	private CardEventsHandler eventsHandler;
-	private final String frontImg;
-	private final String backImg;
 	private boolean revealed;	
 	private Position.Player owner;
 	private Point coord;
 	protected float angle = 0;
+	
+	
+	
 //	private Paint paint;
 	
 	public Card(CardEventsHandler handler,String frontImg,String backImg) {
@@ -38,6 +40,8 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		this.frontImg= frontImg;
 		this.revealed=false;		
 		this.coord=new Point(0,0);
+		
+		
 	}
 	
 	@Override
@@ -154,9 +158,9 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		
 		Point p;
 		if(!isInHand()){
-			p = new Point(6,10);
+			p = scale;
 		}else{
-			p = new Point(9,15);
+			p = new Point((float)(scale.getX() * 1.5) , (float)(scale.getY() * 1.5));
 		}
 		
 		p = MetricsConvertion.pointRelativeToPx(p);
@@ -166,14 +170,14 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 //			resourceId=context.getResources().getIdentifier(frontImg, "drawable", "carddeckplatform.game");
 //			Bitmap frontImg = BitmapFactory.decodeResource(context.getResources(), resourceId);	
 			
-			img = BitmapHolder.get().getBitmap(frontImg,context);
+			img = BitmapHolder.get().getBitmap(frontImg);
 			
 			matrix.postScale((float)p.getX()/(float)img.getWidth(), (float)p.getY()/(float)img.getHeight());
 			resizedBitmap = Bitmap.createBitmap(img, 0, 0, img.getWidth() , img.getHeight(), matrix, true);
 
 		}else{
 			//resourceId=context.getResources().getIdentifier(backImg, "drawable", "carddeckplatform.game");
-			img = BitmapHolder.get().getBitmap(backImg,context);
+			img = BitmapHolder.get().getBitmap(backImg);
 //			int w = img.getWidth();
 //			int h = img.getHeight();
 			matrix.postScale((float)p.getX()/(float)img.getWidth(), (float)p.getY()/(float)img.getHeight());

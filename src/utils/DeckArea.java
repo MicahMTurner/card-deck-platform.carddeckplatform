@@ -13,7 +13,6 @@ import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 import IDmaker.IDMaker;
@@ -26,7 +25,7 @@ import client.gui.entities.MetricsConvertion;
 public class DeckArea extends Droppable{
 	
 	public DeckArea(Position.Button position) {
-		super(position.getId(),position);		
+		super(position.getId(),position, new Point(10,13));
 	}
 
 	//change to queue?
@@ -41,13 +40,6 @@ public class DeckArea extends Droppable{
 
 	public int getSize(){
 		return cards.size();
-	}
-	
-	
-	@Override
-	public Shape getNewShapeInstance() {
-		Point point =MetricsConvertion.pointRelativeToPx(new Point(getX(), getY()));
-		return new Circle(point.getX()+30, point.getY()+30, 30);
 	}
 
 	@Override
@@ -73,7 +65,7 @@ public class DeckArea extends Droppable{
 
 	@Override
 	public void draw(Canvas canvas, Context context) {
-		canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), 0x7f02002e),getX()-28,getY()-27,null);
+		
 	}
 
 //	@Override

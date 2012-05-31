@@ -9,11 +9,14 @@ import communication.messages.SwapRequestMessage;
 
 
 import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
-
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import carddeckplatform.game.BitmapHolder;
+import carddeckplatform.game.R;
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.controller.LivePosition;
@@ -35,7 +38,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 	
 	
 	public Player(PlayerInfo playerInfo,Position.Player globalPosition,int uniqueId, PlayerEventsHandler handler) {
-		super(uniqueId,Position.Player.BOTTOM);
+		super(uniqueId,Position.Player.BOTTOM, new Point(10,13));
 		this.playerInfo=playerInfo;		
 		this.globalPosition=globalPosition;
 		this.position=Position.Player.BOTTOM;	
@@ -43,6 +46,8 @@ public class Player extends Droppable implements  Comparable<Player>{
 		this.hand=new ArrayList<Card>();
 		this.myTurn=false;	
 		
+		this.image = "playerarea";
+		BitmapHolder.get().scaleBitmap(image, this.scale);
 	}
 	
 	public Position.Player getGlobalPosition() {
@@ -125,12 +130,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 			position=newPos;
 		}		
 	}
-	@Override
-	public Shape getNewShapeInstance() {		
-//		return 50;
-		Point point =MetricsConvertion.pointRelativeToPx(new Point(getX(), getY()));
-		return new Circle(point.getX()+50, point.getY()+50, 50);
-	}
+	
 	@Override
 	public void addCard(Player player, Card card) {
 		addCard(card);
@@ -139,11 +139,12 @@ public class Player extends Droppable implements  Comparable<Player>{
 	public void removeCard(Player player, Card card) {
 		removeCard(card);
 	}
-	@Override
-	public void draw(Canvas canvas, Context context) {
-		canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), 0x7f02002e),getX()-28,getY()-27,null);
-		
-	}
+//	@Override
+//	public void draw(Canvas canvas, Context context) {
+//		Bitmap img = BitmapHolder.get().getBitmap(image);
+//		canvas.drawBitmap(img,getX()-img.getWidth() / 2,getY()-img.getHeight() / 2,null);
+//		
+//	}
 
 	@Override
 	public ArrayList<Card> getCards() {		

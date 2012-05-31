@@ -4,6 +4,8 @@ import handlers.CardEventsHandler;
 
 import java.io.Serializable;
 
+import carddeckplatform.game.BitmapHolder;
+
 
 public  class StandartCard extends Card {
 	
@@ -30,6 +32,11 @@ public  class StandartCard extends Card {
 		super(handler,frontImg,backImg);
 		this.value=value;	
 		this.color=color;
+		this.scale = new Point(6,10);
+		
+//		BitmapHolder.get().scaleBitmap(frontImg, scale);
+//		BitmapHolder.get().scaleBitmap(backImg, scale);
+		
 	}
 	
 	public Color getColor() {
