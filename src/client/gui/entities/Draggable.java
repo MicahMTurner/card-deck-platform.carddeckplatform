@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 
+import utils.Card;
 import utils.Player;
 import utils.Point;
 
 import carddeckplatform.game.StaticFunctions;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.controller.ClientController;
+import client.gui.animations.OvershootAnimation;
 import IDmaker.IDMaker;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -62,7 +64,9 @@ public abstract class Draggable implements Serializable{
 		inHand = false;
 	}
 	public void invalidMove(){		
-			setLocation(prevCoord.getX(),prevCoord.getY());			
+//			setLocation(prevCoord.getX(),prevCoord.getY());	
+			new OvershootAnimation(prevCoord.getX(), prevCoord.getY(),(Card) this, 1000, false).execute(null);
+			
 			ClientController.sendAPI().dragMotion(GameEnvironment.get().getPlayerInfo().getUsername(), id, MetricsConvertion.pointPxToRelative(getCoord()));
 			//ClientController.sendAPI().endDragMotion(getMyId());			
 			//angle=0;			
@@ -84,6 +88,8 @@ public abstract class Draggable implements Serializable{
 	public abstract void setLocation(float x, float y);		
 	public abstract void setAngle(float angle);
 	public abstract float getAngle();
+	public abstract void moveTo(final Droppable source,final Droppable destination);
+	
 	public void setCarried(boolean carried) {
 		this.carried = carried;
 	}
@@ -109,7 +115,7 @@ public abstract class Draggable implements Serializable{
 		this.carrier="";
 		
 	}
-	public abstract void moveTo(final Droppable source,final Droppable destination, final boolean revealedWhileMoving, final boolean revealedAtEnd);
+	
 	
 	
 	

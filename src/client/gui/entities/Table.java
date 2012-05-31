@@ -156,6 +156,7 @@ public class Table {
 					answer=draggable;
 					break;
 				}
+				
 			}			
 		}
 		return answer;
@@ -163,10 +164,6 @@ public class Table {
 	
 	public Droppable getNearestDroppable(float x, float y){
 		for(Droppable d : droppables){
-//			double radius  = Math.sqrt( (double) (((d.getX()-x)*(d.getX()-x)) + (d.getY()-y)*(d.getY()-y)));
-//			if(radius <= d.getShape()){
-//				return d;
-//			}
 			if(d.isContain(x, y))
 				return d;
 		}

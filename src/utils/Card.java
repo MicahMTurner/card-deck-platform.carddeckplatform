@@ -17,6 +17,7 @@ import carddeckplatform.game.BitmapHolder;
 import carddeckplatform.game.R;
 import carddeckplatform.game.StaticFunctions;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
+import client.gui.animations.OvershootAnimation;
 import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
 import client.gui.entities.MetricsConvertion;
@@ -61,38 +62,38 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		coord.setY(y);
 	}
 	
-	public void moveTo(final Droppable source,final Droppable destination, final boolean revealedWhileMoving, final boolean revealedAtEnd) {
-		new Thread(new Runnable() {	
-			@Override
-			public void run() {
-				setRevealed(revealedWhileMoving);
-				float x = coord.getX();
-				float y = coord.getY();
-				final ArrayList<Point> vector = StaticFunctions.midLine((int)x, (int)y, (int)destination.getX(), (int)destination.getY());
-				try {
-        			Thread.sleep(1000);
-        		} catch (InterruptedException e) {			        			
-        			e.printStackTrace();
-        		}
-            	for(int i=0; i<vector.size(); i++){
-            		setRevealed(revealedWhileMoving);
-            		final int index = i;
-		
-            		try {
-            			Thread.sleep(10);
-            		} catch (InterruptedException e) {			            			
-            			e.printStackTrace();
-            		}					
-            		
-            		setCoord(vector.get(index).x, vector.get(index).y);
-            		setAngle(i*10);            		
-            	}
-            	setAngle(0);
-            	setRevealed(revealedAtEnd);	
-            	source.removeCard(null, Card.this);
-            	destination.addCard(null, Card.this);
-			}
-		}).start();
+	public void moveTo(final Droppable source,final Droppable destination) {
+//		new Thread(new Runnable() {	
+//			@Override
+//			public void run() {
+//				float x = coord.getX();
+//				float y = coord.getY();
+//				final ArrayList<Point> vector = StaticFunctions.midLine((int)x, (int)y, (int)destination.getX(), (int)destination.getY());
+//				try {
+//        			Thread.sleep(1000);
+//        		} catch (InterruptedException e) {			        			
+//        			e.printStackTrace();
+//        		}
+//            	for(int i=0; i<vector.size(); i++){
+//            		final int index = i;
+//		
+//            		try {
+//            			Thread.sleep(10);
+//            		} catch (InterruptedException e) {			            			
+//            			e.printStackTrace();
+//            		}					
+//            		
+//            		setCoord(vector.get(index).x, vector.get(index).y);
+//            		setAngle(i*10);            		
+//            	}
+//            	setAngle(0);
+//            	source.removeCard(null, Card.this);
+//            	destination.addCard(null, Card.this);
+//			}
+//		}).start();
+		float totalAnimDx=destination.getX()-getX();
+		float totalAnimDy=destination.getY()-getY();
+		new OvershootAnimation(source, destination, this, 1000, totalAnimDx, totalAnimDy, false).execute(null);
 	}
 	
 	

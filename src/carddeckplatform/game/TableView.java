@@ -18,6 +18,8 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.controller.ClientController;
+import client.gui.animations.FlipAnimation;
+import client.gui.animations.OvershootAnimation;
 import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
 import client.gui.entities.Table;
@@ -339,74 +341,74 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 
 	// events when touching the screen
 	public boolean onTouchEvent(MotionEvent event) {
-		 touchmanager.onTouchEvent(event);
+		touchmanager.onTouchEvent(event);
 
-//		int X = (int) event.getX();
-//		int Y = (int) event.getY();
-//		int eventAction = event.getAction();
-//		if (uiEnabled) {
-//			switch (eventAction) {
-//
-//			case MotionEvent.ACTION_DOWN: {
-//				draggableInHand = table.getNearestDraggable(X, Y);
-//
-//				if (draggableInHand != null) {
-//					// table.setFrontOrRear(draggableInHand, Focus.FRONT);
-//					if (draggableInHand.isMoveable()) {
-//						from = table.getNearestDroppable(X, Y);
-//						draggableInHand.onClick();
-//					} else {
-//						popToast("You cannot move this card");
-//						draggableInHand = null;
-//					}
-//				}
-//				break;
-//			}
-//			case MotionEvent.ACTION_MOVE: {
-//				if (draggableInHand != null) {
-//					draggableInHand.setLocation(X, Y);
-//					draggableInHand.onDrag();
-//				}
-//				break;
-//			}
-//			case MotionEvent.ACTION_UP: {
-//				if (draggableInHand != null) {
-//					draggableInHand.setLocation(X, Y);
-//					draggableInHand.onRelease();
-//
-//					Droppable droppable = table.getNearestDroppable(X, Y);
-//					if (droppable != null && from != null) {
-//						droppable.onDrop(ClientController.get().getMe(), from,
-//								((Card) draggableInHand));
-//
-//					} else {
-//						draggableInHand.invalidMove();
-//					}
-//					draggableInHand = null;
-//				}
-//
-//				// Droppable droppable2=table.getNearestDroppable(X, Y);
-//				// if (droppable2!=null){
-//				// droppable2.onClick();
-//
-//				// }
-//				break;
-//			}
-//			}// end if enabdles
-//		} else {
-//			// GUI is not enabled
-//
-//			popToast("It's not your turn now!!");
-//
-//		}
-//		if (draggableInHand != null) {
-//			int dragX = (int) draggableInHand.getX();
-//			int dragY = (int) draggableInHand.getY();
-//			Rect rect = new Rect(dragX - 200, dragY - 200, dragX + 200,
-//					dragY + 200);
-//			redraw(rect);
-//		} else
-//			redraw();
+		// int X = (int) event.getX();
+		// int Y = (int) event.getY();
+		// int eventAction = event.getAction();
+		// if (uiEnabled) {
+		// switch (eventAction) {
+		//
+		// case MotionEvent.ACTION_DOWN: {
+		// draggableInHand = table.getNearestDraggable(X, Y);
+		//
+		// if (draggableInHand != null) {
+		// // table.setFrontOrRear(draggableInHand, Focus.FRONT);
+		// if (draggableInHand.isMoveable()) {
+		// from = table.getNearestDroppable(X, Y);
+		// draggableInHand.onClick();
+		// } else {
+		// popToast("You cannot move this card");
+		// draggableInHand = null;
+		// }
+		// }
+		// break;
+		// }
+		// case MotionEvent.ACTION_MOVE: {
+		// if (draggableInHand != null) {
+		// draggableInHand.setLocation(X, Y);
+		// draggableInHand.onDrag();
+		// }
+		// break;
+		// }
+		// case MotionEvent.ACTION_UP: {
+		// if (draggableInHand != null) {
+		// draggableInHand.setLocation(X, Y);
+		// draggableInHand.onRelease();
+		//
+		// Droppable droppable = table.getNearestDroppable(X, Y);
+		// if (droppable != null && from != null) {
+		// droppable.onDrop(ClientController.get().getMe(), from,
+		// ((Card) draggableInHand));
+		//
+		// } else {
+		// draggableInHand.invalidMove();
+		// }
+		// draggableInHand = null;
+		// }
+		//
+		// // Droppable droppable2=table.getNearestDroppable(X, Y);
+		// // if (droppable2!=null){
+		// // droppable2.onClick();
+		//
+		// // }
+		// break;
+		// }
+		// }// end if enabdles
+		// } else {
+		// // GUI is not enabled
+		//
+		// popToast("It's not your turn now!!");
+		//
+		// }
+		// if (draggableInHand != null) {
+		// int dragX = (int) draggableInHand.getX();
+		// int dragY = (int) draggableInHand.getY();
+		// Rect rect = new Rect(dragX - 200, dragY - 200, dragX + 200,
+		// dragY + 200);
+		// redraw(rect);
+		// } else
+		// redraw();
 
 		return true;
 	}
@@ -468,19 +470,19 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		Droppable destination = table.getDroppableById(to);
 		Droppable source = table.getDroppableById(from);
 		for (Card card : cards) {
-//			if (from == -1) {
-//				// new card, create it
-//				//System.out.println(GameStatus.username+": card id: "+card.getId());
-//				addNewDraggable(card, destination);
-//
-//			} else {
-				// move card from one zone to another
-				source.removeCard(byWhom, card);
-				destination.onCardAdded(byWhom, card);
-				redraw();
-				// drawMovement(cards, destination.getPoint(), 1000, 10,
-				// revealWhileMoving, revealAtEnd);
-			//}
+			// if (from == -1) {
+			// // new card, create it
+			// //System.out.println(GameStatus.username+": card id: "+card.getId());
+			// addNewDraggable(card, destination);
+			//
+			// } else {
+			// move card from one zone to another
+			source.removeCard(byWhom, card);
+			destination.onCardAdded(byWhom, card);
+			redraw();
+			// drawMovement(cards, destination.getPoint(), 1000, 10,
+			// revealWhileMoving, revealAtEnd);
+			// }
 		}
 	}
 
@@ -642,19 +644,30 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 				final float totalDy = (distanceTimeFactor * velocityY / 2);
 				draggableInHand.setLocation(x, y);
 				draggableInHand.onRelease();
-				
+
 				Droppable droppable = table.getNearestDroppable(
 						draggableInHand.getX(), draggableInHand.getY(), x
 								+ totalDx, y + totalDy);
 
 				if (droppable != null && from != null) {
-					System.out.println(draggableInHand.getX()+"PP"+draggableInHand.getY());
-					System.out.println(droppable.getX()+"PP"+droppable.getY());
-					float totalAnimDx=droppable.getX()-draggableInHand.getX();
-					float totalAnimDy=droppable.getY()-draggableInHand.getY();
-					onAnimateMove(from, droppable, true, true, totalAnimDx, totalAnimDy, (long) (2000 * distanceTimeFactor), (Card)draggableInHand);
-					droppable.onDrop(ClientController.get().getMe(), from,
-							((Card) draggableInHand));
+					System.out.println(draggableInHand.getX() + "PP"
+							+ draggableInHand.getY());
+					System.out.println(droppable.getX() + "PP"
+							+ droppable.getY());
+					float totalAnimDx = droppable.getX()
+							- draggableInHand.getX();
+					float totalAnimDy = droppable.getY()
+							- draggableInHand.getY();
+					
+					new OvershootAnimation(from, droppable,(Card) draggableInHand, (long)1000, totalAnimDx, totalAnimDy, true).execute(null);
+//					new FlipAnimation(from, droppable, (Card)draggableInHand, true).execute(null);
+					
+					
+//					onAnimateMove(from, droppable, true, true, totalAnimDx,
+//							totalAnimDy, (long) (2000 * distanceTimeFactor),
+//							(Card) draggableInHand);
+//					droppable.onDrop(ClientController.get().getMe(), from,
+//							((Card) draggableInHand));
 					this.from = null;
 
 				} else {
@@ -722,6 +735,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		// System.out.println(scale);
 		return true;
 	}
+
 	public void onAnimateMove(final Droppable source,
 			final Droppable destination, final boolean revealedWhileMoving,
 			final boolean revealedAtEnd, final float totalAnimDx,
@@ -737,16 +751,17 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 				long curTime = System.currentTimeMillis();
 				float percentTime = (float) (curTime - startTime)
 						/ (float) (endTime - startTime);
-				float percentDistance = animateInterpolator	.getInterpolation(percentTime);
-				float curDx = percentDistance * totalAnimDx+card.getX();
+				float percentDistance = animateInterpolator
+						.getInterpolation(percentTime);
+				float curDx = percentDistance * totalAnimDx + card.getX();
 				float curDy = percentDistance * totalAnimDy;
 				card.setRevealed(revealedWhileMoving);
-				float x=card.getX();
-				float y=card.getY();
-				card.setLocation(card.getX() + curDx, card.getY()+y);
+				float x = card.getX();
+				float y = card.getY();
+				card.setLocation(card.getX() + curDx, card.getY() + y);
 
-				while (percentTime < 1.0 ) {
-					System.out.println(card.getX()+"::"+card.getY());
+				while (percentTime < 1.0) {
+					System.out.println(card.getX() + "::" + card.getY());
 					curTime = System.currentTimeMillis();
 					percentTime = (float) (curTime - startTime)
 							/ (float) (endTime - startTime);
@@ -754,7 +769,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 							.getInterpolation(percentTime);
 					curDx = percentDistance * totalAnimDx;
 					curDy = percentDistance * totalAnimDy;
-					card.setLocation(x+curDx, y+curDy);
+					card.setLocation(x + curDx, y + curDy);
 					try {
 						Thread.sleep(4);
 					} catch (InterruptedException e) {
@@ -774,7 +789,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 
 	}
 
-	public Droppable getDroppableByPosition(Position position) {		
+	public Droppable getDroppableByPosition(Position position) {
 		return table.getDroppableByPosition(position);
 	}
 }

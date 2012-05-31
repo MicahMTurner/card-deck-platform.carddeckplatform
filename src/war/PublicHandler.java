@@ -66,7 +66,8 @@ public class PublicHandler implements PublicEventsHandler{
 
 	private void getCards(Public publicArea, Player player){
 		for (StandartCard card : ((ArrayList<StandartCard>)((ArrayList)publicArea.getCards()))){
-			card.moveTo(publicArea,player,true,false);
+			card.moveTo(publicArea,player);
+			
 		}
 		//publicArea.clear();
 	}
