@@ -28,7 +28,7 @@ public class TopLineLayout extends DroppableLayout {
 		for(Card c : droppable.getCards()){
 			//c.setLocation(newLocation.getX(), newLocation.getY());
 			
-			animate(c , newLocation, 180);
+			animate(c , newLocation, 180,1000);
 			newLocation.setX(newLocation.getX() + step);
 		}
 		

@@ -56,7 +56,7 @@ public class OvershootAnimation extends AsyncTask<Void, Void, Void> {
 					/ (float) (endTime - startTime);
 			float percentDistance = animateInterpolator
 					.getInterpolation(percentTime);
-			float curDx = percentDistance * totalAnimDx + card.getX();
+			float curDx = percentDistance * totalAnimDx;
 			float curDy = percentDistance * totalAnimDy;
 			float x = card.getX();
 			float y = card.getY();
