@@ -80,7 +80,7 @@ public class OvershootAnimation extends AsyncTask<Void, Void, Void> {
 				}
 
 			}
-			card.setLocation(x, y);
+			card.setLocation(destX, destY);
 //			source.removeCard(null, card);
 //			destination.addCard(null, card);
 			System.out.println("END");
