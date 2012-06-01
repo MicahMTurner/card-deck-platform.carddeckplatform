@@ -13,6 +13,7 @@ import utils.Card;
 import utils.Player;
 import utils.Point;
 import utils.Position;
+import utils.droppableLayouts.DroppableLayout;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -47,7 +48,7 @@ public abstract class Droppable implements Serializable{
 
 	protected Point scale;
 	protected String image;
-	
+	protected DroppableLayout droppableLayout;
 	
 	public Shape getShape() {		
 		if(shape==null){
