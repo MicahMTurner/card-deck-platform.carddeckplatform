@@ -46,7 +46,7 @@ public abstract class Droppable implements Serializable {
 	protected Position position;
 	protected Point scale;
 	protected String image;
-	protected DroppableLayout droppableLayout;
+	protected transient DroppableLayout droppableLayout;
 
 	public Shape getShape() {
 		if (shape == null) {
