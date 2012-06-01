@@ -11,6 +11,8 @@ import communication.messages.SwapRequestMessage;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
+
+import utils.droppableLayouts.BottomLineLayout;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -47,6 +49,8 @@ public class Player extends Droppable implements  Comparable<Player>{
 		this.myTurn=false;	
 		
 		this.image = "playerarea";
+		
+		this.droppableLayout = new BottomLineLayout(this);
 		//BitmapHolder.get().scaleBitmap(image, this.scale);
 	}
 	
