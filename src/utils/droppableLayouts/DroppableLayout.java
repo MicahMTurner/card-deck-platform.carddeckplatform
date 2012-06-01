@@ -1,6 +1,7 @@
 package utils.droppableLayouts;
 
 import java.io.Serializable;
+import java.util.AbstractList;
 
 import logic.client.Game;
 
@@ -15,73 +16,127 @@ import utils.Card;
 import utils.Point;
 
 public abstract class DroppableLayout implements Serializable {
-	public enum Orientation{HORIZONTAL, VERTICAL}
-	
+	public enum Orientation {
+		HORIZONTAL, VERTICAL
+	}
+
 	protected Orientation orientation;
 	protected Droppable droppable;
-	
-	
-	public DroppableLayout(Droppable droppable){
+	AnimationRunnable animationRunnable=null;
+	public DroppableLayout(Droppable droppable) {
 		this.orientation = orientation;
 		this.droppable = droppable;
 	}
-	
-	public abstract void rearrange();
-	public void animate(final Card card, final Point dest, final float finalAngle,final long duration) {
-		
-		GameEnvironment.get().getHandler().post(new Runnable() {
-			
-			@Override
-			public void run() {
-				Interpolator animateInterpolator = new AccelerateDecelerateInterpolator();
-				float totalAnimDx=dest.getX()-card.getX();
-				float totalAnimDy=dest.getY()-card.getY();
-				float totalAngle=(float) (finalAngle-card.getAngle());
-				long startTime = System.currentTimeMillis();
-				long endTime = startTime + duration;
-				long curTime = System.currentTimeMillis();
-				
-				float percentTime = (float) (curTime - startTime)
-						/ (float) (endTime - startTime);
-				float percentDistance = animateInterpolator
-						.getInterpolation(percentTime);
-				float curDx = percentDistance * totalAnimDx;
-				float curDy = percentDistance * totalAnimDy;
-				float curDAngle=percentDistance *totalAngle;
-				
-				//save the initial value
-				float initialAngle=card.getAngle();
-				float x = card.getX();
-				float y = card.getY();
-				card.setLocation(card.getX() + curDx, card.getY() + y);
-				card.setAngle(initialAngle+curDAngle);
-				while (percentTime < 1.0) {
-					System.out.println(card.getX() + "::" + card.getY());
-					curTime = System.currentTimeMillis();
-					percentTime = (float) (curTime - startTime)
-							/ (float) (endTime - startTime);
-					percentDistance = animateInterpolator
-							.getInterpolation(percentTime);
-					curDx = percentDistance * totalAnimDx;
-					curDy = percentDistance * totalAnimDy;
-					curDAngle=percentDistance *totalAngle;
-					card.setLocation(x + curDx, y + curDy);
-					curDAngle=percentDistance *totalAngle;
-					try {
-						Thread.sleep(4);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 
-				}
-				card.setLocation(dest.getX(), dest.getY());
-				card.setAngle(finalAngle);
-				System.out.println("END");
-				
-				
-			}
-		});
+	class AnimationRunnable implements Runnable {
+
+		public AnimationRunnable(float[][] animationArgs,
+				AbstractList<Card> abstractList, long duration) {
+			this.animationArgs = animationArgs;
+			this.abstractList = abstractList;
+			this.duration = duration;
+		}
 		
+		public void stopAnimation(){
+			running=false;
+			
+		}
+		
+		boolean running=true;
+		float[][] animationArgs;
+		AbstractList<Card> abstractList;
+		long duration;
+
+		@Override
+		public void run() {
+			// save the initial value
+			Interpolator animateInterpolator = new AccelerateDecelerateInterpolator();
+			System.out.println("rearrange:" + animationArgs[0].length);
+			float[] totalDx = new float[animationArgs[0].length];
+			float[] totalDy = new float[animationArgs[0].length];
+			float[] totalDAngle = new float[animationArgs[0].length];
+			float[][] reserved = new float[3][animationArgs[0].length];
+
+			for (int i = 0; i < totalDx.length; i++) {
+				totalDx[i] = animationArgs[0][i] - abstractList.get(i).getX();
+				totalDy[i] = animationArgs[1][i] - abstractList.get(i).getY();
+				totalDAngle[i] = animationArgs[2][i]
+						- abstractList.get(i).getAngle();
+
+				Card card = abstractList.get(i);
+				reserved[0][i] = card.getX();
+				reserved[1][i] = card.getY();
+				reserved[2][i] = card.getAngle();
+			}
+
+			long startTime = System.currentTimeMillis();
+			long endTime = startTime + duration;
+			long curTime = System.currentTimeMillis();
+
+			float percentTime = (float) (curTime - startTime)
+					/ (float) (endTime - startTime);
+			float percentDistance = animateInterpolator
+					.getInterpolation(percentTime);
+
+			float[] curDx = new float[animationArgs[0].length];
+			float[] curDy = new float[animationArgs[0].length];
+			float[] curDAngle = new float[animationArgs[0].length];
+			for (int i = 0; i < totalDx.length; i++) {
+				curDx[i] = percentDistance * totalDx[i];
+				curDy[i] = percentDistance * totalDy[i];
+				curDAngle[i] = percentDistance * totalDAngle[i];
+
+			}
+			for (int i = 0; i < totalDx.length; i++) {
+				abstractList.get(i).setLocation(reserved[0][i] + curDx[i],
+						reserved[1][i] + curDy[i]);
+				abstractList.get(i).setAngle(reserved[2][i] + curDAngle[i]);
+			}
+			while (percentTime < 1.0 && running) {
+				curTime = System.currentTimeMillis();
+				percentTime = (float) (curTime - startTime)
+						/ (float) (endTime - startTime);
+				percentDistance = animateInterpolator
+						.getInterpolation(percentTime);
+
+				for (int i = 0; i < totalDx.length; i++) {
+					curDx[i] = percentDistance * totalDx[i];
+					curDy[i] = percentDistance * totalDy[i];
+					curDAngle[i] = percentDistance * totalDAngle[i];
+					Card card = abstractList.get(i);
+					card.setLocation(reserved[0][i] + curDx[i], reserved[1][i]
+							+ curDy[i]);
+					card.setAngle(reserved[2][i] + curDAngle[i]);
+				}
+
+			}
+			for (int i = 0; i < animationArgs[0].length; i++) {
+				Card card = abstractList.get(i);
+				card.setLocation(animationArgs[0][i], animationArgs[1][i]);
+				card.setAngle(animationArgs[2][i]);
+			}
+		}
+
+	}
+
+	public abstract void rearrange();
+	
+	public void stopAnimation(){
+		
+		if (this.animationRunnable!=null)
+			animationRunnable.stopAnimation();
+	}
+	
+	
+	public void animate(AbstractList<Card> abstractList,
+			float[][] animationArgs, long duration) {
+		
+		if(animationRunnable!=null)
+			animationRunnable.stopAnimation();
+		
+		this.animationRunnable= new AnimationRunnable(animationArgs,abstractList,duration);
+		 GameEnvironment.get().getHandler().post(animationRunnable);
+
+
 	}
 }

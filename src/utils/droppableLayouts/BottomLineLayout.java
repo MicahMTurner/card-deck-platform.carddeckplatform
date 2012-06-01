@@ -14,28 +14,25 @@ public class BottomLineLayout extends DroppableLayout {
 
 	@Override
 	public void rearrange() {
-		// TODO Auto-generated method stub
+		int numberOfCards = droppable.getCards().size();
+		if(numberOfCards==0)
+			return;
 		Point newLocation=null;
 		Point location = new Point(droppable.getX() , droppable.getY());
-		int numberOfCards = droppable.getCards().size();
+		float[][] animationArgs=new float[3][numberOfCards];
+		
 		
 		// gets the step that each card would move.
-		float step = MetricsConvertion.pointRelativeToPx(new Point(7 , 0)).getX();
-		if(numberOfCards>0)
-			newLocation = new Point((int)(location.getX() - step * numberOfCards/2) , location.getY());
+		float step = MetricsConvertion.pointRelativeToPx(new Point(3 , 0)).getX();
 		
-		System.out.println("BottomLineLayout.rearrange()");
-		for(Card c : droppable.getCards()){
-			//c.setLocation(newLocation.getX(), newLocation.getY());
-			
-			animate(c , newLocation, 0,1000);
+		newLocation = new Point((int)(location.getX() - step * numberOfCards/2) , location.getY());
+		
+		for(int i=0;i<numberOfCards;i++){
+			animationArgs[0][i]=newLocation.getX();
+			animationArgs[1][i]=newLocation.getY();
+			animationArgs[2][i]=0;
 			newLocation.setX(newLocation.getX() + step);
-			
 		}
-		for (Card c : droppable.getCards()) {
-			
-			System.out.println(c.getX());
-		}
-		System.out.println("BottomLineLayout.rearrange()");
+		animate(droppable.getCards() ,animationArgs,1000);
 	}
 }
