@@ -20,18 +20,22 @@ public class BottomLineLayout extends DroppableLayout {
 		int numberOfCards = droppable.getCards().size();
 		
 		// gets the step that each card would move.
-		float step = MetricsConvertion.pointRelativeToPx(new Point(3 , 0)).getX();
+		float step = MetricsConvertion.pointRelativeToPx(new Point(7 , 0)).getX();
 		if(numberOfCards>0)
 			newLocation = new Point((int)(location.getX() - step * numberOfCards/2) , location.getY());
 		
-		
+		System.out.println("BottomLineLayout.rearrange()");
 		for(Card c : droppable.getCards()){
 			//c.setLocation(newLocation.getX(), newLocation.getY());
 			
-			animate(c , newLocation, 0);
+			animate(c , newLocation, 0,1000);
 			newLocation.setX(newLocation.getX() + step);
+			
 		}
-		
-		
+		for (Card c : droppable.getCards()) {
+			
+			System.out.println(c.getX());
+		}
+		System.out.println("BottomLineLayout.rearrange()");
 	}
 }

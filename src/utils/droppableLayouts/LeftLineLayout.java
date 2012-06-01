@@ -28,7 +28,7 @@ public class LeftLineLayout extends DroppableLayout {
 		for(Card c : droppable.getCards()){
 			//c.setLocation(newLocation.getX(), newLocation.getY());
 			
-			animate(c , newLocation, 90);
+			animate(c , newLocation, 90,1000);
 			newLocation.setY(newLocation.getY() + step);
 		}
 	}
