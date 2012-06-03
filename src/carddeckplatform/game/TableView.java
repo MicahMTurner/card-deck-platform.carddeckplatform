@@ -1,6 +1,7 @@
 package carddeckplatform.game;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import utils.Card;
 import utils.Player;
@@ -610,6 +611,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	public boolean onDown(MotionEvent event) {
 		float X = event.getX();
 		float Y = event.getY();
+		System.out.println("TableView.onDown()");
 		if (uiEnabled) {
 			draggableInHand = table.getNearestDraggable(X, Y);
 			if (draggableInHand != null) {
@@ -649,24 +651,26 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 						draggableInHand.getX(), draggableInHand.getY(), x
 								+ totalDx, y + totalDy);
 
-				if (droppable != null && from != null) {
+				if (droppable != null && from != null && from!=droppable) {
+					
+					
+					
+					
 					float totalAnimDx = droppable.getX()
 							- draggableInHand.getX();
 					float totalAnimDy = droppable.getY()
 							- draggableInHand.getY();
-					
-					new OvershootAnimation(from, droppable,(Card) draggableInHand, (long)1000, totalAnimDx, totalAnimDy, true).execute();
-//					new FlipAnimation(from, droppable, (Card)draggableInHand, true).execute(null);
-					
-					
-//					onAnimateMove(from, droppable, true, true, totalAnimDx,
-//							totalAnimDy, (long) (2000 * distanceTimeFactor),
-//							(Card) draggableInHand);
-//					droppable.onDrop(ClientController.get().getMe(), from,
-//							((Card) draggableInHand));
+					System.out.println("animating");
+					new OvershootAnimation(from, droppable,
+							(Card) draggableInHand, (long) 1000, totalAnimDx,
+							totalAnimDy, true).execute();
 					this.from = null;
 
-				} else {
+				}else if(from==droppable){
+					//dont do anything cause rearrange is made at onSingleTapUp method
+					
+				} 
+				else {
 					draggableInHand.invalidMove();
 				}
 				draggableInHand = null;
@@ -688,6 +692,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 			float arg3) {
 		float X = e2.getX();
 		float Y = e2.getY();
+		System.out.println("TableView.onScroll()");
 		if (uiEnabled) {
 			if (draggableInHand != null) {
 				draggableInHand.setLocation(X, Y);
@@ -702,8 +707,24 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 
 	@Override
 	public boolean onSingleTapUp(MotionEvent event) {
-		// TODO Auto-generated method stub
 		System.out.println("TableView.onSingleTapUp()");
+		float x = event.getX();
+		float y = event.getY();
+		Draggable draggable = table.getNearestDraggable(x, y);
+		System.out.println("draggable"+draggable);
+		if (draggable != null) {
+				Droppable droppable = table.getNearestDroppable(x,y);
+				int index=droppable.indexOfDraggabale(draggable);
+				System.out.println("index:"+index);
+				if(index==-1)
+					return true;
+				droppable.rearrange(index);
+				
+		}
+		
+		
+		
+		
 		return true;
 	}
 
@@ -731,8 +752,6 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		// System.out.println(scale);
 		return true;
 	}
-
-	
 
 	public Droppable getDroppableByPosition(Position position) {
 		return table.getDroppableByPosition(position);

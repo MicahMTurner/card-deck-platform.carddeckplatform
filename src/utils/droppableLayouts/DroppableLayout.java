@@ -30,46 +30,46 @@ public abstract class DroppableLayout implements Serializable {
 		this.orientation = orientation;
 		this.droppable = droppable;
 	}
-	protected float[][] shift(float[][] animationArgs,float x,float y){
+
+	protected float[][] shift(float[][] animationArgs, float x, float y) {
 		for (int i = 0; i < animationArgs[0].length; i++) {
-			animationArgs[0][i]=animationArgs[0][i]+x;
-			animationArgs[1][i]=animationArgs[1][i]+y;
+			animationArgs[0][i] = animationArgs[0][i] + x;
+			animationArgs[1][i] = animationArgs[1][i] + y;
 		}
 		return animationArgs;
-		
-		
+
 	}
-	
-	
-	
-	
+
 	protected float[][] normalizePosition(float[][] animationArgs, float width,
 			float height) {
-		float sumX = 0;
-		float sumY = 0;
 		int length = animationArgs[0].length;
-		// ma
-//		for (int i = 0; i < length; i++) {
-//			sumX += animationArgs[0][i];
-//			sumY += animationArgs[1][i];
-//		}
-		// making accumulative array
-		for (int i = 1; i < length; i++) {
-			animationArgs[0][i] = animationArgs[0][i] + animationArgs[0][i - 1];
-			// animationArgs[1][i]=animationArgs[1][i]+animationArgs[1][i-1];
-		}
-
-		if (sumX != 0)
-			for (int i = 0; i < length; i++) {
-				animationArgs[0][i] = (animationArgs[0][i] / sumX) * width;
-						
-				// if(sumY!=0)
-				// animationArgs[1][i]=animationArgs[1][i]/sumY*height+droppable.getY();
-			}
+		if (length == 0)
+			return animationArgs;
+		float maxX = animationArgs[0][0];
+		float maxY = animationArgs[1][0];
+		float minX = animationArgs[0][0];
+		float minY = animationArgs[1][0];
 		
-		for (int i = 0; i < animationArgs[0].length; i++) {
-			System.out.println("blablaba:"+animationArgs[0][i]);
+		for (int i = 0; i < length; i++) {
+			if (animationArgs[0][i] > maxX)
+				maxX = animationArgs[0][i];
+			if (animationArgs[1][i] > maxY)
+				maxY = animationArgs[1][i];
+			if (animationArgs[0][i] < minX)
+				minX = animationArgs[0][i];
+			if (animationArgs[1][i] < minY)
+				minY = animationArgs[1][i];
+
 		}
+		if ((maxX-minX) != 0)
+			for (int i = 0; i < length; i++) {
+				animationArgs[0][i]=(animationArgs[0][i]-minX)/(maxX-minX)*width;
+			}
+		if ((maxY-minY) != 0)
+			for (int i = 0; i < length; i++) {
+				animationArgs[1][i]=(animationArgs[1][i]-minY)/(maxY-minY)*height;
+			}
+
 		return animationArgs;
 
 	}
@@ -174,6 +174,7 @@ public abstract class DroppableLayout implements Serializable {
 	public void animate(AbstractList<Card> abstractList,
 			float[][] animationArgs, long duration) {
 
+		
 		if (animationRunnable != null)
 			animationRunnable.stopAnimation();
 

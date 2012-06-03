@@ -62,8 +62,7 @@ public abstract class Droppable implements Serializable {
 		// card.setCoord(getX(), getY());
 		ClientController.sendAPI().cardAdded(card, from.getId(), id, player);
 		addCard(player, card);
-		if (droppableLayout != null)
-			droppableLayout.rearrange(2,getShape().getWidth(),getShape().getHeight());
+		rearrange(0);
 
 	}
 
@@ -88,6 +87,12 @@ public abstract class Droppable implements Serializable {
 
 	public Position getPosition() {
 		return position;
+	}
+
+	public int indexOfDraggabale(Draggable draggable) {
+
+		return getCards().indexOf(draggable);
+
 	}
 
 	public void onCardAdded(Player byWhom, Card card) {
@@ -144,6 +149,13 @@ public abstract class Droppable implements Serializable {
 
 	public float getY() {
 		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();
+	}
+
+	public void rearrange(int index) {
+		if (droppableLayout != null)
+			droppableLayout.rearrange(index, getShape().getWidth(), getShape()
+					.getHeight());
+
 	}
 
 	public abstract int cardsHolding();
