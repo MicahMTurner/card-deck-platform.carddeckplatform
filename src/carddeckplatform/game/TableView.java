@@ -458,12 +458,12 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	// return table.getDraggableById(id);
 	// }
 
-	public void moveCard(Card card, int from, int to, Player byWhom) {
+	public void moveCard(Card card, int from, int to, int byWhomId) {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		System.out.println("card moved: " + card.getId());
 		cards.add(((Card) (table.getDraggableById(card.getId()))));
 		// cards.add(card);
-		moveCards(cards, from, to, byWhom);
+		moveCards(cards, from, to, (Player)table.getDroppableById(byWhomId));
 	}
 
 	public void moveCards(ArrayList<Card> cards, int from, int to, Player byWhom) {
@@ -502,6 +502,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	public void dealCards(ArrayList<Card> cards, int to) {
 		Droppable destination = table.getDroppableById(to);
 		for (Card card : cards) {
+			card.setOwner(destination.getPosition());
 			addNewDraggable(card, destination);
 		}
 	}

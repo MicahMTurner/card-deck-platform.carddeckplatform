@@ -100,7 +100,7 @@ public class AutoHide implements SensorEventListener {
         	 
     	    	// System.out.println("hide");
     	    	 
-    	    	 ArrayList<Card>myCards=ClientController.get().getMe().getCards();
+    	    	 ArrayList<Card>myCards=(ArrayList<Card>) ClientController.get().getMe().getCards();
     	    	 cardsInHand=myCards.size();
     	    	 //angel is almost horizontal, hide your cards
     	    	 for (Card card : myCards){

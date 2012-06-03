@@ -69,18 +69,18 @@ public class Player extends Droppable implements  Comparable<Player>{
 	public int getId() {
 		return id;
 	}
-	public void addCard(Card card) {
-		card.setOwner((Position.Player)position);		
-		hand.add(card);		
-		handler.onCardAdded(this, card);		
-	}
+	
 	
 //	public void setCoord(Point coord) {
 //		this.coord = coord;
 //	}
-	private void removeCard(Card card) {
-		hand.remove(card);
-		handler.onCardRemoved(this, card);
+	private boolean removeCard(Card card) {
+		boolean answer=handler.onCardRemoved(this, card);
+		if (answer){
+			hand.remove(card);
+		}
+		return answer;
+		
 		
 	}
 	
@@ -97,8 +97,10 @@ public class Player extends Droppable implements  Comparable<Player>{
 		ClientController.get().enableUi();
 	}
 	public void endTurn(){
-		myTurn=false;		
-		ClientController.sendAPI().endTurn(globalPosition);
+		if (myTurn!=false){
+			myTurn=false;		
+			ClientController.sendAPI().endTurn(globalPosition);
+		}
 	}
 	public void deltCard(Card card) {
 		card.setOwner((Position.Player)position);
@@ -136,12 +138,28 @@ public class Player extends Droppable implements  Comparable<Player>{
 	}
 	
 	@Override
-	public void addCard(Player player, Card card) {
-		addCard(card);
+	public boolean addCard(Player player, Card card) {
+		boolean answer=handler.onCardAdded(this, card);
+		if (player==null){
+			answer=true;
+		}
+		if (answer){
+			card.setOwner((Position.Player)position);		
+			hand.add(card);
+		}
+		return answer;
 	}
+//	public boolean addCard(Card card) {
+//		
+//		if (answer){
+//			card.setOwner((Position.Player)position);		
+//			hand.add(card);
+//		}
+//		return answer; 		
+//	}
 	@Override
-	public void removeCard(Player player, Card card) {
-		removeCard(card);
+	public boolean removeCard(Player player, Card card) {
+		return removeCard(card);
 	}
 //	@Override
 //	public void draw(Canvas canvas, Context context) {
@@ -151,7 +169,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 //	}
 
 	@Override
-	public ArrayList<Card> getCards() {		
+	public ArrayList<Card> getMyCards() {		
 		return hand;
 	}
 

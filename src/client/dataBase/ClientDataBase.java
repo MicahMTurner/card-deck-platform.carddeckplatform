@@ -45,10 +45,8 @@ public class ClientDataBase {
 	 * factory
 	 */
 	public Game getGame(String gameName){
-		//return games.get(gameName);
-		//return loader.LoadPlugin(gameName);
-		return new FreePlay();
-		//return new War();
+		return games.get(gameName);
+		//return loader.LoadPlugin(gameName);		
 	}
 	
 	public void addGame(String gameId){

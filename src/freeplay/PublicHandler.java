@@ -9,16 +9,14 @@ public class PublicHandler implements PublicEventsHandler{
 
 	@Override
 	public boolean onCardAdded(Public publicZone, Player player, Card card) {
-		// TODO Auto-generated method stub
 		card.reveal();
-		return false;
+		return true;
 	}
 
 	@Override
-	public boolean onCardRemoved(Public publicZone, Player player, Card card) {
-		// TODO Auto-generated method stub
+	public boolean onCardRemoved(Public publicZone, Player player, Card card) {		
 		card.hide();
-		return false;
+		return true;
 	}
 
 	@Override
