@@ -22,10 +22,56 @@ public abstract class DroppableLayout implements Serializable {
 
 	protected Orientation orientation;
 	protected Droppable droppable;
-	AnimationRunnable animationRunnable=null;
+	AnimationRunnable animationRunnable = null;
+
+	public abstract void rearrange(int index, float width, float height);
+
 	public DroppableLayout(Droppable droppable) {
 		this.orientation = orientation;
 		this.droppable = droppable;
+	}
+	protected float[][] shift(float[][] animationArgs,float x,float y){
+		for (int i = 0; i < animationArgs[0].length; i++) {
+			animationArgs[0][i]=animationArgs[0][i]+x;
+			animationArgs[1][i]=animationArgs[1][i]+y;
+		}
+		return animationArgs;
+		
+		
+	}
+	
+	
+	
+	
+	protected float[][] normalizePosition(float[][] animationArgs, float width,
+			float height) {
+		float sumX = 0;
+		float sumY = 0;
+		int length = animationArgs[0].length;
+		// ma
+//		for (int i = 0; i < length; i++) {
+//			sumX += animationArgs[0][i];
+//			sumY += animationArgs[1][i];
+//		}
+		// making accumulative array
+		for (int i = 1; i < length; i++) {
+			animationArgs[0][i] = animationArgs[0][i] + animationArgs[0][i - 1];
+			// animationArgs[1][i]=animationArgs[1][i]+animationArgs[1][i-1];
+		}
+
+		if (sumX != 0)
+			for (int i = 0; i < length; i++) {
+				animationArgs[0][i] = (animationArgs[0][i] / sumX) * width;
+						
+				// if(sumY!=0)
+				// animationArgs[1][i]=animationArgs[1][i]/sumY*height+droppable.getY();
+			}
+		
+		for (int i = 0; i < animationArgs[0].length; i++) {
+			System.out.println("blablaba:"+animationArgs[0][i]);
+		}
+		return animationArgs;
+
 	}
 
 	class AnimationRunnable implements Runnable {
@@ -36,13 +82,13 @@ public abstract class DroppableLayout implements Serializable {
 			this.abstractList = abstractList;
 			this.duration = duration;
 		}
-		
-		public void stopAnimation(){
-			running=false;
-			
+
+		public void stopAnimation() {
+			running = false;
+
 		}
-		
-		boolean running=true;
+
+		boolean running = true;
 		float[][] animationArgs;
 		AbstractList<Card> abstractList;
 		long duration;
@@ -119,24 +165,21 @@ public abstract class DroppableLayout implements Serializable {
 
 	}
 
-	public abstract void rearrange();
-	
-	public void stopAnimation(){
-		
-		if (this.animationRunnable!=null)
+	public void stopAnimation() {
+
+		if (this.animationRunnable != null)
 			animationRunnable.stopAnimation();
 	}
-	
-	
+
 	public void animate(AbstractList<Card> abstractList,
 			float[][] animationArgs, long duration) {
-		
-		if(animationRunnable!=null)
-			animationRunnable.stopAnimation();
-		
-		this.animationRunnable= new AnimationRunnable(animationArgs,abstractList,duration);
-		 GameEnvironment.get().getHandler().post(animationRunnable);
 
+		if (animationRunnable != null)
+			animationRunnable.stopAnimation();
+
+		this.animationRunnable = new AnimationRunnable(animationArgs,
+				abstractList, duration);
+		GameEnvironment.get().getHandler().post(animationRunnable);
 
 	}
 }

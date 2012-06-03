@@ -26,13 +26,11 @@ public class Sender{
 
 	public void send(Message msg) {
 		// sends the message.
-		System.out.println("Sending message");
 		try {
 			out.writeObject(msg);
 		} catch (IOException e) {			
 			e.printStackTrace();
 		}
-		System.out.println("Message sent");
 	}
 
 	public boolean closeStream() {

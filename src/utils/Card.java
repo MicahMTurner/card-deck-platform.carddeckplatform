@@ -93,7 +93,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 //		}).start();
 		float totalAnimDx=destination.getX()-getX();
 		float totalAnimDy=destination.getY()-getY();
-		new OvershootAnimation(source, destination, this, 1000, totalAnimDx, totalAnimDy, false).execute(null);
+		new OvershootAnimation(source, destination, this, 1000, totalAnimDx, totalAnimDy, false).execute();
 	}
 	
 	

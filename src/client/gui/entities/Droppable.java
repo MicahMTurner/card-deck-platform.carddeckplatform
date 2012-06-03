@@ -63,7 +63,7 @@ public abstract class Droppable implements Serializable {
 		ClientController.sendAPI().cardAdded(card, from.getId(), id, player);
 		addCard(player, card);
 		if (droppableLayout != null)
-			droppableLayout.rearrange();
+			droppableLayout.rearrange(2,getShape().getWidth(),getShape().getHeight());
 
 	}
 

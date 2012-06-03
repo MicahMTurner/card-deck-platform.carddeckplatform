@@ -63,7 +63,6 @@ public class OvershootAnimation extends AsyncTask<Void, Void, Void> {
 			card.setLocation(card.getX() + curDx, card.getY() + y);
 
 			while (percentTime < 1.0) {
-				System.out.println(card.getX() + "::" + card.getY());
 				curTime = System.currentTimeMillis();
 				percentTime = (float) (curTime - startTime)
 						/ (float) (endTime - startTime);
