@@ -121,8 +121,8 @@ public class ClientController implements Observer {
 			gui.setUiEnabled(false);
 			ServerConnection.getConnection().send(new EndTurnMessage(new EndTurnAction(position)));
 		}
-		public void cardAdded(Card card,int from,int to,Player byWhom){			
-			ServerConnection.getConnection().send(new Message(new CardAdded(card,from,to,byWhom)));
+		public void cardAdded(Card card,int from,int to,int byWhomId){			
+			ServerConnection.getConnection().send(new Message(new CardAdded(card,from,to,byWhomId)));
 		}
 		public void cardRemoved(ArrayList<Card> cards,String from){
 			ServerConnection.getConnection().send(new Message(new CardRemoved(cards, from)));
@@ -171,13 +171,13 @@ public class ClientController implements Observer {
 	
 	public Droppable getZone(Position pos){
 		//return gui.getDroppableById(IDMaker.getMaker().getIdByPos(pos.getRelativePosition(getMe().getGlobalPosition())));
-		return gui.getDroppableByPosition((pos.getRelativePosition(getMe().getGlobalPosition())));
+		return gui.getDroppableByPosition(pos);//(pos.getRelativePosition(getMe().getGlobalPosition())));
 	}
 	public ArrayList<Droppable> getLayouts() {
 		return game.getLayouts();	
 	}
-	public void cardMoved(Card card,int from, int to, Player byWhom){
-		gui.moveCard(card, from, to,byWhom);		
+	public void cardMoved(Card card,int from, int to, int byWhomId){
+		gui.moveCard(card, from, to,byWhomId);		
 	}
 	
 	public void addPlayer(Player newPlayer) {
@@ -255,8 +255,9 @@ public class ClientController implements Observer {
 	}
 
 	public void endRound() {
-		//game.getMe().roundEnded();		
+		game.onRoundEnd();		
 	}
+	
 	public Player getMe(){
 		return game.getMe();
 	}

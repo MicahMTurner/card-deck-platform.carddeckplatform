@@ -11,18 +11,18 @@ public class CardAdded implements Action{
 	//private ArrayList<Card> cards=new ArrayList<Card>();
 	//private int cardId;
 	private Card card;
-	private Player byWhom;
+	private int byWhomId;
 	private int from;
 	private int to;
 	
 	
-	public CardAdded(Card card, int from,int to,Player byWhom) {		
+	public CardAdded(Card card, int from,int to,int byWhomId) {		
 	//	for(Card card : cards){
 	//		this.cards.add(card);
 	//	}
 		this.from = from;
 		this.to=to;
-		this.byWhom=byWhom;
+		this.byWhomId=byWhomId;
 		this.card=card;
 		//this.revealAtEnd=revealAtEnd;
 		//this.revealWhileMoving=revealwhileMoving;
@@ -30,7 +30,7 @@ public class CardAdded implements Action{
 
 	@Override
 	public void execute() {
-		ClientController.get().cardMoved(card, from, to,byWhom);
+		ClientController.get().cardMoved(card, from, to,byWhomId);
 		
 	}
 	

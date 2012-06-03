@@ -1,6 +1,7 @@
 package war;
 
 
+import client.controller.ClientController;
 import utils.Card;
 import utils.Player;
 import handlers.PlayerEventsHandler;
@@ -19,13 +20,19 @@ public class PlayerHandler implements PlayerEventsHandler{
 
 	@Override
 	public boolean onCardAdded(Player player, Card card) {
-		card.setCoord(player.getX(), player.getY());
-		return true;
+		//card.setLocation(player.getX(), player.getY());		
+		card.hide();		
+		return false;
 	}
 
 	@Override
 	public boolean onCardRemoved(Player player, Card card) {	
-		return true;
+		if (player.getPosition().equals(card.getOwner())){
+			return true;
+		}else{
+			return false;
+		}
+		
 	}
 
 	@Override

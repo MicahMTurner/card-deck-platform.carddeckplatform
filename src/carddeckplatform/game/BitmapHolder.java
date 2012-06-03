@@ -34,15 +34,12 @@ public class BitmapHolder {
 	public Bitmap getBitmap(String bitmapName){
 		Context context = GameActivity.getContext();
 		Bitmap img=bitmaps.get(bitmapName);
-		try {
 			if (img==null){			
 				int resourceId=context.getResources().getIdentifier(bitmapName, "drawable", "carddeckplatform.game");
 				img = BitmapFactory.decodeResource(context.getResources(), resourceId);
 				bitmaps.put(bitmapName, img);
 			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		
 		
 		return img;
 	}
