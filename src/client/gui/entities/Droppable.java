@@ -57,13 +57,17 @@ public abstract class Droppable implements Serializable {
 		return shape;
 	}
 
-	public void onDrop(Player player, Droppable from, Card card) {
-		from.removeCard(player, card);
-		// card.setCoord(getX(), getY());
-		ClientController.sendAPI().cardAdded(card, from.getId(), id, player);
-		addCard(player, card);
-		if (droppableLayout != null)
-			droppableLayout.rearrange();
+	public boolean onDrop(Player player, Droppable from, Card card) {		
+		boolean answer=false;		
+		ClientController.sendAPI().cardAdded(card, from.getId(), id, player.getId());				
+		if (from.removeCard(player, card) && addCard(player, card)){
+			answer=true;
+			if (droppableLayout != null && answer){
+				droppableLayout.rearrange();
+			}
+		}
+		
+		return answer;
 
 	}
 
@@ -105,15 +109,24 @@ public abstract class Droppable implements Serializable {
 	}
 
 	public abstract void deltCard(Card card);
+	public abstract AbstractList<Card> getMyCards();
+	public AbstractList<Card> getCards(){
+		synchronized(this){
+			AbstractList<Card> cloned=new ArrayList<Card>();
+			for (Card card : getMyCards()){
+				cloned.add(card);
+			}
+			return cloned;
+		}
+	}
 
-	public abstract AbstractList<Card> getCards();
+	public abstract boolean addCard(Player player, Card card);
 
-	public abstract void addCard(Player player, Card card);
+	public abstract boolean removeCard(Player player, Card card);
 
-	public abstract void removeCard(Player player, Card card);
-
-	public void draw(Canvas canvas, Context context) {
+	public void draw(Canvas canvas, Context context,Draggable inHand) {
 		Bitmap img = BitmapHolder.get().getBitmap(image);
+		if (img!=null){
 		Matrix matrix = new Matrix();
 
 		Point absScale = MetricsConvertion.pointRelativeToPx(scale);
@@ -124,6 +137,13 @@ public abstract class Droppable implements Serializable {
 				getY() - absScale.getY() / 2);
 
 		canvas.drawBitmap(img, matrix, null);
+		}
+		
+		for (Card card : getCards()){			
+				if (inHand==null || (inHand!=null && !inHand.equals(card))){
+					card.draw(canvas, context);
+				}			
+		}
 		// canvas.drawBitmap(img,getX()-(img.getWidth() /
 		// 2),getY()-(img.getHeight() / 2),null);
 	}

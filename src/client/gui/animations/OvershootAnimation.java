@@ -12,7 +12,7 @@ public class OvershootAnimation extends AsyncTask<Void, Void, Void> {
 
 	Droppable source;
 	Droppable destination;
-	Draggable draggable;
+	//Draggable draggable;
 	long duration;
 	float totalAnimDx;
 	float totalAnimDy;
@@ -96,10 +96,13 @@ public class OvershootAnimation extends AsyncTask<Void, Void, Void> {
 		super.onPostExecute(result);
 		
 		if(sendToCommunication){
-			destination.onDrop(ClientController.get().getMe(), source,
-					((Card) card));
-			
-			
+			if (!destination.onDrop(ClientController.get().getMe(), source,
+					((Card) card))){
+				card.invalidMove();
+			}
+		}else{
+//			source.removeCard(null, card);
+//			destination.addCard(null, card);
 		}
 		
 		

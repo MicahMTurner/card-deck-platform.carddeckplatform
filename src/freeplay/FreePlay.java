@@ -77,4 +77,8 @@ public class FreePlay extends Game{
 		return new PlayerHandler();
 	}
 
+	@Override
+	public void onRoundEnd() {
+	}
+
 }

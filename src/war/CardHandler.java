@@ -7,16 +7,9 @@ import handlers.CardEventsHandler;
 public class CardHandler implements CardEventsHandler{
 
 	@Override
-	public void onReveal(Card card) {
-		;
-		
-	}
+	public void onReveal(Card card) {}
 
 	@Override
-	public void OnHide(Card card) {
-		;
-		
-		
-	}
+	public void OnHide(Card card) {}
 
 }

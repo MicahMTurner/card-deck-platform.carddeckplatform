@@ -15,30 +15,20 @@ public class Point implements Serializable {
 		this.y=y;
 	}
 	public float getX() {
-		synchronized(this){
 			return x;
-		}
 	}
 	public float getY() {
-		synchronized(this){
 			return y;
-		}
 	}	
 	public void move(float x,float y){
-		synchronized(this){
 			this.x=x;
 			this.y=y;
-		}
 	}
 	public void setX(float x) {
-		synchronized(this){
 			this.x = x;
-		}
 	}
 	public void setY(float y) {
-		synchronized(this){
 			this.y = y;
-		}
 	}
 	
 	/************************************************************************************************************************************

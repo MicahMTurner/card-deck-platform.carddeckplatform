@@ -39,9 +39,11 @@ public class TcpConnector implements Connector {
 	@Override
 	public void disconnect() {
 		try {
-			socket.close();
-			in.close();
-			out.close();
+			if (socket!=null){
+				socket.close();
+				in.close();
+				out.close();
+			}
 		} catch (IOException e) {			
 			e.printStackTrace();
 		}
