@@ -14,6 +14,7 @@ import utils.Player;
 import utils.Point;
 import utils.Position;
 import utils.droppableLayouts.DroppableLayout;
+import utils.droppableLayouts.DroppableLayout.LayoutType;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -56,6 +57,10 @@ public abstract class Droppable implements Serializable {
 		}
 		return shape;
 	}
+	
+	public Point getScale() {
+		return scale;
+	}
 
 	public boolean onDrop(Player player, Droppable from, Card card) {		
 		boolean answer=false;		
@@ -63,14 +68,21 @@ public abstract class Droppable implements Serializable {
 		if (from.removeCard(player, card) && addCard(player, card)){
 			answer=true;
 			if (droppableLayout != null && answer){
-				droppableLayout.rearrange(2,getShape().getWidth(),getShape().getHeight());
+				rearrange(0);
 			}
 		}
 		
 		return answer;
 
 	}
-
+	public boolean isFlingabble(){
+		if(droppableLayout==null)
+			return false;
+		else if(LayoutType.NONE==droppableLayout.getType())
+			return false;
+		
+		return true;
+	}
 	public boolean isContain(float x, float y) {
 		// return shape.contains(x, y);
 		return getShape().contains(x, y);
@@ -93,7 +105,12 @@ public abstract class Droppable implements Serializable {
 	public Position getPosition() {
 		return position;
 	}
+	
+	public int indexOfDraggabale(Draggable draggable) {
 
+		return getCards().indexOf(draggable);
+
+	}
 	public void onCardAdded(Player byWhom, Card card) {
 		// card.setCoord(getX(),getY());
 		addCard(byWhom, card);
@@ -165,7 +182,18 @@ public abstract class Droppable implements Serializable {
 	public float getY() {
 		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();
 	}
+	public void rearrange(int index) {
+		if(cardsHolding()==0)
+			return;
+		Point droppableSize = MetricsConvertion.pointRelativeToPx(scale);
+		Point card=MetricsConvertion.pointRelativeToPx(getCards().get(0).getScale());
+		
+		
+		
+		if (droppableLayout != null)
+			droppableLayout.rearrange(index, droppableSize.getX()-card.getX(), droppableSize.getY()-card.getY());
 
+	}
 	public abstract int cardsHolding();
 
 	public abstract boolean isEmpty();

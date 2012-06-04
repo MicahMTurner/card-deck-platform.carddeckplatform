@@ -1,3 +1,4 @@
+package utils.droppableLayouts.line;
 //package utils.droppableLayouts;
 //
 //import utils.Card;
@@ -5,9 +6,9 @@
 //import client.gui.entities.Droppable;
 //import client.gui.entities.MetricsConvertion;
 //
-//public class TopLineLayout extends DroppableLayout {
+//public class LeftLineLayout extends LineLayout {
 //
-//	public TopLineLayout(Droppable droppable) {
+//	public LeftLineLayout(Droppable droppable) {
 //		super(droppable);
 //		// TODO Auto-generated constructor stub
 //	}
@@ -20,18 +21,17 @@
 //		int numberOfCards = droppable.getCards().size();
 //		
 //		// gets the step that each card would move.
-//		float step = MetricsConvertion.pointRelativeToPx(new Point(3 , 0)).getX();
+//		float step = MetricsConvertion.pointRelativeToPx(new Point(0 , 3)).getY();
 //		if(numberOfCards>0)
-//			newLocation = new Point((int)(location.getX() - step * numberOfCards/2) , location.getY());
+//			newLocation = new Point(location.getX() , (int)(location.getY() - step * numberOfCards/2));
 //		
 //		
 //		for(Card c : droppable.getCards()){
 //			//c.setLocation(newLocation.getX(), newLocation.getY());
 //			
-////			animate(c , newLocation, 180,1000);
-//			newLocation.setX(newLocation.getX() + step);
+////			animate(c , newLocation, 90,1000);
+//			newLocation.setY(newLocation.getY() + step);
 //		}
-//		
-//		
 //	}
+//
 //}

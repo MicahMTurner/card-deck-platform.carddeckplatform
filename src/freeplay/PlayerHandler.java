@@ -32,7 +32,7 @@ public class PlayerHandler implements PlayerEventsHandler{
 	@Override
 	public boolean onCardRemoved(Player player, Card card) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override

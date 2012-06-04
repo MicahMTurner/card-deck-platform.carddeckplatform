@@ -12,7 +12,7 @@ import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
-import utils.droppableLayouts.BottomLineLayout;
+import utils.droppableLayouts.line.BottomLineLayout;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

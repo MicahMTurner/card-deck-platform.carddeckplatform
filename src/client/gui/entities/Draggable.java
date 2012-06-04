@@ -28,6 +28,10 @@ public abstract class Draggable implements Serializable{
 	protected boolean inHand=false;
 	protected Point scale;
 	
+	public Point getScale() {
+		return scale;
+	}
+
 	protected String frontImg;
 	protected String backImg;
 	
@@ -65,10 +69,10 @@ public abstract class Draggable implements Serializable{
 	}
 	public void invalidMove(){		
 //			setLocation(prevCoord.getX(),prevCoord.getY());	
-			new OvershootAnimation(prevCoord.getX(), prevCoord.getY(),(Card) this, 1000, false).execute(null);
+			new OvershootAnimation(prevCoord.getX(), prevCoord.getY(),(Card) this, 1000, false).execute();
 			
-			ClientController.sendAPI().dragMotion(GameEnvironment.get().getPlayerInfo().getUsername(), id, MetricsConvertion.pointPxToRelative(getCoord()));
-			//ClientController.sendAPI().endDragMotion(getMyId());			
+//			ClientController.sendAPI().dragMotion(GameEnvironment.get().getPlayerInfo().getUsername(), id, MetricsConvertion.pointPxToRelative(getCoord()));
+//			ClientController.sendAPI().endDragMotion(id);			
 			//angle=0;			
 		}
 	

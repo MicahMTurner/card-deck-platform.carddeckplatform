@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
 
+import utils.droppableLayouts.HeapLayout;
+import utils.droppableLayouts.line.BottomLineLayout;
+
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -30,7 +33,7 @@ public class Public extends Droppable{
 		
 		
 		this.image = "playerarea";
-		
+		this.droppableLayout = new HeapLayout(this);
 		//BitmapHolder.get().scaleBitmap(image, this.scale);
 	}
 	
