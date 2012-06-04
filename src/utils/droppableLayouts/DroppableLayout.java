@@ -16,18 +16,16 @@ import utils.Card;
 import utils.Point;
 
 public abstract class DroppableLayout implements Serializable {
-	public enum Orientation {
-		HORIZONTAL, VERTICAL
+	public enum LayoutType {
+		NONE, LINE, HEAP
 	}
 
-	protected Orientation orientation;
 	protected Droppable droppable;
 	AnimationRunnable animationRunnable = null;
 
 	public abstract void rearrange(int index, float width, float height);
 
 	public DroppableLayout(Droppable droppable) {
-		this.orientation = orientation;
 		this.droppable = droppable;
 	}
 
@@ -49,7 +47,7 @@ public abstract class DroppableLayout implements Serializable {
 		float maxY = animationArgs[1][0];
 		float minX = animationArgs[0][0];
 		float minY = animationArgs[1][0];
-		
+
 		for (int i = 0; i < length; i++) {
 			if (animationArgs[0][i] > maxX)
 				maxX = animationArgs[0][i];
@@ -61,13 +59,15 @@ public abstract class DroppableLayout implements Serializable {
 				minY = animationArgs[1][i];
 
 		}
-		if ((maxX-minX) != 0)
+		if ((maxX - minX) != 0)
 			for (int i = 0; i < length; i++) {
-				animationArgs[0][i]=(animationArgs[0][i]-minX)/(maxX-minX)*width;
+				animationArgs[0][i] = (animationArgs[0][i] - minX)
+						/ (maxX - minX) * width;
 			}
-		if ((maxY-minY) != 0)
+		if ((maxY - minY) != 0)
 			for (int i = 0; i < length; i++) {
-				animationArgs[1][i]=(animationArgs[1][i]-minY)/(maxY-minY)*height;
+				animationArgs[1][i] = (animationArgs[1][i] - minY)
+						/ (maxY - minY) * height;
 			}
 
 		return animationArgs;
@@ -156,14 +156,17 @@ public abstract class DroppableLayout implements Serializable {
 				}
 
 			}
-			for (int i = 0; i < animationArgs[0].length; i++) {
-				Card card = abstractList.get(i);
-				card.setLocation(animationArgs[0][i], animationArgs[1][i]);
-				card.setAngle(animationArgs[2][i]);
-			}
+			if (running)
+				for (int i = 0; i < animationArgs[0].length; i++) {
+					Card card = abstractList.get(i);
+					card.setLocation(animationArgs[0][i], animationArgs[1][i]);
+					card.setAngle(animationArgs[2][i]);
+				}
 		}
 
 	}
+
+	public abstract LayoutType getType();
 
 	public void stopAnimation() {
 
@@ -174,13 +177,14 @@ public abstract class DroppableLayout implements Serializable {
 	public void animate(AbstractList<Card> abstractList,
 			float[][] animationArgs, long duration) {
 
-		
 		if (animationRunnable != null)
 			animationRunnable.stopAnimation();
 
 		this.animationRunnable = new AnimationRunnable(animationArgs,
 				abstractList, duration);
-		GameEnvironment.get().getHandler().post(animationRunnable);
+
+		Thread thread = new Thread(animationRunnable);
+		thread.start();
 
 	}
 }

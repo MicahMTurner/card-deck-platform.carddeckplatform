@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
 
+import utils.droppableLayouts.HeapLayout;
+import utils.droppableLayouts.line.BottomLineLayout;
+
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -30,7 +33,7 @@ public class Public extends Droppable{
 		
 		
 		this.image = "playerarea";
-		
+		this.droppableLayout = new HeapLayout(this);
 		//BitmapHolder.get().scaleBitmap(image, this.scale);
 	}
 	
@@ -40,15 +43,23 @@ public class Public extends Droppable{
 //	
 	
 	@Override
-	public void addCard(Player player,Card card){
-		cards.add(card);
-		handler.onCardAdded(this,player, card);
+	public boolean addCard(Player player,Card card){
+		boolean answer=handler.onCardAdded(this,player, card);
+		if (answer){
+			cards.add(card);
+		}
+		return answer; 
 	}
 	@Override
-	public void removeCard(Player player,Card card){
-		cards.remove(card);
-		handler.onCardRemoved(this,player, card);
-		
+	public boolean removeCard(Player player,Card card){
+		boolean answer=handler.onCardRemoved(this,player, card);
+		if (player==null){
+			answer=true;
+		}
+		if (answer){
+			cards.remove(card);
+		}		
+		return answer;
 	}
 	
 	public void revealCard(Player player,Card card){
@@ -99,7 +110,7 @@ public class Public extends Droppable{
 	public void clear() {
 		cards.clear();		
 	}
-	public ArrayList<Card> getCards() {
+	public ArrayList<Card> getMyCards() {
 		return cards;
 	}
 	public Card peek(){

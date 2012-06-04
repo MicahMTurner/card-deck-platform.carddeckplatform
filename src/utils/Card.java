@@ -25,11 +25,15 @@ import client.gui.entities.MetricsConvertion;
 public abstract class Card extends Draggable implements Comparable<Card>{
 	
 	private CardEventsHandler eventsHandler;
-	private boolean revealed;	
-	private Position.Player owner;
+	private CardStatus status;	
+	private Position owner;
 	private Point coord;
 	protected float angle = 0;
 	
+	
+	enum CardStatus{
+		MINIMIZED,NORMAl,SELECTED,DRAGGED,
+	}
 	
 	
 //	private Paint paint;
@@ -39,7 +43,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		this.eventsHandler=handler;		
 		this.backImg=backImg;
 		this.frontImg= frontImg;
-		this.revealed=false;		
+		this.status=CardStatus.MINIMIZED;		
 		this.coord=new Point(0,0);
 		
 		
@@ -53,13 +57,11 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		return 1;
 	}
 	@Override
-	public int sensitivityRadius(){
-		return 30;
-	}
-	@Override
 	public void setLocation(float x, float y){
-		coord.setX(x);
-		coord.setY(y);
+		synchronized (coord){
+			coord.setX(x);
+			coord.setY(y);
+		}
 	}
 	
 	public void moveTo(final Droppable source,final Droppable destination) {
@@ -101,12 +103,14 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	
 	
 	public Point getCoord() {
-		return new Point(coord);
+		synchronized(coord){
+			return new Point(coord);
+		}
 	}
-	public void setCoord(float x,float y) {
-			coord.setX(x);
-			coord.setY(y);
-	}
+//	public void setCoord(float x,float y) {
+//			coord.setX(x);
+//			coord.setY(y);
+//	}
 	@Override
 	public void setAngle(float angle) {
 		this.angle = angle%360;
@@ -129,10 +133,10 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	public boolean isRevealed() {
 		return revealed;
 	}
-	public Position.Player getOwner() {
+	public Position getOwner() {
 		return owner;
 	}
-	public void setOwner(Position.Player owner) {
+	public void setOwner(Position owner) {
 		this.owner = owner;
 	}	
 	public String getFrontImg() {

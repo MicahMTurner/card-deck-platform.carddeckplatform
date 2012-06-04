@@ -17,6 +17,7 @@ import android.graphics.Canvas;
 
 import IDmaker.IDMaker;
 
+import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
 import client.gui.entities.MetricsConvertion;
 
@@ -26,13 +27,14 @@ public class DeckArea extends Droppable{
 	
 	public DeckArea(Position.Button position) {
 		super(position.getId(),position, new Point(10,13));
+		this.image = "playerarea";
 	}
 
 	//change to queue?
 	public LinkedList<Card> cards = new LinkedList<Card>();
 	
 	@Override
-	public AbstractList<Card> getCards() {
+	public AbstractList<Card> getMyCards() {
 		return cards;
 	}
 		
@@ -50,23 +52,20 @@ public class DeckArea extends Droppable{
 	}
 
 	@Override
-	public void addCard(Player player, Card card) {
+	public boolean addCard(Player player, Card card) {
 		card.setLocation(getX(), getY());
 		card.setAngle(0);
 		cards.addFirst(card);
+		return true;
 		
 	}
 
 	@Override
-	public void removeCard(Player player, Card card) {
+	public boolean removeCard(Player player, Card card) {
 		cards.remove(card);
-		
+		return true;
 	}
-
-	@Override
-	public void draw(Canvas canvas, Context context) {
-		
-	}
+	
 
 //	@Override
 //	public int getX() {

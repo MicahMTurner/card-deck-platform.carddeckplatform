@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import communication.actions.EndRoundAction;
+import communication.messages.Message;
+import communication.server.ConnectionsManager;
+
 
 
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
@@ -29,13 +33,16 @@ public abstract class Game {
 	protected ArrayList<Droppable> droppables=new ArrayList<Droppable>();
 	//private ToolsFactory tools=new DefaultTools();
 	//private Player.Position currentTurn;
-	protected Deck deck;	
+	protected Deck deck;
+	private boolean firstRound;
+	private Position.Player first;
 	
 	 
 
 	//protected abstract Player createPlayer(String userName, Position.Player position);
 	public abstract Deck getDeck();
-
+	//what to do when round has ended
+	public abstract void onRoundEnd();
 	//the order of the players turns 
 	public abstract Queue<utils.Position.Player> setTurns();
 	//the minimal players count
@@ -72,9 +79,30 @@ public abstract class Game {
 	
 	
 	public Game() {
+		first=null;
+		firstRound=true;		
 		turnsQueue=setTurns();
+		if (turnsQueue!=null){
+			first=turnsQueue.peek();
+		}
+		//clearEmptyPositions();		
 		setLayouts(droppables);
 	}
+	
+	private void clearEmptyPositions() {
+		if (turnsQueue!=null){
+			ArrayList<Position.Player> availablePos=new ArrayList<Position.Player>();
+			for (Player player : players){
+				availablePos.add(player.getGlobalPosition());
+			}
+			for (Position.Player position : turnsQueue){
+				if (!availablePos.contains(position)){
+					turnsQueue.remove(position);
+				}
+			}
+		}		
+	}
+	
 	//return the next player
 	public utils.Position.Player nextInTurn(){
 		utils.Position.Player next=null;
@@ -87,8 +115,14 @@ public abstract class Game {
 			while (!availablePos.contains(next)){
 				next=turnsQueue.poll();
 			}
-			turnsQueue.add(next);
+			turnsQueue.add(next);	
+			if (next.equals(first) && !firstRound){
+				ConnectionsManager.getConnectionsManager().sendToAll(new Message(new EndRoundAction()));
+				firstRound=false;
+			}
 		}
+		
+		
 		return next;		
 	}
 	

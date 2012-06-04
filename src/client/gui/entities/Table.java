@@ -52,9 +52,9 @@ public class Table {
 	public void addDroppable(Droppable droppable){
 		droppables.add(droppable);
 		//map all draggables and their id in given droppable
-		for (Draggable draggable : droppable.getCards()){
-			mappedDraggables.put(draggable.getId(),draggable);
-		}
+//		for (Draggable draggable : droppable.getCards()){
+//			mappedDraggables.put(draggable.getId(),draggable);
+//		}
 	}
 	
 	public void setTableImage(int drawable){
@@ -187,27 +187,27 @@ public class Table {
 		canvas.drawColor(Color.TRANSPARENT);    	  
         canvas.scale(1, 1);
         
-		try {
+		//try {
 			canvas.drawBitmap(img,(float)0,(float)0, null);			
 			
 			for(Droppable d : droppables){
-				synchronized (d) {
-					d.draw(canvas, context);
-				}
+			//	synchronized (d) {
+					d.draw(canvas, context,inHand);
+			//	}
 			}
 			
-			for (Droppable d: droppables){			
-				AbstractList<Card>cards=d.getCards();
-				synchronized (cards){
-					for (Card card : cards){
-						synchronized (card){
-							if (inHand==null || (inHand!=null && !inHand.equals(card))){
-								card.draw(canvas, context);
-							}
-						}
-					}
-				}
-			}
+//			for (Droppable d: droppables){			
+//				AbstractList<Card>cards=d.getCards();
+//				synchronized (cards){
+//					for (Card card : cards){
+//						synchronized (card){
+//							if (inHand==null || (inHand!=null && !inHand.equals(card))){
+//								card.draw(canvas, context);
+//							}
+//						}
+//					}
+//				}
+//			}
 			if (inHand!=null){
 				inHand.draw(canvas, context);
 			}
@@ -217,9 +217,9 @@ public class Table {
 				paint.setColor(Color.RED);
 				canvas.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2(), paint);
 			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		//} catch (Exception e) {
+		//	e.printStackTrace();
+		//}
 		
 		
 		

@@ -459,12 +459,12 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	// return table.getDraggableById(id);
 	// }
 
-	public void moveCard(Card card, int from, int to, Player byWhom) {
+	public void moveCard(Card card, int from, int to, int byWhomId) {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		System.out.println("card moved: " + card.getId());
 		cards.add(((Card) (table.getDraggableById(card.getId()))));
 		// cards.add(card);
-		moveCards(cards, from, to, byWhom);
+		moveCards(cards, from, to, (Player) table.getDroppableById(byWhomId));
 	}
 
 	public void moveCards(ArrayList<Card> cards, int from, int to, Player byWhom) {
@@ -503,6 +503,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	public void dealCards(ArrayList<Card> cards, int to) {
 		Droppable destination = table.getDroppableById(to);
 		for (Card card : cards) {
+			card.setOwner(destination.getPosition());
 			addNewDraggable(card, destination);
 		}
 	}
@@ -651,26 +652,30 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 						draggableInHand.getX(), draggableInHand.getY(), x
 								+ totalDx, y + totalDy);
 
-				if (droppable != null && from != null && from!=droppable) {
-					
-					
-					
-					
-					float totalAnimDx = droppable.getX()
-							- draggableInHand.getX();
-					float totalAnimDy = droppable.getY()
-							- draggableInHand.getY();
-					System.out.println("animating");
-					new OvershootAnimation(from, droppable,
-							(Card) draggableInHand, (long) 1000, totalAnimDx,
-							totalAnimDy, true).execute();
+				if (droppable != null && from != null && from != droppable) {
+					if (droppable.isFlingabble()) {
+						float totalAnimDx = droppable.getX()
+								- draggableInHand.getX();
+						float totalAnimDy = droppable.getY()
+								- draggableInHand.getY();
+						System.out.println("animating");
+						new OvershootAnimation(from, droppable,
+								(Card) draggableInHand, (long) 1000,
+								totalAnimDx, totalAnimDy, true).execute();
+					}else{
+						draggableInHand.setLocation(x, y);
+						if (!droppable.onDrop(ClientController.get().getMe(), from,
+								((Card) draggableInHand))){
+							draggableInHand.invalidMove();
+						}
+					}
 					this.from = null;
 
-				}else if(from==droppable){
-					//dont do anything cause rearrange is made at onSingleTapUp method
-					
-				} 
-				else {
+				} else if (from == droppable) {
+					// dont do anything cause rearrange is made at onSingleTapUp
+					// method
+
+				} else {
 					draggableInHand.invalidMove();
 				}
 				draggableInHand = null;
@@ -690,14 +695,22 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float arg2,
 			float arg3) {
-		float X = e2.getX();
-		float Y = e2.getY();
+		float x = e2.getX();
+		float y = e2.getY();
 		System.out.println("TableView.onScroll()");
 		if (uiEnabled) {
 			if (draggableInHand != null) {
-				draggableInHand.setLocation(X, Y);
-				draggableInHand.onDrag();
-				redraw();
+				Droppable droppable = table.getNearestDroppable(x, y);
+				if(droppable==from){
+					draggableInHand
+					
+				}else{
+				
+				
+					draggableInHand.setLocation(x, y);
+					draggableInHand.onDrag();
+					redraw();
+				}
 			}
 		} else
 			popToast("It's not your turn now!!");
@@ -711,20 +724,17 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		float x = event.getX();
 		float y = event.getY();
 		Draggable draggable = table.getNearestDraggable(x, y);
-		System.out.println("draggable"+draggable);
+		System.out.println("draggable" + draggable);
 		if (draggable != null) {
-				Droppable droppable = table.getNearestDroppable(x,y);
-				int index=droppable.indexOfDraggabale(draggable);
-				System.out.println("index:"+index);
-				if(index==-1)
-					return true;
-				droppable.rearrange(index);
-				
+			Droppable droppable = table.getNearestDroppable(x, y);
+			int index = droppable.indexOfDraggabale(draggable);
+			System.out.println("index:" + index);
+			if (index == -1)
+				return true;
+			droppable.rearrange(index);
+
 		}
-		
-		
-		
-		
+
 		return true;
 	}
 

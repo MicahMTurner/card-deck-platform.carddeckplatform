@@ -14,6 +14,7 @@ import utils.Player;
 import utils.Point;
 import utils.Position;
 import utils.droppableLayouts.DroppableLayout;
+import utils.droppableLayouts.DroppableLayout.LayoutType;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -56,16 +57,32 @@ public abstract class Droppable implements Serializable {
 		}
 		return shape;
 	}
-
-	public void onDrop(Player player, Droppable from, Card card) {
-		from.removeCard(player, card);
-		// card.setCoord(getX(), getY());
-		ClientController.sendAPI().cardAdded(card, from.getId(), id, player);
-		addCard(player, card);
-		rearrange(0);
-
+	
+	public Point getScale() {
+		return scale;
 	}
 
+	public boolean onDrop(Player player, Droppable from, Card card) {		
+		boolean answer=false;		
+		ClientController.sendAPI().cardAdded(card, from.getId(), id, player.getId());				
+		if (from.removeCard(player, card) && addCard(player, card)){
+			answer=true;
+			if (droppableLayout != null && answer){
+				rearrange(0);
+			}
+		}
+		
+		return answer;
+
+	}
+	public boolean isFlingabble(){
+		if(droppableLayout==null)
+			return false;
+		else if(LayoutType.NONE==droppableLayout.getType())
+			return false;
+		
+		return true;
+	}
 	public boolean isContain(float x, float y) {
 		// return shape.contains(x, y);
 		return getShape().contains(x, y);
@@ -88,13 +105,12 @@ public abstract class Droppable implements Serializable {
 	public Position getPosition() {
 		return position;
 	}
-
+	
 	public int indexOfDraggabale(Draggable draggable) {
 
 		return getCards().indexOf(draggable);
 
 	}
-
 	public void onCardAdded(Player byWhom, Card card) {
 		// card.setCoord(getX(),getY());
 		addCard(byWhom, card);
@@ -110,15 +126,24 @@ public abstract class Droppable implements Serializable {
 	}
 
 	public abstract void deltCard(Card card);
+	public abstract AbstractList<Card> getMyCards();
+	public AbstractList<Card> getCards(){
+		synchronized(this){
+			AbstractList<Card> cloned=new ArrayList<Card>();
+			for (Card card : getMyCards()){
+				cloned.add(card);
+			}
+			return cloned;
+		}
+	}
 
-	public abstract AbstractList<Card> getCards();
+	public abstract boolean addCard(Player player, Card card);
 
-	public abstract void addCard(Player player, Card card);
+	public abstract boolean removeCard(Player player, Card card);
 
-	public abstract void removeCard(Player player, Card card);
-
-	public void draw(Canvas canvas, Context context) {
+	public void draw(Canvas canvas, Context context,Draggable inHand) {
 		Bitmap img = BitmapHolder.get().getBitmap(image);
+		if (img!=null){
 		Matrix matrix = new Matrix();
 
 		Point absScale = MetricsConvertion.pointRelativeToPx(scale);
@@ -129,6 +154,13 @@ public abstract class Droppable implements Serializable {
 				getY() - absScale.getY() / 2);
 
 		canvas.drawBitmap(img, matrix, null);
+		}
+		AbstractList<Card>cards = getCards();
+		for (Card card : cards){			
+				if (inHand==null || (inHand!=null && !inHand.equals(card))){
+					card.draw(canvas, context);
+				}			
+		}
 		// canvas.drawBitmap(img,getX()-(img.getWidth() /
 		// 2),getY()-(img.getHeight() / 2),null);
 	}
@@ -150,14 +182,18 @@ public abstract class Droppable implements Serializable {
 	public float getY() {
 		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();
 	}
-
 	public void rearrange(int index) {
+		if(cardsHolding()==0)
+			return;
+		Point droppableSize = MetricsConvertion.pointRelativeToPx(scale);
+		Point card=MetricsConvertion.pointRelativeToPx(getCards().get(0).getScale());
+		
+		
+		
 		if (droppableLayout != null)
-			droppableLayout.rearrange(index, getShape().getWidth(), getShape()
-					.getHeight());
+			droppableLayout.rearrange(index, droppableSize.getX()-card.getX(), droppableSize.getY()-card.getY());
 
 	}
-
 	public abstract int cardsHolding();
 
 	public abstract boolean isEmpty();

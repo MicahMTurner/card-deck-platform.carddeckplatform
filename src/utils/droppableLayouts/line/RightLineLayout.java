@@ -1,3 +1,4 @@
+package utils.droppableLayouts.line;
 //package utils.droppableLayouts;
 //
 //import utils.Card;
@@ -5,7 +6,7 @@
 //import client.gui.entities.Droppable;
 //import client.gui.entities.MetricsConvertion;
 //
-//public class RightLineLayout extends DroppableLayout {
+//public class RightLineLayout extends LineLayout {
 //
 //	public RightLineLayout(Droppable droppable) {
 //		super(droppable);
