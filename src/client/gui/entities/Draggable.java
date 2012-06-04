@@ -28,6 +28,11 @@ public abstract class Draggable implements Serializable{
 	protected boolean inHand=false;
 	protected Point scale;
 	
+	
+	enum CardStatus{
+		MINIMIZED,NORMAl,SELECTED,DRAGGED,
+	}
+	
 	public Point getScale() {
 		return scale;
 	}
