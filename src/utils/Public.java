@@ -3,6 +3,7 @@ package utils;
 import handlers.PublicEventsHandler;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
@@ -23,7 +24,7 @@ import client.gui.entities.MetricsConvertion;
 public class Public extends Droppable{	
 	private PublicEventsHandler handler;
 	
-	private ArrayList<Card> cards=new ArrayList<Card>();	
+	private LinkedList<Card> cards=new LinkedList<Card>();	
 	
 	
 	
@@ -46,17 +47,14 @@ public class Public extends Droppable{
 	public boolean addCard(Player player,Card card){
 		boolean answer=handler.onCardAdded(this,player, card);
 		if (answer){
-			cards.add(card);
+			cards.addFirst(card);
 		}
 		return answer; 
 	}
 	@Override
 	public boolean removeCard(Player player,Card card){
 		boolean answer=handler.onCardRemoved(this,player, card);
-		if (player==null){
-			answer=true;
-		}
-		if (answer){
+		if (answer || player==null){
 			cards.remove(card);
 		}		
 		return answer;
@@ -110,7 +108,7 @@ public class Public extends Droppable{
 	public void clear() {
 		cards.clear();		
 	}
-	public ArrayList<Card> getMyCards() {
+	public LinkedList<Card> getMyCards() {
 		return cards;
 	}
 	public Card peek(){

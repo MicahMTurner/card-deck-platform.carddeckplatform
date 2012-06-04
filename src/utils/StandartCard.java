@@ -23,7 +23,6 @@ public  class StandartCard extends Card {
 		public String getCode(){
 			return code;
 		}
-		
 	}
 	private final Color color;
 	private final int value;
@@ -33,7 +32,7 @@ public  class StandartCard extends Card {
 		this.value=value;	
 		this.color=color;
 		this.scale = new Point(6,10);
-		
+		this.handScale = new Point(3,5);
 		BitmapHolder.get().scaleBitmap(frontImg, this.scale);
 		BitmapHolder.get().scaleBitmap(backImg, this.scale);
 		
