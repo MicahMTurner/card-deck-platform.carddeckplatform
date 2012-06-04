@@ -55,7 +55,7 @@ public class DeckArea extends Droppable{
 	public boolean addCard(Player player, Card card) {
 		card.setLocation(getX(), getY());
 		card.setAngle(0);
-		cards.addFirst(card);
+		cards.addLast(card);
 		return true;
 		
 	}

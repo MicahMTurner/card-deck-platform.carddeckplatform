@@ -17,6 +17,7 @@ import carddeckplatform.game.BitmapHolder;
 import carddeckplatform.game.R;
 import carddeckplatform.game.StaticFunctions;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
+import client.gui.animations.FlipAnimation;
 import client.gui.animations.OvershootAnimation;
 import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
@@ -29,7 +30,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	private Position owner;
 	private Point coord;
 	protected float angle = 0;
-	
+	protected Point handScale;
 	
 	
 //	private Paint paint;
@@ -65,37 +66,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	}
 	
 	public void moveTo(final Droppable source,final Droppable destination) {
-//		new Thread(new Runnable() {	
-//			@Override
-//			public void run() {
-//				float x = coord.getX();
-//				float y = coord.getY();
-//				final ArrayList<Point> vector = StaticFunctions.midLine((int)x, (int)y, (int)destination.getX(), (int)destination.getY());
-//				try {
-//        			Thread.sleep(1000);
-//        		} catch (InterruptedException e) {			        			
-//        			e.printStackTrace();
-//        		}
-//            	for(int i=0; i<vector.size(); i++){
-//            		final int index = i;
-//		
-//            		try {
-//            			Thread.sleep(10);
-//            		} catch (InterruptedException e) {			            			
-//            			e.printStackTrace();
-//            		}					
-//            		
-//            		setCoord(vector.get(index).x, vector.get(index).y);
-//            		setAngle(i*10);            		
-//            	}
-//            	setAngle(0);
-//            	source.removeCard(null, Card.this);
-//            	destination.addCard(null, Card.this);
-//			}
-//		}).start();
-		float totalAnimDx=destination.getX()-getX();
-		float totalAnimDy=destination.getY()-getY();
-		new OvershootAnimation(source, destination, this, 1000, totalAnimDx, totalAnimDy, false).execute();
+		new FlipAnimation(source, destination, this, false).execute();
 	}
 	
 	
@@ -158,7 +129,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
     public void draw(Canvas canvas,Context context) {
 		Bitmap img;			
 		Matrix matrix = new Matrix();
-		Point p;
+		Point p = null;
 		if(!isInHand()){
 			p = scale;
 		}else{
@@ -181,6 +152,11 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		
 		// if the card is being carried by another player a hand and the name of the carrier would be drawn near the card's image.
         if(isCarried()){
+        	Matrix matrix2 = new Matrix();
+        	Point absHandScale = MetricsConvertion.pointRelativeToPx(handScale);
+        	
+        	matrix2.postScale(absHandScale.getX() / BitmapHolder.get().getBitmap("hand").getWidth(), absHandScale.getY() / BitmapHolder.get().getBitmap("hand").getWidth() );
+        	matrix2.postTranslate(getX()-absHandScale.getX(), getY() - absHandScale.getY()/2);
         	Point absScale = MetricsConvertion.pointRelativeToPx(scale);
         	Paint paint = GameEnvironment.get().getPaint();   
         	// draws the name of the carrier.
@@ -188,7 +164,9 @@ public abstract class Card extends Draggable implements Comparable<Card>{
             paint.setTextSize(20); 
             canvas.drawText(getCarrier(),getX()-absScale.getX() / 2, getY()-absScale.getY() / 2, paint);
             // draws the hand.
-            canvas.drawBitmap(BitmapHolder.get().getBitmap("hand"),getX()-absScale.getX(), getY() - absScale.getY()/2 , paint);
+            //canvas.drawBitmap(BitmapHolder.get().getBitmap("hand"),getX()-absScale.getX(), getY() - absScale.getY()/2 , paint);
+            
+            canvas.drawBitmap(BitmapHolder.get().getBitmap("hand"), matrix2, null);
         } 
        
 	}
