@@ -3,7 +3,8 @@ package client.gui.entities;
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.ConcurrentModificationException;
+import java.util.Stack;
 
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
@@ -18,13 +19,8 @@ import utils.droppableLayouts.DroppableLayout.LayoutType;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.LightingColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import carddeckplatform.game.BitmapHolder;
 import client.controller.ClientController;
 
@@ -85,7 +81,7 @@ public abstract class Droppable implements Serializable {
 	public boolean onDrop(Player player, Droppable from, Card card) {		
 		boolean answer=false;		
 		ClientController.sendAPI().cardAdded(card, from.getId(), id, player.getId());				
-		if (from.removeCard(player, card) && addCard(player, card)){
+		if (addCard(player, card) && from.removeCard(player, card)){
 			answer=true;
 			if (droppableLayout != null && answer){
 				rearrange(0);
@@ -146,14 +142,20 @@ public abstract class Droppable implements Serializable {
 	}
 
 	public abstract void deltCard(Card card);
-	public abstract AbstractList<Card> getMyCards();
+	protected abstract AbstractList<Card> getMyCards();
 	public AbstractList<Card> getCards(){
-		synchronized(this){
+		synchronized(this){		
+			try{
 			AbstractList<Card> cloned=new ArrayList<Card>();
 			for (Card card : getMyCards()){
 				cloned.add(card);
 			}
 			return cloned;
+			}
+			catch(ConcurrentModificationException e){
+				return new ArrayList<Card>();
+						
+			}
 		}
 	}
 
@@ -161,17 +163,19 @@ public abstract class Droppable implements Serializable {
 
 	public abstract boolean removeCard(Player player, Card card);
 
-	public void draw(Canvas canvas, Context context,Draggable inHand) {
+	public Draggable draw(Canvas canvas, Context context) {
+		Card holding=null;
 		Bitmap img = BitmapHolder.get().getBitmap(image);
 		if (img!=null){
 		Matrix matrix = new Matrix();
 
 		Point absScale = MetricsConvertion.pointRelativeToPx(scale);
 
-		matrix.postScale((float) absScale.getX() / (float) img.getWidth(),
-				(float) absScale.getY() / (float) img.getHeight());
-		matrix.postTranslate(getX() - absScale.getX() / 2,
-				getY() - absScale.getY() / 2);
+		matrix.postScale((float) absScale.getX() / (float) img.getWidth(),(float) absScale.getY() / (float) img.getHeight());
+		matrix.postTranslate(getX() - absScale.getX() / 2, getY() - absScale.getY() / 2);
+
+		
+		canvas.drawBitmap(img, matrix, null);
 		if(mPaintForGlow==null){
 			mPaintForGlow=new Paint();
 			mPaintForGlow = new Paint();
@@ -184,13 +188,17 @@ public abstract class Droppable implements Serializable {
 //		ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE, glowColor);
 //		mPaintForGlow.setColorFilter(colorFilterTint);
 		canvas.drawBitmap(img, matrix, mPaintForGlow);
+		
 		}
 		AbstractList<Card>cards = getCards();
-		for (Card card : cards){			
-				if (inHand==null || (inHand!=null && !inHand.equals(card))){
+		for (Card card : cards){
+				if (!card.isInHand() && !card.isCarried()){
 					card.draw(canvas, context);
-				}			
+				}else{
+					holding=card;
+				}
 		}
+		return holding;
 		// canvas.drawBitmap(img,getX()-(img.getWidth() /
 		// 2),getY()-(img.getHeight() / 2),null);
 	}

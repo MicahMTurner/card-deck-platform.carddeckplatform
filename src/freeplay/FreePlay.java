@@ -50,13 +50,13 @@ public class FreePlay extends Game{
 		for (int i=0;i<size;i++){
 			cards.add(deck.drawCard());
 		}
-		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(cards,Position.Button.BOTLEFT.getId())));
+		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(cards,Position.Button.TOPRIGHT.getId())));
 	}
 
 	
 	@Override
 	public void setLayouts(ArrayList<Droppable> publics) {
-		droppables.add(new DeckArea(Position.Button.BOTLEFT));
+		droppables.add(new DeckArea(Position.Button.TOPRIGHT));
 		droppables.add(new Public(new PublicHandler(), Position.Public.MID));		
 	}
 	

@@ -1,5 +1,8 @@
 package client.gui.animations;
 
+import communication.actions.DraggableMotionAction;
+import communication.link.ServerConnection;
+
 import utils.Card;
 import android.os.AsyncTask;
 import android.view.animation.Interpolator;
@@ -60,8 +63,11 @@ public class OvershootAnimation extends AsyncTask<Void, Void, Void> {
 			float curDy = percentDistance * totalAnimDy;
 			float x = card.getX();
 			float y = card.getY();
-			card.setLocation(card.getX() + curDx, card.getY() + y);
-
+			card.setLocation(x + curDx, y + curDy);
+			
+			if(sendToCommunication)
+				card.onDrag();
+			
 			while (percentTime < 1.0) {
 				curTime = System.currentTimeMillis();
 				percentTime = (float) (curTime - startTime)
@@ -71,6 +77,10 @@ public class OvershootAnimation extends AsyncTask<Void, Void, Void> {
 				curDx = percentDistance * totalAnimDx;
 				curDy = percentDistance * totalAnimDy;
 				card.setLocation(x + curDx, y + curDy);
+				
+				if(sendToCommunication)
+					card.onDrag();
+				
 				try {
 					Thread.sleep(4);
 				} catch (InterruptedException e) {
@@ -93,17 +103,21 @@ public class OvershootAnimation extends AsyncTask<Void, Void, Void> {
 		super.onPostExecute(result);
 		
 		if(sendToCommunication){
+			
+			ClientController.sendAPI().endDragMotion(card.getId());
 			if (!destination.onDrop(ClientController.get().getMe(), source,
 					((Card) card))){
 				card.invalidMove();
 			}
+			
 		}else{
-//			source.removeCard(null, card);
-//			destination.addCard(null, card);
+			
 		}
+			
+
 		
 		
-		
+		card.onRelease();
 		
 	}
 

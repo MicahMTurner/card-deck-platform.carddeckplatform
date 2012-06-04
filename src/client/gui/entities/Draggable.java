@@ -3,6 +3,10 @@ package client.gui.entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import communication.actions.StartDraggableMotionAction;
+import communication.link.ServerConnection;
+import communication.messages.Message;
+
 
 import utils.Card;
 import utils.Player;
@@ -56,11 +60,15 @@ public abstract class Draggable implements Serializable{
 	public String getCarrier() {
 		return carrier;
 	}
-	public void onClick() {		
+	public void saveOldCoord(){
 		// save the current location in order to be able to return to this position if needed.
 		prevCoord.setX(getCoord().getX());
 		prevCoord.setY(getCoord().getY());
+	}
+	public void onClick() {		
+		saveOldCoord();
 		inHand = true;
+		ServerConnection.getConnection().send(new Message(new StartDraggableMotionAction(id, GameEnvironment.get().getPlayerInfo().getUsername())));
 		//setCarried(true);
 	}
 	public void onDrag() {		
@@ -68,16 +76,17 @@ public abstract class Draggable implements Serializable{
 		ClientController.sendAPI().dragMotion(GameEnvironment.get().getPlayerInfo().getUsername(),id,MetricsConvertion.pointPxToRelative(getCoord()));
 	}
 	public void onRelease() {		
-		ClientController.sendAPI().dragMotion(GameEnvironment.get().getPlayerInfo().getUsername(), id, MetricsConvertion.pointPxToRelative(getCoord()));
+		//ClientController.sendAPI().dragMotion(GameEnvironment.get().getPlayerInfo().getUsername(), id, MetricsConvertion.pointPxToRelative(getCoord()));
 		ClientController.sendAPI().endDragMotion(id);
 		inHand = false;
 	}
+	
 	public void invalidMove(){		
 //			setLocation(prevCoord.getX(),prevCoord.getY());	
-			new OvershootAnimation(prevCoord.getX(), prevCoord.getY(),(Card) this, 1000, false).execute();
+			new OvershootAnimation(prevCoord.getX(), prevCoord.getY(),(Card) this, 1000, false).execute(null);
 			
-//			ClientController.sendAPI().dragMotion(GameEnvironment.get().getPlayerInfo().getUsername(), id, MetricsConvertion.pointPxToRelative(getCoord()));
-//			ClientController.sendAPI().endDragMotion(id);			
+			//ClientController.sendAPI().dragMotion(GameEnvironment.get().getPlayerInfo().getUsername(), id, MetricsConvertion.pointPxToRelative(getCoord()));
+			//ClientController.sendAPI().endDragMotion(getMyId());			
 			//angle=0;			
 		}
 	
