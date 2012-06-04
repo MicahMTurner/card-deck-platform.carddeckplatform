@@ -19,6 +19,7 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.controller.ClientController;
+import client.gui.animations.BlinkAnimation;
 import client.gui.animations.FlipAnimation;
 import client.gui.animations.OvershootAnimation;
 import client.gui.entities.Draggable;
@@ -618,6 +619,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 			if (draggableInHand != null) {
 				if (draggableInHand.isMoveable()) {
 					from = table.getNearestDroppable(X, Y);
+					new BlinkAnimation(from, 4000).execute();
 					draggableInHand.onClick();
 				} else {
 					popToast("You cannot move this card");
@@ -702,7 +704,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 			if (draggableInHand != null) {
 				Droppable droppable = table.getNearestDroppable(x, y);
 				if(droppable==from){
-					draggableInHand
+					
 					
 				}else{
 				

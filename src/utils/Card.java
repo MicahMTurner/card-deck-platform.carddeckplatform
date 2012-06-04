@@ -25,15 +25,11 @@ import client.gui.entities.MetricsConvertion;
 public abstract class Card extends Draggable implements Comparable<Card>{
 	
 	private CardEventsHandler eventsHandler;
-	private CardStatus status;	
+	private boolean revealed;	
 	private Position owner;
 	private Point coord;
 	protected float angle = 0;
 	
-	
-	enum CardStatus{
-		MINIMIZED,NORMAl,SELECTED,DRAGGED,
-	}
 	
 	
 //	private Paint paint;
@@ -43,7 +39,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		this.eventsHandler=handler;		
 		this.backImg=backImg;
 		this.frontImg= frontImg;
-		this.status=CardStatus.MINIMIZED;		
+		this.revealed=false;		
 		this.coord=new Point(0,0);
 		
 		
@@ -55,6 +51,10 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 			return 0;
 		}
 		return 1;
+	}
+	@Override
+	public int sensitivityRadius(){
+		return 30;
 	}
 	@Override
 	public void setLocation(float x, float y){

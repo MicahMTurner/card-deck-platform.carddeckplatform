@@ -3,7 +3,7 @@ package client.gui.entities;
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.ArrayList;
-import java.util.Stack;
+import java.util.Random;
 
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
@@ -18,7 +18,13 @@ import utils.droppableLayouts.DroppableLayout.LayoutType;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import carddeckplatform.game.BitmapHolder;
 import client.controller.ClientController;
 
@@ -37,7 +43,11 @@ public abstract class Droppable implements Serializable {
 	 * @author Yoav
 	 * 
 	 */
-
+	
+	enum DroppableStatus{
+		MINIMIZED,NORMAl,SELECTED,DRAGGED,
+	}
+	
 	// protected Point point;
 	// public Stack<GuiCard>guiCards=new Stack<GuiCard>();
 	// protected Stack<Card> cards = new Stack<Card>();
@@ -48,6 +58,16 @@ public abstract class Droppable implements Serializable {
 	protected Point scale;
 	protected String image;
 	protected transient DroppableLayout droppableLayout;
+	transient protected Paint mPaintForGlow= new Paint();
+	protected int alpha=255;
+	protected int glowColor=0;
+	public int getAlpha() {
+		return alpha;
+	}
+
+	public void setAlpha(int alpha) {
+		this.alpha = alpha;
+	}
 
 	public Shape getShape() {
 		if (shape == null) {
@@ -152,8 +172,18 @@ public abstract class Droppable implements Serializable {
 				(float) absScale.getY() / (float) img.getHeight());
 		matrix.postTranslate(getX() - absScale.getX() / 2,
 				getY() - absScale.getY() / 2);
-
-		canvas.drawBitmap(img, matrix, null);
+		if(mPaintForGlow==null){
+			mPaintForGlow=new Paint();
+			mPaintForGlow = new Paint();
+			mPaintForGlow.setDither(true);
+			mPaintForGlow.setAntiAlias(true);
+			mPaintForGlow.setFilterBitmap(true);  
+			
+		}
+//		Random rand= new Random();
+//		ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE, glowColor);
+//		mPaintForGlow.setColorFilter(colorFilterTint);
+		canvas.drawBitmap(img, matrix, mPaintForGlow);
 		}
 		AbstractList<Card>cards = getCards();
 		for (Card card : cards){			
