@@ -138,8 +138,8 @@ public abstract class Droppable implements Serializable {
 
 		canvas.drawBitmap(img, matrix, null);
 		}
-		
-		for (Card card : getCards()){			
+		AbstractList<Card>cards = getCards();
+		for (Card card : cards){			
 				if (inHand==null || (inHand!=null && !inHand.equals(card))){
 					card.draw(canvas, context);
 				}			

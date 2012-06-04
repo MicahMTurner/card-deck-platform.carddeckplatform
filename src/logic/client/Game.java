@@ -115,12 +115,14 @@ public abstract class Game {
 			while (!availablePos.contains(next)){
 				next=turnsQueue.poll();
 			}
-			turnsQueue.add(next);			
+			turnsQueue.add(next);	
+			if (next.equals(first) && !firstRound){
+				ConnectionsManager.getConnectionsManager().sendToAll(new Message(new EndRoundAction()));
+				firstRound=false;
+			}
 		}
-		if (next.equals(first) && !firstRound){
-			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new EndRoundAction()));
-		}
-		firstRound=false;
+		
+		
 		return next;		
 	}
 	
