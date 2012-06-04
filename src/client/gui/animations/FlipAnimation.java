@@ -39,7 +39,7 @@ public class FlipAnimation extends AsyncTask<Void, Void, Void> {
     		final int index = i;
 
     		try {
-    			Thread.sleep(10);
+    			Thread.sleep(5);
     		} catch (InterruptedException e) {			            			
     			e.printStackTrace();
     		}					
@@ -61,6 +61,9 @@ public class FlipAnimation extends AsyncTask<Void, Void, Void> {
 			destination.onDrop(ClientController.get().getMe(), source,
 					((Card) card));
 			
+		}else{
+			source.removeCard(null,card);
+			destination.addCard(null,card);
 		}
 		
 		

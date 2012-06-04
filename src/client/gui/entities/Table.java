@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Stack;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import org.newdawn.slick.geom.Line;
 
@@ -27,7 +28,7 @@ public class Table {
 	Line line=null;//needed for DEBUG fling
 	
 	//private Stack<Draggable> draggables = new Stack<Draggable>();
-	private ArrayList<Droppable> droppables;
+	private ArrayBlockingQueue<Droppable> droppables;
 	private Hashtable<Integer,Draggable>mappedDraggables;
 	private Bitmap img;
 	private Context context;
@@ -40,7 +41,7 @@ public class Table {
 		//this.matrix=new Matrix();		
 		this.context = context;
 		this.img=null;
-		this.droppables= new ArrayList<Droppable>();
+		this.droppables= new ArrayBlockingQueue<Droppable>(20);
 		this.mappedDraggables= new Hashtable<Integer,Draggable>();
 	}
 //	public void addDraggable(Draggable draggable){
@@ -138,7 +139,7 @@ public class Table {
 	
 	
 	public Draggable getNearestDraggable(float x, float y){
-		Droppable d=this.droppables.get(0);
+	
 		Draggable answer=null;
 		//get nearest container where draggable can be found at
 		Droppable nearestDroppable=getNearestDroppable(x, y);
@@ -149,7 +150,7 @@ public class Table {
 			AbstractList<Card>nearestDroppableCards=nearestDroppable.getCards();
 			int size=nearestDroppableCards.size()-1;
 			Draggable draggable;
-			for (int i=size;i>-1;i--){
+			for (int i=0;i<size;i++){
 				draggable=nearestDroppableCards.get(i);
 				radius=Math.sqrt( (double) (((draggable.getX()-x)*(draggable.getX()-x)) + (draggable.getY()-y)*(draggable.getY()-y)));
 				if (radius<=draggable.sensitivityRadius()){
@@ -181,9 +182,11 @@ public class Table {
 	
 
 	
-	public void draw(Canvas canvas, Draggable inHand){		
+	public void draw(Canvas canvas){		
 				
 	if (canvas!=null){
+		Draggable holding=null;
+		Draggable drawLast=null;
 		canvas.drawColor(Color.TRANSPARENT);    	  
         canvas.scale(1, 1);
         
@@ -191,9 +194,10 @@ public class Table {
 			canvas.drawBitmap(img,(float)0,(float)0, null);			
 			
 			for(Droppable d : droppables){
-			//	synchronized (d) {
-					d.draw(canvas, context,inHand);
-			//	}
+					holding=d.draw(canvas, context);
+					if (holding!=null){
+						drawLast=holding;
+					}
 			}
 			
 //			for (Droppable d: droppables){			
@@ -208,8 +212,8 @@ public class Table {
 //					}
 //				}
 //			}
-			if (inHand!=null){
-				inHand.draw(canvas, context);
+			if (drawLast!=null){
+				drawLast.draw(canvas, context);
 			}
 			
 			if(this.line!=null){

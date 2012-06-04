@@ -168,7 +168,7 @@ public class CarddeckplatformActivity extends Activity {
 					public void onClick(View arg0) {
 						
 						GameEnvironment.get().getPlayerInfo().setServer(false);
-						GameEnvironment.get().getTcpInfo().setHostIp("192.168.2.111");
+						GameEnvironment.get().getTcpInfo().setHostIp("192.168.43.45");
 		            	GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
 		            	
 		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);

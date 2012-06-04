@@ -30,11 +30,12 @@ public class PublicHandler implements PublicEventsHandler{
 					cardsPlacedWhileTie=0;
 					card.reveal();
 				}
-				answer=true;			
+				answer=true;
+				if( byWhom.equals(ClientController.get().getMe()) && !War.tie){
+					byWhom.endTurn();
+				}
 			}
-			if( byWhom.equals(ClientController.get().getMe()) && !War.tie){
-				byWhom.endTurn();
-			}
+			
 		}
 		return answer;
 //		Card cardInPublic=publicArea.peek();

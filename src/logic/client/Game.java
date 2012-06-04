@@ -118,11 +118,11 @@ public abstract class Game {
 			turnsQueue.add(next);	
 			if (next.equals(first) && !firstRound){
 				ConnectionsManager.getConnectionsManager().sendToAll(new Message(new EndRoundAction()));
-				firstRound=false;
+				
 			}
 		}
 		
-		
+		firstRound=false;
 		return next;		
 	}
 	
