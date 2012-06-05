@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import freePlaySingle.FreePlaySingle;
 import freeplay.FreePlay;
 
 import war.War;
@@ -39,6 +40,8 @@ public class ClientDataBase {
 		games.put(freePlay.toString(), freePlay);
 		//BlackJack blackJack=new BlackJack();
 		//games.put(blackJack.toString(), blackJack);
+		FreePlaySingle freePlaySingle = new FreePlaySingle();
+		games.put(freePlaySingle.toString(), freePlaySingle);
 		
 	}
 	/**

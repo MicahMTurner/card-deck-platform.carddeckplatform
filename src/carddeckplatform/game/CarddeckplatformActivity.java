@@ -178,10 +178,11 @@ public class CarddeckplatformActivity extends Activity {
             	});
             	ll.addView(hostBtn);
             	
-            	HostFinder hostFinder = new TcpHostFinder((WifiManager) getSystemService(Context.WIFI_SERVICE));
-            	hosts = hostFinder.findHosts();
+            	
             	
             	if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){
+            		HostFinder hostFinder = new TcpHostFinder((WifiManager) getSystemService(Context.WIFI_SERVICE));
+                	hosts = hostFinder.findHosts();
 	            	for(final HostId hostId : hosts){
 	            		hostBtn = new Button(getApplicationContext());
 	            		hostBtn.setText("Play " + hostId.getGameName() + " with " + hostId.getOwner());
