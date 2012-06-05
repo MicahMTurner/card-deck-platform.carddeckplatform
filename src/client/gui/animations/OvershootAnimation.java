@@ -4,18 +4,19 @@ import communication.actions.DraggableMotionAction;
 import communication.link.ServerConnection;
 
 import utils.Card;
+import utils.Point;
 import android.os.AsyncTask;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 import client.controller.ClientController;
 import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
+import client.gui.entities.MetricsConvertion;
 
-public class OvershootAnimation extends AsyncTask<Void, Void, Void> {
+public class OvershootAnimation extends Animation {
 
 	Droppable source;
 	Droppable destination;
-	//Draggable draggable;
 	long duration;
 	float totalAnimDx;
 	float totalAnimDy;
@@ -48,60 +49,60 @@ public class OvershootAnimation extends AsyncTask<Void, Void, Void> {
 		this.totalAnimDy = destY-card.getY();
 		
 	}
+	
 	@Override
-	protected Void doInBackground(Void... arg0) {
+	protected void animate() {
+		float minSize=MetricsConvertion.pointRelativeToPx(new Point(10,5)).getX();
+		if(totalAnimDx<minSize && totalAnimDy<minSize ){
+//			card.setLocation(destX, destY);
+			this.duration=250;
+//			return ;
+		}
+		System.out.println("OvershootAnimation.doInBackground()");
+		Interpolator animateInterpolator = new OvershootInterpolator();
+		long startTime = System.currentTimeMillis();
+		long endTime = startTime + duration;
+		long curTime = System.currentTimeMillis();
+		float percentTime = (float) (curTime - startTime)
+				/ (float) (endTime - startTime);
+		float percentDistance = animateInterpolator
+				.getInterpolation(percentTime);
+		float curDx = percentDistance * totalAnimDx;
+		float curDy = percentDistance * totalAnimDy;
+		float x = card.getX();
+		float y = card.getY();
+		card.setLocation(x + curDx, y + curDy);
 		
-			Interpolator animateInterpolator = new OvershootInterpolator();
-			long startTime = System.currentTimeMillis();
-			long endTime = startTime + duration;
-			long curTime = System.currentTimeMillis();
-			float percentTime = (float) (curTime - startTime)
+		if(sendToCommunication)
+			card.onDrag();
+		
+		while (percentTime < 1.0) {
+			curTime = System.currentTimeMillis();
+			percentTime = (float) (curTime - startTime)
 					/ (float) (endTime - startTime);
-			float percentDistance = animateInterpolator
+			percentDistance = animateInterpolator
 					.getInterpolation(percentTime);
-			float curDx = percentDistance * totalAnimDx;
-			float curDy = percentDistance * totalAnimDy;
-			float x = card.getX();
-			float y = card.getY();
+			curDx = percentDistance * totalAnimDx;
+			curDy = percentDistance * totalAnimDy;
 			card.setLocation(x + curDx, y + curDy);
 			
 			if(sendToCommunication)
 				card.onDrag();
 			
-			while (percentTime < 1.0) {
-				curTime = System.currentTimeMillis();
-				percentTime = (float) (curTime - startTime)
-						/ (float) (endTime - startTime);
-				percentDistance = animateInterpolator
-						.getInterpolation(percentTime);
-				curDx = percentDistance * totalAnimDx;
-				curDy = percentDistance * totalAnimDy;
-				card.setLocation(x + curDx, y + curDy);
-				
-				if(sendToCommunication)
-					card.onDrag();
-				
-				try {
-					Thread.sleep(4);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
+			try {
+				Thread.sleep(4);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			card.setLocation(destX, destY);
-			System.out.println("END");
+
+		}
+		card.setLocation(destX, destY);
+		System.out.println("END");
 		
-		
-		return null;
 	}
-	
-	
 	@Override
-	protected void onPostExecute(Void result) {
-		// TODO Auto-generated method stub
-		super.onPostExecute(result);
-		
+	protected void postAnimation() {
 		if(sendToCommunication){
 			
 			ClientController.sendAPI().endDragMotion(card.getId());
@@ -110,15 +111,27 @@ public class OvershootAnimation extends AsyncTask<Void, Void, Void> {
 				card.invalidMove();
 			}
 			
-		}else{
-			
 		}
-			
-
-		
-		
 		card.onRelease();
 		
 	}
+	
+//	@Override
+//	protected void onPostExecute(Void result) {
+//		// TODO Auto-generated method stub
+//		super.onPostExecute(result);
+//		
+//		if(sendToCommunication){
+//			
+//			ClientController.sendAPI().endDragMotion(card.getId());
+//			if (!destination.onDrop(ClientController.get().getMe(), source,
+//					((Card) card))){
+//				card.invalidMove();
+//			}
+//			
+//		}
+//		card.onRelease();
+//		
+//	}
 
 }

@@ -45,8 +45,17 @@ public class ClientDataBase {
 	 * factory
 	 */
 	public Game getGame(String gameName){
-		return games.get(gameName);
-		//return loader.LoadPlugin(gameName);		
+		try {
+			return games.get(gameName).getClass().newInstance();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//return loader.LoadPlugin(gameName);	
+		return null;
 	}
 	
 	public void addGame(String gameId){

@@ -3,6 +3,10 @@ package client.gui.entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
+
 import communication.actions.StartDraggableMotionAction;
 import communication.link.ServerConnection;
 import communication.messages.Message;
@@ -20,8 +24,8 @@ import IDmaker.IDMaker;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-
-
+	
+	
 public abstract class Draggable implements Serializable{	
 	
 	private String carrier = "";
@@ -31,7 +35,7 @@ public abstract class Draggable implements Serializable{
 	protected boolean carried=false;
 	protected boolean inHand=false;
 	protected Point scale;
-	
+	protected transient Shape shape = null;
 	
 	enum CardStatus{
 		MINIMIZED,NORMAl,SELECTED,DRAGGED,
@@ -39,6 +43,28 @@ public abstract class Draggable implements Serializable{
 	
 	public Point getScale() {
 		return scale;
+	}
+	
+	public Shape getShape() {
+		Point size = MetricsConvertion.pointRelativeToPx(this.scale);
+		if (shape == null) {
+			
+			shape = new Rectangle(getX() - (size.getX() / 2), getY()
+					- (size.getY() / 2), size.getX(), size.getY());
+		}
+		shape.setX(getX() - (size.getX() / 2));
+		shape.setY(getY() - (size.getY() / 2));
+		return shape;
+	}
+	
+	public boolean isIntersect(Line line) {
+		return line.intersects(getShape()) || getShape().contains(line);
+	}
+	
+	public boolean isContain(float x, float y) {
+		// return shape.contains(x, y);
+		return getShape().contains(x, y);
+
 	}
 
 	protected String frontImg;
@@ -83,7 +109,7 @@ public abstract class Draggable implements Serializable{
 	
 	public void invalidMove(){		
 //			setLocation(prevCoord.getX(),prevCoord.getY());	
-			new OvershootAnimation(prevCoord.getX(), prevCoord.getY(),(Card) this, 1000, false).execute(null);
+			new OvershootAnimation(prevCoord.getX(), prevCoord.getY(),(Card) this, 1000, false).execute();
 			
 			//ClientController.sendAPI().dragMotion(GameEnvironment.get().getPlayerInfo().getUsername(), id, MetricsConvertion.pointPxToRelative(getCoord()));
 			//ClientController.sendAPI().endDragMotion(getMyId());			

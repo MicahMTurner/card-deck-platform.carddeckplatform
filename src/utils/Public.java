@@ -44,7 +44,7 @@ public class Public extends Droppable{
 //	
 	
 	@Override
-	public boolean addCard(Player player,Card card){
+	public boolean onCardAdded(Player player,Card card){
 		boolean answer=handler.onCardAdded(this,player, card);
 		if (answer){
 			cards.addFirst(card);
@@ -52,7 +52,7 @@ public class Public extends Droppable{
 		return answer; 
 	}
 	@Override
-	public boolean removeCard(Player player,Card card){
+	public boolean onCardRemoved(Player player,Card card){
 		boolean answer=handler.onCardRemoved(this,player, card);
 		if (answer || player==null){
 			cards.remove(card);
