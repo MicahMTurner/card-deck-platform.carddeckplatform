@@ -17,6 +17,14 @@ public class ColorInterpolator {
 	
 	
 	ColorInterpolator(int source,int dest){
+		
+		mEnd_Alpha=Color.alpha(dest);
+		mEnd_Red=Color.red(dest);
+		mEnd_Green=Color.green(dest);
+		mEnd_Blue=Color.blue(dest);
+		mStart_Red=Color.red(source);
+		mStart_Green=Color.green(source);
+		mStart_Blue=Color.blue(source);
 		mStart_Alpha =Color.alpha(source);
 	}
 	

@@ -213,7 +213,8 @@ public class ClientController implements Observer {
 		if (playerPosition.equals(me.getGlobalPosition())){
 			me.startTurn();
 		}
-		//glow player icon/name		
+		//glow player icon/name
+		gui.setPlayerTurn(getZone(playerPosition.getRelativePosition(me.getGlobalPosition())));
 	}
 
 	public void endTurn() {

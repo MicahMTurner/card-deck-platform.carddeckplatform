@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-import java.util.Stack;
+import java.util.Random;
 
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
@@ -19,12 +19,23 @@ import utils.droppableLayouts.DroppableLayout.LayoutType;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import carddeckplatform.game.BitmapHolder;
 import client.controller.ClientController;
 
 public abstract class Droppable implements Serializable {
+	public int getGlowColor() {
+		return glowColor;
+	}
+
+	public void setGlowColor(int glowColor) {
+		this.glowColor = glowColor;
+	}
+
 	/**
 	 * **************************************************<br/>
 	 * **************************************************<br/>
@@ -184,9 +195,9 @@ public abstract class Droppable implements Serializable {
 			mPaintForGlow.setFilterBitmap(true);  
 			
 		}
-//		Random rand= new Random();
-//		ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE, glowColor);
-//		mPaintForGlow.setColorFilter(colorFilterTint);
+		Random rand= new Random();
+		ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE,glowColor);
+		mPaintForGlow.setColorFilter(colorFilterTint);
 		canvas.drawBitmap(img, matrix, mPaintForGlow);
 		
 		}
