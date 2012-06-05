@@ -48,7 +48,7 @@ public class GlowAnimation extends AsyncTask<Void, Void, Void> {
 				.getInterpolation(percentTime);
 		
 		
-		float degree=40;
+		float degree=40;//controlling with the degree on the cycle period
 		percentDistance=(float) (Math.cos(percentDistance*degree)+1)/2;
 		System.out.println("PD:"+percentDistance);
 		int glowColor = colorinterpolator.getInterpolatedColor(percentDistance);
