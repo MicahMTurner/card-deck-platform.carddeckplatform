@@ -83,9 +83,9 @@ public abstract class Droppable implements Serializable {
 		ClientController.sendAPI().cardAdded(card, from.getId(), id, player.getId());				
 		if (addCard(player, card) && from.removeCard(player, card)){
 			answer=true;
-			if (droppableLayout != null && answer){
-				rearrange(0);
-			}
+//			if (droppableLayout != null && answer){
+//				rearrange(0);
+//			}
 		}
 		
 		return answer;
@@ -100,22 +100,12 @@ public abstract class Droppable implements Serializable {
 		return true;
 	}
 	public boolean isContain(float x, float y) {
-		// return shape.contains(x, y);
 		return getShape().contains(x, y);
 
 	}
 
 	public boolean isIntersect(Line line) {
-		// try {
-		// return line.intersects(shape)||shape.contains(line);
 		return line.intersects(getShape()) || getShape().contains(line);
-		// } catch (Exception e) {
-		// // TODO: handle exception
-		// // TODO: handle exception
-		// this.shape=getShape();
-		// return line.intersects(shape)||shape.contains(line);
-		// }
-
 	}
 
 	public Position getPosition() {
@@ -127,11 +117,7 @@ public abstract class Droppable implements Serializable {
 		return getCards().indexOf(draggable);
 
 	}
-	public void onCardAdded(Player byWhom, Card card) {
-		// card.setCoord(getX(),getY());
-		addCard(byWhom, card);
-	}
-
+	
 	@Override
 	public boolean equals(Object other) {
 		if (other == null || !(other instanceof Droppable)) {
@@ -159,12 +145,32 @@ public abstract class Droppable implements Serializable {
 		}
 	}
 
-	public abstract boolean addCard(Player player, Card card);
+	
+	
+	public boolean addCard(Player player, Card card){
+		boolean answer;
+		answer = onCardAdded(player, card);
+		if (droppableLayout != null && answer){
+			rearrange(0);
+		}
+		return answer;
+	}
 
-	public abstract boolean removeCard(Player player, Card card);
+	public boolean removeCard(Player player, Card card){
+		boolean answer;
+		answer = onCardRemoved(player, card);
+		if (droppableLayout != null && answer){
+			rearrange(0);
+		}
+		return answer;
+	}
+	
+	public abstract boolean onCardAdded(Player player, Card card);
+	
+	public abstract boolean onCardRemoved(Player player, Card card);
 
-	public Draggable draw(Canvas canvas, Context context) {
-		Card holding=null;
+	public ArrayList<Draggable> draw(Canvas canvas, Context context) {
+		ArrayList<Draggable> holding=null;
 		Bitmap img = BitmapHolder.get().getBitmap(image);
 		if (img!=null){
 		Matrix matrix = new Matrix();
@@ -191,11 +197,17 @@ public abstract class Droppable implements Serializable {
 		
 		}
 		AbstractList<Card>cards = getCards();
-		for (Card card : cards){
+		int size=cards.size()-1;
+		Card card=null;
+		for (int i=size;i>=0;i--){
+			card=cards.get(i);
 				if (!card.isInHand() && !card.isCarried()){
 					card.draw(canvas, context);
 				}else{
-					holding=card;
+					if (holding==null){
+						holding=new ArrayList<Draggable>();
+					}
+					holding.add(card);
 				}
 		}
 		return holding;

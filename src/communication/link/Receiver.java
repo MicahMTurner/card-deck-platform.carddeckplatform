@@ -45,7 +45,7 @@ public class Receiver implements Runnable{
 					in.close();
 					//check if stream closed unwillingly
 					if (!stop){
-						ClientController.get().playerLeft();
+						//ClientController.get().playerLeft();
 						stop=true;
 					}
 				} catch (IOException e1) {					

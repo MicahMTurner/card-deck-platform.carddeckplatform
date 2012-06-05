@@ -8,6 +8,7 @@ import communication.messages.Message;
 
 import utils.Card;
 import utils.Player;
+import utils.Point;
 import utils.Position;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -27,6 +28,7 @@ import client.gui.animations.FlipAnimation;
 import client.gui.animations.OvershootAnimation;
 import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
+import client.gui.entities.MetricsConvertion;
 import client.gui.entities.Table;
 import client.gui.entities.TouchHandler;
 import client.gui.entities.TouchManager;
@@ -335,8 +337,8 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 						draggableInHand.getX(), draggableInHand.getY(), x
 								+ totalDx, y + totalDy);
 
-				if (droppable != null && from != null && from!=droppable) {
-					if (droppable.isFlingabble()) {
+				if (droppable != null && from != null && !from.equals(droppable)) {
+					if (droppable.isFlingabble() ) {
 						float totalAnimDx = droppable.getX()
 								- draggableInHand.getX();
 						float totalAnimDy = droppable.getY()
@@ -346,12 +348,13 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 								(Card) draggableInHand, (long) 1000,
 								totalAnimDx, totalAnimDy, true).execute();
 					}
-					else if (from == droppable) {
+					else if (from.equals(droppable)) {
 						// dont do anything cause rearrange is made at onSingleTapUp
 						// method
 
 					}else{
 						draggableInHand.setLocation(x, y);
+						draggableInHand.onRelease();
 						if (!droppable.onDrop(ClientController.get().getMe(), from,
 								((Card) draggableInHand))){
 							draggableInHand.invalidMove();
@@ -359,6 +362,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 					}
 					this.from = null;
 				} else {
+					
 					draggableInHand.invalidMove();
 					ServerConnection.getConnection().send(new Message(new InvalidMoveAction(draggableInHand.getId())));
 				}
@@ -385,13 +389,13 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		if (uiEnabled) {
 			if (draggableInHand != null) {
 				Droppable droppable = table.getNearestDroppable(x, y);
-				if(droppable==from){
-					
-				}else{
+//				if(droppable==from){
+//					
+//				}else{
 					draggableInHand.setLocation(x, y);
 					draggableInHand.onDrag();
 					
-				}
+//				}
 			}
 		} else
 			popToast("It's not your turn now!!");
