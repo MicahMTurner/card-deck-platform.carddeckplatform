@@ -14,12 +14,32 @@ import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.gui.entities.Droppable;
 import utils.Card;
 import utils.Point;
+import utils.Position;
+import utils.droppableLayouts.line.BottomLineLayout;
 
 public abstract class DroppableLayout implements Serializable {
 	public enum LayoutType {
-		NONE, LINE, HEAP
+		NONE, LINE, HEAP;
+		public DroppableLayout getLayout(Droppable droppable){
+			DroppableLayout answer=null;
+			switch(this){
+				case LINE:{
+					answer=new BottomLineLayout(droppable);
+					break;
+				}
+				case HEAP:{
+					answer=new HeapLayout(droppable); 
+					break;
+				}
+				case NONE:{
+					break;
+				}
+				default:{}
+			}
+			return answer;
+		}
 	}
-
+		
 	protected Droppable droppable;
 	AnimationRunnable animationRunnable = null;
 
