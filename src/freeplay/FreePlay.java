@@ -9,14 +9,17 @@ import communication.actions.DealCardAction;
 import communication.messages.Message;
 import communication.server.ConnectionsManager;
 
+import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
 
 import utils.DeckArea;
 import utils.Card;
 import utils.Deck;
+import utils.Point;
 import utils.Position;
 import utils.Position.Player;
+import utils.droppableLayouts.DroppableLayout;
 import utils.Public;
 import logic.client.Game;
 
@@ -34,7 +37,7 @@ public class FreePlay extends Game{
 
 	@Override
 	public int minPlayers() {
-		return 1;
+		return 2;
 	}
 
 	@Override
@@ -57,7 +60,7 @@ public class FreePlay extends Game{
 	@Override
 	public void setLayouts(ArrayList<Droppable> publics) {
 		droppables.add(new DeckArea(Position.Button.TOPRIGHT));
-		droppables.add(new Public(new PublicHandler(), Position.Public.MID));		
+		droppables.add(new Public(new PublicHandler(), Position.Public.MID,DroppableLayout.LayoutType.NONE , new Point(65,65)));		
 	}
 	
 //	@Override
@@ -72,13 +75,15 @@ public class FreePlay extends Game{
 		return "free play";
 	}
 
-	@Override
-	public PlayerEventsHandler getPlayerHandler() {		
-		return new PlayerHandler();
-	}
 
 	@Override
 	public void onRoundEnd() {
+	}
+
+	@Override
+	public utils.Player getPlayerInstance(PlayerInfo playerInfo,
+			Player position, int uniqueId) {
+		return new utils.Player(playerInfo, position, uniqueId, new PlayerHandler(), DroppableLayout.LayoutType.LINE);
 	}
 
 }

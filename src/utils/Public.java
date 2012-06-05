@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
 
+import utils.droppableLayouts.DroppableLayout;
+import utils.droppableLayouts.DroppableLayout.LayoutType;
 import utils.droppableLayouts.HeapLayout;
 import utils.droppableLayouts.line.BottomLineLayout;
 
@@ -28,13 +30,14 @@ public class Public extends Droppable{
 	
 	
 	
-	public Public(PublicEventsHandler handler,Position.Public position) {
-		super(position.getId(),position, new Point(10,13));
+	public Public(PublicEventsHandler handler,Position.Public position,DroppableLayout.LayoutType layoutType , Point scale) {
+//		super(position.getId(),position, new Point(10,13),layoutType);
+		super(position.getId(),position, scale,layoutType);
 		this.handler=handler;
 		
 		
-		this.image = "playerarea";
-		this.droppableLayout = new HeapLayout(this);
+		this.image = "freepublic";
+		
 		//BitmapHolder.get().scaleBitmap(image, this.scale);
 	}
 	

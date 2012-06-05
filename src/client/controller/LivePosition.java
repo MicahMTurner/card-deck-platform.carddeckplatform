@@ -313,7 +313,7 @@ public class LivePosition implements SensorEventListener{
 		        if (azimut<0){
 		        	azimut+=360;
 		        }
-		        //System.out.println("azimut: "+azimut);
+		        System.out.println("azimut: "+azimut);
 		      }
 		      
 		    }

@@ -12,6 +12,8 @@ import java.util.Stack;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
 
+import utils.droppableLayouts.DroppableLayout;
+
 import android.content.Context;
 import android.graphics.Canvas;
 
@@ -26,7 +28,7 @@ import client.gui.entities.MetricsConvertion;
 public class DeckArea extends Droppable{
 	
 	public DeckArea(Position.Button position) {
-		super(position.getId(),position, new Point(10,13));
+		super(position.getId(),position, new Point(10,13),DroppableLayout.LayoutType.HEAP);
 		this.image = "playerarea";
 	}
 
@@ -53,6 +55,7 @@ public class DeckArea extends Droppable{
 
 	@Override
 	public boolean onCardAdded(Player player, Card card) {
+		card.hide();
 		card.setLocation(getX(), getY());
 		card.setAngle(0);
 		cards.addLast(card);
