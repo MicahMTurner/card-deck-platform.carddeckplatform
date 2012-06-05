@@ -304,7 +304,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 			if (draggableInHand != null) {
 				if (draggableInHand.isMoveable()) {
 					from = table.getNearestDroppable(X, Y);
-					new GlowAnimation(from, 10000).execute();
+					
 					draggableInHand.onClick();
 				} else {
 					popToast("You cannot move this card");
@@ -461,6 +461,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		
 	}
 
-	public void setPlayerTurn(Droppable zone) {
+	public void setPlayerTurn(Droppable droppable) {
+		new GlowAnimation(droppable, 10000).execute();
 	}
 }
