@@ -52,7 +52,7 @@ public class DeckArea extends Droppable{
 	}
 
 	@Override
-	public boolean addCard(Player player, Card card) {
+	public boolean onCardAdded(Player player, Card card) {
 		card.setLocation(getX(), getY());
 		card.setAngle(0);
 		cards.addLast(card);
@@ -61,7 +61,7 @@ public class DeckArea extends Droppable{
 	}
 
 	@Override
-	public boolean removeCard(Player player, Card card) {
+	public boolean onCardRemoved(Player player, Card card) {
 		cards.remove(card);
 		return true;
 	}

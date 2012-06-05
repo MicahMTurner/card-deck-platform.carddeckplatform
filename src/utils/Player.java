@@ -134,11 +134,13 @@ public class Player extends Droppable implements  Comparable<Player>{
 				CardTransformation.get().transform(card,position,newPos);
 			}
 			position=newPos;
+			//TODO:
+			this.droppableLayout = new BottomLineLayout(this);
 		}		
 	}
 	
 	@Override
-	public boolean addCard(Player player, Card card) {
+	public boolean onCardAdded(Player player, Card card) {
 		boolean answer=handler.onCardAdded(this, card);
 		if (answer || player==null){
 			card.setOwner((Position.Player)position);		
@@ -155,7 +157,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 //		return answer; 		
 //	}
 	@Override
-	public boolean removeCard(Player player, Card card) {
+	public boolean onCardRemoved(Player player, Card card) {
 		return removeCard(card);
 	}
 //	@Override
