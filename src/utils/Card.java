@@ -145,7 +145,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		
 		// transformations.
 		matrix.postScale((float)p.getX()/(float)img.getWidth(), (float)p.getY()/(float)img.getHeight());
-		matrix.postTranslate(coord.getX()-img.getWidth()/2, coord.getY()-img.getHeight()/2);
+		matrix.postTranslate(coord.getX()-p.getX()/2, coord.getY()-p.getY()/2);
 		matrix.postRotate(angle , getX(), getY());
 		
 		canvas.drawBitmap(img, matrix, null);

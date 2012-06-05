@@ -10,7 +10,7 @@ import utils.Point;
 import carddeckplatform.game.StaticFunctions;
 import android.os.AsyncTask;
 
-public class FlipAnimation extends AsyncTask<Void, Void, Void> {
+public class FlipAnimation extends Animation {
 
 	public FlipAnimation(Droppable source, Droppable destination,Card card,boolean sendToCommunication) {
 		super();
@@ -24,9 +24,9 @@ public class FlipAnimation extends AsyncTask<Void, Void, Void> {
 	final Droppable source;
 	final Droppable destination;
 	boolean sendToCommunication;
-	
+
 	@Override
-	protected Void doInBackground(Void... params) {
+	protected void animate() {
 		float x = card.getX();
 		float y = card.getY();
 		final ArrayList<Point> vector = StaticFunctions.midLine((int)x, (int)y, (int)destination.getX(), (int)destination.getY());
@@ -50,13 +50,11 @@ public class FlipAnimation extends AsyncTask<Void, Void, Void> {
     	card.setLocation(destination.getX(), destination.getY());
     	card.setAngle(0);
 		
-		return null;
+		
 	}
-	
+
 	@Override
-	protected void onPostExecute(Void result) {
-		// TODO Auto-generated method stub
-		super.onPostExecute(result);
+	protected void postAnimation() {
 		if(sendToCommunication){
 			destination.onDrop(ClientController.get().getMe(), source,
 					((Card) card));
@@ -65,10 +63,6 @@ public class FlipAnimation extends AsyncTask<Void, Void, Void> {
 			source.removeCard(null,card);
 			destination.addCard(null,card);
 		}
-		
-		
-		
-		
 	}
 
 }
