@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 import android.bluetooth.BluetoothAdapter;
@@ -24,6 +27,7 @@ public class GameEnvironment {
 	private ConnectionType connectionType;	
 	private Handler handler;
 	private Paint paint;
+	private ExecutorService executor;
 	
 	/*---Singleton implementation---*/
 	private static class GameEnvironmentHolder
@@ -44,13 +48,17 @@ public class GameEnvironment {
 		tcpInfo = new TcpInfo();
 		bluetoothInfo = new BluetoothInfo();
 		playerInfo = new PlayerInfo();
-		
+		executor=Executors.newCachedThreadPool();
 		handler = new Handler();
 		paint = new Paint();
 	}
 
 	public Paint getPaint(){
 		return paint;
+	}
+	
+	public ExecutorService getExecutor() {		
+		return executor;
 	}
 	
 	public Handler getHandler() {
