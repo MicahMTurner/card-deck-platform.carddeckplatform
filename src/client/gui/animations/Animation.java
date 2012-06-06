@@ -4,7 +4,7 @@ import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
 public abstract class Animation implements Runnable{
 	public void execute(){
-		//new Thread(this).start();
+		//new Thread(this).start();//
 		GameEnvironment.get().getExecutor().execute(this);
 	}
 	@Override
