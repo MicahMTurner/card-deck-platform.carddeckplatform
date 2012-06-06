@@ -281,6 +281,10 @@ public abstract class Droppable implements Serializable {
 
 	public void setPosition(Position relativePosition) {
 		this.position = relativePosition;
+		AbstractList<Card>cards=getCards();
+		for (Card card : cards){
+			card.setLocation(getX(), getY());
+		}
 
 	}
 
