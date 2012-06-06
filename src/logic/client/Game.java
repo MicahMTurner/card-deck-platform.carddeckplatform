@@ -147,8 +147,9 @@ public abstract class Game {
 	}
 
 	public void positionUpdate(Player player, Position.Player newPosition) {
-		Player swappedWith=(Player) ClientController.get().getZone(newPosition);
 		Position.Player oldPosition=getMe().getGlobalPosition();
+		Player swappedWith=(Player) ClientController.get().getZone(newPosition.getRelativePosition(oldPosition));
+		
 		if (swappedWith==null){
 			player.setGlobalPosition(newPosition);
 		}else{			

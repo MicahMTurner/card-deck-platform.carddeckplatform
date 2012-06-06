@@ -4,9 +4,9 @@
                 android:title="Player setup">
                  <EditTextPreference
                 android:name="EditText Preference"
-                android:defaultValue="Set your username"
+                android:defaultValue="Guest"
                 android:title="Set your username"
-                android:key="editTextPref" />
+                android:key="userName" />
         </PreferenceCategory>
         
         <PreferenceCategory

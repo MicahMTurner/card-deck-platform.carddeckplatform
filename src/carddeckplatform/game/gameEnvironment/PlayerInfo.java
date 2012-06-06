@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import android.view.Surface;
 
+import utils.Player;
 import utils.Position;
 
 import client.controller.ClientController;
@@ -39,16 +40,18 @@ public class PlayerInfo implements Serializable{
 		public void setAzimute(Double newAzimut) {
 			
 			if (azimut!=null){
-				if (!(ClientController.get().getMe().getGlobalPosition().equals(LivePosition.translatePositionByAzimute(newAzimut-LivePosition.SAFETYDISTANCE)))
-						&& !(ClientController.get().getMe().getGlobalPosition().
-						equals(LivePosition.translatePositionByAzimute(newAzimut+LivePosition.SAFETYDISTANCE)))){
+				Player me=ClientController.get().getMe();
+				if (me!=null){
+					if (!(me.getGlobalPosition().equals(LivePosition.translatePositionByAzimute(newAzimut-LivePosition.SAFETYDISTANCE)))
+							&& !(me.getGlobalPosition().equals(LivePosition.translatePositionByAzimute(newAzimut+LivePosition.SAFETYDISTANCE)))){
 					
-					//get new position player want to swap to
-					Position.Player newPosition=LivePosition.translatePositionByAzimute(newAzimut);					
+						//get new position player want to swap to
+						Position.Player newPosition=LivePosition.translatePositionByAzimute(newAzimut);					
 						
-					//send swap-position request message		
-					ServerConnection.getConnection().send(new SwapRequestMessage(ClientController.get().getMe().getGlobalPosition(),newPosition));
-				}			
+						//send swap-position request message		
+						ServerConnection.getConnection().send(new SwapRequestMessage(ClientController.get().getMe().getGlobalPosition(),newPosition));
+					}
+				}
 			}
 			this.azimut=newAzimut;
 		
