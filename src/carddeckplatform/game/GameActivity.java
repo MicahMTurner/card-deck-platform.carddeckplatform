@@ -3,6 +3,7 @@ package carddeckplatform.game;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 import javax.annotation.PostConstruct;
 
@@ -118,7 +119,7 @@ public class GameActivity extends Activity {
 
     }
     
-    private void initialServer(final String gameName) {
+    private void initialServer(final String gameName) {    	
     	// added by Michael: bluetooth throws exception if the server socket isn't instantiated from main thread or handler.
     	GameEnvironment.get().getHandler().post(new Runnable() {
 			@Override
@@ -133,9 +134,12 @@ public class GameActivity extends Activity {
 		    		// in blue-tooth mode there is no need for host id listener.
 		          	GameEnvironment.get().getBluetoothInfo().initServerSocket();
 		    	  }
-		    	  host=new Host(ClientDataBase.getDataBase().getGame(gameName));
-		    	  new Thread(host).start();		
+				
+		    	host=new Host(ClientDataBase.getDataBase().getGame(gameName));
+		    	new Thread(host).start();
+		    	//cdl.countDown();
 			}
+			
 		});
     	  
 	}
@@ -196,7 +200,13 @@ public class GameActivity extends Activity {
 	@Override
 	protected String doInBackground(String... params) {
 		if (GameEnvironment.get().getPlayerInfo().isServer()){
+			//CountDownLatch cdl=new CountDownLatch(1);
 	        initialServer(params[0]);
+	       // try {
+			//	cdl.await();
+			//} catch (InterruptedException e) {		
+			//	e.printStackTrace();
+			//}
 	    }
 		return setupGame();
 	}
@@ -230,13 +240,12 @@ public class GameActivity extends Activity {
 	  
   }
   private String setupGame(){  
-	  
-		if (GameEnvironment.get().getPlayerInfo().isServer()){
-			//start live position feature
-			//LivePosition.get().start();
+	  	//check if live position was enabled
+	  	if (getIntent().getBooleanExtra("livePosition", false)){
+			LivePosition.get().start();
 		}
-		//-------CONNECT TO SERVER(HOST)------//
-			
+
+		//-------CONNECT TO SERVER(HOST)------//			
 		try {
 			ServerConnection.getConnection().openConnection();					
 			   

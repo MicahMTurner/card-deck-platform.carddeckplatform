@@ -46,6 +46,7 @@ import android.widget.ViewFlipper;
 public class CarddeckplatformActivity extends Activity {
 	private static Context context;
 	private ViewFlipper mFlipper;
+	private boolean livePosition;
 
 	public static Context getContext(){
 		return context;
@@ -56,13 +57,18 @@ public class CarddeckplatformActivity extends Activity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         
         boolean useBluetooth = prefs.getBoolean("useBluetooth", false);
-        
+        boolean useLivePosition=prefs.getBoolean("useLivePosition", false);
         if(!useBluetooth){
         	GameEnvironment.get().setConnectionType(ConnectionType.TCP);
         }
         else{
         	GameEnvironment.get().setConnectionType(ConnectionType.BLUETOOTH);
         }
+        if (useLivePosition){
+        	livePosition=true;
+        }
+        
+        
 	}
 	
 	
@@ -107,9 +113,12 @@ public class CarddeckplatformActivity extends Activity {
         
         
         final EditText username = (EditText) findViewById(R.id.nickText);
+
+        //take user name from prefs
+        username.setText(PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getString("userName", "Guest"));
         
-        username.setText("user1");
-        
+        //bring curser to end of text
+        username.setSelection(username.length());
         
         Button hostBtn = (Button) findViewById(R.id.creategameButton);
         Button joinBtn = (Button) findViewById(R.id.joingamebutton);
@@ -142,7 +151,9 @@ public class CarddeckplatformActivity extends Activity {
 			                String prefs = ClientDataBase.getDataBase().getGame(gameName).getPrefsName();
 			                
 			                i.putExtra("gamePrefs", prefs);
-			                i.putExtra("gameName", gameName);
+			                i.putExtra("gameName", gameName);			                
+			                i.putExtra("livePosition", livePosition);
+			                
 			                startActivity(i);
 			                
 			                dialog.dismiss();

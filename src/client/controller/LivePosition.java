@@ -57,59 +57,10 @@ public class LivePosition implements SensorEventListener{
 	}
 	
 	private class SwapAgreementManager{
-		//if i requested a swap
-		//private boolean requestedSwap;
-		//if someone else sent me a swap request message and he wants to swap with me
-		//private boolean swapRequested;
-		//private Position.Player requested;
-		//private int waitingTo=-1;
-		//private Position.Player desiredPosition;
+		
 		private HashMap<Position.Player, Position.Player> movingEdges=new HashMap<Position.Player, Position.Player>();
 		
-//		public void swapReqeusted(Position.Player whereToMove){
-//			if (!swapRequested){
-//				this.swapRequested=true;
-//				this.requested=whereToMove;
-//			}else if (desiredPosition!=null && whereToMove.equals(desiredPosition)){
-//				if (requested.equals(whereToMove)){
-//					ClientController.get().positionUpdate(ClientController.get().getMe().getId(), whereToMove);
-//					ServerConnection.getConnection().send(new Message(
-//							new LivePositionChangedAction(ClientController.get().getMe().getId(), whereToMove)));
-//					clearSwappedPlayersPendingAgreement(desiredPosition,whereToMove);
-//				}
-//			}
-//		}
-//		public void clearSwappedPlayersPendingAgreement(Position.Player swappedPosition1,Position.Player swappedPosition2){
-//			//check if one of the swapped players was my desired position
-//			if (desiredPosition.equals(swappedPosition1) || desiredPosition.equals(swappedPosition2)){
-//				desiredPosition=null;
-//				requestedSwap=false;
-//			}
-//			//check if one of the swapped players reqested to swap with me
-//			if (requested.equals(swappedPosition1) || requested.equals(swappedPosition2)){
-//				swapRequested=false;
-//				requested=null;				
-//			}
-//			
-//		}
 
-//		public void waitForAgreement(int fromWho,Position.Player desiredPosition) {
-//			if (desiredPosition.equals(ClientController.get().getMe().getPosition())){
-//				//CHECK THIS
-//				clearSwappedPlayersPendingAgreement(desiredPosition,this.desiredPosition);
-//			}else{
-//				requestedSwap=true;
-//				//swap to array-list of desired positions and array-list of requests? 
-//				this.desiredPosition=desiredPosition;
-//				this.waitingTo=fromWho;	
-//				if (swapRequested &&  ClientController.get().getZone(requested).getId()==fromWho){	
-//					ClientController.get().positionUpdate(ClientController.get().getMe().getId(), requested);
-//					clearSwappedPlayersPendingAgreement(requested,desiredPosition);								
-//				}
-//			}
-//			
-//			
-//		}
 		public void moveReqeuested(Position.Player from, Position.Player to) {
 			synchronized(movingEdges){
 				
@@ -118,7 +69,7 @@ public class LivePosition implements SensorEventListener{
 					ArrayList<Pair<Position.Player,Position.Player>> movingList;
 
 					//check if place is not occupied
-					if (ClientController.get().getZone(to)==null){						
+					if (ClientController.get().getZone(to.getRelativePosition(ClientController.get().getMe().getGlobalPosition()))==null){						
 					
 						//place isn't occupied
 						movingList=new ArrayList<Pair<Player,Player>>();
