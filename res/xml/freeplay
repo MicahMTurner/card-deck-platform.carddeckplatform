@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    	<PreferenceCategory
+                android:title="Number of players">
+                 <EditTextPreference
+                android:name="Number of players"
+                android:defaultValue="1"
+                android:title="Set number of players"
+                android:key="playersNum" />
+        </PreferenceCategory> 
+</PreferenceScreen>

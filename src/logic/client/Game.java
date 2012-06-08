@@ -31,13 +31,16 @@ public abstract class Game {
 	protected ArrayList<Player> players = new ArrayList<Player>();
 	protected Queue<utils.Position.Player> turnsQueue=new LinkedList<utils.Position.Player>();
 	protected ArrayList<Droppable> droppables=new ArrayList<Droppable>();
+	//The number of players the host would accept before starting the game.  
+	protected int numberOfParticipants=0; 
 	//private ToolsFactory tools=new DefaultTools();
 	//private Player.Position currentTurn;
 	protected Deck deck;
 	private boolean firstRound;
 	private Position.Player first;
 	
-	 
+	  
+	
 
 	//protected abstract Player createPlayer(String userName, Position.Player position);
 	public abstract Deck getDeck();
@@ -47,6 +50,7 @@ public abstract class Game {
 	public abstract Queue<utils.Position.Player> setTurns();
 	//the minimal players count
 	public abstract int minPlayers();
+	
 	//how many cards to split
 	public abstract int cardsForEachPlayer();
 	
@@ -77,6 +81,11 @@ public abstract class Game {
 		deck=getDeck();	
 	}
 	
+	public int getNumberOfParticipants() {
+		if(numberOfParticipants==0)
+			return minPlayers();
+		return numberOfParticipants;
+	}
 	
 	public Game() {
 		first=null;
@@ -87,6 +96,8 @@ public abstract class Game {
 		}
 		//clearEmptyPositions();		
 		setLayouts(droppables);
+		
+		loadPrefs();
 	}
 	
 	private void clearEmptyPositions() {
@@ -188,6 +199,14 @@ public abstract class Game {
 		Position.Player temp=swappedWith.getGlobalPosition();
 		swappedWith.setGlobalPosition(player.getGlobalPosition());
 		player.setGlobalPosition(temp);
+	}
+	
+	public String getPrefsName(){
+		return "";
+	}
+	
+	public void loadPrefs(){
+		
 	}
 
 }
