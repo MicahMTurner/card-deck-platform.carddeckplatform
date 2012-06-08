@@ -1,47 +1,48 @@
 package logic.client;
 
-import handlers.PlayerEventsHandler;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
-import communication.actions.EndRoundAction;
+import communication.actions.DealCardAction;
 import communication.messages.Message;
+import communication.messages.RequestCardMessage;
 import communication.server.ConnectionsManager;
 
-
-
-import carddeckplatform.game.gameEnvironment.PlayerInfo;
-import client.controller.ClientController;
-import client.gui.entities.Droppable;
-
 import utils.Button;
-import utils.DeckArea;
+import utils.Card;
 import utils.Deck;
+import utils.GamePrefs;
 import utils.Pair;
 import utils.Player;
 import utils.Position;
-import utils.Public;
+import carddeckplatform.game.gameEnvironment.PlayerInfo;
+import client.controller.ClientController;
+import client.gui.entities.Droppable;
+import freeplay.customization.FreePlayProfile;
 
 
 
 
 
 public abstract class Game {	
-	//i'm first in the list
-	protected ArrayList<Player> players = new ArrayList<Player>();
-	protected Queue<utils.Position.Player> turnsQueue=new LinkedList<utils.Position.Player>();
+		//i'm first in the list
+	
+//	public static GamePrefs receivedGamePrefs=null;
+	protected static ArrayList<Player> staticPlayers;
+	protected ArrayList<Player> players;
+	protected Queue<Integer> turnsQueue=new LinkedList<Integer>();
 	protected ArrayList<Droppable> droppables=new ArrayList<Droppable>();
+	//The number of players the host would accept before starting the game.  
+	protected int numberOfParticipants=0; 
 	protected ArrayList<Button> buttons=new ArrayList<Button>();
 	//private ToolsFactory tools=new DefaultTools();
 	//private Player.Position currentTurn;
 	protected Deck deck;
-	private boolean firstRound;
-	private Position.Player first;
-	
+	protected FreePlayProfile freePlayProfile=null;
 	 
-
+	protected int roundNumber;
 	//protected abstract Player createPlayer(String userName, Position.Player position);
 	public abstract Deck getDeck();
 	//what to do when round has ended
@@ -50,14 +51,13 @@ public abstract class Game {
 	protected abstract Queue<utils.Position.Player> setTurns();
 	//the minimal players count
 	public abstract int minPlayers();
-	//how many cards to split
-	public abstract int cardsForEachPlayer();
-	
+	//the maximum players count
+	public abstract int maxPlayers();
 	//the game split cards on the begginng of the game
 	public abstract void dealCards();	
 	
 	
-	public abstract void setLayouts(ArrayList<Droppable>publics,ArrayList<Button> buttons);
+	public abstract void setLayouts();
 	/**
 	 * game id
 	 */
@@ -79,70 +79,98 @@ public abstract class Game {
 	public void initiate(){
 		deck=getDeck();	
 	}
+	public Integer endRound(){
+		roundNumber++;
+		return onRoundEnd();
+	}
+	
+	public int getNumberOfParticipants() {
+		if(numberOfParticipants==0)
+			return maxPlayers();
+		return numberOfParticipants;
+	}
+	public int getRoundNumber() {
+		return roundNumber;
+	}
 	
 	public void setupTurns(){
-		turnsQueue=setTurns();
-		if (turnsQueue!=null){
-			first=turnsQueue.peek();
+		for (Position p : setTurns()){
+			turnsQueue.add(p.getId());
 		}
 	}
-	public Game() {
-		first=null;
-		firstRound=true;
-		//Position.Player x=Position.Player.BOTTOM;
-		
-		//clearEmptyPositions();		
-		setLayouts(droppables,buttons);
-	}
 	
+	public Game() {
+
+		//Position.Player x=Position.Player.BOTTOM;
+		 this.players= new ArrayList<Player>();
+		//clearEmptyPositions();	
+		staticPlayers = players;
+		roundNumber=0;
+		//loadPrefs();
+	}
+	/**
+	 * deal given cards for each player
+	 * @param cardsForEachPlayer number of cards to deal for each player
+	 */
+	protected void dealCards(int cardsForEachPlayer){
+		int deckSize=deck.getSize();
+		
+		int numOfPlayers=players.size();
+		
+		ArrayList<ArrayList<Card>> playersCards= new ArrayList<ArrayList<Card>>();
+		for (int i=0;i<numOfPlayers;i++){
+			playersCards.add(new ArrayList<Card>());
+		}
+
+		for (int i=0;i<cardsForEachPlayer && i<deckSize ;i++){			
+			Card card=deck.drawCard();			
+			playersCards.get(i%players.size()).add(card);			
+			
+		}
+		for (int i=0;i<players.size();i++){
+			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(playersCards.get(i),players.get(i).getId())));
+		}
+	}
+
 	private void clearEmptyPositions() {
 		if (turnsQueue!=null){
-			ArrayList<Position.Player> availablePos=new ArrayList<Position.Player>();
+			ArrayList<Integer> availableIds=new ArrayList<Integer>();
 			for (Player player : players){
-				availablePos.add(player.getGlobalPosition());
+				availableIds.add(player.getId());
 			}
-			for (Position.Player position : turnsQueue){
-				if (!availablePos.contains(position)){
-					turnsQueue.remove(position);
+			for (int id : turnsQueue){
+				if (!availableIds.contains(id)){
+					turnsQueue.remove(id);
 				}
 			}
 		}		
 	}
 	
 	//return the next player
-	public utils.Position.Player nextInTurn(){
-		utils.Position.Player next=null;
+	public Integer nextInTurn(){
+		Integer next=null;
+		Integer answer=null;
 		if (turnsQueue!=null){
-			ArrayList<Position.Player> availablePos=new ArrayList<Position.Player>();
+			ArrayList<Integer> availableIds=new ArrayList<Integer>();
 			for (Player player : players){
-				availablePos.add(player.getGlobalPosition());
+				availableIds.add(player.getId());
 			}
 			next=turnsQueue.poll();
-			while (!availablePos.contains(next)){
+			while (!availableIds.contains(next)){
 				next=turnsQueue.poll();
-			}
+			}	
 			
-//			if (next.equals(first) && !firstRound){
-//				ConnectionsManager.getConnectionsManager().sendToAllExcptMe((new Message(new EndRoundAction())),players.get(0).getId());
-//				Integer nextPlayerId=onRoundEnd();
-//				if (nextPlayerId==null){
-//					next=null;
-//				}else{
-//					while (next.getId()!=nextPlayerId){
-//						turnsQueue.add(next);
-//						next=turnsQueue.poll();
-//					
-//					}
-//				}				
-//			}
+			turnsQueue.add(next);
 			if (next!=null){
-				turnsQueue.add(next);
+				for (Player player : players){
+					if (player.getId()==next){
+						answer=player.getId();
+					}
+				}
 			}
-			
-		}
+		}		
 		
-		firstRound=false;
-		return next;		
+		return answer;		
 	}
 	
 	public void addPlayer(Player newPlayer) {
@@ -167,7 +195,7 @@ public abstract class Game {
 
 	public void positionUpdate(Player player, Position.Player newPosition) {
 		Position.Player oldPosition=getMe().getGlobalPosition();
-		Player swappedWith=(Player) ClientController.get().getZone(newPosition.getRelativePosition(oldPosition));
+		Player swappedWith=(Player) ClientController.get().getSwappingZone(newPosition.getRelativePosition(oldPosition));
 		
 		if (swappedWith==null){
 			player.setGlobalPosition(newPosition);
@@ -180,19 +208,22 @@ public abstract class Game {
 	}
 	private void setRelativePositions(Player player,Player swappedWith, Position.Player oldPosition){
 		//check if I moved
-				if (player.equals(getMe()) || swappedWith.equals(getMe())){
+				if (player.equals(getMe()) || (swappedWith!=null && swappedWith.equals(getMe()))){
 					
 					for (int i=1;i<players.size();i++){				
 						players.get(i).setRelativePosition(player.getGlobalPosition());
+						players.get(i).locationChangedNotify();
 					}
 					//re arrange droppables
 					for (Droppable droppalbe : droppables){
 			    		//set public zone according to my position
 						droppalbe.setPosition(droppalbe.getPosition().reArrangeRelativePosition(oldPosition, getMe().getGlobalPosition()));
+						droppalbe.locationChangedNotify();
 					}
 				}else{
 					//other person moved
 					player.setRelativePosition(getMe().getGlobalPosition());
+					player.locationChangedNotify();
 					//check if swapped with existing player
 					if (swappedWith!=null){
 						//true, set existing player relative position
@@ -208,19 +239,90 @@ public abstract class Game {
 		swappedWith.setGlobalPosition(player.getGlobalPosition());
 		player.setGlobalPosition(temp);
 	}
-	public void reArrangeQueue(int nextPlayerId) {
-		Position.Player startingPlayer=null;
-		for (Position.Player pos : Position.Player.values()){
-			if (pos.getId()==nextPlayerId){
-				startingPlayer=pos;
-				break;
+	public void reArrangeQueue(Integer nextPlayerId) {
+		if (nextPlayerId!=null){
+//			Position.Player startingPlayer=null;
+//			for (Position.Player pos : Position.Player.values()){
+//				if (pos.getId()==nextPlayerId){
+//					startingPlayer=pos;
+//					break;
+//				}
+//			}
+			Integer next=turnsQueue.peek();	
+			if (next!=null){
+				while (next!=nextPlayerId){
+					turnsQueue.poll();
+					turnsQueue.add(next);
+					next=turnsQueue.peek();
+				}
+				//turnsQueue.add(next);
 			}
 		}
-		Position.Player next=turnsQueue.poll();
-		while (!next.equals(startingPlayer)){
-			next=turnsQueue.poll();
-		}		
 		
 	}
+	
+	
+	public FreePlayProfile getFreePlayProfile() {
+		return freePlayProfile;
+	}
+	
+	public void setFreePlayProfile(FreePlayProfile freePlayProfile) {
+		this.freePlayProfile = freePlayProfile;
+		numberOfParticipants = freePlayProfile.getPlayerHandlers().size();
+	}
+	
+	
+	
+//	public String getPrefsName(){
+//		return "";
+//	}
+	
+//	public void loadProfile(){
+//		
+//	}
+//	
 
+//	
+//	public GamePrefs getPrefs() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+	public abstract String instructions();
+	
+	
+	/**
+	 * get the player positions available in the game.
+	 * @return
+	 */
+	public Stack<Position.Player> getPositions(){
+		Stack<Position.Player> availablePositions=new Stack<Position.Player>();
+		availablePositions.add(Position.Player.RIGHT);
+		availablePositions.add(Position.Player.LEFT);
+		availablePositions.add(Position.Player.TOP);
+		availablePositions.add(Position.Player.BOTTOM);
+		
+		return availablePositions;
+	}
+
+	/**
+	 * use only when deck instance is available
+	 * @param deckId deck's instance id
+	 * @param deckCards deck's cards
+	 * @param cardsToEachPlayer number of cards for each player
+	 */
+	protected void dealCardAnimation(int deckId, ArrayList<Card> deckCards, int cardsToEachPlayer){
+		int numOfPlayers=players.size();
+		for(int i=0 ; i<numOfPlayers * cardsToEachPlayer ; i++){
+			ConnectionsManager.getConnectionsManager().sendToAll(new RequestCardMessage(players.get(i % numOfPlayers), deckId, deckCards.get(i)));
+			try {
+				Thread.sleep(400);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void newTurn(Player player){
+		
+	}
 }

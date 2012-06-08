@@ -2,37 +2,32 @@ package carddeckplatform.game;
 
 import java.util.ArrayList;
 
-import communication.actions.InvalidMoveAction;
-import communication.link.ServerConnection;
-import communication.messages.Message;
-
 import utils.Button;
 import utils.Card;
 import utils.Player;
-import utils.Point;
 import utils.Position;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.animation.Interpolator;
-import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
-import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.controller.ClientController;
 import client.gui.animations.GlowAnimation;
-import client.gui.animations.FlipAnimation;
 import client.gui.animations.OvershootAnimation;
 import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
-import client.gui.entities.MetricsConvertion;
 import client.gui.entities.Table;
 import client.gui.entities.TouchHandler;
 import client.gui.entities.TouchManager;
+
+import communication.actions.FlipCardAction;
+import communication.actions.InvalidMoveAction;
+import communication.link.ServerConnection;
+import communication.messages.Message;
 
 public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		TouchHandler {
@@ -40,6 +35,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	private Context cont;
 	private Matrix translate;
 	private Draggable draggableInHand = null;
+	private Button buttonInHand = null;
 	private Droppable from = null;
 	private int xDimention;
 	private int yDimention;
@@ -67,14 +63,15 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 
 	public void onMove(float dx, float dy) {
 		translate.postTranslate(dx, dy);
+		
 	}
-	public void startDraggableMotion(String username, int id){
-		Draggable draggable = table.getDraggableById(id);
+	public void startDraggableMotion(String username, int draggableId, int fromId){
+		Draggable draggable = table.getDraggableById(draggableId);
+		Droppable from = table.getDroppableById(fromId);
 		synchronized (draggable) {
-			draggable.setCarried(true);
-			draggable.setCarrier(username);
+			draggable.onOtherClick(from, username);
 		}
-		draggable.saveOldCoord();
+
 	}
 	
 	
@@ -84,16 +81,22 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	public void draggableMotion(String username, int id, float x, float y) {
 		Draggable draggable = table.getDraggableById(id);
 		synchronized (draggable) {
-//			draggable.setCarried(true);
-//			draggable.setCarrier(username);
 			draggable.setLocation(x, y);
 		}
 	}
 
 	public void endDraggableMotion(int id) {
 		Draggable draggable = table.getDraggableById(id);
-		draggable.setCarried(false);
-		draggable.setCarrier("");
+		draggable.onOtherRelease();
+	}
+	
+	public void flipCard(int cardId){
+		Card c = (Card)(table.getDraggableById(cardId));
+		
+		if(c.isRevealed())
+			c.hide();
+		else
+			c.reveal();
 	}
 
 	public void addDroppable(Droppable droppable) {
@@ -167,6 +170,10 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	public Droppable getDroppableById(Integer id) {
 		return table.getDroppableById(id);
 	}
+	
+	public Draggable getDraggableById(Integer id){
+		return table.getDraggableById(id);
+	}
 
 	public void moveCard(Card card, int from, int to, int byWhomId) {
 		ArrayList<Card> cards = new ArrayList<Card>();
@@ -178,18 +185,30 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 
 	public void moveCards(ArrayList<Card> cards, int from, int to, Player byWhom) {
 		Droppable destination = table.getDroppableById(to);
-		Droppable source = table.getDroppableById(from);
-		for (Card card : cards) {		
-			if (destination.addCard(byWhom, card)){
-				source.removeCard(byWhom, card);
-			}else{
-				card.invalidMove();
-			}
-		}
+        Droppable source = table.getDroppableById(from);
+        for (Card card : cards) {
+                int cardPlace=source.getCards().indexOf(card);
+
+                //check if remove is legal move
+                if (source.removeCard(byWhom, card)){
+                	if (destination.addCard(byWhom, card)){
+                		//remove and add are legal moves
+                		
+                		source.rearrange(0);	
+                		
+                		continue;
+                	}else{
+                		//add is not legal, return removed card back to its place
+                		source.AddInPlace(card,cardPlace);                       
+                	}
+                }
+                card.invalidMove();             
+        }
 	}
 	
-	public void invalidMove(int cardId){
-		Draggable draggable = table.getDraggableById(cardId);
+	public void invalidMove(int cardId,int fromId){
+		Droppable droppable = table.getDroppableById(fromId);
+		Draggable draggable = table.getDraggableById(cardId);		
 		draggable.invalidMove();
 	}
 
@@ -200,7 +219,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	public void dealCards(ArrayList<Card> cards, int to) {
 		Droppable destination = table.getDroppableById(to);
 		for (Card card : cards) {
-			card.setOwner(destination.getPosition());
+			card.setOwner(to);
 			addNewDraggable(card, destination);
 		}
 	}
@@ -209,7 +228,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		System.out.println("TableView.surfaceCreated()");
-		drawThread = new DrawThread(holder);
+		drawThread = new DrawThread(holder, table);
 		drawThread.setName("drawThread");
 		drawThread.setRunning(true);
 		drawThread.start();
@@ -226,50 +245,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		}
 	}
 
-	class DrawThread extends Thread {
-		private SurfaceHolder surfaceHolder;
 
-		private boolean running = false;
-
-		public void setRunning(boolean value) {
-			running = value;
-		}
-
-		public DrawThread(SurfaceHolder surfaceHolder) {
-			this.surfaceHolder = surfaceHolder;
-		}
-
-		@Override
-		public void run() {
-			Canvas c;
-			while (running) {
-				try {
-					// Don't hog the entire CPU
-					Thread.sleep(1);
-				} catch (InterruptedException e) {
-				}
-				c = null;
-				try {
-
-					c = surfaceHolder.lockCanvas(null);
-					synchronized (surfaceHolder) {
-						// System.out.println(c.getDensity());
-
-						table.draw(c);// draw it
-					}
-				} finally {
-					if (c != null) {
-						surfaceHolder.unlockCanvasAndPost(c);
-					}
-				}
-			}
-		}
-	}
-
-	public void swapPositions(Player player, Position.Player swappedWith) {
-		// TODO Auto-generated method stub
-
-	}
 
 	/*************************************************************************************
 	 * 
@@ -277,15 +253,23 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	 *************************************************************************************/
 	@Override
 	public boolean onDoubleTap(MotionEvent event) {
-		// TODO Auto-generated method stub
-		System.out.println("TableView.onDoubleTap()");
+		boolean answer=false;
+		float x = event.getX();
+		float y = event.getY();
+		Droppable d = table.getNearestDroppable(x, y);
+		Card card = (Card)table.getNearestDraggable(x, y);
+		// check if the there is a target droppable.
+		if(d!=null && card!=null){	
+			answer = d.onFlipCard(card);
+			if(answer)
+				ServerConnection.getConnection().send(new Message(new FlipCardAction(card.getId())));
+			//d.getPosition().equals(Position.Player.);
+		}
 		return true;
 	}
 
 	@Override
 	public boolean onDoubleTapEvent(MotionEvent event) {
-		// TODO Auto-generated method stub
-		System.out.println("TableView.onDoubleTapEvent()");
 		return true;
 	}
 
@@ -300,20 +284,31 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	public boolean onDown(MotionEvent event) {
 		float X = event.getX();
 		float Y = event.getY();
+		System.out.println("on down()");
 		if (uiEnabled) {
-			draggableInHand = table.getNearestDraggable(X, Y);
+			draggableInHand = table.getNearestDraggable(X, Y);//check if its a card
 			if (draggableInHand != null) {
 				if (draggableInHand.isMoveable()) {
+					
+					
 					from = table.getNearestDroppable(X, Y);
 					
-					draggableInHand.onClick();
+					draggableInHand.onClick(from);
 				} else {
 					popToast("You cannot move this card");
 					draggableInHand = null;
 				}
 			}
-		} else
+			else{//check if its a button
+				this.buttonInHand=table.getNearestButton(X, Y);//check if its a card
+				
+				
+			}
+		} else{
 			popToast("It's not your turn now!!");
+			GlowAnimation gn = new GlowAnimation(ClientController.get().getMe(), 1000, Color.argb(255, 255, 0, 0));
+			gn.execute();
+		}
 		return true;
 	}
 
@@ -350,6 +345,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 								totalAnimDx, totalAnimDy, true).execute();
 					}
 					else if (from.equals(droppable)) {
+						draggableInHand.onRelease();
 						// dont do anything cause rearrange is made at onSingleTapUp
 						// method
 
@@ -364,8 +360,9 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 					this.from = null;
 				} else {
 					if((droppable!=null && droppable.isFlingabble())|| droppable==null){
+						
 						draggableInHand.invalidMove();
-						ServerConnection.getConnection().send(new Message(new InvalidMoveAction(draggableInHand.getId())));
+						ServerConnection.getConnection().send(new Message(new InvalidMoveAction(draggableInHand.getId(),from.getId())));
 					}
 					else{
 						draggableInHand.onRelease();
@@ -375,15 +372,36 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 				
 				draggableInHand = null;
 			}
+			else if(buttonInHand!=null){
+				buttonInHand.onClick();
+				buttonInHand=null;
+			}
 		} else{
-			popToast("It's not your turn now!!");
+			//popToast("It's not your turn now!!");
+//			GlowAnimation gn = new GlowAnimation(ClientController.get().getMe(), 100, Color.argb(255, 255, 0, 0));
+//			gn.execute();
+//			gn.waitForMe();
+			
 		}
 		return true;
 	}
-
+	
 	@Override
 	public void onLongPress(MotionEvent event) {
-		System.out.println("TableView.onLongPress()");
+		
+		boolean answer=false;
+		
+		float x = event.getX();
+		float y = event.getY();
+		Droppable d = table.getNearestDroppable(x, y);
+		// check if the there is a target droppable.
+		if(d!=null)
+			answer = d.onLongPress(draggableInHand, from);
+		// if the answer is true then release the card.
+		if(draggableInHand!=null){
+			draggableInHand.onRelease();
+			draggableInHand = null;
+		}
 	}
 
 	@Override
@@ -391,7 +409,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 			float arg3) {
 		float x = e2.getX();
 		float y = e2.getY();
-		System.out.println("TableView.onScroll()");
+		//System.out.println("TableView.onScroll()");
 		if (uiEnabled) {
 			if (draggableInHand != null) {
 				Droppable droppable = table.getNearestDroppable(x, y);
@@ -403,9 +421,11 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 					
 //				}
 			}
-		} else
-			popToast("It's not your turn now!!");
-
+		} else{
+//			GlowAnimation gn = new GlowAnimation(ClientController.get().getMe(), 100, Color.argb(255, 255, 0, 0));
+//			gn.execute();
+//			gn.waitForMe();
+		}
 		return true;
 	}
 	@Override
@@ -439,8 +459,11 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 					angle -= 360;
 				draggableInHand.setAngle(angle);
 			}
-		} else
-			popToast("It's not your turn now!!");
+		} else{
+//			GlowAnimation gn = new GlowAnimation(ClientController.get().getMe(), 100, Color.argb(255, 255, 0, 0));
+//			gn.execute();
+//			gn.waitForMe();
+		}
 		return true;
 	}
 
@@ -467,7 +490,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	}
 
 	public void setPlayerTurn(Droppable droppable) {
-		new GlowAnimation(droppable, 3000).execute();
+		new GlowAnimation(droppable, 3000, Color.argb(255, 255, 255, 255)).execute();
 	}
 
 	public void addButton(Button button) {
@@ -475,4 +498,8 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		
 	}
 	
+	public void clearCards() {
+		// TODO Auto-generated method stub
+		table.clearCards();
+	}
 }
