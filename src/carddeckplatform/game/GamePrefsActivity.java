@@ -25,7 +25,7 @@ public class GamePrefsActivity extends PreferenceActivity  {
 			addPreferencesFromResource(res);
 		else{
 			startGame();
-			finish();
+			
 		}
         setContentView(R.layout.gameprefs);
         
@@ -46,6 +46,8 @@ public class GamePrefsActivity extends PreferenceActivity  {
 	public void startGame(){
 		Intent i = new Intent(GamePrefsActivity.this, GameActivity.class);               
         i.putExtra("gameName", getIntent().getStringExtra("gameName"));
+        i.putExtra("livePosition", getIntent().getStringExtra("livePosition"));
         startActivity(i);
+        finish();
 	}
 }
