@@ -5,10 +5,15 @@ import handlers.PlayerEventsHandler;
 import java.util.ArrayList;
 import java.util.Queue;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import communication.actions.DealCardAction;
 import communication.messages.Message;
 import communication.server.ConnectionsManager;
 
+import carddeckplatform.game.CarddeckplatformActivity;
+import carddeckplatform.game.GameActivity;
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
@@ -37,7 +42,7 @@ public class FreePlay extends Game{
 
 	@Override
 	public int minPlayers() {
-		return 2;
+		return 1;
 	}
 
 	@Override
@@ -84,6 +89,31 @@ public class FreePlay extends Game{
 	public utils.Player getPlayerInstance(PlayerInfo playerInfo,
 			Player position, int uniqueId) {
 		return new utils.Player(playerInfo, position, uniqueId, new PlayerHandler(), DroppableLayout.LayoutType.LINE);
+	}
+	
+	@Override
+	public String getPrefsName(){
+		return "freeplay";
+	}
+	
+	@Override
+	public void loadPrefs(){
+		try {
+			SharedPreferences preferences = CarddeckplatformActivity.getContext().getSharedPreferences(getPrefsName(), Context.MODE_PRIVATE);
+			
+			String numberOfPlayers = preferences.getString("playersNum", String.valueOf(minPlayers()));
+			
+			numberOfParticipants = Integer.parseInt(numberOfPlayers);
+			
+			int x=2;
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		
+		
+		
+//		String somePreference = preferences.getString("somePreference", defaultValue);
 	}
 
 }
