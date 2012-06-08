@@ -89,6 +89,8 @@ public class War extends Game{
 		return utils.Turns.clockWise(Position.Player.BOTTOM);
 	}
 
+
+
 	@Override
 	public int minPlayers() {		
 		return 1;

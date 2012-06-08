@@ -16,11 +16,10 @@ public class EndTurnMessage extends Message{
 	}
 	
 	@Override
-	public void actionOnServer(int id){		
-		ConnectionsManager.getConnectionsManager().sendToAllExcptMe(this, id);		
-		Position.Player next=Host.nextInTurn();
-		if (next!=null){
-			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(next.getId())));
+	public void actionOnServer(int id){			
+		Integer nextId=Host.nextInTurn();
+		if (nextId!=null){
+			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(nextId)));
 		}
 	}
 	

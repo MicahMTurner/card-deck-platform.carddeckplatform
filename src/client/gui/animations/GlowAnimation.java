@@ -7,15 +7,17 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import client.gui.entities.Droppable;
 
-public class GlowAnimation extends AsyncTask<Void, Void, Void> {
+public class GlowAnimation extends Animation {
 	Droppable droppable;
 	long duration;
 	boolean running=true;
 	boolean pause=false;
+	int colorArbg;
 
-	public GlowAnimation(Droppable droppable, long duration) {
+	public GlowAnimation(Droppable droppable, long duration, int colorArbg) {
 		this.duration = duration;
 		this.droppable = droppable;
+		this.colorArbg = colorArbg;
 	}
 
 	public boolean isRunning() {
@@ -34,10 +36,19 @@ public class GlowAnimation extends AsyncTask<Void, Void, Void> {
 		this.pause = pause;
 	}
 
+//	@Override
+//	protected Void doInBackground(Void... arg0) {
+//		
+//		return null;
+//	}
+
 	@Override
-	protected Void doInBackground(Void... arg0) {
+	protected void animate() {
+		if(droppable==null)
+			return;
+		//System.out.println("GLOW Animation Activated");
 		ColorInterpolator colorinterpolator = new ColorInterpolator(
-				Color.TRANSPARENT, Color.argb(255, 255, 255, 255));
+				Color.TRANSPARENT, colorArbg);
 		Interpolator animateInterpolator = new LinearInterpolator();
 		long startTime = System.currentTimeMillis();
 		long endTime = startTime + duration;
@@ -55,12 +66,15 @@ public class GlowAnimation extends AsyncTask<Void, Void, Void> {
 
 		while (percentTime < 1.0) {
 			curTime = System.currentTimeMillis();
+			
 			percentTime = (float) (curTime - startTime)
 					/ (float) (endTime - startTime);
 			percentDistance = animateInterpolator.getInterpolation(percentTime);
 			percentDistance=(float) (Math.cos(percentDistance*degree)+1)/2;
 			glowColor = colorinterpolator.getInterpolatedColor(percentDistance);
+			//glowColor+=255;
 			droppable.setGlowColor(glowColor);
+			//System.out.println(curTime+","+glowColor);
 			try {
 				Thread.sleep(4);
 			} catch (InterruptedException e) {				
@@ -68,9 +82,13 @@ public class GlowAnimation extends AsyncTask<Void, Void, Void> {
 			}
 
 		}
-		droppable.setGlowColor(Color.TRANSPARENT);
+		droppable.setGlowColor(droppable.originalDroppableColor);
+		
+	}
 
-		return null;
+	@Override
+	protected void postAnimation() {		
+		
 	}
 
 }

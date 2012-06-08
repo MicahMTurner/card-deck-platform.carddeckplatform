@@ -15,6 +15,7 @@ import communication.messages.Message;
 //import communication.entities.TcpClient;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import carddeckplatform.game.gameEnvironment.GameEnvironment.ConnectionType;
+import dalvik.system.DexClassLoader;
 
 
 public class ServerConnection implements Runnable{
@@ -50,7 +51,9 @@ public class ServerConnection implements Runnable{
 			}
 			@Override
 			public void execute() {
-				sender.send(msg);
+				if (sender!=null){
+					sender.send(msg);
+				}
 				
 			}
 		}
@@ -62,7 +65,7 @@ public class ServerConnection implements Runnable{
 				if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP || GameEnvironment.get().getPlayerInfo().isServer())
 					connector = new TcpConnector(GameEnvironment.get().getTcpInfo().getHostIp(),GameEnvironment.get().getTcpInfo().getHostPort());
 				else if(GameEnvironment.get().getConnectionType()==ConnectionType.BLUETOOTH)
-					connector = new BlueToothConnector(GameEnvironment.get().getBluetoothInfo().getHostDevice(), GameEnvironment.get().getBluetoothInfo().getUUID());
+					connector = new BlueToothConnector(GameEnvironment.get().getBluetoothInfo().getHostDevice());
 				Streams stream = connector.connect();
 				if (stream!=null){
 					ObjectOutputStream out = stream.getOut();
@@ -111,6 +114,7 @@ public class ServerConnection implements Runnable{
 	private ServerConnection(){
 		commandsQueue=new LinkedBlockingQueue<ActionForQueue>();
 		this.stopped=false;
+		
 		new Thread(this).start();
 	}
 	//---Public methods---//

@@ -1,6 +1,7 @@
 package president;
 
 import client.controller.ClientController;
+import utils.Button;
 import utils.Card;
 import utils.Player;
 import utils.Public;
@@ -16,28 +17,36 @@ public class PublicAndButtonHandler implements PublicEventsHandler,ButtonEventsH
 	@Override
 	public boolean onCardAdded(Public publicZone, Player player, Card card) {
 		boolean answer=false;
-		if (counter==4){
-			//got series,end round
-			//ClientController.sendAPI().endRound();
-			ClientController.get().endRound();
+		if (card.getOwner()==(player.getId())){			
+			if(this.player!=null && this.player.equals(player)){
+					/*not first card added in this turn, all cards 
+					/*must be equal to first one that was placed*/					
+					if (publicZone.peek().compareTo(card)==0){						
+						if (playerCounter==0 || (playerCounter>0 && counter<playerCounter)){
+							//trying to reply
+							counter++;
+							answer=true;
+						}
+					}
+			}
+			else{
+				//player just switched, go over switched player possible actions
+				answer=switchedPlayerActions(publicZone, player,card);
+			
+			}
+			if ((counter+playerCounter)==4){
+				//got series,end round
+				//ClientController.sendAPI().endRound();
+				ClientController.get().endRound();
 			
 			
-		}else if(this.player!=null && this.player.equals(player)){
-				/*not first card added in this turn, all cards 
-				/*must be equal to first one that was placed*/
-				if (publicZone.peek().compareTo(card)==0){
-					counter++;
-					answer=true;
-				}
+			}
 		}
-		else{
-			//player just switched, go over switched player possible actions
-			answer=switchedPlayerActions(publicZone, player,card);
-			
-		}	
+		
 		if (answer){
 			card.reveal();
 		}
+		
 		return answer;
 	}
 		
@@ -53,11 +62,20 @@ public class PublicAndButtonHandler implements PublicEventsHandler,ButtonEventsH
 			answer=true;
 			
 		}else if (card.compareTo(publicZone.peek())>0){
+			int possibleRepliesCounter=0;
 			//replying with bigger cards
-			this.player=player;
-			this.playerCounter=counter;
-			counter=1;
-			answer=true;
+			for (Card sCard : player.getCards()){
+				if (sCard.compareTo(publicZone.peek())>0){
+					possibleRepliesCounter++;
+				}
+			}
+			if (possibleRepliesCounter>=counter){
+			
+				this.player=player;
+				this.playerCounter=counter;
+				counter=1;
+				answer=true;
+			}
 			
 		}else if (((StandartCard)card).getValue()==2 && !publicZone.isEmpty()){
 			//cutting cards
@@ -69,7 +87,7 @@ public class PublicAndButtonHandler implements PublicEventsHandler,ButtonEventsH
 			//trying to complete series
 			this.player=player;
 			this.playerCounter=counter;
-			counter++;
+			counter=1;			
 			answer=true;
 		}
 		return answer;
@@ -78,7 +96,7 @@ public class PublicAndButtonHandler implements PublicEventsHandler,ButtonEventsH
 
 	@Override
 	public boolean onCardRemoved(Public publicZone, Player player, Card card) {
-		if (player!=null && card.getOwner().getId()==player.getId()){
+		if (player!=null && card.getOwner()==(player.getId())){
 			counter--;
 			return true;
 		}
@@ -110,6 +128,12 @@ public class PublicAndButtonHandler implements PublicEventsHandler,ButtonEventsH
 		this.counter=0;
 		this.player=null;
 		this.playerCounter=0;
+	}
+
+	@Override
+	public boolean onFlipCard(Card card) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

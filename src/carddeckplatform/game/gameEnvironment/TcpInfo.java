@@ -8,6 +8,7 @@ public class TcpInfo {
 	private String localIp;
 	private int hostPort = 9997;
 	private int idPort = 9998;
+	private int broadcastPort=9996;
 	
 	private ServerSocket tcpServerSocket;
 	
@@ -42,5 +43,7 @@ public class TcpInfo {
 	public int getIdPort() {
 		return idPort;
 	}
-
+	public int getBroadcastPort() {
+		return broadcastPort;
+	}
 }

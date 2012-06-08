@@ -5,15 +5,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.newdawn.slick.geom.Line;
 
 
-import utils.Button;
 import utils.Card;
 import utils.Position;
+import utils.Button;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -30,15 +32,18 @@ public class Table {
 	
 	//private Stack<Draggable> draggables = new Stack<Draggable>();
 	private ArrayBlockingQueue<Droppable> droppables;
+	private ArrayBlockingQueue<Button> buttons;
+	
 	private Hashtable<Integer,Draggable>mappedDraggables;
 	private Bitmap img;
 	private Context context;
 	private int xDimention;
 	private int yDimention;
-	private ArrayBlockingQueue<Button> buttons;
+	
 	//private Matrix matrix;
 	
-
+	static public ArrayList<Card> animatedCards;
+	
 	public Table(Context context){
 		//this.matrix=new Matrix();		
 		this.context = context;
@@ -46,6 +51,7 @@ public class Table {
 		this.droppables= new ArrayBlockingQueue<Droppable>(20);
 		this.mappedDraggables= new Hashtable<Integer,Draggable>();
 		this.buttons = new ArrayBlockingQueue<Button>(4);
+		this.animatedCards = new ArrayList<Card>();
 	}
 
 	
@@ -130,39 +136,59 @@ public class Table {
 	public void draw(Canvas canvas){		
 				
 	if (canvas!=null){
-		ArrayList<Draggable>priority=null;
+		//ArrayList<Draggable>priority=null;
 		canvas.drawColor(Color.TRANSPARENT);    	  
         //canvas.scale(1, 1);
         
 		
 			canvas.drawBitmap(img,(float)0,(float)0, null);	
 			
+			ArrayList<ConcurrentSkipListSet<Draggable>>priorityDraggableSets=
+					new ArrayList<ConcurrentSkipListSet<Draggable>>();
+			
 			for (Button b : buttons){
 				b.draw(canvas, context);
 			}
-			
-			for(Droppable d : droppables){
-					ArrayList<Draggable>holding=d.draw(canvas, context);
-					if (holding!=null){
-						if (priority==null){
-							priority=new ArrayList<Draggable>();
-						}
-						for(Draggable priorityDraggable : holding){
-							priority.add(priorityDraggable);
-						}
-					}
+			for (Droppable d : droppables ){
+				d.draw(canvas, context);
 			}
-			if (priority!=null){
-				for (Draggable priorityDraggable : priority){
-					priorityDraggable.draw(canvas, context);
+			for(Droppable d : droppables){
+				d.drawMyCards(canvas, context);
+			}
+			
+			for(Card c : animatedCards){
+				c.draw(canvas, context);
+			}
+			animatedCards.clear();
+			
+			for (ConcurrentSkipListSet<Draggable> set : priorityDraggableSets){
+				for (Draggable draggable : set){
+					draggable.draw(canvas, context);
 				}
 			}
+				
+//			for(Droppable d : droppables){
+//					ArrayList<Draggable>holding=d.drawMyCards(canvas, context);
+//					if (holding!=null){
+//						if (priority==null){
+//							priority=new ArrayList<Draggable>();
+//						}
+//						for(Draggable priorityDraggable : holding){
+//							priority.add(priorityDraggable);
+//						}
+//					}
+//			}
+//			if (priority!=null){
+//				for (Draggable priorityDraggable : priority){
+//					priorityDraggable.draw(canvas, context);
+//				}
+//			}
 			
-			if(this.line!=null){
-				Paint paint= new Paint();
-				paint.setColor(Color.RED);
-				canvas.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2(), paint);
-			}
+//			if(this.line!=null){
+//				Paint paint= new Paint();
+//				paint.setColor(Color.RED);
+//				canvas.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2(), paint);
+//			}
 		}
 	}
 
@@ -184,10 +210,34 @@ public class Table {
 		return null;
 	}
 
-
 	public void addButon(Button button) {
 		buttons.add(button);
-		
+	}
+
+
+	public Button getNearestButton(float x, float y) {
+
+		Button answer=null;
+		//get nearest container where draggable can be found at
+		for(Button button: buttons){
+			if(button.isContain(x, y))
+				answer= button;
+		}
+		return answer;
+	
+	}
+
+	public void clearCards() {
+		for(Droppable d : droppables){
+			d.clear();
+		}
 	}
 	
+	public void clearDroppables(){
+		droppables.clear();
+	}
+	
+	public ArrayBlockingQueue<Droppable> getDroppables() {
+		return droppables;
+	}
 }
