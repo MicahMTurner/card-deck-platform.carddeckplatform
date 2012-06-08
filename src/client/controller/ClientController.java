@@ -262,7 +262,10 @@ public class ClientController implements Observer {
 	}
 	
 	public Player getMe(){
-		return game.getMe();
+		if (game!=null){
+			return game.getMe();
+		}
+		return null;
 	}
 
 	public void dealCards(ArrayList<Card> cards, int to) {
@@ -299,8 +302,10 @@ public class ClientController implements Observer {
 		//contains player to move
 		Player player;
 		for (Pair<Position.Player, Position.Player> pair : movingList){
-			player=(Player) getZone(pair.getFirst());			
-					game.positionUpdate(player,pair.getSecond());			
+			player=(Player) getZone(pair.getFirst().getRelativePosition(getMe().getGlobalPosition()));	
+			if (player!=null){
+				game.positionUpdate(player,pair.getSecond());
+			}
 		}
 	}
 
