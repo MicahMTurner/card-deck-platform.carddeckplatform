@@ -69,7 +69,7 @@ public class LivePosition implements SensorEventListener{
 					ArrayList<Pair<Position.Player,Position.Player>> movingList;
 
 					//check if place is not occupied
-					if (ClientController.get().getZone(to.getRelativePosition(ClientController.get().getMe().getGlobalPosition()))==null){						
+					if (ClientController.get().getSwappingZone(to.getRelativePosition(ClientController.get().getMe().getGlobalPosition()))==null){						
 					
 						//place isn't occupied
 						movingList=new ArrayList<Pair<Player,Player>>();
@@ -183,7 +183,7 @@ public class LivePosition implements SensorEventListener{
 		cdl=new CountDownLatch(1);		
 		//setPosition=new SetPosition();
 		//initiate matrixes for rotation and azimuth calculations
-		timer=new Timer();
+		
 		rotationMatrix=new float[9];
 		inclinationMatrix=new float[9];
 		outRotationMatrix=new float[9];
@@ -204,6 +204,7 @@ public class LivePosition implements SensorEventListener{
 				try {
 					//System.out.println("waiting: "+System.currentTimeMillis());
 					//tasks=execService.scheduleAtFixedRate(new SetPosition(), 1, 2, TimeUnit.SECONDS);
+					timer=new Timer();
 					timer.schedule(new SetPosition(),1000,4000);
 					//System.out.println("locking thread.");
 					cdl.await();
@@ -218,12 +219,15 @@ public class LivePosition implements SensorEventListener{
 		
 	}
 	public void stop(){
-		mSensorManager.unregisterListener(this);
-		running=false;
-		//if (tasks!=null){
-		//	tasks.cancel(true);
-		//}
-		timer.cancel();	
+		if (running){
+			mSensorManager.unregisterListener(this);
+			running=false;
+			//if (tasks!=null){
+			//	tasks.cancel(true);
+			//}
+			timer.cancel();
+			this.azimut=null;
+		}
 	}
 	public boolean isRunning(){
 		return running;

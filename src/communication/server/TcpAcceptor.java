@@ -6,8 +6,11 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import org.apache.commons.io.input.ClassLoaderObjectInputStream;
+
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
+import communication.link.ObjectInputStreamWithDelegateClassLoader;
 import communication.link.Streams;
 
 public class TcpAcceptor implements Acceptor {
@@ -24,8 +27,8 @@ public class TcpAcceptor implements Acceptor {
 			Socket clientSocket;
 			clientSocket = GameEnvironment.get().getTcpInfo().getServerSocket().accept();
 			
-			ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
-			ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
+			ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());				
+			ObjectInputStream in = new ObjectInputStreamWithDelegateClassLoader(clientSocket.getInputStream());
 			
 			return new Streams(out, in);
 			

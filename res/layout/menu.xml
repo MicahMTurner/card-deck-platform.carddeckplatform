@@ -6,36 +6,17 @@
     android:background="@drawable/woodtexture"
     android:orientation="vertical"
     android:stretchColumns="1" 
-    >
-	
-    	<ViewFlipper
-        android:id="@+id/welcomeFlipper"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+    android:gravity="center">
 
-        <TextView
-            android:id="@+id/WelcomeText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Welcome to :"
-            style="@style/WelcomeFont"/>"
 
-        <TextView
-            android:id="@+id/CardDeckText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Card-Deck-Platform"
-            style="@style/WelcomeFont" />
-    </ViewFlipper>
-
-    <LinearLayout
-        android:id="@+id/LinearLayout2"
-        android:layout_width="match_parent"
+    <TableLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
-        <LinearLayout
-            android:id="@+id/linearLayout3"
+        android:layout_gravity="center_horizontal" 
+        android:padding="5dp">
+		
+        <TableRow
+            android:id="@+id/tableRow3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
@@ -44,39 +25,81 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nickname:  "
-                android:textAppearance="?android:attr/textAppearanceLarge" android:textColor="@color/TransparentGrey"/>
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/White" 
+                android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/nickText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" >
+                android:layout_weight="1"
+                android:ems="10" >
 
                 <requestFocus />
             </EditText>
-        </LinearLayout>
-    </LinearLayout>
+        </TableRow>
+		</TableLayout>
+		<TableLayout
+		    android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+       		android:layout_gravity="center_horizontal" >
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
 
-    <Button
-        android:id="@+id/joingamebutton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="1dip"
-        android:text="@string/JoinAGame" android:textColor="@color/TransparentGrey"/>
+            <Button
+                android:id="@+id/joingamebutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/joinbutton"
+                android:padding="3dip"
+                android:textColor="@color/TransparentGrey" />
 
-    <Button
-        android:id="@+id/creategameButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="3dip"
-        android:text="@string/StartANewGame" android:textColor="@color/TransparentGrey"/>
-    
-    <Button
-        android:id="@+id/optionsButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="3dip"
-        android:text="@string/options"
-        android:textColor="@color/TransparentGrey" />
+            <Button
+                android:id="@+id/creategameButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/hostbutton"
+                android:padding="3dip" >
+                
+			</Button>
+
+            <Button
+                android:id="@+id/optionsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/opstionsbutton"
+                android:padding="3dip" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/marketButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/marketbutton"
+                android:padding="3dip" />
+
+            <Button
+                android:id="@+id/rateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ratebutton"
+                android:padding="3dip" />
+
+            <Button
+                android:id="@+id/scoreButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/scoresbutton"
+                android:padding="3dip" />
+        </TableRow>
+    </TableLayout>
 
 </LinearLayout>

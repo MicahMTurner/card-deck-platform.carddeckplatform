@@ -20,17 +20,31 @@ public class Turns {
 				nextPlayer=(nextPlayer+1)%(positions.length);
 			}
 			else{
-				nextPlayer-=(nextPlayer+1)%(positions.length);
+				nextPlayer=(nextPlayer-1)%(positions.length);
+				if (nextPlayer<0){
+					nextPlayer+=positions.length;
+				}
 			}
 		}
 		return turns;
 		
 	}
 	
+	/**
+	 * creates a turn queue that that goes clock wise.
+	 * @param startingPlayer
+	 * @return
+	 */
 	public static Queue<Position.Player> clockWise(Position.Player startingPlayer){
 		return clockTurns(startingPlayer,true);
 			
 	}
+	
+	/**
+	 * creates a turn queue that that goes counter clock wise.
+	 * @param startingPlayer
+	 * @return
+	 */
 	public static Queue<Position.Player> counterClockWise(Position.Player startingPlayer){
 		return clockTurns(startingPlayer,false);
 		

@@ -3,13 +3,18 @@ package utils.droppableLayouts;
 import client.gui.entities.Droppable;
 import client.gui.entities.MetricsConvertion;
 import utils.Point;
-
+/**
+ * 
+ *	Arranges the cards in a heap formation.
+ *
+ */
 public class HeapLayout extends DroppableLayout {
 	
 	
 	public HeapLayout(Droppable droppable) {
 		super(droppable);
 	}
+	
 	@Override
 	public void rearrange(int index, float width, float height) {
 		int numberOfCards = droppable.cardsHolding();
@@ -22,15 +27,12 @@ public class HeapLayout extends DroppableLayout {
 		for (int i = 0; i < numberOfCards; i++) {
 			animationArgs[0][i] = i+1;
 			animationArgs[1][i] = i+1;
-			animationArgs[2][i] = 0;
+			animationArgs[2][i] = 0;	
 		}
 		
 		animate(droppable.getCards(),
 				shift(normalizePosition(animationArgs, width/4, height/4),
 						location.getX(), location.getY()), 1000);
-		
-		
-		
 	}
 
 	@Override

@@ -35,7 +35,7 @@ public class President extends Game{
 		Integer answer=null;
 		passed=false;
 		Public publicZone=(Public) ClientController.get().getZone(Position.Public.MID);
-		answer=publicZone.peek().getOwner().getId();
+		answer=publicZone.first().getOwner();
 		publicZone.clear();
 		for (Droppable droppable : droppables){
 			droppable.onRoundEnd(null);
@@ -47,18 +47,12 @@ public class President extends Game{
 	}
 	@Override
 	public Queue<Player> setTurns() {		
-		return utils.Turns.clockWise(startingPlayer);
+		return utils.Turns.counterClockWise(startingPlayer);
 	}
 
 	@Override
 	public int minPlayers() {
 		return 2;
-	}
-
-	@Override
-	public int cardsForEachPlayer() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
@@ -96,20 +90,32 @@ public class President extends Game{
 	}
 
 	@Override
-	public void setLayouts(ArrayList<Droppable> publics, ArrayList<Button> buttons) {
-		publics.add(new Public(new PublicAndButtonHandler(), Position.Public.MID, DroppableLayout.LayoutType.HEAP, new Point(10,13)));
-		buttons.add(new Button(new ButtonHandler(),Position.Button.BOTLEFT,"Pass"));
+	public void setLayouts() {
+		droppables.add(new Public(new PublicAndButtonHandler(), Position.Public.MID, DroppableLayout.LayoutType.HEAP));
+		buttons.add(new Button(new PublicAndButtonHandler(),Position.Button.BOTLEFT,"Pass"));
 	}
 
 	@Override
 	public String toString() {		
-		return "President";
+		return "president";
 	}
 
 	@Override
 	public utils.Player getPlayerInstance(PlayerInfo playerInfo,
 			Player position, int uniqueId) {		
 		return new utils.Player(playerInfo, position, uniqueId, new PlayerHandler(), DroppableLayout.LayoutType.LINE);
+	}
+
+	@Override
+	public String instructions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int maxPlayers() {
+		// TODO Auto-generated method stub
+		return 4;
 	}
 	
 

@@ -58,7 +58,7 @@ public class OvershootAnimation extends Animation {
 			this.duration=250;
 //			return ;
 		}
-		System.out.println("OvershootAnimation.doInBackground()");
+		//System.out.println("OvershootAnimation.doInBackground()");
 		Interpolator animateInterpolator = new OvershootInterpolator();
 		long startTime = System.currentTimeMillis();
 		long endTime = startTime + duration;
@@ -76,7 +76,9 @@ public class OvershootAnimation extends Animation {
 		if(sendToCommunication)
 			card.onDrag();
 		
-		while (percentTime < 1.0) {
+		card.getAnimationFlags().resetFlags();
+		card.getAnimationFlags().fling = true;
+		while (percentTime < 1.0 && card.getAnimationFlags().fling) {
 			curTime = System.currentTimeMillis();
 			percentTime = (float) (curTime - startTime)
 					/ (float) (endTime - startTime);
@@ -97,22 +99,25 @@ public class OvershootAnimation extends Animation {
 			}
 
 		}
+		card.getAnimationFlags().fling = false;
 		card.setLocation(destX, destY);
-		System.out.println("END");
+		//System.out.println("END");
 		
 	}
 	@Override
 	protected void postAnimation() {
+		card.onRelease();
 		if(sendToCommunication){
 			
 			ClientController.sendAPI().endDragMotion(card.getId());
+			
 			if (!destination.onDrop(ClientController.get().getMe(), source,
 					((Card) card))){
 				card.invalidMove();
 			}
 			
 		}
-		card.onRelease();
+		
 		
 	}
 	

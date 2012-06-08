@@ -47,7 +47,7 @@ public class Connection implements Runnable {
 			msg = (Message)in.readObject();
 			msg.actionOnServer(id);
 		} catch (ClassNotFoundException e) {			
-			e.printStackTrace();
+ 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

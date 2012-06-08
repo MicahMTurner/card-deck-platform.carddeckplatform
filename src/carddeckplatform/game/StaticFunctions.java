@@ -1,6 +1,19 @@
 package carddeckplatform.game;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.util.ArrayList;
+
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
+import freeplay.customization.FreePlayProfile;
 
 import utils.Point;
 
@@ -21,24 +34,24 @@ public class StaticFunctions {
 			if(y0<y1)
 				for(int y = y0; y<=y1; y++ ){
 					points.add(new Point(x0,y));
-					System.out.println("(" + x0 + "," + y + ")");
+					//System.out.println("(" + x0 + "," + y + ")");
 				}
 			else{
 				for(int y = y0; y>=y1; y-- ){
 					points.add(new Point(x0,y));
-					System.out.println("(" + x0 + "," + y + ")");
+					//System.out.println("(" + x0 + "," + y + ")");
 				}
 			}
 		}else if(y0==y1){
 			if(x0<x1)
 				for(int x = x0; x<=x1; x++ ){
 					points.add(new Point(x,y0));
-					System.out.println("(" + x + "," + y0 + ")");
+					//System.out.println("(" + x + "," + y0 + ")");
 				}
 			else{
 				for(int x = x0; x>=x1; x-- ){
 					points.add(new Point(x,y0));
-					System.out.println("(" + x + "," + y0 + ")");
+					//System.out.println("(" + x + "," + y0 + ")");
 				}
 			}
 		}
@@ -49,7 +62,7 @@ public class StaticFunctions {
 			int y=y0;
 			for (int x=x0; x <=x1; x++){
 				points.add(new Point(x,y));
-				System.out.println("(" + x + "," + y + ")");	
+				//System.out.println("(" + x + "," + y + ")");	
 				if(p > 0) {
 					y++;
 					p += dy-dx;
@@ -66,7 +79,7 @@ public class StaticFunctions {
 			int x=x0;
 			for (int y=y0; y <=y1; y++){
 				points.add(new Point(x,y));
-				System.out.println("(" + x + "," + y + ")");	
+				//System.out.println("(" + x + "," + y + ")");	
 				if(p > 0) {
 					x++;
 					p += dx-dy;
@@ -82,7 +95,7 @@ public class StaticFunctions {
 			int x=x0;
 			for (int y=y0; y >=y1; y--){
 				points.add(new Point(x,y));
-				System.out.println("(" + x + "," + y + ")");	
+				//System.out.println("(" + x + "," + y + ")");	
 				if(p > 0) {
 					x++;
 					p += dx-dy;
@@ -98,7 +111,7 @@ public class StaticFunctions {
 			int y=y0;
 			for (int x=x0; x <=x1; x++){
 				points.add(new Point(x,y));
-				System.out.println("(" + x + "," + y + ")");	
+				//System.out.println("(" + x + "," + y + ")");	
 				if(p > 0) {
 					y--;
 					p += dy-dx;
@@ -114,7 +127,7 @@ public class StaticFunctions {
 			int y=y0;
 			for (int x=x0; x >=x1; x--){
 				points.add(new Point(x,y));
-				System.out.println("(" + x + "," + y + ")");	
+				//System.out.println("(" + x + "," + y + ")");	
 				if(p > 0) {
 					y--;
 					p += dy-dx;
@@ -130,7 +143,7 @@ public class StaticFunctions {
 			int x=x0;
 			for (int y=y0; y >=y1; y--){
 				points.add(new Point(x,y));
-				System.out.println("(" + x + "," + y + ")");	
+				//System.out.println("(" + x + "," + y + ")");	
 				if(p > 0) {
 					x--;
 					p += dx-dy;
@@ -146,7 +159,7 @@ public class StaticFunctions {
 			int x=x0;
 			for (int y=y0; y <=y1; y++){
 				points.add(new Point(x,y));
-				System.out.println("(" + x + "," + y + ")");	
+				//System.out.println("(" + x + "," + y + ")");	
 				if(p > 0) {
 					x--;
 					p += dx-dy;
@@ -163,7 +176,7 @@ public class StaticFunctions {
 			int y=y0;
 			for (int x=x0; x >=x1; x--){
 				points.add(new Point(x,y));
-				System.out.println("(" + x + "," + y + ")");	
+				//System.out.println("(" + x + "," + y + ")");	
 				if(p > 0) {
 					y++;
 					p += dy-dx;
@@ -175,4 +188,61 @@ public class StaticFunctions {
 		}
 		return points;
 	}
+	
+	
+	public static Object readFile(String path){
+		Object res=null;
+		String appPath = GameEnvironment.path;
+		File myFile=new File(appPath + path);
+		
+		FileInputStream fOut;
+		try {
+			fOut = new FileInputStream(myFile);
+			ObjectInput myOutWriter = new ObjectInputStream(fOut);
+			res = myOutWriter.readObject();	
+			myOutWriter.close();
+			fOut.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (StreamCorruptedException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	public static void writeFile(Object obj, String path){
+		String appPath = GameEnvironment.path;
+		File myFile=new File(appPath + path);
+		try {
+			myFile.createNewFile();
+			FileOutputStream fOut = new FileOutputStream(myFile);
+			ObjectOutput myOutWriter = new ObjectOutputStream(fOut);
+			myOutWriter.writeObject(obj);
+			myOutWriter.close();
+			fOut.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void deleteFile(String path){
+		String appPath = GameEnvironment.path;
+		File myFile=new File(appPath + path);
+		myFile.delete();
+		myFile = null;
+	}
+
+
+	public static FileOutputStream getPluginOutputStream(String filename) throws FileNotFoundException {
+		return new FileOutputStream(GameEnvironment.path+"plugins/"+filename);
+		
+		
+		
+	}
+	
 }

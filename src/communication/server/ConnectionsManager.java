@@ -8,6 +8,9 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
+
+import org.apache.commons.io.input.ClassLoaderObjectInputStream;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
@@ -15,13 +18,16 @@ import android.bluetooth.BluetoothServerSocket;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import carddeckplatform.game.gameEnvironment.GameEnvironment.ConnectionType;
 
+import utils.GamePrefs;
 import utils.Player;
 import utils.Position;
 import communication.actions.InitialConnectionAction;
+import communication.actions.LoadGameAction;
 import communication.actions.PlayerLeftAction;
 import communication.link.Streams;
 import communication.messages.InitialMessage;
 import communication.messages.Message;
+import freeplay.customization.FreePlayProfile;
 
 public class ConnectionsManager {
 	private ServerSocket serverSocket=null;
@@ -41,10 +47,10 @@ public class ConnectionsManager {
 		return ConnectionsManagerHolder.connectionsManager;
 	}
 			
-	private ArrayList<Connection> connections;
+	private ArrayBlockingQueue<Connection> connections;
 	
 	private ConnectionsManager() {
-		connections = new ArrayList<Connection>();
+		connections = new ArrayBlockingQueue<Connection>(4);
 //		try {
 //			if(GameEnvironment.getGameEnvironment().getConnectionType()==ConnectionType.TCP || GameEnvironment.getGameEnvironment().getPlayerInfo().isServer()){
 //				serverSocket = new ServerSocket(GameEnvironment.getGameEnvironment().getTcpInfo().getHostPort());
@@ -61,8 +67,8 @@ public class ConnectionsManager {
 	public int getNumberOfConnections(){
 		return connections.size();
 	}
-
-		
+	
+		 
 	/**
 	 * sendToAll - sends the message to every user.
 	 * @param msg
@@ -73,16 +79,35 @@ public class ConnectionsManager {
 		}
 	}
 	
+	
+	/**
+	 * sendToAll - sends the message to every user.
+	 * @param msg
+	 */
+	public void sendToAllExcptHost(Message msg){
+		boolean first=true;
+		for(Connection conn : connections){
+			if(first){
+				first = false;
+				continue;
+			}
+			conn.send(msg);
+		}
+	}
+	
+	
 	/**
 	 * sendToAllExcptMe - sends the message to every user except for the user 'id'.
 	 * @param msg
 	 * @param id
 	 */
 	public void sendToAllExcptMe(Message msg , int id){
-		for(Connection conn : connections){
-			if(conn.getId()!=id){
-				conn.send(msg);
-			}			
+		synchronized(connections){
+			for(Connection conn : connections){
+				if(conn.getId()!=id){
+					conn.send(msg);
+				}			
+			}
 		}
 	}
 	
@@ -106,10 +131,10 @@ public class ConnectionsManager {
 	 * @param gameId
 	 * @param playersInfo
 	 */
-	public void connectHostingPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo){
+	public void connectHostingPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo, FreePlayProfile freePlayProfile){
 		Acceptor acceptor = new TcpAcceptor();
 		Streams s = acceptor.accept();
-		addConnection(s, position, gameId, playersInfo);
+		addConnection(s, position, gameId, playersInfo, freePlayProfile);
 	}
 	
 	
@@ -119,7 +144,7 @@ public class ConnectionsManager {
 	 * @param gameId
 	 * @param playersInfo
 	 */
-	public void connectPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo){			
+	public void connectPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo, FreePlayProfile freePlayProfile){			
 		Acceptor acceptor=null;
 		// accept connections according to the connection type specified by the user.
 		if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP)
@@ -129,7 +154,7 @@ public class ConnectionsManager {
 		
 		Streams s = acceptor.accept();
 		if (s!=null){
-			addConnection(s, position, gameId, playersInfo);
+			addConnection(s, position, gameId, playersInfo, freePlayProfile);
 		}
 	}
 	
@@ -140,13 +165,14 @@ public class ConnectionsManager {
 	 * @param gameId
 	 * @param playersInfo
 	 */
-	public void addConnection(Streams s, Position.Player position,String gameId,ArrayList<Player> playersInfo){
+	public void addConnection(Streams s, Position.Player position,String gameId,ArrayList<Player> playersInfo, FreePlayProfile freePlayProfile){
 			ObjectOutputStream out=s.getOut();
 			ObjectInputStream in=s.getIn();
 			
 			Connection connection = new Connection(position.getId(),in, out);
 			connections.add(connection);
-			sendTo(new InitialMessage(new InitialConnectionAction(gameId,position,playersInfo)),connection.getId());
+			sendTo(new Message(new LoadGameAction(gameId, freePlayProfile)),connection.getId());
+			sendTo(new Message(new InitialConnectionAction(position,playersInfo)),connection.getId());
 			connection.getInitialMessage();			
 		    new Thread(connection).start();	
 			
@@ -157,19 +183,29 @@ public class ConnectionsManager {
 		connections.remove(connection);		
 		sendToAllExcptMe(new Message(new PlayerLeftAction()), connection.getId());		
 	}
+	public void stopListening(){
+		closeServerSocket();
+	}
+	
+	private void closeServerSocket(){
+		//close server socket
+				ServerSocket ss=GameEnvironment.get().getTcpInfo().getServerSocket();
+				if (ss!=null){
+					try {
+						ss.close();
+					} catch (IOException e) {				
+						e.printStackTrace();
+					}
+				}
+	}
+	
 	public void shutDown(){
 		for (Connection connection : connections){
 			connection.cancelConnection();
 		}
-		//close server socket
-		ServerSocket ss=GameEnvironment.get().getTcpInfo().getServerSocket();
-		if (ss!=null){
-			try {
-				ss.close();
-			} catch (IOException e) {				
-				e.printStackTrace();
-			}
-		}
+		
+		GameEnvironment.get().getBluetoothInfo().resetSockets();
+		closeServerSocket();
 	}
 	
 }

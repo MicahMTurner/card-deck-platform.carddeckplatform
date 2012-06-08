@@ -19,8 +19,6 @@ public class DealCardAction implements Action{
 	@Override
 	public void execute() {
 		ClientController.get().dealCards(cards,to);
-		
-		
 	}
 
 }

@@ -1,14 +1,24 @@
 package freeplay;
 
+import freeplay.customization.FreePlayProfile;
+import handlers.Handler;
 import handlers.PlayerEventsHandler;
 
 import java.util.ArrayList;
 import java.util.Queue;
+import java.util.Set;
+import java.util.Stack;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import communication.actions.DealCardAction;
 import communication.messages.Message;
 import communication.server.ConnectionsManager;
 
+import carddeckplatform.game.CarddeckplatformActivity;
+import carddeckplatform.game.GameActivity;
+import carddeckplatform.game.StaticFunctions;
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
@@ -17,6 +27,7 @@ import utils.Button;
 import utils.DeckArea;
 import utils.Card;
 import utils.Deck;
+import utils.GamePrefs;
 import utils.Point;
 import utils.Position;
 import utils.Position.Player;
@@ -26,6 +37,8 @@ import logic.client.Game;
 
 public class FreePlay extends Game{
 
+	private boolean publicCardsVisible;
+	
 	@Override
 	public Deck getDeck() {
 		return new Deck(new CardHandler(), true);
@@ -38,14 +51,9 @@ public class FreePlay extends Game{
 
 	@Override
 	public int minPlayers() {
-		return 2;
+		return 1;
 	}
 
-	@Override
-	public int cardsForEachPlayer() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
 	public void dealCards() {
@@ -55,21 +63,20 @@ public class FreePlay extends Game{
 			cards.add(deck.drawCard());
 		}
 		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(cards,Position.Button.TOPRIGHT.getId())));
+		
+		dealCardAnimation(Position.Button.TOPRIGHT.getId(), cards, freePlayProfile.getCardsToDeal());
 	}
-
+	
+	
 	
 	@Override
-	public void setLayouts(ArrayList<Droppable> publics, ArrayList<Button> buttons) {
-		droppables.add(new DeckArea(Position.Button.TOPRIGHT));
-		droppables.add(new Public(new PublicHandler(), Position.Public.MID,DroppableLayout.LayoutType.NONE , new Point(65,65)));		
+	public void setLayouts() {
+		droppables.add(new DeckArea(Position.Button.TOPRIGHT));		
+		for(Droppable d : freePlayProfile.getPublics()){
+			if(d!=null)
+				droppables.add(d);
+		}
 	}
-	
-//	@Override
-//	public void getLayouts(ArrayList<Droppable> droppables) {
-//		droppables.add(new DeckArea(Position.Button.BOTLEFT));
-//		//(new CardHandler(), true,));
-//		droppables.add(new Public(new PublicHandler(), Position.Public.MID));
-//	}
 
 	@Override
 	public String toString() {
@@ -85,6 +92,89 @@ public class FreePlay extends Game{
 	@Override
 	public utils.Player getPlayerInstance(PlayerInfo playerInfo,
 			Player position, int uniqueId) {
-		return new utils.Player(playerInfo, position, uniqueId, new PlayerHandler(), DroppableLayout.LayoutType.LINE);
+		
+		PlayerEventsHandler playerHandler = freePlayProfile.getPlayerHandlers().get(position);
+		
+		utils.Player p = new utils.Player(playerInfo, position, uniqueId, (PlayerEventsHandler)playerHandler, DroppableLayout.LayoutType.LINE);
+		//playerHandler.setAttachedPlayer(p);
+		
+		return p;
 	}
+	
+//	@Override
+//	public String getPrefsName(){
+//		return "freeplay";
+//	}
+	
+	
+	public void applyProfile(FreePlayProfile freePlayProfile){
+		this.freePlayProfile = freePlayProfile;
+	}
+
+	@Override
+	public String instructions() {
+		return "";
+	}
+//	public void loadProfile(){
+//		try {
+//			SharedPreferences preferences = CarddeckplatformActivity.getContext().getSharedPreferences(getPrefsName(), Context.MODE_PRIVATE);		
+//			String numberOfPlayers = preferences.getString("playersNum", String.valueOf(minPlayers()));		
+//			numberOfParticipants = Integer.parseInt(numberOfPlayers);
+//			
+//			publicLayout = preferences.getString("publicLayout", "free");
+//			playerCardsVisible = preferences.getBoolean("playerCardsVisible" , false);
+//			publicCardsVisible = preferences.getBoolean("publicCardsVisible" , true);
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			// TODO: handle exception
+//		}
+//		
+//		
+//		
+////		String somePreference = preferences.getString("somePreference", defaultValue);
+//	}
+//	
+//	
+//
+//	public void applyReceivedProfile(FreePlayProfile gamePrefs){
+//		this.publicLayout = new String(gamePrefs.getPublicLayout());
+//		this.playerCardsVisible = gamePrefs.getPlayerCardsVisible();
+//		this.publicCardsVisible = gamePrefs.getPublicCardsVisible();
+//	}
+//	
+//	@Override
+//	public GamePrefs getPrefs() {
+//		// TODO Auto-generated method stub
+//		return new GamePrefs(publicLayout, playerCardsVisible, publicCardsVisible);
+//	}
+	
+	@Override
+	public Stack<Position.Player> getPositions(){
+		Stack<Position.Player> availablePositions = super.getPositions();
+		Stack<Position.Player> toRemove = new Stack<Position.Player>();
+		
+		Set<Player> players = freePlayProfile.getPlayerHandlers().keySet();
+		
+		for(Position.Player pp :  availablePositions){
+			if(!players.contains(pp)){
+				toRemove.add(pp);
+			}
+		}
+		
+		// remove if there is unnecessary items
+		if(toRemove.size()>0)
+			availablePositions.removeAll(toRemove);
+		
+		return availablePositions;
+		
+	}
+
+	@Override
+	public int maxPlayers() {
+		// TODO Auto-generated method stub
+		return 3;
+	}
+
+
 }
