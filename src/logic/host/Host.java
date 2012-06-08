@@ -70,7 +70,7 @@ public class Host implements Runnable{
 	
 	public void waitForPlayers() throws Exception{
 		ConnectionsManager.getConnectionsManager().connectHostingPlayer(availablePositions.pop(),game.toString(),game.getPlayers());
-		while(ConnectionsManager.getConnectionsManager().getNumberOfConnections()<game.minPlayers()){
+		while(ConnectionsManager.getConnectionsManager().getNumberOfConnections()<game.getNumberOfParticipants()){
 			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions.pop(),game.toString(),game.getPlayers());
 			if (shutDown){
 				throw new Exception("server shutting down");
