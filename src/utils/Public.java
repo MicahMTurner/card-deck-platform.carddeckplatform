@@ -2,99 +2,85 @@ package utils;
 
 import handlers.PublicEventsHandler;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-
-import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Shape;
 
 import utils.droppableLayouts.DroppableLayout;
 import utils.droppableLayouts.DroppableLayout.LayoutType;
-import utils.droppableLayouts.HeapLayout;
-import utils.droppableLayouts.line.BottomLineLayout;
-
-import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import carddeckplatform.game.BitmapHolder;
 import client.gui.entities.Droppable;
-import client.gui.entities.MetricsConvertion;
 
-
+/**
+ * this class represents an area where cards can be placed for all to see
+ * (cards can bee seen faced down or up)
+ * @author Yoav
+ *
+ */
 public class Public extends Droppable{	
 	private PublicEventsHandler handler;
 	
-	private LinkedList<Card> cards=new LinkedList<Card>();	
+	protected LinkedList<Card> cards=new LinkedList<Card>();	
 	
-	
-	
-	public Public(PublicEventsHandler handler,Position.Public position,DroppableLayout.LayoutType layoutType , Point scale) {
-//		super(position.getId(),position, new Point(10,13),layoutType);
-		super(position.getId(),position, scale,layoutType);
-		this.handler=handler;
+	/**
+	 * constructor 
+	 * @param handler the public area handler for the game
+	 * @param position public area's position
+	 * @param layoutType layoutType of the public zone
+	 * @see LayoutType
+	 */
+	public Public(PublicEventsHandler handler,Position.Public position,DroppableLayout.LayoutType layoutType) {
+		super(position.getId(),position, layoutType,handler);
+		this.handler=handler;			
+		this.image = "drop";
 		
-		
-		this.image = "freepublic";
-		
-		//BitmapHolder.get().scaleBitmap(image, this.scale);
 	}
 	
-//	public void setPosition(Position.Public position) {
-//		this.position = position;
-//	}
-//	
-	
-	@Override
+	@Override	
 	public boolean onCardAdded(Player player,Card card){
-		cards.addFirst(card);
-		boolean answer=handler.onCardAdded(this,player, card);
-		if (!answer){
-			cards.removeFirst();
-		}
+		boolean answer;
+		//synchronized (cards) {
+			cards.addFirst(card);
+			answer=handler.onCardAdded(this,player, card);
+			if (!answer){
+				cards.removeFirst();
+			}
+		//}
+		
+		
 		return answer; 
 	}
+	
 	@Override
 	public boolean onCardRemoved(Player player,Card card){
-		boolean answer=handler.onCardRemoved(this,player, card);
-		if (answer || player==null){
-			cards.remove(card);
-		}		
+		boolean answer;
+		//synchronized (cards) {
+			answer=handler.onCardRemoved(this,player, card);
+			if (answer || player==null){
+				cards.remove(card);
+			}		
+		//}
 		return answer;
 	}
-	
+	/**
+	 * reaveal a card in this public
+	 * @param player player that did the action
+	 * @param card the card we want to reaveal
+	 */
 	public void revealCard(Player player,Card card){
 		card.reveal();
 		handler.onCardRevealed(this,player, card);
 	}
 
 
-//	@Override
-//	public int getX() {
-//		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();		
-//	}
-//
-//	@Override
-//	public int getY() {
-//		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();		
-//	}
-
-//	@Override
-//	public void draw(Canvas canvas,Context context) {
-//		Paint paint=new Paint();
-//		paint.setColor(Color.BLUE);
-//		canvas.drawCircle(shape.getCenterX(), shape.getCenterY(), 50, paint);
-//		canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), 0x7f02002e),getX()-28,getY()-27,null);
-//	}
-
 	@Override
 	public void deltCard(Card card) {
-		cards.add(card);
+		cards.addFirst(card);
 		card.setLocation(getX(), getY());
 		
 	}
-
+	@Override
+	public void AddInPlace(Card card,int place) {
+		this.cards.add(place,card);
+		
+	}
 	@Override
 	public int cardsHolding() {		
 		return cards.size();
@@ -112,14 +98,19 @@ public class Public extends Droppable{
 	public LinkedList<Card> getMyCards() {
 		return cards;
 	}
+	/**
+	 * get first/top card in this droppable (not removing it from the droppable)
+	 * if public has more than 1 card, returns the 2nd one (for use in handlers - card is added before handler is called)
+	 */
 	public Card peek(){
-		if (!cards.isEmpty()){
-			return cards.get(cards.size()-1);
-		}else{
-			return null;
+		if (cards.size()>1){
+			return cards.get(1);
 		}
+		return cards.peek();
 	}
-
+	public Card first(){		
+		return cards.peek();
+	}
 	@Override
 	public void onRoundEnd(Player player) {
 		handler.onRoundEnd(this,player);

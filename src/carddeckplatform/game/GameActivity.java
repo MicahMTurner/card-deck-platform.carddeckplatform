@@ -3,16 +3,11 @@ package carddeckplatform.game;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.CountDownLatch;
 
-import javax.annotation.PostConstruct;
-
-import president.PublicAndButtonHandler;
-
+import logic.client.Game;
+import logic.host.Host;
 import utils.Button;
 import utils.Pair;
-
-import logic.host.Host;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -20,15 +15,20 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import carddeckplatform.game.gameEnvironment.GameEnvironment.ConnectionType;
@@ -37,16 +37,26 @@ import client.controller.ClientController;
 import client.controller.LivePosition;
 import client.dataBase.ClientDataBase;
 import client.gui.entities.Droppable;
+import client.ranking.db.Round;
+import client.ranking.db.ScoringSystem;
 
+import communication.actions.StopLivePositionAction;
 import communication.link.ServerConnection;
-import communication.link.TcpIdListener;
+import communication.messages.Message;
+import communication.messages.RestartMessage;
+import communication.server.ConnectionsManager;
+
+import freeplay.customization.FreePlayProfile;
 
 public class GameActivity extends Activity {
 	private final int SPINNERPROGBAR=0;
 	private static Context context;
+	private static Intent intent;
+	//public static Activity thisActivity;
 	private ProgressDialog progDialog;
 	private TableView tableview;
-	private TcpIdListener tcpIdListener;
+	public static boolean enableStartButton;
+	//private TcpIdListener tcpIdListener;
 	private Host host;
 	//private boolean disableLivePosition;
 	
@@ -54,7 +64,9 @@ public class GameActivity extends Activity {
 	
 	
 
-	
+	public static Intent getMyIntent(){
+		return intent;
+	}
 
 	public static Context getContext(){
 		return context;
@@ -76,14 +88,15 @@ public class GameActivity extends Activity {
 			host.shutDown();
 			host=null;
 		}
-		if (tcpIdListener!=null){
-			tcpIdListener.stop();
-		}
+		enableStartButton=false;
+		//if (tcpIdListener!=null){
+		//	tcpIdListener.stop();
+		//}
 	}
 	
 	@Override
 	protected void onResume() {	
-		super.onResume();
+		super.onResume();		
 		//posByComp.start();
 		//AutoHide.get().start();
 		
@@ -94,18 +107,18 @@ public class GameActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); 
         host=null;
-        tcpIdListener=null;       
+        enableStartButton=false;
+        //tcpIdListener=null;       
         //disableLivePosition=false;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); 
 
         //gravity = new AutoHide(getApplicationContext());
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        context=getApplicationContext();
-        Display display = getWindowManager().getDefaultDisplay();        
-        GameEnvironment.get().getDeviceInfo().setScreenWidth(display.getWidth());
-        GameEnvironment.get().getDeviceInfo().setScreenHeight(display.getHeight());
-        GameEnvironment.get().getDeviceInfo().setRotationAngle(display.getRotation());
+        context=(Context)this;
+        intent=getIntent();
+        //thisActivity=this;
+        
         
         //GameStatus.metrics = getApplicationContext().getResources().getDisplayMetrics();
         
@@ -120,29 +133,35 @@ public class GameActivity extends Activity {
         ClientController.get().setGui(tableview);       
         //setupGame();
         
-        new GameSetup().execute(getIntent().getStringExtra("gameName"));
-
+        new GameSetup().execute(getMyIntent().getStringExtra("gameName"));
+        
     }
+    
+
     
     private void initialServer(final String gameName) {    	
     	// added by Michael: bluetooth throws exception if the server socket isn't instantiated from main thread or handler.
     	GameEnvironment.get().getHandler().post(new Runnable() {
 			@Override
 			public void run() {
-
 				if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){
 		    		  //if in tcp mode start id listener.
-		   			  tcpIdListener = new TcpIdListener(GameEnvironment.get().getPlayerInfo().getUsername() , gameName);
-		    		  tcpIdListener.start();
+		   			 // tcpIdListener = new TcpIdListener(host.getHostGameDetails());//new TcpIdListener(GameEnvironment.get().getPlayerInfo().getUsername() , gameName);
+		    		 // tcpIdListener.start();
 		    	  }
 		    	  else if(GameEnvironment.get().getConnectionType()==ConnectionType.BLUETOOTH){
 		    		// in blue-tooth mode there is no need for host id listener.
 		          	GameEnvironment.get().getBluetoothInfo().initServerSocket();
 		    	  }
+				Game game = ClientDataBase.getDataBase().getGame(gameName);
 				
-		    	host=new Host(ClientDataBase.getDataBase().getGame(gameName));
+				if(gameName.equals("free play")){
+					game.setFreePlayProfile((FreePlayProfile)getIntent().getSerializableExtra("profile"));
+				}
+
+		    	host=new Host(game);
 		    	new Thread(host).start();
-		    	//cdl.countDown();
+
 			}
 			
 		});
@@ -198,8 +217,6 @@ public class GameActivity extends Activity {
       //insert public areas into publics array
       Pair<ArrayList<Droppable>,ArrayList<Button>> publicsAndButtons=ClientController.get().getLayouts();
       
-      //ArrayList<Button>buttons=new ArrayList<Public>();
-      
       //build the layout
       buildLayout(publicsAndButtons);      
   }
@@ -209,13 +226,7 @@ public class GameActivity extends Activity {
 	@Override
 	protected String doInBackground(String... params) {
 		if (GameEnvironment.get().getPlayerInfo().isServer()){
-			//CountDownLatch cdl=new CountDownLatch(1);
 	        initialServer(params[0]);
-	       // try {
-			//	cdl.await();
-			//} catch (InterruptedException e) {		
-			//	e.printStackTrace();
-			//}
 	    }
 		return setupGame();
 	}
@@ -260,7 +271,7 @@ public class GameActivity extends Activity {
 			   
 		    //setup all layout prefs
 		    setupLayout();		          
-		    AutoHide.get().start();
+		    AutoHide.get().start(GameActivity.context);
 		} catch (IOException e) {
 			return e.getMessage();
 		}
@@ -277,36 +288,15 @@ public class GameActivity extends Activity {
 
 
 
-	@Override
-	public void onWindowFocusChanged(boolean hasWindowFocus){
-//    	if(!GameStatus.isServer)
-//    		return;
-//    	//making the ip dialog in case its the first time that we entered
-//    	final Dialog dialog = new Dialog(GameActivity.this);
-//    	dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
-//                WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-//    	dialog.setContentView(R.layout.showmyip);
-//    	dialog.setTitle("Host IP Dialog");
-//    	TextView myIP=(TextView)dialog.findViewById(R.id.myipnumbertext);
-//    	Button contin= (Button) dialog.findViewById(R.id.myipbutton);
-//    	System.out.println("Your ip address is:\n "+GameStatus.localIp);
-//		myIP.setText(GameStatus.localIp);
-//		contin.setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {	
-//				dialog.dismiss();
-//			}
-//		});
-//    	//dialog.show();
-	}
+
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
     	menu.add(0, Menu.FIRST, Menu.NONE, "Restart").setIcon(R.drawable.restart);
     	menu.add(0, Menu.FIRST+1, Menu.NONE, "Ranking").setIcon(R.drawable.rank);
-    	menu.add(0, Menu.FIRST+2, Menu.NONE, "Main Menu").setIcon(R.drawable.exit);
-    	if (GameEnvironment.get().getPlayerInfo().isServer()){
-    		menu.add(0, Menu.FIRST+3, Menu.NONE, "Stop Live Position").setIcon(R.drawable.exit);
+    	menu.add(0, Menu.FIRST+2, Menu.NONE, "start").setEnabled(enableStartButton).setIcon(R.drawable.start);
+    	if (GameEnvironment.get().getPlayerInfo().isServer() && LivePosition.get().isRunning()){
+    		menu.add(0, Menu.FIRST+3, Menu.NONE, "Stop Live Position").setIcon(R.drawable.stop);
     	}    	
     	
     	return true;
@@ -318,35 +308,77 @@ public class GameActivity extends Activity {
     	switch(item.getItemId()){
     		case Menu.FIRST:
     			Toast.makeText(this, "Restart", 2000).show();
+    			ServerConnection.getConnection().send(new RestartMessage());
     			return true;
     		case Menu.FIRST+1:
+    			showScores();
     			Toast.makeText(this, "Ranking", 2000).show();
     			return true;
     		case Menu.FIRST+2:
-    			Toast.makeText(this, "Main Menu", 2000).show();
-    			ServerConnection.getConnection().closeConnection();
-    			//add new message - shut down server
-    			
-    			finish();
+    			item.setEnabled(false);
+    			Host.hostStartedGame=true;
+				GameActivity.enableStartButton=false;
+				ConnectionsManager.getConnectionsManager().stopListening();	    			
     			return true;
     		case Menu.FIRST+3:{    			
     			LivePosition.get().stop();
-    			
-    			item.setTitle("Start Live Position");
-    			item.setIcon(R.drawable.rank);
+    			ServerConnection.getConnection().send(new Message(new StopLivePositionAction()));
+    			Toast.makeText(this,"Live-Position stopped", 2000).show();
+    			item.setTitle("Live-Position stopped");  
+    			item.setEnabled(false);
     			return true;
     		}
     		
     		
-    		default:
-    			Toast.makeText(this, "NOthing", 2000).show();
-    			System.out.println(item.getItemId());
+    		default:{    			 			
+    		}
     			return true;
-    		
-    	
-    	
     	}
 
-    } 
+    }
+
+	private void showScores() {
+		Round[] rounds=ScoringSystem.getInstance().showAllRoundsRounds();
+		if(rounds==null){
+			Toast.makeText(this, "Game is not rankable", 2000).show();;
+			return;
+		}
+		
+		Dialog dialog = new Dialog(GameActivity.this);
+		ScrollView scrollView = new ScrollView(GameActivity.this);
+		TableLayout table = new TableLayout(GameActivity.this);
+		scrollView.addView(table);
+		table.setColumnStretchable(0, true);
+		table.setColumnStretchable(10, true);
+		table.setShrinkAllColumns(true);
+		LayoutParams params = new LayoutParams(700, 500);
+		dialog.setContentView(scrollView, params);
+		if(rounds.length==0)
+			Toast.makeText(this, "No points added", 2000).show();
+		//making headers
+		TableRow tr= new TableRow(GameActivity.this);
+		TextView tv= new TextView(GameActivity.this);
+		tv.setText("");
+		tr.addView(tv);
+		for(int i=0;i<rounds[0].getRoundResult().size();i++){
+			tv= new TextView(GameActivity.this);
+			tv.setText(rounds[0].getRoundResult().get(i).getUserName());
+			tr.addView(tv);
+		}
+		table.addView(tr);
+		for(int i=0;i<rounds.length;i++){
+			tr= new TableRow(GameActivity.this);
+			tv= new TextView(GameActivity.this);
+			tv.setText(i);
+			tr.addView(tv);
+			Round round=rounds[i];
+			for(int j=0;j<round.getRoundResult().size();j++){
+				tv= new TextView(GameActivity.this);
+				tv.setText(round.getRoundResult().get(j).getScore()+"");
+				tr.addView(tv);
+			}
+		}
+		dialog.show();
+	} 
 }
 
