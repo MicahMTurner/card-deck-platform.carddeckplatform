@@ -12,6 +12,7 @@ import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
+import utils.droppableLayouts.DroppableLayout;
 import utils.droppableLayouts.line.BottomLineLayout;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -39,8 +40,8 @@ public class Player extends Droppable implements  Comparable<Player>{
 	
 	
 	
-	public Player(PlayerInfo playerInfo,Position.Player globalPosition,int uniqueId, PlayerEventsHandler handler) {
-		super(uniqueId,Position.Player.BOTTOM, new Point(40,13));
+	public Player(PlayerInfo playerInfo,Position.Player globalPosition,int uniqueId, PlayerEventsHandler handler,DroppableLayout.LayoutType layoutType) {
+		super(uniqueId,Position.Player.BOTTOM, new Point(40,13),layoutType);
 		this.playerInfo=playerInfo;		
 		this.globalPosition=globalPosition;
 		this.position=Position.Player.BOTTOM;	
@@ -50,7 +51,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 		
 		this.image = "playerarea";
 		
-		this.droppableLayout = new BottomLineLayout(this);
+		//this.droppableLayout = new BottomLineLayout(this);
 		//BitmapHolder.get().scaleBitmap(image, this.scale);
 	}
 	
@@ -134,8 +135,9 @@ public class Player extends Droppable implements  Comparable<Player>{
 				CardTransformation.get().transform(card,position,newPos);
 			}
 			position=newPos;
-			//TODO:
-			this.droppableLayout = new BottomLineLayout(this);
+			//TODO:CHANGE THIS!!!!!
+			//this.droppableLayout = new BottomLineLayout(this);
+			
 		}		
 	}
 	

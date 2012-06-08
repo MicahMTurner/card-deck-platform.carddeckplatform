@@ -61,7 +61,7 @@ public abstract class Game {
 	@Override	
 	public abstract String toString();
 	//the game create player according to his hander
-	public abstract PlayerEventsHandler getPlayerHandler();	
+	public abstract Player getPlayerInstance(PlayerInfo playerInfo, utils.Position.Player position,int uniqueId);	
 	public ArrayList<Droppable>getLayouts(){
 		return droppables;
 	}
@@ -142,13 +142,14 @@ public abstract class Game {
 	}
 	// 
 	public void addMe(PlayerInfo playerInfo, utils.Position.Player position,int uniqueId) {
-		players.add(new Player(playerInfo,position,uniqueId,getPlayerHandler()));
+		players.add(getPlayerInstance(playerInfo,position,uniqueId));
 		
 	}
 
 	public void positionUpdate(Player player, Position.Player newPosition) {
-		Player swappedWith=(Player) ClientController.get().getZone(newPosition);
 		Position.Player oldPosition=getMe().getGlobalPosition();
+		Player swappedWith=(Player) ClientController.get().getZone(newPosition.getRelativePosition(oldPosition));
+		
 		if (swappedWith==null){
 			player.setGlobalPosition(newPosition);
 		}else{			

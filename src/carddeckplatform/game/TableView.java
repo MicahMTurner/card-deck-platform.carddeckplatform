@@ -362,9 +362,14 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 					}
 					this.from = null;
 				} else {
-					
-					draggableInHand.invalidMove();
-					ServerConnection.getConnection().send(new Message(new InvalidMoveAction(draggableInHand.getId())));
+					if((droppable!=null && droppable.isFlingabble())|| droppable==null){
+						draggableInHand.invalidMove();
+						ServerConnection.getConnection().send(new Message(new InvalidMoveAction(draggableInHand.getId())));
+					}
+					else{
+						draggableInHand.onRelease();
+					}
+						
 				}
 				
 				draggableInHand = null;
@@ -462,6 +467,6 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	}
 
 	public void setPlayerTurn(Droppable droppable) {
-		new GlowAnimation(droppable, 10000).execute();
+		new GlowAnimation(droppable, 3000).execute();
 	}
 }

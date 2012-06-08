@@ -59,15 +59,27 @@ public abstract class Droppable implements Serializable {
 	// public Stack<GuiCard>guiCards=new Stack<GuiCard>();
 	// protected Stack<Card> cards = new Stack<Card>();
 	// protected ArrayList<Card> cards;
+	private DroppableLayout.LayoutType layoutType;
 	protected transient Shape shape = null;
 	protected int id;
 	protected Position position;
 	protected Point scale;
 	protected String image;
-	protected transient DroppableLayout droppableLayout;
+	protected transient DroppableLayout droppableLayout=null;
 	transient protected Paint mPaintForGlow= new Paint();
 	protected int alpha=255;
 	protected int glowColor=0;
+	
+	
+	
+	private DroppableLayout getDroppableLayout() {
+		if(droppableLayout==null)
+			this.droppableLayout=layoutType.getLayout(this);
+		
+		return droppableLayout;
+	}
+	
+	
 	public int getAlpha() {
 		return alpha;
 	}
@@ -103,9 +115,9 @@ public abstract class Droppable implements Serializable {
 
 	}
 	public boolean isFlingabble(){
-		if(droppableLayout==null)
+		if(getDroppableLayout()==null)
 			return false;
-		else if(LayoutType.NONE==droppableLayout.getType())
+		if(LayoutType.NONE.equals(getDroppableLayout().getType()))
 			return false;
 		
 		return true;
@@ -161,7 +173,7 @@ public abstract class Droppable implements Serializable {
 	public boolean addCard(Player player, Card card){
 		boolean answer;
 		answer = onCardAdded(player, card);
-		if (droppableLayout != null && answer){
+		if (getDroppableLayout() != null && answer){
 			rearrange(0);
 		}
 		return answer;
@@ -170,7 +182,7 @@ public abstract class Droppable implements Serializable {
 	public boolean removeCard(Player player, Card card){
 		boolean answer;
 		answer = onCardRemoved(player, card);
-		if (droppableLayout != null && answer){
+		if (getDroppableLayout() != null && answer){
 			rearrange(0);
 		}
 		return answer;
@@ -226,10 +238,12 @@ public abstract class Droppable implements Serializable {
 		// 2),getY()-(img.getHeight() / 2),null);
 	}
 
-	public Droppable(int id, Position position, Point scale) {
+	public Droppable(int id, Position position, Point scale,DroppableLayout.LayoutType layoutType) {
 		this.id = id;
 		this.scale = scale;
 		this.position = position;
+		this.layoutType = layoutType;
+//		this.droppableLayout=layoutType.getLayout(this);
 		// this.shape=getShape();
 		// this.cards=new ArrayList<Card>();
 		// this.point=new Point(190,175);
@@ -251,8 +265,8 @@ public abstract class Droppable implements Serializable {
 		
 		
 		
-		if (droppableLayout != null)
-			droppableLayout.rearrange(index, droppableSize.getX()-card.getX(), droppableSize.getY()-card.getY());
+		if (getDroppableLayout() != null)
+			getDroppableLayout().rearrange(index, droppableSize.getX()-card.getX(), droppableSize.getY()-card.getY());
 
 	}
 	public abstract int cardsHolding();
@@ -267,6 +281,10 @@ public abstract class Droppable implements Serializable {
 
 	public void setPosition(Position relativePosition) {
 		this.position = relativePosition;
+		AbstractList<Card>cards=getCards();
+		for (Card card : cards){
+			card.setLocation(getX(), getY());
+		}
 
 	}
 

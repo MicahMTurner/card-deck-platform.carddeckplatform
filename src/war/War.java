@@ -5,6 +5,7 @@ import handlers.PlayerEventsHandler;
 import java.util.ArrayList;
 import java.util.Queue;
 
+import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
 
@@ -17,9 +18,11 @@ import utils.DeckArea;
 import utils.Card;
 import utils.Deck;
 import utils.Player;
+import utils.Point;
 import utils.Position;
 import utils.Public;
 import utils.StandartCard;
+import utils.droppableLayouts.DroppableLayout;
 
 import logic.client.Game;
 
@@ -79,8 +82,9 @@ public class War extends Game{
 
 	@Override
 	public void setLayouts(ArrayList<Droppable> publics) {
-		publics.add(new Public(new PublicHandler(),Position.Public.MIDLEFT));
-		publics.add(new Public(new PublicHandler(),Position.Public.MIDRIGHT));		
+		
+		publics.add(new Public(new PublicHandler(),Position.Public.MIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));
+		publics.add(new Public(new PublicHandler(),Position.Public.MIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));		
 	}
 //	@Override
 //	public void getLayouts(ArrayList<Droppable> publics){//,ArrayList<Button>buttons) {
@@ -95,10 +99,6 @@ public class War extends Game{
 		return new Deck(new CardHandler(),true);
 	}
 
-	@Override
-	public PlayerEventsHandler getPlayerHandler() {
-		return new PlayerHandler();
-	}
 
 	@Override
 	public void onRoundEnd() {		
@@ -156,6 +156,13 @@ public class War extends Game{
 			War.tie=true;
 			return null;
 		}
+	}
+
+	@Override
+	public Player getPlayerInstance(PlayerInfo playerInfo,
+			utils.Position.Player position, int uniqueId) {
+		
+		return new Player(playerInfo, position, uniqueId, new PlayerHandler(), DroppableLayout.LayoutType.HEAP);
 	}
 	
 }

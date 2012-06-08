@@ -1,4 +1,4 @@
-package freeplay;
+package freePlaySingle;
 
 import handlers.PlayerEventsHandler;
 
@@ -23,7 +23,7 @@ import utils.droppableLayouts.DroppableLayout;
 import utils.Public;
 import logic.client.Game;
 
-public class FreePlay extends Game{
+public class FreePlaySingle extends Game{
 
 	@Override
 	public Deck getDeck() {
@@ -37,7 +37,7 @@ public class FreePlay extends Game{
 
 	@Override
 	public int minPlayers() {
-		return 2;
+		return 1;
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class FreePlay extends Game{
 
 	@Override
 	public String toString() {
-		return "free play";
+		return "free play single player";
 	}
 
 

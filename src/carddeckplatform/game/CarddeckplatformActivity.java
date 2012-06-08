@@ -45,6 +45,7 @@ import android.widget.ViewFlipper;
 
 public class CarddeckplatformActivity extends Activity {
 	private ViewFlipper mFlipper;
+	private boolean livePosition;
 
 	
 
@@ -53,13 +54,18 @@ public class CarddeckplatformActivity extends Activity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         
         boolean useBluetooth = prefs.getBoolean("useBluetooth", false);
-        
+        boolean useLivePosition=prefs.getBoolean("useLivePosition", false);
         if(!useBluetooth){
         	GameEnvironment.get().setConnectionType(ConnectionType.TCP);
         }
         else{
         	GameEnvironment.get().setConnectionType(ConnectionType.BLUETOOTH);
         }
+        if (useLivePosition){
+        	livePosition=true;
+        }
+        
+        
 	}
 	
 	
@@ -102,9 +108,12 @@ public class CarddeckplatformActivity extends Activity {
         
         
         final EditText username = (EditText) findViewById(R.id.nickText);
+
+        //take user name from prefs
+        username.setText(PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getString("userName", "Guest"));
         
-        username.setText("user1");
-        
+        //bring curser to end of text
+        username.setSelection(username.length());
         
         Button hostBtn = (Button) findViewById(R.id.creategameButton);
         Button joinBtn = (Button) findViewById(R.id.joingamebutton);
@@ -132,7 +141,9 @@ public class CarddeckplatformActivity extends Activity {
 			                // always use the tcp server socket since we always need it to connect the hosting player.
 			                GameEnvironment.get().getTcpInfo().initServerSocket();
 
-			                i.putExtra("gameName", gameName);
+			                i.putExtra("gameName", gameName);			                
+			                i.putExtra("livePosition", livePosition);
+			                
 			                startActivity(i);
 			                
 			                dialog.dismiss();
@@ -178,10 +189,11 @@ public class CarddeckplatformActivity extends Activity {
             	});
             	ll.addView(hostBtn);
             	
-            	HostFinder hostFinder = new TcpHostFinder((WifiManager) getSystemService(Context.WIFI_SERVICE));
-            	hosts = hostFinder.findHosts();
+            	
             	
             	if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){
+            		HostFinder hostFinder = new TcpHostFinder((WifiManager) getSystemService(Context.WIFI_SERVICE));
+                	hosts = hostFinder.findHosts();
 	            	for(final HostId hostId : hosts){
 	            		hostBtn = new Button(getApplicationContext());
 	            		hostBtn.setText("Play " + hostId.getGameName() + " with " + hostId.getOwner());
