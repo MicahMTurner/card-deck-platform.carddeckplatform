@@ -16,6 +16,7 @@ import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
 
+import utils.Button;
 import utils.DeckArea;
 import utils.Deck;
 import utils.Player;
@@ -54,7 +55,7 @@ public abstract class Game {
 	public abstract void dealCards();	
 	
 	
-	public abstract void setLayouts(ArrayList<Droppable>publics);
+	public abstract void setLayouts(ArrayList<Droppable>publics,ArrayList<Button> buttons);
 	/**
 	 * game id
 	 */

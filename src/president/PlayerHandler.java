@@ -5,22 +5,23 @@ import utils.Player;
 import handlers.PlayerEventsHandler;
 
 public class PlayerHandler implements PlayerEventsHandler{
-
+	
+	
 	@Override
 	public boolean onMyTurn(Player player) {
-		// TODO Auto-generated method stub
+		if (President.passed){
+			player.endTurn();
+		}
 		return false;
 	}
 
 	@Override
 	public boolean onTurnEnd(Player player) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean onCardAdded(Player player, Card card) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

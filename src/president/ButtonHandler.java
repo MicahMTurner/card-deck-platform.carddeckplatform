@@ -7,7 +7,9 @@ public class ButtonHandler implements ButtonEventsHandler{
 
 	@Override
 	public void onClick() {
-		ClientController.get().getMe().endTurn();		
+		ClientController.get().getMe().endTurn();
+		President.passed=true;
+		
 	}
 
 }
