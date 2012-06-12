@@ -83,7 +83,7 @@ public abstract class Droppable implements Serializable {
 	public int getAlpha() {
 		return alpha;
 	}
-
+	public abstract void onRoundEnd(Player player);
 	public void setAlpha(int alpha) {
 		this.alpha = alpha;
 	}

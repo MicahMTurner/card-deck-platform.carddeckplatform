@@ -48,9 +48,10 @@ public class Public extends Droppable{
 	
 	@Override
 	public boolean onCardAdded(Player player,Card card){
+		cards.addFirst(card);
 		boolean answer=handler.onCardAdded(this,player, card);
-		if (answer){
-			cards.addFirst(card);
+		if (!answer){
+			cards.removeFirst();
 		}
 		return answer; 
 	}
