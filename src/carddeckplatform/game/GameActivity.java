@@ -144,7 +144,7 @@ public class GameActivity extends Activity {
     	  
 	}
     
-	private void buildLayout( ArrayList<Droppable> publics){
+	private void buildLayout(ArrayList<Droppable> publics){
     	for (Droppable publicZone : publics){
     		//set public zone according to my position
     		publicZone.setPosition(publicZone.getPosition().getRelativePosition(ClientController.get().getMe().getGlobalPosition()));

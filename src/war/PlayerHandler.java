@@ -20,8 +20,10 @@ public class PlayerHandler implements PlayerEventsHandler{
 
 	@Override
 	public boolean onCardAdded(Player player, Card card) {
-		//card.setLocation(player.getX(), player.getY());		
-		card.hide();		
+		//card.setLocation(player.getX(), player.getY());
+		if (player==null){
+			card.hide();
+		}
 		return false;
 	}
 

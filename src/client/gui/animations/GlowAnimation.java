@@ -63,8 +63,7 @@ public class GlowAnimation extends AsyncTask<Void, Void, Void> {
 			droppable.setGlowColor(glowColor);
 			try {
 				Thread.sleep(4);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+			} catch (InterruptedException e) {				
 				e.printStackTrace();
 			}
 

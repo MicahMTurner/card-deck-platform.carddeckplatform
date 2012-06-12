@@ -77,7 +77,8 @@ public class FreePlaySingle extends Game{
 
 
 	@Override
-	public void onRoundEnd() {
+	public Integer onRoundEnd() {
+		return null;
 	}
 
 	@Override

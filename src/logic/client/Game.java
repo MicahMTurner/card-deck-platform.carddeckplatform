@@ -42,9 +42,9 @@ public abstract class Game {
 	//protected abstract Player createPlayer(String userName, Position.Player position);
 	public abstract Deck getDeck();
 	//what to do when round has ended
-	public abstract void onRoundEnd();
+	public abstract Integer onRoundEnd();
 	//the order of the players turns 
-	public abstract Queue<utils.Position.Player> setTurns();
+	protected abstract Queue<utils.Position.Player> setTurns();
 	//the minimal players count
 	public abstract int minPlayers();
 	//how many cards to split
@@ -77,14 +77,16 @@ public abstract class Game {
 		deck=getDeck();	
 	}
 	
-	
-	public Game() {
-		first=null;
-		firstRound=true;		
+	public void setupTurns(){
 		turnsQueue=setTurns();
 		if (turnsQueue!=null){
 			first=turnsQueue.peek();
 		}
+	}
+	public Game() {
+		first=null;
+		firstRound=true;		
+		
 		//clearEmptyPositions();		
 		setLayouts(droppables);
 	}
@@ -115,11 +117,24 @@ public abstract class Game {
 			while (!availablePos.contains(next)){
 				next=turnsQueue.poll();
 			}
-			turnsQueue.add(next);	
+			
 			if (next.equals(first) && !firstRound){
-				ConnectionsManager.getConnectionsManager().sendToAll(new Message(new EndRoundAction()));
-				
+				ConnectionsManager.getConnectionsManager().sendToAllExcptMe((new Message(new EndRoundAction())),players.get(0).getId());
+				Integer nextPlayerId=onRoundEnd();
+				if (nextPlayerId==null){
+					next=null;
+				}else{
+					while (next.getId()!=nextPlayerId){
+						turnsQueue.add(next);
+						next=turnsQueue.poll();
+					
+					}
+				}				
 			}
+			if (next!=null){
+				turnsQueue.add(next);
+			}
+			
 		}
 		
 		firstRound=false;

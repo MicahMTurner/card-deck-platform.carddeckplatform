@@ -179,7 +179,7 @@ public class CarddeckplatformActivity extends Activity {
 					public void onClick(View arg0) {
 						
 						GameEnvironment.get().getPlayerInfo().setServer(false);
-						GameEnvironment.get().getTcpInfo().setHostIp("192.168.43.45");
+						GameEnvironment.get().getTcpInfo().setHostIp("192.168.2.102");
 		            	GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
 		            	
 		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
@@ -193,7 +193,7 @@ public class CarddeckplatformActivity extends Activity {
             	
             	if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){
             		HostFinder hostFinder = new TcpHostFinder((WifiManager) getSystemService(Context.WIFI_SERVICE));
-                	hosts = hostFinder.findHosts();
+                	hosts = new ArrayList<HostId>();//hostFinder.findHosts();
 	            	for(final HostId hostId : hosts){
 	            		hostBtn = new Button(getApplicationContext());
 	            		hostBtn.setText("Play " + hostId.getGameName() + " with " + hostId.getOwner());
