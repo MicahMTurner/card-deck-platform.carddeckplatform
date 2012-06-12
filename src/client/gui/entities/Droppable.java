@@ -66,7 +66,7 @@ public abstract class Droppable implements Serializable {
 	protected Point scale;
 	protected String image;
 	protected transient DroppableLayout droppableLayout=null;
-	transient protected Paint mPaintForGlow= new Paint();
+	protected transient Paint mPaintForGlow;
 	protected int alpha=255;
 	protected int glowColor=0;
 	
@@ -206,14 +206,12 @@ public abstract class Droppable implements Serializable {
 		
 		canvas.drawBitmap(img, matrix, null);
 		if(mPaintForGlow==null){
-			mPaintForGlow=new Paint();
-			mPaintForGlow = new Paint();
+			mPaintForGlow=new Paint();			
 			mPaintForGlow.setDither(true);
 			mPaintForGlow.setAntiAlias(true);
 			mPaintForGlow.setFilterBitmap(true);  
 			
-		}
-		Random rand= new Random();
+		}		
 		ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE,glowColor);
 		mPaintForGlow.setColorFilter(colorFilterTint);
 		canvas.drawBitmap(img, matrix, mPaintForGlow);
@@ -282,9 +280,12 @@ public abstract class Droppable implements Serializable {
 	public void setPosition(Position relativePosition) {
 		this.position = relativePosition;
 		AbstractList<Card>cards=getCards();
-		for (Card card : cards){
-			card.setLocation(getX(), getY());
+		if (getDroppableLayout() != null){
+			rearrange(0);
 		}
+//		for (Card card : cards){
+//			card.setLocation(getX(), getY());
+//		}
 
 	}
 

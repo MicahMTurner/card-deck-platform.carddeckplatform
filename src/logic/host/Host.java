@@ -89,7 +89,8 @@ public class Host implements Runnable{
 		
 			System.out.println("game initiated");
 			game.dealCards();		
-		
+			game.setupTurns();
+			
 			System.out.println("cards dealt");
 			// send the turn action if the game is turned base card game.
 			Position.Player next=game.nextInTurn();

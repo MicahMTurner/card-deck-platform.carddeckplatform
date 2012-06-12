@@ -407,7 +407,6 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 
 		return true;
 	}
-
 	@Override
 	public boolean onSingleTapUp(MotionEvent event) {
 		// TODO Auto-generated method stub
@@ -469,4 +468,5 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	public void setPlayerTurn(Droppable droppable) {
 		new GlowAnimation(droppable, 3000).execute();
 	}
+	
 }

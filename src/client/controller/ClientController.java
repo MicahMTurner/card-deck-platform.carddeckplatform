@@ -210,19 +210,13 @@ public class ClientController implements Observer {
 
 	public void playerTurn(Position.Player playerPosition) {
 		Player me=game.getMe();
-		if (playerPosition.equals(me.getGlobalPosition())){
+		if (playerPosition.getId()==me.getGlobalPosition().getId()){
 			me.startTurn();
 		}
 		//glow player icon/name
-		gui.setPlayerTurn(getZone(playerPosition.getRelativePosition(me.getGlobalPosition())));
+		gui.setPlayerTurn(gui.getDroppableById(playerPosition.getId()));//getZone(playerPosition.getRelativePosition(me.getGlobalPosition())));
 	}
 
-	public void endTurn() {
-		// disable glow player icon/name	
-		
-	}
-	
-	
 	//private void moveCard(Card card,Droppable from,Droppable to){		
 	//	to.addCard(card);
 	//	from.removeCard(card);		
