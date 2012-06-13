@@ -37,8 +37,6 @@ public abstract class Game {
 	//private ToolsFactory tools=new DefaultTools();
 	//private Player.Position currentTurn;
 	protected Deck deck;
-	private boolean firstRound;
-	private Position.Player first;
 	
 	 
 
@@ -82,13 +80,9 @@ public abstract class Game {
 	
 	public void setupTurns(){
 		turnsQueue=setTurns();
-		if (turnsQueue!=null){
-			first=turnsQueue.peek();
-		}
 	}
 	public Game() {
-		first=null;
-		firstRound=true;
+
 		//Position.Player x=Position.Player.BOTTOM;
 		
 		//clearEmptyPositions();		
@@ -120,28 +114,12 @@ public abstract class Game {
 			next=turnsQueue.poll();
 			while (!availablePos.contains(next)){
 				next=turnsQueue.poll();
-			}
+			}	
 			
-//			if (next.equals(first) && !firstRound){
-//				ConnectionsManager.getConnectionsManager().sendToAllExcptMe((new Message(new EndRoundAction())),players.get(0).getId());
-//				Integer nextPlayerId=onRoundEnd();
-//				if (nextPlayerId==null){
-//					next=null;
-//				}else{
-//					while (next.getId()!=nextPlayerId){
-//						turnsQueue.add(next);
-//						next=turnsQueue.poll();
-//					
-//					}
-//				}				
-//			}
-			if (next!=null){
-				turnsQueue.add(next);
-			}
+			turnsQueue.add(next);
 			
-		}
+		}		
 		
-		firstRound=false;
 		return next;		
 	}
 	
@@ -208,18 +186,22 @@ public abstract class Game {
 		swappedWith.setGlobalPosition(player.getGlobalPosition());
 		player.setGlobalPosition(temp);
 	}
-	public void reArrangeQueue(int nextPlayerId) {
-		Position.Player startingPlayer=null;
-		for (Position.Player pos : Position.Player.values()){
-			if (pos.getId()==nextPlayerId){
-				startingPlayer=pos;
-				break;
+	public void reArrangeQueue(Integer nextPlayerId) {
+		if (nextPlayerId!=null){
+			Position.Player startingPlayer=null;
+			for (Position.Player pos : Position.Player.values()){
+				if (pos.getId()==nextPlayerId){
+					startingPlayer=pos;
+					break;
+				}
 			}
+			Position.Player next=turnsQueue.poll();
+			while (!next.equals(startingPlayer)){
+				turnsQueue.add(next);
+				next=turnsQueue.poll();
+			}
+			turnsQueue.add(next);
 		}
-		Position.Player next=turnsQueue.poll();
-		while (!next.equals(startingPlayer)){
-			next=turnsQueue.poll();
-		}		
 		
 	}
 
