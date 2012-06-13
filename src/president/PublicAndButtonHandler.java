@@ -16,25 +16,27 @@ public class PublicAndButtonHandler implements PublicEventsHandler,ButtonEventsH
 	@Override
 	public boolean onCardAdded(Public publicZone, Player player, Card card) {
 		boolean answer=false;
-		if (counter==4){
-			//got series,end round
-			//ClientController.sendAPI().endRound();
-			ClientController.get().endRound();
+		if (card.getOwner().equals(player.getPosition())){
+			if (counter==4){
+				//got series,end round
+				//ClientController.sendAPI().endRound();
+				ClientController.get().endRound();
 			
 			
-		}else if(this.player!=null && this.player.equals(player)){
-				/*not first card added in this turn, all cards 
-				/*must be equal to first one that was placed*/
-				if (publicZone.peek().compareTo(card)==0){
-					counter++;
-					answer=true;
-				}
+			}else if(this.player!=null && this.player.equals(player)){
+					/*not first card added in this turn, all cards 
+					/*must be equal to first one that was placed*/
+					if (publicZone.peek().compareTo(card)==0){
+						counter++;
+						answer=true;
+					}
+			}
+			else{
+				//player just switched, go over switched player possible actions
+				answer=switchedPlayerActions(publicZone, player,card);
+			
+			}
 		}
-		else{
-			//player just switched, go over switched player possible actions
-			answer=switchedPlayerActions(publicZone, player,card);
-			
-		}	
 		if (answer){
 			card.reveal();
 		}

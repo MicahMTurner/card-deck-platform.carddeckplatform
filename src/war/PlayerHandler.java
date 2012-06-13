@@ -4,12 +4,19 @@ package war;
 import client.controller.ClientController;
 import utils.Card;
 import utils.Player;
+import utils.Position;
 import handlers.PlayerEventsHandler;
 
 public class PlayerHandler implements PlayerEventsHandler{
 
 	@Override
 	public boolean onMyTurn(Player player) {		
+		if (ClientController.get().getZone(Position.Public.MIDRIGHT).cardsHolding()==
+				ClientController.get().getZone(Position.Public.MIDLEFT).cardsHolding() && !War.tie){
+			ClientController.get().disableUi();
+			
+			ClientController.sendAPI().endRound(ClientController.get().endRound());
+		}
 		return true;
 	}
 
