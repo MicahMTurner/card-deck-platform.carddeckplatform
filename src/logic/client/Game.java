@@ -12,6 +12,7 @@ import communication.server.ConnectionsManager;
 
 
 
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
@@ -19,6 +20,7 @@ import client.gui.entities.Droppable;
 import utils.Button;
 import utils.DeckArea;
 import utils.Deck;
+import utils.GamePrefs;
 import utils.Pair;
 import utils.Player;
 import utils.Position;
@@ -30,9 +32,14 @@ import utils.Public;
 
 public abstract class Game {	
 	//i'm first in the list
+	
+//	public static GamePrefs receivedGamePrefs=null;
+	
 	protected ArrayList<Player> players = new ArrayList<Player>();
 	protected Queue<utils.Position.Player> turnsQueue=new LinkedList<utils.Position.Player>();
 	protected ArrayList<Droppable> droppables=new ArrayList<Droppable>();
+	//The number of players the host would accept before starting the game.  
+	protected int numberOfParticipants=0; 
 	protected ArrayList<Button> buttons=new ArrayList<Button>();
 	//private ToolsFactory tools=new DefaultTools();
 	//private Player.Position currentTurn;
@@ -40,7 +47,8 @@ public abstract class Game {
 	private boolean firstRound;
 	private Position.Player first;
 	
-	 
+	  
+	
 
 	//protected abstract Player createPlayer(String userName, Position.Player position);
 	public abstract Deck getDeck();
@@ -50,6 +58,7 @@ public abstract class Game {
 	protected abstract Queue<utils.Position.Player> setTurns();
 	//the minimal players count
 	public abstract int minPlayers();
+	
 	//how many cards to split
 	public abstract int cardsForEachPlayer();
 	
@@ -57,7 +66,7 @@ public abstract class Game {
 	public abstract void dealCards();	
 	
 	
-	public abstract void setLayouts(ArrayList<Droppable>publics,ArrayList<Button> buttons);
+	public abstract void setLayouts();
 	/**
 	 * game id
 	 */
@@ -80,19 +89,42 @@ public abstract class Game {
 		deck=getDeck();	
 	}
 	
+	public int getNumberOfParticipants() {
+		if(numberOfParticipants==0)
+			return minPlayers();
+		return numberOfParticipants;
+	}
+	
 	public void setupTurns(){
 		turnsQueue=setTurns();
 		if (turnsQueue!=null){
 			first=turnsQueue.peek();
 		}
 	}
+	
 	public Game() {
 		first=null;
-		firstRound=true;
-		//Position.Player x=Position.Player.BOTTOM;
+		firstRound=true;		
+		turnsQueue=setTurns();
+		if (turnsQueue!=null){
+			first=turnsQueue.peek();
+		}
+		//if(GameEnvironment.get().getPlayerInfo().isServer())
+		loadPrefs();
+		//clearEmptyPositions();	
 		
-		//clearEmptyPositions();		
-		setLayouts(droppables,buttons);
+//		if(receivedGamePrefs!=null)
+//			applyReceivedPrefs(receivedGamePrefs);
+		
+//		try {
+//			setLayouts();
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+		
+		
+		
+		
 	}
 	
 	private void clearEmptyPositions() {
@@ -221,6 +253,22 @@ public abstract class Game {
 			next=turnsQueue.poll();
 		}		
 		
+	}
+	public String getPrefsName(){
+		return "";
+	}
+	
+	public void loadPrefs(){
+		
+	}
+	
+	public void applyReceivedPrefs(GamePrefs gamePrefs){
+		
+	}
+	
+	public GamePrefs getPrefs() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

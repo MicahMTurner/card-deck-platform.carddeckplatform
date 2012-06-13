@@ -2,6 +2,11 @@ package utils.droppableLayouts.line;
 
 import java.util.Random;
 
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
+
 import utils.Card;
 import utils.Point;
 import utils.droppableLayouts.DroppableLayout;
@@ -25,49 +30,76 @@ public class BottomLineLayout extends LineLayout {
 		Point newLocation = null;
 		Point location = new Point(droppable.getX(), droppable.getY());
 		float[][] animationArgs = new float[3][numberOfCards];
-
-		// gets the step that each card would move.
-//		float step = MetricsConvertion.pointRelativeToPx(new Point(3, 0))
-//				.getX();
-
-//		newLocation = new Point(0, 0);
-//		float[] diff = new float[numberOfCards - 1];
-//
-//		for (int i = 0; i < index; i++) {
-//			diff[i] = numberOfCards-Math.abs(index - i) + 1;
-//		}
-//		// second loop
-//		for (int i = index + 1; i < numberOfCards; i++) {
-//			diff[i - 1] = numberOfCards-Math.abs(index - i) + 1;
-//		}
-//		
-//		//find min
-//		float min=10000;
-//		for (int i = 0; i < diff.length; i++)
-//			if(diff[i]<min)
-//				min=diff[i];
-//		for (int i = 0; i < diff.length; i++)
-//			diff[i]=diff[i]-min;
-//		
-//		for (int i = 0; i < diff.length; i++) {
-//			System.err.println(diff[i]);
-//		}
-//		animationArgs[0][0] = 0;
-//		for (int i = 1; i < numberOfCards; i++)
-//			animationArgs[0][i] = animationArgs[0][i - 1] + diff[i - 1];
+		Point point=MetricsConvertion.pointRelativeToPx(droppable.getCards().get(0).getScale());
 		
-		for (int i = 0; i < numberOfCards; i++) {
-			animationArgs[0][i] = (i+1);
-			animationArgs[1][i] = 0;
-			animationArgs[2][i] = 0;
+		if(point.getX()*numberOfCards<=width*1.8){//in case there is a lot of place 
+			for (int i = 0; i < numberOfCards; i++) {
+				animationArgs[0][i] = (i+1);
+				animationArgs[1][i] = 0;
+				animationArgs[2][i] = 0;
+			}
+			
+			animationArgs=normalizePosition(animationArgs, width, height);
+			
+		}else{
+			float position=findIndexPlace(point.getX(), width, index, numberOfCards);
+			float  leftSize=position-point.getX();
+			float  rightSize=width-(position+point.getX());
+			
+			//initialize the middle
+			animationArgs[0][index]=position;
+			animationArgs[1][index] = 0;
+			animationArgs[2][index] = 0;
+			
+			//rearrange left size
+			Interpolator interpolator=new AccelerateInterpolator();
+			animationArgs[0][0]=0;
+			animationArgs[1][0] = 0;
+			animationArgs[2][0] = 0;
+			for(int i=1;i<index;i++){
+				System.out.println(i+"::"+(index-1)+"::"+((float)i/(index-1)));
+				animationArgs[0][i]=leftSize*interpolator.getInterpolation((float)i/(index-1));
+				animationArgs[1][i] = 0;
+				animationArgs[2][i] = 0;
+			}
+			//rearange right size
+			interpolator=new DecelerateInterpolator();
+			animationArgs[0][numberOfCards-1]=width;
+			animationArgs[1][numberOfCards-1] = 0;
+			animationArgs[2][numberOfCards-1] = 0;
+			for(int i=index+1;i<numberOfCards-1;i++){
+				animationArgs[0][i]=point.getX()+position+rightSize*interpolator.getInterpolation((float)(i-(index+1))/((numberOfCards-1)-(index+1)));
+				animationArgs[1][i] = 0;
+				animationArgs[2][i] = 0;
+				
+			}
+			
+			
+			
 		}
-
-		
 		
 		animate(droppable.getCards(),
-				shift(normalizePosition(animationArgs, width, height),
+				shift(animationArgs,
 						location.getX()-width/2, location.getY()), 1000);
 	}
+	
+	
+	
+	private float findIndexPlace(float cardSize,float length,int cardsIndex,int numberOfCards){
+		float middle=length/2;
+		float factor=1.8f;
+		if(cardsIndex*cardSize<middle*factor)
+			return (float) (cardSize*cardsIndex/factor);
+		else if((numberOfCards-cardsIndex)*cardSize<middle*factor)
+			return (float) (length-(numberOfCards-cardsIndex)*cardSize/factor);
+		else
+			return middle;
+		
+		
+	}
+	
+	
+	
 
 	
 }

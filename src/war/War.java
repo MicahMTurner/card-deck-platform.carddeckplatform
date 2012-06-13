@@ -91,10 +91,10 @@ public class War extends Game{
 	}
 
 	@Override
-	public void setLayouts(ArrayList<Droppable> publics, ArrayList<Button> buttons) {
+	public void setLayouts() {
 		
-		publics.add(new Public(new PublicHandler(),Position.Public.MIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));
-		publics.add(new Public(new PublicHandler(),Position.Public.MIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));		
+		droppables.add(new Public(new PublicHandler(),Position.Public.MIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));
+		droppables.add(new Public(new PublicHandler(),Position.Public.MIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));		
 	}
 //	@Override
 //	public void getLayouts(ArrayList<Droppable> publics){//,ArrayList<Button>buttons) {
@@ -170,6 +170,7 @@ public class War extends Game{
 		}
 	}
 	private Player getWinner(Public public1,Public public2){
+		
 		int comparisonAnswer=((StandartCard)public1.peek()).compareTo((StandartCard)public2.peek());
 		if (comparisonAnswer>0){
 			return (Player)(ClientController.get().getZone(public1.peek().getOwner()));			

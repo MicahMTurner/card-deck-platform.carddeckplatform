@@ -252,6 +252,13 @@ public class ClientController implements Observer {
 		gui.removeCards(cards,from);
 		
 	}
+	
+	
+	
+	public void clearCards(){
+		gui.clearCards();
+	}
+	
 
 	public Integer endRound() {
 		return game.onRoundEnd();		
@@ -332,6 +339,20 @@ public class ClientController implements Observer {
 
 	public void invalidMove(int cardId){
 		gui.invalidMove(cardId);
+	}
+
+	public void restart() {
+		// TODO Auto-generated method stub
+		gui.clearCards();
+//		try {
+//			game = game.getClass().newInstance();
+//		} catch (InstantiationException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IllegalAccessException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 	
 	//---------------------------------------------------------------------//	

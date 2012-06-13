@@ -35,11 +35,11 @@ public class ClientDataBase {
 	}
 	private ClientDataBase() {
 		loader=new DynamicLoader();
-		President president=new President();
+		//President president=new President();
 		games = new HashMap<String, Game>();
 		War war = new War();
 		
-		games.put(president.toString(), president);
+		//games.put(president.toString(), president);
 		games.put(war.toString(), war);
 		FreePlay freePlay = new FreePlay();
 		games.put(freePlay.toString(), freePlay);
@@ -66,9 +66,6 @@ public class ClientDataBase {
 		return null;
 	}
 	
-	public void addGame(String gameId){
-		
-	}
 	
 	public Set<String> getGamesNames(){
 		Set<String> gameNames =new HashSet<String>();

@@ -140,7 +140,6 @@ public class Player extends Droppable implements  Comparable<Player>{
 			position=newPos;
 			//TODO:CHANGE THIS!!!!!
 			//this.droppableLayout = new BottomLineLayout(this);
-			
 		}		
 	}
 	
@@ -185,6 +184,15 @@ public class Player extends Droppable implements  Comparable<Player>{
 //	}
 	public Double getAzimute() {
 		return playerInfo.getAzimute();
+	}
+	
+	@Override
+	public Point getScale(){
+		if(position==Position.Player.LEFT || position==Position.Player.RIGHT){
+			return (new Point(scale.getY() , scale.getX()));
+		}
+		else
+			return scale;
 	}
 
 	@Override
