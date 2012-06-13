@@ -1,30 +1,18 @@
 package logic.client;
 
-import handlers.PlayerEventsHandler;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import communication.actions.EndRoundAction;
-import communication.messages.Message;
-import communication.server.ConnectionsManager;
-
-
-
-import carddeckplatform.game.gameEnvironment.GameEnvironment;
-import client.controller.ClientController;
-import client.gui.entities.Droppable;
-
 import utils.Button;
-import utils.DeckArea;
 import utils.Deck;
-
 import utils.GamePrefs;
 import utils.Pair;
 import utils.Player;
 import utils.Position;
-import utils.Public;
+import carddeckplatform.game.gameEnvironment.PlayerInfo;
+import client.controller.ClientController;
+import client.gui.entities.Droppable;
 
 
 
@@ -44,8 +32,6 @@ public abstract class Game {
 	//private ToolsFactory tools=new DefaultTools();
 	//private Player.Position currentTurn;
 	protected Deck deck;
-	private boolean firstRound;
-	private Position.Player first;
 	
 	 
 
