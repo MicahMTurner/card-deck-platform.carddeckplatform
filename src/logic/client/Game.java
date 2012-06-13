@@ -13,13 +13,13 @@ import communication.server.ConnectionsManager;
 
 
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
-import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
 
 import utils.Button;
 import utils.DeckArea;
 import utils.Deck;
+
 import utils.GamePrefs;
 import utils.Pair;
 import utils.Player;
@@ -31,7 +31,7 @@ import utils.Public;
 
 
 public abstract class Game {	
-	//i'm first in the list
+		//i'm first in the list
 	
 //	public static GamePrefs receivedGamePrefs=null;
 	
@@ -47,8 +47,7 @@ public abstract class Game {
 	private boolean firstRound;
 	private Position.Player first;
 	
-	  
-	
+	 
 
 	//protected abstract Player createPlayer(String userName, Position.Player position);
 	public abstract Deck getDeck();
@@ -58,7 +57,6 @@ public abstract class Game {
 	protected abstract Queue<utils.Position.Player> setTurns();
 	//the minimal players count
 	public abstract int minPlayers();
-	
 	//how many cards to split
 	public abstract int cardsForEachPlayer();
 	
@@ -97,34 +95,13 @@ public abstract class Game {
 	
 	public void setupTurns(){
 		turnsQueue=setTurns();
-		if (turnsQueue!=null){
-			first=turnsQueue.peek();
-		}
 	}
-	
 	public Game() {
-		first=null;
-		firstRound=true;		
-		turnsQueue=setTurns();
-		if (turnsQueue!=null){
-			first=turnsQueue.peek();
-		}
-		//if(GameEnvironment.get().getPlayerInfo().isServer())
+
+		//Position.Player x=Position.Player.BOTTOM;
+		
+		//clearEmptyPositions();		
 		loadPrefs();
-		//clearEmptyPositions();	
-		
-//		if(receivedGamePrefs!=null)
-//			applyReceivedPrefs(receivedGamePrefs);
-		
-//		try {
-//			setLayouts();
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//		}
-		
-		
-		
-		
 	}
 	
 	private void clearEmptyPositions() {
@@ -152,28 +129,12 @@ public abstract class Game {
 			next=turnsQueue.poll();
 			while (!availablePos.contains(next)){
 				next=turnsQueue.poll();
-			}
+			}	
 			
-//			if (next.equals(first) && !firstRound){
-//				ConnectionsManager.getConnectionsManager().sendToAllExcptMe((new Message(new EndRoundAction())),players.get(0).getId());
-//				Integer nextPlayerId=onRoundEnd();
-//				if (nextPlayerId==null){
-//					next=null;
-//				}else{
-//					while (next.getId()!=nextPlayerId){
-//						turnsQueue.add(next);
-//						next=turnsQueue.poll();
-//					
-//					}
-//				}				
-//			}
-			if (next!=null){
-				turnsQueue.add(next);
-			}
+			turnsQueue.add(next);
 			
-		}
+		}		
 		
-		firstRound=false;
 		return next;		
 	}
 	
@@ -240,18 +201,22 @@ public abstract class Game {
 		swappedWith.setGlobalPosition(player.getGlobalPosition());
 		player.setGlobalPosition(temp);
 	}
-	public void reArrangeQueue(int nextPlayerId) {
-		Position.Player startingPlayer=null;
-		for (Position.Player pos : Position.Player.values()){
-			if (pos.getId()==nextPlayerId){
-				startingPlayer=pos;
-				break;
+	public void reArrangeQueue(Integer nextPlayerId) {
+		if (nextPlayerId!=null){
+			Position.Player startingPlayer=null;
+			for (Position.Player pos : Position.Player.values()){
+				if (pos.getId()==nextPlayerId){
+					startingPlayer=pos;
+					break;
+				}
 			}
+			Position.Player next=turnsQueue.poll();
+			while (!next.equals(startingPlayer)){
+				turnsQueue.add(next);
+				next=turnsQueue.poll();
+			}
+			turnsQueue.add(next);
 		}
-		Position.Player next=turnsQueue.poll();
-		while (!next.equals(startingPlayer)){
-			next=turnsQueue.poll();
-		}		
 		
 	}
 	public String getPrefsName(){
