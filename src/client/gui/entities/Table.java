@@ -30,12 +30,14 @@ public class Table {
 	
 	//private Stack<Draggable> draggables = new Stack<Draggable>();
 	private ArrayBlockingQueue<Droppable> droppables;
+	private ArrayBlockingQueue<Button> buttons;
+	
 	private Hashtable<Integer,Draggable>mappedDraggables;
 	private Bitmap img;
 	private Context context;
 	private int xDimention;
 	private int yDimention;
-	private ArrayBlockingQueue<Button> buttons;
+	
 	//private Matrix matrix;
 	
 
@@ -188,6 +190,19 @@ public class Table {
 	public void addButon(Button button) {
 		buttons.add(button);
 		
+	}
+
+
+	public Button getNearestButton(float x, float y) {
+
+		Button answer=null;
+		//get nearest container where draggable can be found at
+		for(Button button: buttons){
+			if(button.isContain(x, y))
+				return button;
+		}
+		return null;
+	
 	}
 	
 }
