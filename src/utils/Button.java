@@ -1,27 +1,32 @@
 package utils;
 
-import java.util.AbstractList;
-
+import handlers.ButtonEventsHandler;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-
-import utils.droppableLayouts.DroppableLayout;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import carddeckplatform.game.BitmapHolder;
-import client.gui.entities.Droppable;
-import handlers.ButtonEventsHandler;
+import client.gui.entities.MetricsConvertion;
 
 public class Button{
 	private ButtonEventsHandler handler;
 	private String text;
 	private String image;
 	private Position.Button position;
+	private Point scale;
+	private Paint paint; 
 	public Button(ButtonEventsHandler handler,Position.Button position,String text) {
 		//super(position.getId(), position, new Point(10,13), DroppableLayout.LayoutType.NONE);
 		this.handler=handler;
 		this.text=text;
-		this.image="button.png";
+		this.image="button";
 		this.position=position;
+		this.scale=new Point(5, 5);
+		this.paint=new Paint();
+		paint.setTextSize(20);
+		paint.setColor(Color.argb(170, 0, 0, 0));
 		//image="button.png";
 	}
 	public Position.Button getPosition() {
@@ -34,8 +39,17 @@ public class Button{
 		handler.onClick();
 	}
 	public void draw(Canvas canvas, Context context){
-		Bitmap button=BitmapHolder.get().getBitmap(image);
-		//canvas.drawBitmap(button, matrix, paint)
+		Bitmap buttonBitmap=BitmapHolder.get().getBitmap(image);
+		Matrix matrix = new Matrix();		 
+		Point p= MetricsConvertion.pointRelativeToPx(scale);
+		float x=MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();
+		float y=MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();
+		// transformations.
+		matrix.postScale((float)p.getX()/(float)buttonBitmap.getWidth(), (float)p.getY()/(float)buttonBitmap.getHeight());
+		matrix.postTranslate(x, y);
+		
+		canvas.drawBitmap(buttonBitmap, matrix, null);
+		canvas.drawText(text,x, y, paint);
 	}
 //	@Override
 //	public boolean onDrop(Player player, Droppable from, Card card) {
