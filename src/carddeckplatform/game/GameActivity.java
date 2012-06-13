@@ -7,6 +7,11 @@ import java.util.concurrent.CountDownLatch;
 
 import javax.annotation.PostConstruct;
 
+import president.PublicAndButtonHandler;
+
+import utils.Button;
+import utils.Pair;
+
 import logic.host.Host;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -144,11 +149,15 @@ public class GameActivity extends Activity {
     	  
 	}
     
-	private void buildLayout(ArrayList<Droppable> publics){
-    	for (Droppable publicZone : publics){
+	private void buildLayout(Pair<ArrayList<Droppable>,ArrayList<Button>> publicsAndButtons){
+    	for (Droppable publicZone : publicsAndButtons.getFirst()){
     		//set public zone according to my position
     		publicZone.setPosition(publicZone.getPosition().getRelativePosition(ClientController.get().getMe().getGlobalPosition()));
     		tableview.addDroppable(publicZone);
+    	}
+    	for (Button button : publicsAndButtons.getSecond()){
+    		button.setPosition(button.getPosition().getRelativePosition(ClientController.get().getMe().getGlobalPosition()));
+    		tableview.addButton(button);
     	}
     	
     }
@@ -187,12 +196,12 @@ public class GameActivity extends Activity {
       ArrayList<Droppable>publics=new ArrayList<Droppable>();
 
       //insert public areas into publics array
-      publics=ClientController.get().getLayouts();
+      Pair<ArrayList<Droppable>,ArrayList<Button>> publicsAndButtons=ClientController.get().getLayouts();
       
       //ArrayList<Button>buttons=new ArrayList<Public>();
       
       //build the layout
-      buildLayout(publics);      
+      buildLayout(publicsAndButtons);      
   }
   
   private class GameSetup extends AsyncTask<String, Void, String>{

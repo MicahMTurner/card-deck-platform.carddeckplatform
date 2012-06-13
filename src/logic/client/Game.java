@@ -19,6 +19,7 @@ import client.gui.entities.Droppable;
 import utils.Button;
 import utils.DeckArea;
 import utils.Deck;
+import utils.Pair;
 import utils.Player;
 import utils.Position;
 import utils.Public;
@@ -64,8 +65,8 @@ public abstract class Game {
 	public abstract String toString();
 	//the game create player according to his hander
 	public abstract Player getPlayerInstance(PlayerInfo playerInfo, utils.Position.Player position,int uniqueId);	
-	public ArrayList<Droppable>getLayouts(){
-		return droppables;
+	public Pair<ArrayList<Droppable>,ArrayList<Button>> getLayouts(){
+		return new Pair<ArrayList<Droppable>,ArrayList<Button>>(this.droppables,this.buttons);
 	}
 	public String getClassName(){
 		return getClass().getName();
@@ -87,7 +88,8 @@ public abstract class Game {
 	}
 	public Game() {
 		first=null;
-		firstRound=true;		
+		firstRound=true;
+		//Position.Player x=Position.Player.BOTTOM;
 		
 		//clearEmptyPositions();		
 		setLayouts(droppables,buttons);

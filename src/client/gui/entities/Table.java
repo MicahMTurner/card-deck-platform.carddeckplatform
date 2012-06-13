@@ -11,6 +11,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import org.newdawn.slick.geom.Line;
 
 
+import utils.Button;
 import utils.Card;
 import utils.Position;
 
@@ -34,6 +35,7 @@ public class Table {
 	private Context context;
 	private int xDimention;
 	private int yDimention;
+	private ArrayBlockingQueue<Button> buttons;
 	//private Matrix matrix;
 	
 
@@ -43,6 +45,7 @@ public class Table {
 		this.img=null;
 		this.droppables= new ArrayBlockingQueue<Droppable>(20);
 		this.mappedDraggables= new Hashtable<Integer,Draggable>();
+		this.buttons = new ArrayBlockingQueue<Button>(4);
 	}
 
 	
@@ -132,7 +135,11 @@ public class Table {
         //canvas.scale(1, 1);
         
 		
-			canvas.drawBitmap(img,(float)0,(float)0, null);			
+			canvas.drawBitmap(img,(float)0,(float)0, null);	
+			
+			for (Button b : buttons){
+				b.draw(canvas, context);
+			}
 			
 			for(Droppable d : droppables){
 					ArrayList<Draggable>holding=d.draw(canvas, context);
@@ -175,6 +182,12 @@ public class Table {
 			}
 		}
 		return null;
+	}
+
+
+	public void addButon(Button button) {
+		buttons.add(button);
+		
 	}
 	
 }
