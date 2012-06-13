@@ -10,6 +10,7 @@ import utils.Card;
 import utils.Player;
 import utils.Point;
 import utils.Position;
+import utils.Button;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -39,6 +40,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	private Context cont;
 	private Matrix translate;
 	private Draggable draggableInHand = null;
+	private Button buttonInHand = null;
 	private Droppable from = null;
 	private int xDimention;
 	private int yDimention;
@@ -300,7 +302,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		float X = event.getX();
 		float Y = event.getY();
 		if (uiEnabled) {
-			draggableInHand = table.getNearestDraggable(X, Y);
+			draggableInHand = table.getNearestDraggable(X, Y);//check if its a card
 			if (draggableInHand != null) {
 				if (draggableInHand.isMoveable()) {
 					from = table.getNearestDroppable(X, Y);
@@ -310,6 +312,11 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 					popToast("You cannot move this card");
 					draggableInHand = null;
 				}
+			}
+			else{//check if its a button
+				this.buttonInHand=table.getNearestButton(X, Y);//check if its a card
+				
+				
 			}
 		} else
 			popToast("It's not your turn now!!");
@@ -374,6 +381,10 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 				
 				draggableInHand = null;
 			}
+			else if(buttonInHand!=null){
+				buttonInHand.onClick();
+				buttonInHand=null;
+			}
 		} else{
 			popToast("It's not your turn now!!");
 		}
@@ -407,7 +418,6 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 
 		return true;
 	}
-
 	@Override
 	public boolean onSingleTapUp(MotionEvent event) {
 		// TODO Auto-generated method stub
@@ -470,6 +480,11 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		new GlowAnimation(droppable, 3000).execute();
 	}
 
+	public void addButton(Button button) {
+		table.addButon(button);
+		
+	}
+	
 	public void clearCards() {
 		// TODO Auto-generated method stub
 		table.clearCards();

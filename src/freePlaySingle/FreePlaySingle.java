@@ -13,6 +13,7 @@ import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
 
+import utils.Button;
 import utils.DeckArea;
 import utils.Card;
 import utils.Deck;
@@ -77,7 +78,8 @@ public class FreePlaySingle extends Game{
 
 
 	@Override
-	public void onRoundEnd() {
+	public Integer onRoundEnd() {
+		return null;
 	}
 
 	@Override

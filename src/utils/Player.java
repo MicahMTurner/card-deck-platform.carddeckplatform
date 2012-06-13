@@ -94,8 +94,9 @@ public class Player extends Droppable implements  Comparable<Player>{
 		return myTurn;
 	}
 	public void startTurn(){
-		myTurn=true;		
+		myTurn=true;
 		ClientController.get().enableUi();
+		handler.onMyTurn(this);
 	}
 	public void endTurn(){
 		if (myTurn!=false){
@@ -105,8 +106,10 @@ public class Player extends Droppable implements  Comparable<Player>{
 	}
 	public void deltCard(Card card) {
 		card.setOwner((Position.Player)position);
-		hand.add(card);	
+		hand.add(card);
+		handler.onCardAdded(this, card);
 		card.setLocation(getX(), getY());
+		super.rearrange(0);
 	}
 	public int cardsHolding() {		
 		return hand.size();
@@ -142,10 +145,13 @@ public class Player extends Droppable implements  Comparable<Player>{
 	
 	@Override
 	public boolean onCardAdded(Player player, Card card) {
+		hand.add(card);
 		boolean answer=handler.onCardAdded(this, card);
 		if (answer || player==null){
 			card.setOwner((Position.Player)position);		
-			hand.add(card);
+			
+		}else{
+			hand.remove(card);
 		}
 		return answer;
 	}
@@ -187,6 +193,16 @@ public class Player extends Droppable implements  Comparable<Player>{
 		}
 		else
 			return scale;
+	}
+
+	@Override
+	public void onRoundEnd(Player player) {
+		handler.onRoundEnd(this);
+	}
+
+	@Override
+	public Card peek() {
+		return hand.get(0);
 	}
 
 }

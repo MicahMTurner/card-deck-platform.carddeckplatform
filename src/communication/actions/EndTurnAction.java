@@ -14,7 +14,7 @@ public class EndTurnAction implements Action{
 	
 	@Override
 	public void execute() {
-		ClientController.get().endTurn();
+		//ClientController.get().endTurn();
 		
 	}
 

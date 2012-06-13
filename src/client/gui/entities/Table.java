@@ -13,6 +13,7 @@ import org.newdawn.slick.geom.Line;
 
 import utils.Card;
 import utils.Position;
+import utils.Button;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -29,11 +30,14 @@ public class Table {
 	
 	//private Stack<Draggable> draggables = new Stack<Draggable>();
 	private ArrayBlockingQueue<Droppable> droppables;
+	private ArrayBlockingQueue<Button> buttons;
+	
 	private Hashtable<Integer,Draggable>mappedDraggables;
 	private Bitmap img;
 	private Context context;
 	private int xDimention;
 	private int yDimention;
+	
 	//private Matrix matrix;
 	
 
@@ -43,6 +47,7 @@ public class Table {
 		this.img=null;
 		this.droppables= new ArrayBlockingQueue<Droppable>(20);
 		this.mappedDraggables= new Hashtable<Integer,Draggable>();
+		this.buttons = new ArrayBlockingQueue<Button>(4);
 	}
 
 	
@@ -132,7 +137,11 @@ public class Table {
         //canvas.scale(1, 1);
         
 		
-			canvas.drawBitmap(img,(float)0,(float)0, null);			
+			canvas.drawBitmap(img,(float)0,(float)0, null);	
+			
+			for (Button b : buttons){
+				b.draw(canvas, context);
+			}
 			
 			for(Droppable d : droppables){
 					ArrayList<Draggable>holding=d.draw(canvas, context);
@@ -177,6 +186,22 @@ public class Table {
 		return null;
 	}
 
+	public void addButon(Button button) {
+		buttons.add(button);
+	}
+
+
+	public Button getNearestButton(float x, float y) {
+
+		Button answer=null;
+		//get nearest container where draggable can be found at
+		for(Button button: buttons){
+			if(button.isContain(x, y))
+				answer= button;
+		}
+		return answer;
+	
+	}
 
 	public void clearCards() {
 		for(Droppable d : droppables){

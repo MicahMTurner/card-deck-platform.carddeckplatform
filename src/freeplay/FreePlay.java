@@ -18,6 +18,7 @@ import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
 
+import utils.Button;
 import utils.DeckArea;
 import utils.Card;
 import utils.Deck;
@@ -119,15 +120,14 @@ public class FreePlay extends Game{
 
 
 	@Override
-	public void onRoundEnd() {
+	public Integer onRoundEnd() {
+		return null;
 	}
 
 	@Override
 	public utils.Player getPlayerInstance(PlayerInfo playerInfo,
 			Player position, int uniqueId) {
-		PlayerHandler playerHandler = new PlayerHandler();
-		playerHandler.setPlayerCardsVisible(playerCardsVisible);
-		return new utils.Player(playerInfo, position, uniqueId, playerHandler, DroppableLayout.LayoutType.LINE);
+		return new utils.Player(playerInfo, position, uniqueId, new PlayerHandler(), DroppableLayout.LayoutType.LINE);
 	}
 	
 	@Override

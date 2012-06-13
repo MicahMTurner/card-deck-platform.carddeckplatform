@@ -2,25 +2,10 @@ package utils;
 
 import handlers.PublicEventsHandler;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
-import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Shape;
-
 import utils.droppableLayouts.DroppableLayout;
-import utils.droppableLayouts.DroppableLayout.LayoutType;
-import utils.droppableLayouts.HeapLayout;
-import utils.droppableLayouts.line.BottomLineLayout;
-
-import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import carddeckplatform.game.BitmapHolder;
 import client.gui.entities.Droppable;
-import client.gui.entities.MetricsConvertion;
 
 
 public class Public extends Droppable{	
@@ -48,9 +33,10 @@ public class Public extends Droppable{
 	
 	@Override
 	public boolean onCardAdded(Player player,Card card){
+		cards.addFirst(card);
 		boolean answer=handler.onCardAdded(this,player, card);
-		if (answer){
-			cards.addFirst(card);
+		if (!answer){
+			cards.removeFirst();
 		}
 		return answer; 
 	}
@@ -67,10 +53,7 @@ public class Public extends Droppable{
 		card.reveal();
 		handler.onCardRevealed(this,player, card);
 	}
-	
-	public void roundEnded(Player player){
-		handler.onRoundEnd(this,player);
-	}
+
 
 //	@Override
 //	public int getX() {
@@ -92,7 +75,7 @@ public class Public extends Droppable{
 
 	@Override
 	public void deltCard(Card card) {
-		cards.add(card);
+		cards.addFirst(card);
 		card.setLocation(getX(), getY());
 		
 	}
@@ -115,10 +98,17 @@ public class Public extends Droppable{
 		return cards;
 	}
 	public Card peek(){
-		if (!cards.isEmpty()){
-			return cards.get(cards.size()-1);
-		}else{
-			return null;
-		}
+		return cards.peek();
+//		if (!cards.isEmpty()){
+//			return cards.get(cards.size()-1);
+//		}else{
+//			return null;
+//		}
+	}
+
+	@Override
+	public void onRoundEnd(Player player) {
+		handler.onRoundEnd(this,player);
+		
 	}	
 }

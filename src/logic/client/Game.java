@@ -17,9 +17,11 @@ import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
 
+import utils.Button;
 import utils.DeckArea;
 import utils.Deck;
 import utils.GamePrefs;
+import utils.Pair;
 import utils.Player;
 import utils.Position;
 import utils.Public;
@@ -38,6 +40,7 @@ public abstract class Game {
 	protected ArrayList<Droppable> droppables=new ArrayList<Droppable>();
 	//The number of players the host would accept before starting the game.  
 	protected int numberOfParticipants=0; 
+	protected ArrayList<Button> buttons=new ArrayList<Button>();
 	//private ToolsFactory tools=new DefaultTools();
 	//private Player.Position currentTurn;
 	protected Deck deck;
@@ -50,9 +53,9 @@ public abstract class Game {
 	//protected abstract Player createPlayer(String userName, Position.Player position);
 	public abstract Deck getDeck();
 	//what to do when round has ended
-	public abstract void onRoundEnd();
+	public abstract Integer onRoundEnd();
 	//the order of the players turns 
-	public abstract Queue<utils.Position.Player> setTurns();
+	protected abstract Queue<utils.Position.Player> setTurns();
 	//the minimal players count
 	public abstract int minPlayers();
 	
@@ -71,8 +74,8 @@ public abstract class Game {
 	public abstract String toString();
 	//the game create player according to his hander
 	public abstract Player getPlayerInstance(PlayerInfo playerInfo, utils.Position.Player position,int uniqueId);	
-	public ArrayList<Droppable>getLayouts(){
-		return droppables;
+	public Pair<ArrayList<Droppable>,ArrayList<Button>> getLayouts(){
+		return new Pair<ArrayList<Droppable>,ArrayList<Button>>(this.droppables,this.buttons);
 	}
 	public String getClassName(){
 		return getClass().getName();
@@ -90,6 +93,13 @@ public abstract class Game {
 		if(numberOfParticipants==0)
 			return minPlayers();
 		return numberOfParticipants;
+	}
+	
+	public void setupTurns(){
+		turnsQueue=setTurns();
+		if (turnsQueue!=null){
+			first=turnsQueue.peek();
+		}
 	}
 	
 	public Game() {
@@ -143,11 +153,24 @@ public abstract class Game {
 			while (!availablePos.contains(next)){
 				next=turnsQueue.poll();
 			}
-			turnsQueue.add(next);	
-			if (next.equals(first) && !firstRound){
-				ConnectionsManager.getConnectionsManager().sendToAll(new Message(new EndRoundAction()));
-				
+			
+//			if (next.equals(first) && !firstRound){
+//				ConnectionsManager.getConnectionsManager().sendToAllExcptMe((new Message(new EndRoundAction())),players.get(0).getId());
+//				Integer nextPlayerId=onRoundEnd();
+//				if (nextPlayerId==null){
+//					next=null;
+//				}else{
+//					while (next.getId()!=nextPlayerId){
+//						turnsQueue.add(next);
+//						next=turnsQueue.poll();
+//					
+//					}
+//				}				
+//			}
+			if (next!=null){
+				turnsQueue.add(next);
 			}
+			
 		}
 		
 		firstRound=false;
@@ -217,7 +240,20 @@ public abstract class Game {
 		swappedWith.setGlobalPosition(player.getGlobalPosition());
 		player.setGlobalPosition(temp);
 	}
-	
+	public void reArrangeQueue(int nextPlayerId) {
+		Position.Player startingPlayer=null;
+		for (Position.Player pos : Position.Player.values()){
+			if (pos.getId()==nextPlayerId){
+				startingPlayer=pos;
+				break;
+			}
+		}
+		Position.Player next=turnsQueue.poll();
+		while (!next.equals(startingPlayer)){
+			next=turnsQueue.poll();
+		}		
+		
+	}
 	public String getPrefsName(){
 		return "";
 	}

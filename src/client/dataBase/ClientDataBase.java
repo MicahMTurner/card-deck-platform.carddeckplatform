@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import president.President;
+
 import freePlaySingle.FreePlaySingle;
 import freeplay.FreePlay;
 
@@ -33,8 +35,11 @@ public class ClientDataBase {
 	}
 	private ClientDataBase() {
 		loader=new DynamicLoader();
+		//President president=new President();
 		games = new HashMap<String, Game>();
 		War war = new War();
+		
+		//games.put(president.toString(), president);
 		games.put(war.toString(), war);
 		FreePlay freePlay = new FreePlay();
 		games.put(freePlay.toString(), freePlay);

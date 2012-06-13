@@ -18,9 +18,11 @@ import communication.actions.EndDraggableMotionAction;
 import communication.actions.EndRoundAction;
 import communication.actions.EndTurnAction;
 import communication.link.ServerConnection;
+import communication.messages.EndRoundMessage;
 import communication.messages.EndTurnMessage;
 import communication.messages.Message;
 
+import utils.Button;
 import utils.Card;
 import utils.Pair;
 import utils.Player;
@@ -127,8 +129,8 @@ public class ClientController implements Observer {
 		public void cardRemoved(ArrayList<Card> cards,String from){
 			ServerConnection.getConnection().send(new Message(new CardRemoved(cards, from)));
 		}
-		public void endRound(){
-			ServerConnection.getConnection().send(new Message(new EndRoundAction()));
+		public void endRound(Integer nextPlayerId){
+			ServerConnection.getConnection().send(new EndRoundMessage(nextPlayerId,new EndRoundAction()));
 		}
 		public void cardRevealed(Card card){
 			//ServerConnection.getConnection().getMessageSender().send(new Message(new CardRevealAction()))
@@ -173,7 +175,7 @@ public class ClientController implements Observer {
 		//return gui.getDroppableById(IDMaker.getMaker().getIdByPos(pos.getRelativePosition(getMe().getGlobalPosition())));
 		return gui.getDroppableByPosition(pos);//(pos.getRelativePosition(getMe().getGlobalPosition())));
 	}
-	public ArrayList<Droppable> getLayouts() {
+	public Pair<ArrayList<Droppable>,ArrayList<Button>>getLayouts() {
 		return game.getLayouts();	
 	}
 	public void cardMoved(Card card,int from, int to, int byWhomId){
@@ -208,21 +210,15 @@ public class ClientController implements Observer {
 		gui.popToast("Your Move");
 	}
 
-	public void playerTurn(Position.Player playerPosition) {
+	public void playerTurn(int playerId) {
 		Player me=game.getMe();
-		if (playerPosition.equals(me.getGlobalPosition())){
+		if (playerId==me.getId()){
 			me.startTurn();
 		}
 		//glow player icon/name
-		gui.setPlayerTurn(getZone(playerPosition.getRelativePosition(me.getGlobalPosition())));
+		gui.setPlayerTurn(gui.getDroppableById(playerId));//getZone(playerPosition.getRelativePosition(me.getGlobalPosition())));
 	}
 
-	public void endTurn() {
-		// disable glow player icon/name	
-		
-	}
-	
-	
 	//private void moveCard(Card card,Droppable from,Droppable to){		
 	//	to.addCard(card);
 	//	from.removeCard(card);		
@@ -264,8 +260,8 @@ public class ClientController implements Observer {
 	}
 	
 
-	public void endRound() {
-		game.onRoundEnd();		
+	public Integer endRound() {
+		return game.onRoundEnd();		
 	}
 	
 	public Player getMe(){

@@ -68,7 +68,7 @@ public abstract class Droppable implements Serializable {
 	protected Point scale;
 	protected String image;
 	protected transient DroppableLayout droppableLayout=null;
-	transient protected Paint mPaintForGlow= new Paint();
+	protected transient Paint mPaintForGlow;
 	protected int alpha=255;
 	protected int glowColor=0;
 	
@@ -85,7 +85,8 @@ public abstract class Droppable implements Serializable {
 	public int getAlpha() {
 		return alpha;
 	}
-
+	public abstract Card peek();
+	public abstract void onRoundEnd(Player player);
 	public void setAlpha(int alpha) {
 		this.alpha = alpha;
 	}
@@ -210,27 +211,26 @@ public abstract class Droppable implements Serializable {
 		ArrayList<Draggable> holding=null;
 		Bitmap img = BitmapHolder.get().getBitmap(image);
 		if (img!=null){
-		Matrix matrix = new Matrix();
-
-		Point absScale = MetricsConvertion.pointRelativeToPx(getScale());
-
-		matrix.postScale((float) absScale.getX() / (float) img.getWidth(),(float) absScale.getY() / (float) img.getHeight());
-		matrix.postTranslate(getX() - absScale.getX() / 2, getY() - absScale.getY() / 2);
+			Matrix matrix = new Matrix();
 
 		
-		canvas.drawBitmap(img, matrix, null);
-		if(mPaintForGlow==null){
-			mPaintForGlow=new Paint();
-			mPaintForGlow = new Paint();
-			mPaintForGlow.setDither(true);
-			mPaintForGlow.setAntiAlias(true);
-			mPaintForGlow.setFilterBitmap(true);  
+			Point absScale = MetricsConvertion.pointRelativeToPx(scale);
+
+			matrix.postScale((float) absScale.getX() / (float) img.getWidth(),(float) absScale.getY() / (float) img.getHeight());
+			matrix.postTranslate(getX() - absScale.getX() / 2, getY() - absScale.getY() / 2);
+
+		
+			canvas.drawBitmap(img, matrix, null);
+			if(mPaintForGlow==null){
+				mPaintForGlow=new Paint();			
+				mPaintForGlow.setDither(true);
+				mPaintForGlow.setAntiAlias(true);
+				mPaintForGlow.setFilterBitmap(true);  
 			
-		}
-		Random rand= new Random();
-		ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE,glowColor);
-		mPaintForGlow.setColorFilter(colorFilterTint);
-		canvas.drawBitmap(img, matrix, mPaintForGlow);
+			}		
+			ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE,glowColor);
+			mPaintForGlow.setColorFilter(colorFilterTint);
+			canvas.drawBitmap(img, matrix, mPaintForGlow);
 		
 		}
 		AbstractList<Card>cards = getCards();
@@ -274,7 +274,7 @@ public abstract class Droppable implements Serializable {
 	public void rearrange(int index) {
 		if(cardsHolding()==0)
 			return;
-		Point droppableSize = MetricsConvertion.pointRelativeToPx(getScale());
+		Point droppableSize = MetricsConvertion.pointRelativeToPx(scale);
 		Point card=MetricsConvertion.pointRelativeToPx(getCards().get(0).getScale());
 		
 		
@@ -296,9 +296,12 @@ public abstract class Droppable implements Serializable {
 	public void setPosition(Position relativePosition) {
 		this.position = relativePosition;
 		AbstractList<Card>cards=getCards();
-		for (Card card : cards){
-			card.setLocation(getX(), getY());
+		if (getDroppableLayout() != null){
+			rearrange(0);
 		}
+//		for (Card card : cards){
+//			card.setLocation(getX(), getY());
+//		}
 
 	}
 

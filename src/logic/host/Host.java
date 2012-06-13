@@ -96,6 +96,10 @@ public class Host implements Runnable{
 		
 		
 	}
+	public static void reArrangeQueue(int nextPlayerId) {
+		game.reArrangeQueue(nextPlayerId);
+		
+	}
 	
 	public static void startGame(){
 		
@@ -104,15 +108,16 @@ public class Host implements Runnable{
 	
 		System.out.println("game initiated");
 		game.dealCards();		
-	
+		game.setupTurns();
+		
 		System.out.println("cards dealt");
 		// send the turn action if the game is turned base card game.
 		Position.Player next=game.nextInTurn();
 		if (next!=null){
-			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(next)));
+			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(next.getId())));
 		}else{
 			for (Player player: game.getPlayers()){
-				ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(player.getGlobalPosition())));
+				ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(player.getId())));
 			}
 		}
 	}

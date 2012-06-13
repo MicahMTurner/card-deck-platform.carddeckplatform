@@ -12,7 +12,7 @@ public interface Position extends Serializable{
 	final public int RIGHTDEVIATION=1;
 	final public int LEFTDEVIATION=3;	
 	
-	
+	public int getId();
 	public float getX();
 	public float getY();
 	public Position getRelativePosition(Player playerPos);
