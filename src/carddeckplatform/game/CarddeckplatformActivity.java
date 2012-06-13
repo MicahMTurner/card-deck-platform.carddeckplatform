@@ -199,30 +199,45 @@ public class CarddeckplatformActivity extends Activity {
             	});
             	ll.addView(hostBtn);
             	
-            	
+            	hostBtn = new Button(getApplicationContext());
+            	hostBtn.setText("Default tethering");
+            	hostBtn.setOnClickListener(new OnClickListener(){
+					@Override
+					public void onClick(View arg0) {
+						
+						GameEnvironment.get().getPlayerInfo().setServer(false);
+						GameEnvironment.get().getTcpInfo().setHostIp("192.168.43.1");
+		            	GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
+		            	
+		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
+		                startActivity(i);
+		                dialog.dismiss();
+					}    		
+            	});
+            	ll.addView(hostBtn);
             	
             	if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){
-            		HostFinder hostFinder = new TcpHostFinder((WifiManager) getSystemService(Context.WIFI_SERVICE));
-                	hosts = hostFinder.findHosts();
-	            	for(final HostId hostId : hosts){
-	            		hostBtn = new Button(getApplicationContext());
-	            		hostBtn.setText("Play " + hostId.getGameName() + " with " + hostId.getOwner());
-	            		hostBtn.setOnClickListener(new OnClickListener(){
-	    					@Override
-	    					public void onClick(View arg0) {
-	    						
-	    		            	
-	    		            	GameEnvironment.get().getPlayerInfo().setServer(false);
-	    						GameEnvironment.get().getTcpInfo().setHostIp(hostId.getAddress());
-	    		            	GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
-	    		            	
-	    		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
-	    		                startActivity(i);
-	    		                dialog.dismiss();
-	    					}                		
-	                	});
-	            		ll.addView(hostBtn);
-	            	}
+//            		HostFinder hostFinder = new TcpHostFinder((WifiManager) getSystemService(Context.WIFI_SERVICE));
+//                	hosts = hostFinder.findHosts();
+//	            	for(final HostId hostId : hosts){
+//	            		hostBtn = new Button(getApplicationContext());
+//	            		hostBtn.setText("Play " + hostId.getGameName() + " with " + hostId.getOwner());
+//	            		hostBtn.setOnClickListener(new OnClickListener(){
+//	    					@Override
+//	    					public void onClick(View arg0) {
+//	    						
+//	    		            	
+//	    		            	GameEnvironment.get().getPlayerInfo().setServer(false);
+//	    						GameEnvironment.get().getTcpInfo().setHostIp(hostId.getAddress());
+//	    		            	GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
+//	    		            	
+//	    		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
+//	    		                startActivity(i);
+//	    		                dialog.dismiss();
+//	    					}                		
+//	                	});
+//	            		ll.addView(hostBtn);
+	            	//}
             	}else if(GameEnvironment.get().getConnectionType()==ConnectionType.BLUETOOTH){
             		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             		if (mBluetoothAdapter == null) {
