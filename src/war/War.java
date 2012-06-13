@@ -14,6 +14,7 @@ import communication.messages.Message;
 import communication.server.ConnectionsManager;
 
 
+import utils.Button;
 import utils.DeckArea;
 import utils.Card;
 import utils.Deck;
@@ -90,7 +91,7 @@ public class War extends Game{
 	}
 
 	@Override
-	public void setLayouts(ArrayList<Droppable> publics) {
+	public void setLayouts(ArrayList<Droppable> publics, ArrayList<Button> buttons) {
 		
 		publics.add(new Public(new PublicHandler(),Position.Public.MIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));
 		publics.add(new Public(new PublicHandler(),Position.Public.MIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));		
@@ -121,7 +122,6 @@ public class War extends Game{
 			getCards(public1,winner);								
 			getCards(public2,winner);
 			answer=winner.getId();
-			
 		}else{
 			ClientController.get().enableUi();	
 		}

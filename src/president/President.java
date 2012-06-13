@@ -32,22 +32,22 @@ public class President extends Game{
 
 	@Override
 	public Integer onRoundEnd() {
+		Integer answer=null;
 		passed=false;
 		Public publicZone=(Public) ClientController.get().getZone(Position.Public.MID);
-		int nextRoundStartingPlayer=publicZone.peek().getOwner().getId();
+		answer=publicZone.peek().getOwner().getId();
 		publicZone.clear();
 		for (Droppable droppable : droppables){
 			droppable.onRoundEnd(null);
-		}
-
-		return nextRoundStartingPlayer;
+		}		
+		return answer;
 	}
 	public President() {
 		passed=false;
 	}
 	@Override
 	public Queue<Player> setTurns() {		
-		return utils.Turns.counterClockWise(startingPlayer);
+		return utils.Turns.clockWise(startingPlayer);
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class President extends Game{
 	@Override
 	public void setLayouts(ArrayList<Droppable> publics, ArrayList<Button> buttons) {
 		publics.add(new Public(new PublicAndButtonHandler(), Position.Public.MID, DroppableLayout.LayoutType.HEAP, new Point(10,13)));
-		buttons.add(new Button(new ButtonHandler(),Position.Button.BOTLEFT));
+		buttons.add(new Button(new ButtonHandler(),Position.Button.BOTLEFT,"Pass"));
 	}
 
 	@Override

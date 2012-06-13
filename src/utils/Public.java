@@ -68,10 +68,7 @@ public class Public extends Droppable{
 		card.reveal();
 		handler.onCardRevealed(this,player, card);
 	}
-	
-	public void roundEnded(Player player){
-		handler.onRoundEnd(this,player);
-	}
+
 
 //	@Override
 //	public int getX() {
@@ -121,5 +118,11 @@ public class Public extends Droppable{
 		}else{
 			return null;
 		}
+	}
+
+	@Override
+	public void onRoundEnd(Player player) {
+		handler.onRoundEnd(this,player);
+		
 	}	
 }

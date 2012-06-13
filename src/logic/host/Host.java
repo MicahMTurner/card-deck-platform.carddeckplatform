@@ -95,10 +95,10 @@ public class Host implements Runnable{
 			// send the turn action if the game is turned base card game.
 			Position.Player next=game.nextInTurn();
 			if (next!=null){
-				ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(next)));
+				ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(next.getId())));
 			}else{
 				for (Player player: game.getPlayers()){
-					ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(player.getGlobalPosition())));
+					ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(player.getId())));
 				}
 			}
 		} catch (Exception e) {
@@ -106,6 +106,10 @@ public class Host implements Runnable{
 			e.printStackTrace();
 		}
 		
+		
+	}
+	public static void reArrangeQueue(int nextPlayerId) {
+		game.reArrangeQueue(nextPlayerId);
 		
 	}
 	

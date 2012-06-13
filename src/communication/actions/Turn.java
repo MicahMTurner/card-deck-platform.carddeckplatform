@@ -8,14 +8,14 @@ import utils.Position;
 
 
 public class Turn implements Action{
-	Position.Player player;
-	public Turn(Position.Player player) {
-		this.player=player;
+	int playerId;
+	public Turn(int playerId) {
+		this.playerId=playerId;
 		
 	}
 	@Override
 	public void execute() {
-		ClientController.get().playerTurn(player);
+		ClientController.get().playerTurn(playerId);
 		
 	}
 

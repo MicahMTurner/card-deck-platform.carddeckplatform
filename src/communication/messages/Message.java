@@ -8,7 +8,7 @@ import communication.actions.Action;
 import communication.server.ConnectionsManager;
 
 
-public class Message implements Serializable {
+public class Message implements MessageInterface {
 	protected Action action;
 	
 	

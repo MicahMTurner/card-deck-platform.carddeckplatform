@@ -20,7 +20,7 @@ public class EndTurnMessage extends Message{
 		ConnectionsManager.getConnectionsManager().sendToAllExcptMe(this, id);		
 		Position.Player next=Host.nextInTurn();
 		if (next!=null){
-			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(next)));
+			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(next.getId())));
 		}
 	}
 	

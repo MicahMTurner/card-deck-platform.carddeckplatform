@@ -96,4 +96,17 @@ public class DeckArea extends Droppable{
 		
 	}
 
+
+
+	@Override
+	public void onRoundEnd(Player player) {
+	}
+
+
+
+	@Override
+	public Card peek() {
+		return cards.peek();
+	}
+
 }

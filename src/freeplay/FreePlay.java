@@ -13,6 +13,7 @@ import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
 
+import utils.Button;
 import utils.DeckArea;
 import utils.Card;
 import utils.Deck;
@@ -58,7 +59,7 @@ public class FreePlay extends Game{
 
 	
 	@Override
-	public void setLayouts(ArrayList<Droppable> publics) {
+	public void setLayouts(ArrayList<Droppable> publics, ArrayList<Button> buttons) {
 		droppables.add(new DeckArea(Position.Button.TOPRIGHT));
 		droppables.add(new Public(new PublicHandler(), Position.Public.MID,DroppableLayout.LayoutType.NONE , new Point(65,65)));		
 	}
@@ -86,5 +87,4 @@ public class FreePlay extends Game{
 			Player position, int uniqueId) {
 		return new utils.Player(playerInfo, position, uniqueId, new PlayerHandler(), DroppableLayout.LayoutType.LINE);
 	}
-
 }
