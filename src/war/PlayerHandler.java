@@ -5,17 +5,21 @@ import client.controller.ClientController;
 import utils.Card;
 import utils.Player;
 import utils.Position;
+import utils.Public;
 import handlers.PlayerEventsHandler;
 
 public class PlayerHandler implements PlayerEventsHandler{
 
 	@Override
-	public boolean onMyTurn(Player player) {		
-		if (ClientController.get().getZone(Position.Public.MIDRIGHT).cardsHolding()==
-				ClientController.get().getZone(Position.Public.MIDLEFT).cardsHolding() && !War.tie){
-			ClientController.get().disableUi();
+	public boolean onMyTurn(Player player) {	
+		Public midRightPublic=(Public) (ClientController.get().getZone(Position.Public.MIDRIGHT));
+		Public midLeftPublic=(Public) (ClientController.get().getZone(Position.Public.MIDLEFT));
+		if (!midRightPublic.isEmpty() && !midLeftPublic.isEmpty()){
+			if (midRightPublic.cardsHolding()==midLeftPublic.cardsHolding() && !War.tie){
+				ClientController.get().disableUi();
 			
-			ClientController.sendAPI().endRound(ClientController.get().endRound());
+				ClientController.sendAPI().endRound(ClientController.get().endRound());
+			}
 		}
 		return true;
 	}
@@ -30,6 +34,7 @@ public class PlayerHandler implements PlayerEventsHandler{
 		//card.setLocation(player.getX(), player.getY());
 		if (player==null){
 			card.hide();
+			return true;
 		}
 		return false;
 	}
