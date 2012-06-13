@@ -15,6 +15,7 @@ import android.bluetooth.BluetoothServerSocket;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import carddeckplatform.game.gameEnvironment.GameEnvironment.ConnectionType;
 
+import utils.GamePrefs;
 import utils.Player;
 import utils.Position;
 import communication.actions.InitialConnectionAction;
@@ -109,7 +110,7 @@ public class ConnectionsManager {
 	public void connectHostingPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo){
 		Acceptor acceptor = new TcpAcceptor();
 		Streams s = acceptor.accept();
-		addConnection(s, position, gameId, playersInfo);
+		addConnection(s, position, gameId, playersInfo, null);
 	}
 	
 	
@@ -119,7 +120,7 @@ public class ConnectionsManager {
 	 * @param gameId
 	 * @param playersInfo
 	 */
-	public void connectPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo){			
+	public void connectPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo, GamePrefs gamePrefs){			
 		Acceptor acceptor=null;
 		// accept connections according to the connection type specified by the user.
 		if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP)
@@ -129,7 +130,7 @@ public class ConnectionsManager {
 		
 		Streams s = acceptor.accept();
 		if (s!=null){
-			addConnection(s, position, gameId, playersInfo);
+			addConnection(s, position, gameId, playersInfo, gamePrefs);
 		}
 	}
 	
@@ -140,13 +141,13 @@ public class ConnectionsManager {
 	 * @param gameId
 	 * @param playersInfo
 	 */
-	public void addConnection(Streams s, Position.Player position,String gameId,ArrayList<Player> playersInfo){
+	public void addConnection(Streams s, Position.Player position,String gameId,ArrayList<Player> playersInfo, GamePrefs gamePrefs){
 			ObjectOutputStream out=s.getOut();
 			ObjectInputStream in=s.getIn();
 			
 			Connection connection = new Connection(position.getId(),in, out);
 			connections.add(connection);
-			sendTo(new InitialMessage(new InitialConnectionAction(gameId,position,playersInfo)),connection.getId());
+			sendTo(new InitialMessage(new InitialConnectionAction(gameId,position,playersInfo, gamePrefs)),connection.getId());
 			connection.getInitialMessage();			
 		    new Thread(connection).start();	
 			

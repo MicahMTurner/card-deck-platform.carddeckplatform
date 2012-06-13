@@ -3,6 +3,8 @@ package client.gui.entities;
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.ConcurrentModificationException;
 import java.util.Random;
 
@@ -91,7 +93,7 @@ public abstract class Droppable implements Serializable {
 
 	public Shape getShape() {
 		if (shape == null) {
-			Point size = MetricsConvertion.pointRelativeToPx(this.scale);
+			Point size = MetricsConvertion.pointRelativeToPx(getScale());
 			shape = new Rectangle(getX() - (size.getX() / 2), getY()
 					- (size.getY() / 2), size.getX(), size.getY());
 		}
@@ -100,6 +102,10 @@ public abstract class Droppable implements Serializable {
 	
 	public Point getScale() {
 		return scale;
+	}
+	
+	public void setScale(Point scale) {
+		this.scale = scale;
 	}
 
 	public boolean onDrop(Player player, Droppable from, Card card) {		
@@ -189,6 +195,14 @@ public abstract class Droppable implements Serializable {
 		return answer;
 	}
 	
+	public void sort(){
+		Collections.sort(getMyCards());
+	}
+	
+	public void sort(Comparator comperator){
+		Collections.sort(getMyCards(), comperator);
+	}
+	
 	public abstract boolean onCardAdded(Player player, Card card);
 	
 	public abstract boolean onCardRemoved(Player player, Card card);
@@ -199,6 +213,7 @@ public abstract class Droppable implements Serializable {
 		if (img!=null){
 			Matrix matrix = new Matrix();
 
+		
 			Point absScale = MetricsConvertion.pointRelativeToPx(scale);
 
 			matrix.postScale((float) absScale.getX() / (float) img.getWidth(),(float) absScale.getY() / (float) img.getHeight());

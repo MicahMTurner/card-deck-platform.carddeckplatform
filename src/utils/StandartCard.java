@@ -14,7 +14,6 @@ public  class StandartCard extends Card {
 		DIAMOND("d"),
 		SPADE("s"),
 		CLUB("c");
-		
 		final String code;
 		
 		Color( String code){
@@ -52,6 +51,40 @@ public  class StandartCard extends Card {
 	@Override
 	public int compareTo(Card otherStandartCard) {
 		StandartCard otherCard=(StandartCard)otherStandartCard;
+		
+		if(getColor().getCode().equals("h") && otherCard.getColor().getCode().equals("d"))
+			return 1;
+		if(getColor().getCode().equals("h") && otherCard.getColor().getCode().equals("s"))
+			return 1;
+		if(getColor().getCode().equals("h") && otherCard.getColor().getCode().equals("c"))
+			return 1;
+		
+		
+		
+		if(getColor().getCode().equals("d") && otherCard.getColor().getCode().equals("h"))
+			return -1;
+		if(getColor().getCode().equals("d") && otherCard.getColor().getCode().equals("s"))
+			return 1;
+		if(getColor().getCode().equals("d") && otherCard.getColor().getCode().equals("c"))
+			return 1;
+		
+		if(getColor().getCode().equals("s") && otherCard.getColor().getCode().equals("d"))
+			return -1;
+		if(getColor().getCode().equals("s") && otherCard.getColor().getCode().equals("h"))
+			return -1;
+		if(getColor().getCode().equals("s") && otherCard.getColor().getCode().equals("c"))
+			return 1;
+		
+		
+		
+		if(getColor().getCode().equals("c") && otherCard.getColor().getCode().equals("d"))
+			return -1;
+		if(getColor().getCode().equals("c") && otherCard.getColor().getCode().equals("s"))
+			return -1;
+		if(getColor().getCode().equals("c") && otherCard.getColor().getCode().equals("h"))
+			return -1;
+		
+		
 		if (this.value<otherCard.value){
 			return -1;
 		}else if (this.value>otherCard.value){

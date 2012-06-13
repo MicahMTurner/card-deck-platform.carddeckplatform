@@ -24,7 +24,7 @@ public abstract class DroppableLayout implements Serializable {
 			DroppableLayout answer=null;
 			switch(this){
 				case LINE:{
-					answer=new BottomLineLayout(droppable);
+					answer=new LineLayout(droppable);
 					break;
 				}
 				case HEAP:{

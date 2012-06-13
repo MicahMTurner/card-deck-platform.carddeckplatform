@@ -6,11 +6,11 @@ import communication.actions.InvalidMoveAction;
 import communication.link.ServerConnection;
 import communication.messages.Message;
 
-import utils.Button;
 import utils.Card;
 import utils.Player;
 import utils.Point;
 import utils.Position;
+import utils.Button;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -485,4 +485,8 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		
 	}
 	
+	public void clearCards() {
+		// TODO Auto-generated method stub
+		table.clearCards();
+	}
 }

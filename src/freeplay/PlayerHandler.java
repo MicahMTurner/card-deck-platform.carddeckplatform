@@ -7,6 +7,12 @@ import handlers.PlayerEventsHandler;
 
 public class PlayerHandler implements PlayerEventsHandler{
 
+	private boolean playerCardsVisible;
+	
+	public void setPlayerCardsVisible(boolean playerCardsVisible) {
+		this.playerCardsVisible = playerCardsVisible;
+	}
+	
 	@Override
 	public boolean onMyTurn(Player player) {
 		// TODO Auto-generated method stub
@@ -21,7 +27,7 @@ public class PlayerHandler implements PlayerEventsHandler{
 
 	@Override
 	public boolean onCardAdded(Player player, Card card) {
-		if(player.equals(ClientController.get().getMe())){
+		if(playerCardsVisible || player.equals(ClientController.get().getMe())){
 			card.reveal();
 		}else{
 			card.hide();

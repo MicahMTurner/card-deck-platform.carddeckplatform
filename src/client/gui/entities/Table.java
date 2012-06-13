@@ -11,9 +11,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import org.newdawn.slick.geom.Line;
 
 
-import utils.Button;
 import utils.Card;
 import utils.Position;
+import utils.Button;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -186,7 +186,6 @@ public class Table {
 		return null;
 	}
 
-
 	public void addButon(Button button) {
 		buttons.add(button);
 	}
@@ -202,6 +201,12 @@ public class Table {
 		}
 		return answer;
 	
+	}
+
+	public void clearCards() {
+		for(Droppable d : droppables){
+			d.getMyCards().clear();
+		}
 	}
 	
 }

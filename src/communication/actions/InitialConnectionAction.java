@@ -2,6 +2,7 @@ package communication.actions;
 
 import java.util.ArrayList;
 
+import utils.GamePrefs;
 import utils.Player;
 import utils.Position;
 
@@ -10,6 +11,7 @@ import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.controller.ClientController;
 import client.controller.LivePosition;
 import client.dataBase.ClientDataBase;
+import freeplay.FreePlayPrefs;
 import logic.client.Game;
 
 
@@ -18,16 +20,56 @@ public class InitialConnectionAction implements Action{
 	private String gameId;
 	private Position.Player position;
 	private ArrayList<Player> newPlayers;
+	private GamePrefs gamePrefs;
 	
-	public InitialConnectionAction(String gameId, Position.Player position, ArrayList<Player> newPlayers) {		
+	
+	public InitialConnectionAction(String gameId, Position.Player position, ArrayList<Player> newPlayers, GamePrefs gamePrefs) {
 		this.gameId=gameId;
 		this.position=position;
 		this.newPlayers=newPlayers;
+		this.gamePrefs = gamePrefs;
+		
+		
 	}
+	
+//	public InitialConnectionAction(String gameId, Position.Player position, ArrayList<Player> newPlayers) {		
+//		this.gameId=gameId;
+//		this.position=position;
+//		this.newPlayers=newPlayers;
+//	}
 
 	@Override
 	public void execute() {
+		//if(gamePrefs!=null)
+//		Game.receivedGamePrefs = gamePrefs;
+
 		Game game=ClientDataBase.getDataBase().getGame(gameId);
+		
+		
+		
+//		if(gamePrefs!=null && !GameEnvironment.get().getPlayerInfo().isServer()){
+//			game.applyReceivedPrefs(gamePrefs);
+//		}
+//		else{
+			
+			
+//		}
+			
+		if(!game.getPrefsName().equals("") && !GameEnvironment.get().getPlayerInfo().isServer()){
+			game.applyReceivedPrefs(gamePrefs);
+		}else{
+			game.loadPrefs();
+		}
+		
+		game.setLayouts();
+//		try {
+//			game.setLayouts();
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+		
+		
+		//game.setLayouts();
 		ClientController.get().setGame(game);
 		
 		//create my instance	

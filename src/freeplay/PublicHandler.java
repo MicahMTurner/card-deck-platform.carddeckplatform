@@ -7,9 +7,18 @@ import handlers.PublicEventsHandler;
 
 public class PublicHandler implements PublicEventsHandler{
 
+	private boolean publicCardsVisible;
+	
+	public void setPublicCardsVisible(boolean publicCardsVisible) {
+		this.publicCardsVisible = publicCardsVisible;
+	}
+	
 	@Override
 	public boolean onCardAdded(Public publicZone, Player player, Card card) {
-		card.reveal();
+		if(publicCardsVisible)
+			card.reveal();
+		else
+			card.hide();
 		return true;
 	}
 
