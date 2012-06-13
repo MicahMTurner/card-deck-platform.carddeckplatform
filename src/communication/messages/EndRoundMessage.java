@@ -7,9 +7,9 @@ import communication.server.ConnectionsManager;
 
 
 public class EndRoundMessage extends Message{
-	int nextPlayerId;
+	private Integer nextPlayerId;
 	
-	public EndRoundMessage(int nextPlayerId, Action action) {
+	public EndRoundMessage(Integer nextPlayerId, Action action) {
 		this.nextPlayerId=nextPlayerId;
 		super.action=action;
 	}	
@@ -17,8 +17,10 @@ public class EndRoundMessage extends Message{
 	@Override
 	public void actionOnServer(int id){		
 		ConnectionsManager.getConnectionsManager().sendToAllExcptMe(this, id);
-		Host.reArrangeQueue(nextPlayerId);
-		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(nextPlayerId)));
+		if (nextPlayerId!=null){
+			Host.reArrangeQueue(nextPlayerId);
+			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(nextPlayerId)));
+		}
 		
 	}
 	
