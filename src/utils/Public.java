@@ -75,7 +75,7 @@ public class Public extends Droppable{
 
 	@Override
 	public void deltCard(Card card) {
-		cards.add(card);
+		cards.addFirst(card);
 		card.setLocation(getX(), getY());
 		
 	}
@@ -98,11 +98,12 @@ public class Public extends Droppable{
 		return cards;
 	}
 	public Card peek(){
-		if (!cards.isEmpty()){
-			return cards.get(cards.size()-1);
-		}else{
-			return null;
-		}
+		return cards.peek();
+//		if (!cards.isEmpty()){
+//			return cards.get(cards.size()-1);
+//		}else{
+//			return null;
+//		}
 	}
 
 	@Override
