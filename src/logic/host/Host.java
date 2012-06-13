@@ -47,16 +47,21 @@ public class Host implements Runnable{
 //		}
 	}
 	public Host(Game game) {	
-		availablePositions=new Stack<Position.Player>();
-		availablePositions.add(Position.Player.RIGHT);
-		availablePositions.add(Position.Player.LEFT);
-		availablePositions.add(Position.Player.TOP);
-		availablePositions.add(Position.Player.BOTTOM);
+		setPositions();
 		shutDown=false;
 		Host.game=game;
 		//this.playersInfo=new ArrayList<Host.PlayersInfo>();
 		
 	}
+	
+	private void setPositions(){
+		availablePositions=new Stack<Position.Player>();
+		availablePositions.add(Position.Player.RIGHT);
+		availablePositions.add(Position.Player.LEFT);
+		availablePositions.add(Position.Player.TOP);
+		availablePositions.add(Position.Player.BOTTOM);
+	}
+	
 	public static void addPlayer(Player playerInfo){
 		//playersInfo.add(playerInfo);
 		game.addPlayer(playerInfo);
@@ -71,7 +76,7 @@ public class Host implements Runnable{
 	public void waitForPlayers() throws Exception{
 		ConnectionsManager.getConnectionsManager().connectHostingPlayer(availablePositions.pop(),game.toString(),game.getPlayers());
 		while(ConnectionsManager.getConnectionsManager().getNumberOfConnections()<game.getNumberOfParticipants()){
-			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions.pop(),game.toString(),game.getPlayers());
+			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions.pop(),game.toString(),game.getPlayers(), game.getPrefs());
 			if (shutDown){
 				throw new Exception("server shutting down");
 			}
@@ -83,23 +88,7 @@ public class Host implements Runnable{
 
 		try {
 			waitForPlayers();
-		
-			System.out.println("got all players");
-			game.initiate();		
-		
-			System.out.println("game initiated");
-			game.dealCards();		
-		
-			System.out.println("cards dealt");
-			// send the turn action if the game is turned base card game.
-			Position.Player next=game.nextInTurn();
-			if (next!=null){
-				ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(next)));
-			}else{
-				for (Player player: game.getPlayers()){
-					ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(player.getGlobalPosition())));
-				}
-			}
+			startGame();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -108,7 +97,25 @@ public class Host implements Runnable{
 		
 	}
 	
+	public static void startGame(){
+		
+		System.out.println("got all players");
+		game.initiate();		
 	
+		System.out.println("game initiated");
+		game.dealCards();		
+	
+		System.out.println("cards dealt");
+		// send the turn action if the game is turned base card game.
+		Position.Player next=game.nextInTurn();
+		if (next!=null){
+			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(next)));
+		}else{
+			for (Player player: game.getPlayers()){
+				ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(player.getGlobalPosition())));
+			}
+		}
+	}
 
 	
 }

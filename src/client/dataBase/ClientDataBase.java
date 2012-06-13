@@ -61,9 +61,6 @@ public class ClientDataBase {
 		return null;
 	}
 	
-	public void addGame(String gameId){
-		
-	}
 	
 	public Set<String> getGamesNames(){
 		Set<String> gameNames =new HashSet<String>();

@@ -12,12 +12,14 @@ import communication.server.ConnectionsManager;
 
 
 
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
 
 import utils.DeckArea;
 import utils.Deck;
+import utils.GamePrefs;
 import utils.Player;
 import utils.Position;
 import utils.Public;
@@ -28,6 +30,9 @@ import utils.Public;
 
 public abstract class Game {	
 	//i'm first in the list
+	
+//	public static GamePrefs receivedGamePrefs=null;
+	
 	protected ArrayList<Player> players = new ArrayList<Player>();
 	protected Queue<utils.Position.Player> turnsQueue=new LinkedList<utils.Position.Player>();
 	protected ArrayList<Droppable> droppables=new ArrayList<Droppable>();
@@ -58,7 +63,7 @@ public abstract class Game {
 	public abstract void dealCards();	
 	
 	
-	public abstract void setLayouts(ArrayList<Droppable>publics);
+	public abstract void setLayouts();
 	/**
 	 * game id
 	 */
@@ -94,10 +99,22 @@ public abstract class Game {
 		if (turnsQueue!=null){
 			first=turnsQueue.peek();
 		}
-		//clearEmptyPositions();		
-		setLayouts(droppables);
-		
+		//if(GameEnvironment.get().getPlayerInfo().isServer())
 		loadPrefs();
+		//clearEmptyPositions();	
+		
+//		if(receivedGamePrefs!=null)
+//			applyReceivedPrefs(receivedGamePrefs);
+		
+//		try {
+//			setLayouts();
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+		
+		
+		
+		
 	}
 	
 	private void clearEmptyPositions() {
@@ -207,6 +224,15 @@ public abstract class Game {
 	
 	public void loadPrefs(){
 		
+	}
+	
+	public void applyReceivedPrefs(GamePrefs gamePrefs){
+		
+	}
+	
+	public GamePrefs getPrefs() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

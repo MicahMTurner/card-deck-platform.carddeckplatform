@@ -3,6 +3,8 @@ package client.gui.entities;
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.ConcurrentModificationException;
 import java.util.Random;
 
@@ -190,6 +192,14 @@ public abstract class Droppable implements Serializable {
 			rearrange(0);
 		}
 		return answer;
+	}
+	
+	public void sort(){
+		Collections.sort(getMyCards());
+	}
+	
+	public void sort(Comparator comperator){
+		Collections.sort(getMyCards(), comperator);
 	}
 	
 	public abstract boolean onCardAdded(Player player, Card card);

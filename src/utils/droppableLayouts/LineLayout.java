@@ -1,8 +1,12 @@
 package utils.droppableLayouts;
 
+import java.util.AbstractList;
+import java.util.Collections;
+
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import utils.Card;
 import utils.Point;
 import utils.Position;
 import client.gui.entities.Droppable;
@@ -40,7 +44,7 @@ public class LineLayout extends DroppableLayout {
 
 	private class BottomRearranger implements Rearranger{
 		@Override
-		public void rearrange(int index, float width, float height) {
+		public void rearrange(int index, float width, float height, AbstractList<Card> cards) {
 			int numberOfCards = droppable.cardsHolding();
 
 			if (numberOfCards == 0)
@@ -96,7 +100,7 @@ public class LineLayout extends DroppableLayout {
 				
 			}
 			
-			animate(droppable.getCards(),
+			animate(cards,
 					shift(animationArgs,
 							location.getX()-width/2, location.getY()), 1000);
 		}
@@ -119,7 +123,7 @@ public class LineLayout extends DroppableLayout {
 	
 	private class TopRearranger implements Rearranger{
 		@Override
-		public void rearrange(int index, float width, float height) {
+		public void rearrange(int index, float width, float height, AbstractList<Card> cards) {
 			// TODO Auto-generated method stub
 			int numberOfCards = droppable.cardsHolding();
 
@@ -135,7 +139,7 @@ public class LineLayout extends DroppableLayout {
 					
 				
 			}
-			animate(droppable.getCards(),
+			animate(cards,
 					shift(normalizePosition(animationArgs, width, height),
 							location.getX()-width/2, location.getY()), 1000);
 		}
@@ -144,7 +148,7 @@ public class LineLayout extends DroppableLayout {
 	
 	private class LeftRearranger implements Rearranger{
 		@Override
-		public void rearrange(int index, float width, float height) {
+		public void rearrange(int index, float width, float height, AbstractList<Card> cards) {
 			// TODO Auto-generated method stub
 			int numberOfCards = droppable.cardsHolding();
 
@@ -158,7 +162,7 @@ public class LineLayout extends DroppableLayout {
 				animationArgs[1][i] = (i+1);
 				animationArgs[2][i] = 0;
 			}
-			animate(droppable.getCards(),
+			animate(cards,
 					shift(normalizePosition(animationArgs, width, height),
 							location.getX(), location.getY() - height / 2), 1000);
 		}
@@ -167,7 +171,7 @@ public class LineLayout extends DroppableLayout {
 	
 	private class RightRearranger implements Rearranger{
 		@Override
-		public void rearrange(int index, float width, float height) {
+		public void rearrange(int index, float width, float height, AbstractList<Card> cards) {
 			// TODO Auto-generated method stub
 			int numberOfCards = droppable.cardsHolding();
 
@@ -181,7 +185,7 @@ public class LineLayout extends DroppableLayout {
 				animationArgs[1][numberOfCards-i-1] = (i+1);
 				animationArgs[2][i] = 0;
 			}
-			animate(droppable.getCards(),
+			animate(cards,
 					shift(normalizePosition(animationArgs, width, height),
 							location.getX(), location.getY() - height / 2), 1000);
 		}
@@ -196,7 +200,11 @@ public class LineLayout extends DroppableLayout {
 	@Override
 	public void rearrange(int index, float width, float height) {
 		// TODO Auto-generated method stub
-		rearranger.rearrange(index, width, height);
+//		Collections.sort(droppable.getCards());
+//		AbstractList<Card> cards = droppable.getCards();
+//		Collections.sort(cards);
+		droppable.sort();
+		rearranger.rearrange(index, width, height, droppable.getCards());
 	}
 
 

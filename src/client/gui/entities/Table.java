@@ -176,5 +176,12 @@ public class Table {
 		}
 		return null;
 	}
+
+
+	public void clearCards() {
+		for(Droppable d : droppables){
+			d.getMyCards().clear();
+		}
+	}
 	
 }

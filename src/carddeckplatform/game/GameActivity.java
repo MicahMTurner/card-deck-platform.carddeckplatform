@@ -15,6 +15,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.os.AsyncTask;
@@ -35,10 +36,13 @@ import client.gui.entities.Droppable;
 
 import communication.link.ServerConnection;
 import communication.link.TcpIdListener;
+import communication.messages.RestartMessage;
 
 public class GameActivity extends Activity {
 	private final int SPINNERPROGBAR=0;
 	private static Context context;
+	private static Intent intent;
+	public static Activity thisActivity;
 	private ProgressDialog progDialog;
 	private TableView tableview;
 	private TcpIdListener tcpIdListener;
@@ -49,7 +53,9 @@ public class GameActivity extends Activity {
 	
 	
 
-	
+	public static Intent getMyIntent(){
+		return intent;
+	}
 
 	public static Context getContext(){
 		return context;
@@ -97,6 +103,8 @@ public class GameActivity extends Activity {
         //gravity = new AutoHide(getApplicationContext());
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         context=getApplicationContext();
+        intent=getIntent();
+        thisActivity=this;
         Display display = getWindowManager().getDefaultDisplay();        
         GameEnvironment.get().getDeviceInfo().setScreenWidth(display.getWidth());
         GameEnvironment.get().getDeviceInfo().setScreenHeight(display.getHeight());
@@ -115,9 +123,17 @@ public class GameActivity extends Activity {
         ClientController.get().setGui(tableview);       
         //setupGame();
         
-        new GameSetup().execute(getIntent().getStringExtra("gameName"));
-
+        new GameSetup().execute(getMyIntent().getStringExtra("gameName"));
+        
     }
+    
+//    public static void restart(){
+//    	Intent intent = getMyIntent();
+//    	intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//    	
+//    	context.startActivity(intent);
+//    	thisActivity.finish();
+//    }
     
     private void initialServer(final String gameName) {    	
     	// added by Michael: bluetooth throws exception if the server socket isn't instantiated from main thread or handler.
@@ -309,6 +325,7 @@ public class GameActivity extends Activity {
     	switch(item.getItemId()){
     		case Menu.FIRST:
     			Toast.makeText(this, "Restart", 2000).show();
+    			ServerConnection.getConnection().send(new RestartMessage());
     			return true;
     		case Menu.FIRST+1:
     			Toast.makeText(this, "Ranking", 2000).show();

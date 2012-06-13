@@ -469,4 +469,9 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	public void setPlayerTurn(Droppable droppable) {
 		new GlowAnimation(droppable, 3000).execute();
 	}
+
+	public void clearCards() {
+		// TODO Auto-generated method stub
+		table.clearCards();
+	}
 }
