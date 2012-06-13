@@ -35,7 +35,7 @@ public class President extends Game{
 		Integer answer=null;
 		passed=false;
 		Public publicZone=(Public) ClientController.get().getZone(Position.Public.MID);
-		answer=publicZone.peek().getOwner().getId();
+		//answer=publicZone.peek().getOwner();
 		publicZone.clear();
 		for (Droppable droppable : droppables){
 			droppable.onRoundEnd(null);

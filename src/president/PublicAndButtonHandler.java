@@ -78,7 +78,7 @@ public class PublicAndButtonHandler implements PublicEventsHandler,ButtonEventsH
 
 	@Override
 	public boolean onCardRemoved(Public publicZone, Player player, Card card) {
-		if (player!=null && card.getOwner().getId()==player.getId()){
+		if (player!=null && card.getOwner().equals(player.getPosition())){
 			counter--;
 			return true;
 		}

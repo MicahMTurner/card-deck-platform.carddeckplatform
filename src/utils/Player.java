@@ -94,8 +94,9 @@ public class Player extends Droppable implements  Comparable<Player>{
 		return myTurn;
 	}
 	public void startTurn(){
-		myTurn=true;		
+		myTurn=true;
 		ClientController.get().enableUi();
+		handler.onMyTurn(this);
 	}
 	public void endTurn(){
 		if (myTurn!=false){

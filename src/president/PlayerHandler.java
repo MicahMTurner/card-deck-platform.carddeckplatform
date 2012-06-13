@@ -12,18 +12,18 @@ public class PlayerHandler implements PlayerEventsHandler{
 	
 	@Override
 	public boolean onMyTurn(Player player) {
-		if (President.passed){
-			player.endTurn();
-		}else{
+//		if (President.passed){
+//			player.endTurn();
+//		}else{
 			Card topCard=(ClientController.get().getZone(Position.Public.MID)).peek();
 			//check if no one placed any cards during the entire round
-			if (topCard!=null && topCard.getOwner().getId()==ClientController.get().getMe().getId()){
+			if (topCard!=null && topCard.getOwner().equals(ClientController.get().getMe().getPosition())){
 				Integer nextPlayerId=ClientController.get().endRound();
 				ClientController.sendAPI().endRound(nextPlayerId);
 				
 			}
 			
-		}
+		//}
 		return false;
 	}
 
