@@ -146,7 +146,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 	@Override
 	public boolean onCardAdded(Player player, Card card) {
 		hand.add(card);
-		boolean answer=handler.onCardAdded(this, card);
+		boolean answer=handler.onCardAdded(player, card);
 		if (answer || player==null){
 			card.setOwner((Position.Player)position);		
 			

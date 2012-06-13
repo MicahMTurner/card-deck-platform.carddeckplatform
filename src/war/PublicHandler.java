@@ -21,17 +21,37 @@ public class PublicHandler implements PublicEventsHandler{
 		Card cardInPublic=publicArea.peek();
 
 		if (card.getOwner().equals(byWhom.getPosition())){
-			//no cards in public place or same player adding a card while tie
-			if (cardInPublic==null || (card.getOwner().equals(cardInPublic.getOwner()) && War.tie)){				
+			
+			if (card.getOwner().equals(cardInPublic.getOwner())){				
 				if (War.tie){
 					if (cardsPlacedWhileTie<2){				
 						card.hide();
 						++cardsPlacedWhileTie;
 					}else{
-						War.tie=false;
-//						if (ClientController.get().getMe().equals(byWhom)){
-//							ClientController.get().disableUi();							
-//						}
+						//already placed 2 cards upside-down
+						card.reveal();
+						Public midright=(Public) ClientController.get().getZone(Position.Public.MIDRIGHT);
+						Public midleft=(Public) ClientController.get().getZone(Position.Public.MIDLEFT);
+						
+						if (byWhom.equals(ClientController.get().getMe())){
+							ClientController.get().disableUi();
+						}
+						
+						if (midright.cardsHolding()==midleft.cardsHolding()){
+							War.tie=false;	
+							
+							Integer nextPlayerId=ClientController.get().endRound();
+							if (nextPlayerId!=null){
+								if (ClientController.get().getMe().getId()!=nextPlayerId){
+									ClientController.get().getMe().endTurn();
+								}else{
+									ClientController.get().enableUi();
+								}
+							}
+//							if (ClientController.get().getMe().equals(byWhom)){
+//								ClientController.get().disableUi();							
+//							}
+						}
 					}
 				}else{					
 					cardsPlacedWhileTie=0;
