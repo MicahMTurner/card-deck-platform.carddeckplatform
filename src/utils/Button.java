@@ -102,13 +102,12 @@ public class Button{
 //		// TODO Auto-generated method stub
 //		
 //	}
-	private float getX(){
-		
-		
+	public float getX() {
+		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();
 	}
-	private float getY(){
-		
-		
+
+	public float getY() {
+		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();
 	}
 	
 	
