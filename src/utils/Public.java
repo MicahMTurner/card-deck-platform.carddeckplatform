@@ -2,25 +2,10 @@ package utils;
 
 import handlers.PublicEventsHandler;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
-import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Shape;
-
 import utils.droppableLayouts.DroppableLayout;
-import utils.droppableLayouts.DroppableLayout.LayoutType;
-import utils.droppableLayouts.HeapLayout;
-import utils.droppableLayouts.line.BottomLineLayout;
-
-import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import carddeckplatform.game.BitmapHolder;
 import client.gui.entities.Droppable;
-import client.gui.entities.MetricsConvertion;
 
 
 public class Public extends Droppable{	

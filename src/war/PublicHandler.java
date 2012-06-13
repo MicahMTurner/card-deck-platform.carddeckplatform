@@ -13,7 +13,7 @@ import client.controller.ClientController;
 
 public class PublicHandler implements PublicEventsHandler{
 	private int cardsPlacedWhileTie=0;
-	private boolean guiLocked=false;
+	//private boolean guiLocked=false;
 	
 	@Override
 	public boolean onCardAdded(Public publicArea,Player byWhom, Card card) {
