@@ -22,6 +22,7 @@ import communication.messages.EndRoundMessage;
 import communication.messages.EndTurnMessage;
 import communication.messages.Message;
 
+import utils.Button;
 import utils.Card;
 import utils.Pair;
 import utils.Player;
@@ -174,7 +175,7 @@ public class ClientController implements Observer {
 		//return gui.getDroppableById(IDMaker.getMaker().getIdByPos(pos.getRelativePosition(getMe().getGlobalPosition())));
 		return gui.getDroppableByPosition(pos);//(pos.getRelativePosition(getMe().getGlobalPosition())));
 	}
-	public ArrayList<Droppable> getLayouts() {
+	public Pair<ArrayList<Droppable>,ArrayList<Button>>getLayouts() {
 		return game.getLayouts();	
 	}
 	public void cardMoved(Card card,int from, int to, int byWhomId){

@@ -6,6 +6,7 @@ import communication.actions.InvalidMoveAction;
 import communication.link.ServerConnection;
 import communication.messages.Message;
 
+import utils.Button;
 import utils.Card;
 import utils.Player;
 import utils.Point;
@@ -467,6 +468,11 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 
 	public void setPlayerTurn(Droppable droppable) {
 		new GlowAnimation(droppable, 3000).execute();
+	}
+
+	public void addButton(Button button) {
+		table.addButon(button);
+		
 	}
 	
 }
