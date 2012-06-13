@@ -28,9 +28,10 @@ public class PublicHandler implements PublicEventsHandler{
 						card.hide();
 						++cardsPlacedWhileTie;
 					}else{
-						if (ClientController.get().getMe().equals(byWhom)){
-							ClientController.get().disableUi();							
-						}
+						War.tie=false;
+//						if (ClientController.get().getMe().equals(byWhom)){
+//							ClientController.get().disableUi();							
+//						}
 					}
 				}else{					
 					cardsPlacedWhileTie=0;

@@ -96,11 +96,6 @@ public class War extends Game{
 		publics.add(new Public(new PublicHandler(),Position.Public.MIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));
 		publics.add(new Public(new PublicHandler(),Position.Public.MIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));		
 	}
-//	@Override
-//	public void getLayouts(ArrayList<Droppable> publics){//,ArrayList<Button>buttons) {
-//		publics.add(new Public(new PublicHandler(),Position.Public.MIDLEFT));
-//		publics.add(new Public(new PublicHandler(),Position.Public.MIDRIGHT));
-//	}
 
 	
 
