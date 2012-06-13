@@ -2,22 +2,32 @@ package utils;
 
 import java.util.AbstractList;
 
+import android.content.Context;
+import android.graphics.Canvas;
+
 import utils.droppableLayouts.DroppableLayout;
 import client.gui.entities.Droppable;
 import handlers.ButtonEventsHandler;
 
 public class Button{
 	private ButtonEventsHandler handler;
+	private String text;
+	private String image;
 	
-	public Button(ButtonEventsHandler handler,Position.Button position) {
+	public Button(ButtonEventsHandler handler,Position.Button position,String text) {
 		//super(position.getId(), position, new Point(10,13), DroppableLayout.LayoutType.NONE);
 		this.handler=handler;
+		this.text=text;
+		this.image="freepublic";
 		//image="button.png";
 		
 	}
 
 	public void onClic(){
 		handler.onClick();
+	}
+	public void draw(Canvas canvas, Context context){
+		
 	}
 //	@Override
 //	public boolean onDrop(Player player, Droppable from, Card card) {

@@ -105,8 +105,10 @@ public class Player extends Droppable implements  Comparable<Player>{
 	}
 	public void deltCard(Card card) {
 		card.setOwner((Position.Player)position);
-		hand.add(card);	
+		hand.add(card);
+		handler.onCardAdded(this, card);
 		card.setLocation(getX(), getY());
+		super.rearrange(0);
 	}
 	public int cardsHolding() {		
 		return hand.size();
@@ -182,6 +184,16 @@ public class Player extends Droppable implements  Comparable<Player>{
 //	}
 	public Double getAzimute() {
 		return playerInfo.getAzimute();
+	}
+
+	@Override
+	public void onRoundEnd(Player player) {
+		handler.onRoundEnd(this);
+	}
+
+	@Override
+	public Card peek() {
+		return hand.get(0);
 	}
 
 }

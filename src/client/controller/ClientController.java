@@ -18,6 +18,7 @@ import communication.actions.EndDraggableMotionAction;
 import communication.actions.EndRoundAction;
 import communication.actions.EndTurnAction;
 import communication.link.ServerConnection;
+import communication.messages.EndRoundMessage;
 import communication.messages.EndTurnMessage;
 import communication.messages.Message;
 
@@ -127,8 +128,8 @@ public class ClientController implements Observer {
 		public void cardRemoved(ArrayList<Card> cards,String from){
 			ServerConnection.getConnection().send(new Message(new CardRemoved(cards, from)));
 		}
-		public void endRound(){
-			ServerConnection.getConnection().send(new Message(new EndRoundAction()));
+		public void endRound(int nextPlayerId){
+			ServerConnection.getConnection().send(new EndRoundMessage(nextPlayerId,new EndRoundAction()));
 		}
 		public void cardRevealed(Card card){
 			//ServerConnection.getConnection().getMessageSender().send(new Message(new CardRevealAction()))
@@ -208,13 +209,13 @@ public class ClientController implements Observer {
 		gui.popToast("Your Move");
 	}
 
-	public void playerTurn(Position.Player playerPosition) {
+	public void playerTurn(int playerId) {
 		Player me=game.getMe();
-		if (playerPosition.getId()==me.getGlobalPosition().getId()){
+		if (playerId==me.getId()){
 			me.startTurn();
 		}
 		//glow player icon/name
-		gui.setPlayerTurn(gui.getDroppableById(playerPosition.getId()));//getZone(playerPosition.getRelativePosition(me.getGlobalPosition())));
+		gui.setPlayerTurn(gui.getDroppableById(playerId));//getZone(playerPosition.getRelativePosition(me.getGlobalPosition())));
 	}
 
 	//private void moveCard(Card card,Droppable from,Droppable to){		
@@ -251,8 +252,8 @@ public class ClientController implements Observer {
 		
 	}
 
-	public void endRound() {
-		game.onRoundEnd();		
+	public Integer endRound() {
+		return game.onRoundEnd();		
 	}
 	
 	public Player getMe(){
