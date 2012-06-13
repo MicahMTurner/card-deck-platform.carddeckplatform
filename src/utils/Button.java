@@ -23,7 +23,7 @@ public class Button{
 		this.text=text;
 		this.image="button";
 		this.position=position;
-		this.scale=new Point(5, 5);
+		this.scale=new Point(7, 7);
 		this.paint=new Paint();
 		paint.setTextSize(20);
 		paint.setColor(Color.argb(170, 0, 0, 0));
@@ -44,12 +44,13 @@ public class Button{
 		Point p= MetricsConvertion.pointRelativeToPx(scale);
 		float x=MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();
 		float y=MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();
-		// transformations.
+		
+		// transformations.		
 		matrix.postScale((float)p.getX()/(float)buttonBitmap.getWidth(), (float)p.getY()/(float)buttonBitmap.getHeight());
-		matrix.postTranslate(x, y);
+		matrix.postTranslate(x-p.getX()/2, y-p.getY()/2);
 		
 		canvas.drawBitmap(buttonBitmap, matrix, null);
-		canvas.drawText(text,x, y, paint);
+		canvas.drawText(text,x,y, paint);
 	}
 //	@Override
 //	public boolean onDrop(Player player, Droppable from, Card card) {
