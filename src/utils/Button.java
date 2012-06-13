@@ -1,6 +1,10 @@
 package utils;
 
 import handlers.ButtonEventsHandler;
+
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -16,7 +20,8 @@ public class Button{
 	private String image;
 	private Position.Button position;
 	private Point scale;
-	private Paint paint; 
+	private Paint paint;
+	private transient Shape shape;
 	public Button(ButtonEventsHandler handler,Position.Button position,String text) {
 		//super(position.getId(), position, new Point(10,13), DroppableLayout.LayoutType.NONE);
 		this.handler=handler;
@@ -35,7 +40,7 @@ public class Button{
 	public void setPosition(Position.Button position) {
 		this.position = position;
 	}
-	public void onClic(){
+	public void onClick(){
 		handler.onClick();
 	}
 	public void draw(Canvas canvas, Context context){
@@ -98,5 +103,25 @@ public class Button{
 //		// TODO Auto-generated method stub
 //		
 //	}
+	public float getX() {
+		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();
+	}
+
+	public float getY() {
+		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();
+	}
+	
+	
+	public boolean isContain(float x, float y) {
+		return getShape().includes(x, y);
+	}
+	private Shape getShape() {
+		if (shape == null) {
+			Point size = MetricsConvertion.pointRelativeToPx(this.scale);
+			shape = new Rectangle(getX() - (size.getX() / 2), getY()
+					- (size.getY() / 2), size.getX(), size.getY());
+		}
+		return shape;
+	}
 	
 }

@@ -40,6 +40,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	private Context cont;
 	private Matrix translate;
 	private Draggable draggableInHand = null;
+	private Button buttonInHand = null;
 	private Droppable from = null;
 	private int xDimention;
 	private int yDimention;
@@ -301,7 +302,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		float X = event.getX();
 		float Y = event.getY();
 		if (uiEnabled) {
-			draggableInHand = table.getNearestDraggable(X, Y);
+			draggableInHand = table.getNearestDraggable(X, Y);//check if its a card
 			if (draggableInHand != null) {
 				if (draggableInHand.isMoveable()) {
 					from = table.getNearestDroppable(X, Y);
@@ -311,6 +312,11 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 					popToast("You cannot move this card");
 					draggableInHand = null;
 				}
+			}
+			else{//check if its a button
+				this.buttonInHand=table.getNearestButton(X, Y);//check if its a card
+				
+				
 			}
 		} else
 			popToast("It's not your turn now!!");
@@ -374,6 +380,10 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 				}
 				
 				draggableInHand = null;
+			}
+			else if(buttonInHand!=null){
+				buttonInHand.onClick();
+				buttonInHand=null;
 			}
 		} else{
 			popToast("It's not your turn now!!");
