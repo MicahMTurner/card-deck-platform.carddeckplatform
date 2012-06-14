@@ -173,7 +173,13 @@ public class ClientController implements Observer {
 	
 	public Droppable getZone(Position pos){
 		//return gui.getDroppableById(IDMaker.getMaker().getIdByPos(pos.getRelativePosition(getMe().getGlobalPosition())));
-		return gui.getDroppableByPosition(pos);//(pos.getRelativePosition(getMe().getGlobalPosition())));
+		
+		Droppable answer=gui.getDroppableByPosition(pos);//(pos.getRelativePosition(getMe().getGlobalPosition())));
+		if (answer==null && LivePosition.get().isRunning()){
+			//try to see if moved cause of live position
+			answer=gui.getDroppableByPosition((pos.getRelativePosition(getMe().getGlobalPosition())));
+		}
+		return answer;
 	}
 	public Pair<ArrayList<Droppable>,ArrayList<Button>>getLayouts() {
 		return game.getLayouts();	
@@ -353,6 +359,10 @@ public class ClientController implements Observer {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
+	}
+
+	public Object getSwappingZone(utils.Position.Player relativePosition) {
+		return gui.getDroppableByPosition(relativePosition);
 	}
 	
 	//---------------------------------------------------------------------//	

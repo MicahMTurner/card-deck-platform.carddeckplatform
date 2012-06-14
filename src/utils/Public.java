@@ -55,24 +55,6 @@ public class Public extends Droppable{
 	}
 
 
-//	@Override
-//	public int getX() {
-//		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();		
-//	}
-//
-//	@Override
-//	public int getY() {
-//		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();		
-//	}
-
-//	@Override
-//	public void draw(Canvas canvas,Context context) {
-//		Paint paint=new Paint();
-//		paint.setColor(Color.BLUE);
-//		canvas.drawCircle(shape.getCenterX(), shape.getCenterY(), 50, paint);
-//		canvas.drawBitmap(BitmapFactory.decodeResource(context.getResources(), 0x7f02002e),getX()-28,getY()-27,null);
-//	}
-
 	@Override
 	public void deltCard(Card card) {
 		cards.addFirst(card);
@@ -98,6 +80,9 @@ public class Public extends Droppable{
 		return cards;
 	}
 	public Card peek(){
+		if (cards.size()>1){
+			return cards.get(1);
+		}
 		return cards.peek();
 //		if (!cards.isEmpty()){
 //			return cards.get(cards.size()-1);

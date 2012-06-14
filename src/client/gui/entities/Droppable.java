@@ -214,7 +214,7 @@ public abstract class Droppable implements Serializable {
 			Matrix matrix = new Matrix();
 
 		
-			Point absScale = MetricsConvertion.pointRelativeToPx(scale);
+			Point absScale = MetricsConvertion.pointRelativeToPx(getScale());
 
 			matrix.postScale((float) absScale.getX() / (float) img.getWidth(),(float) absScale.getY() / (float) img.getHeight());
 			matrix.postTranslate(getX() - absScale.getX() / 2, getY() - absScale.getY() / 2);
@@ -274,7 +274,7 @@ public abstract class Droppable implements Serializable {
 	public void rearrange(int index) {
 		if(cardsHolding()==0)
 			return;
-		Point droppableSize = MetricsConvertion.pointRelativeToPx(scale);
+		Point droppableSize = MetricsConvertion.pointRelativeToPx(getScale());
 		Point card=MetricsConvertion.pointRelativeToPx(getCards().get(0).getScale());
 		
 		

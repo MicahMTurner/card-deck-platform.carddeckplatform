@@ -3,6 +3,7 @@ package utils;
 
 import handlers.CardEventsHandler;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -17,6 +18,7 @@ import carddeckplatform.game.BitmapHolder;
 import carddeckplatform.game.R;
 import carddeckplatform.game.StaticFunctions;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
+import client.gui.animations.Animation;
 import client.gui.animations.FlipAnimation;
 import client.gui.animations.OvershootAnimation;
 import client.gui.entities.Draggable;
@@ -64,7 +66,19 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 			coord.setY(y);
 		}
 	}
-	
+	static public void moveTo(final Droppable source,final Droppable destination,AbstractList<Card>cards,boolean wait){
+		ArrayList<Animation> animations=new ArrayList<Animation>();
+		for (Card card : cards){
+			Animation animation=new FlipAnimation(source, destination, card, false);
+			animations.add(animation);
+			animation.execute();
+		}
+		if (wait){
+			for (Animation animation : animations){
+				animation.waitForMe();
+			}
+		}
+	}
 	public void moveTo(final Droppable source,final Droppable destination) {
 		new FlipAnimation(source, destination, this, false).execute();
 	}

@@ -152,8 +152,7 @@ public class CarddeckplatformActivity extends Activity {
 			                
 			                i.putExtra("gamePrefs", prefs);
 			                i.putExtra("gameName", gameName);			                
-			                i.putExtra("livePosition", livePosition);
-			                
+			                i.putExtra("livePosition", livePosition);			               
 			                startActivity(i);
 			                
 			                dialog.dismiss();

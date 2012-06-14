@@ -13,14 +13,15 @@ public class PlayerHandler implements PlayerEventsHandler{
 	@Override
 	public boolean onMyTurn(Player player) {	
 		Public midRightPublic=(Public) (ClientController.get().getZone(Position.Public.MIDRIGHT));
-		Public midLeftPublic=(Public) (ClientController.get().getZone(Position.Public.MIDLEFT));
+		Public midLeftPublic=(Public) (ClientController.get().getZone(Position.Public.MIDLEFT));		
 		if (!midRightPublic.isEmpty() && !midLeftPublic.isEmpty()){
 			if (midRightPublic.cardsHolding()==midLeftPublic.cardsHolding() && !War.tie){
 				ClientController.get().disableUi();
-			
-				ClientController.sendAPI().endRound(ClientController.get().endRound());
+				ClientController.get().getMe().setMyTurn(false);
+				Integer nextPlayerId=ClientController.get().endRound();				
+				ClientController.sendAPI().endRound(nextPlayerId);
 			}
-		}
+		}		
 		return true;
 	}
 
