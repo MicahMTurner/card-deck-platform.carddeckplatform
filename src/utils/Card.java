@@ -34,6 +34,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	protected float angle = 0;
 	protected Point handScale;
 	
+	private int backAd;
 	
 //	private Paint paint;
 	
@@ -45,7 +46,9 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		this.revealed=false;		
 		this.coord=new Point(0,0);
 		
+		Random rand = new Random();
 		
+		this.backAd = rand.nextInt(3);
 	}
 	
 	@Override
@@ -154,7 +157,21 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		if(revealed){				
 			img = BitmapHolder.get().getBitmap(frontImg);
 		}else{
-			img = BitmapHolder.get().getBitmap(backImg);
+			switch (backAd) {
+			case 0:
+				img = BitmapHolder.get().getBitmap(backImg);
+				break;
+			case 1:
+				img = BitmapHolder.get().getBitmap("bluead");
+				break;
+			case 2:
+				img = BitmapHolder.get().getBitmap("yellowad");
+				break;
+			default:
+				img = BitmapHolder.get().getBitmap(backImg);
+				break;
+			}
+			
 		}
 		
 		// transformations.
