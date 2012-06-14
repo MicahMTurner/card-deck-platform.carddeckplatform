@@ -80,10 +80,12 @@ public class ConnectionsManager {
 	 * @param id
 	 */
 	public void sendToAllExcptMe(Message msg , int id){
-		for(Connection conn : connections){
-			if(conn.getId()!=id){
-				conn.send(msg);
-			}			
+		synchronized(connections){
+			for(Connection conn : connections){
+				if(conn.getId()!=id){
+					conn.send(msg);
+				}			
+			}
 		}
 	}
 	
