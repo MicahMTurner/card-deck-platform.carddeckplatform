@@ -66,7 +66,7 @@ public class Host implements Runnable{
 		//playersInfo.add(playerInfo);
 		game.addPlayer(playerInfo);
 	}
-	public static Position.Player nextInTurn(){
+	public static Integer nextInTurn(){
 		return game.nextInTurn();
 	}
 	public static void playerLost(int id){
@@ -112,9 +112,9 @@ public class Host implements Runnable{
 		
 		System.out.println("cards dealt");
 		// send the turn action if the game is turned base card game.
-		Position.Player next=game.nextInTurn();
+		Integer next=game.nextInTurn();
 		if (next!=null){
-			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(next.getId())));
+			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(next)));
 		}else{
 			for (Player player: game.getPlayers()){
 				ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(player.getId())));

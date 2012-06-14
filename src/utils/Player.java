@@ -98,6 +98,9 @@ public class Player extends Droppable implements  Comparable<Player>{
 		ClientController.get().enableUi();
 		handler.onMyTurn(this);
 	}
+	public void setMyTurn(boolean myTurn) {
+		this.myTurn = myTurn;
+	}
 	public void endTurn(){
 		if (myTurn!=false){
 			myTurn=false;		
@@ -134,10 +137,12 @@ public class Player extends Droppable implements  Comparable<Player>{
 		Position.Player newPos=this.globalPosition.getRelativePosition(devicePlayerGlobalPos);;
 		
 		if (!(this.globalPosition.equals(devicePlayerGlobalPos))){			
-			for (Card card : hand){
-				CardTransformation.get().transform(card,position,newPos);
-			}
+//			for (Card card : hand){
+//				CardTransformation.get().transform(card,position,newPos);
+//			}
 			position=newPos;
+			super.rearrange(0);
+			
 			//TODO:CHANGE THIS!!!!!
 			//this.droppableLayout = new BottomLineLayout(this);
 		}		

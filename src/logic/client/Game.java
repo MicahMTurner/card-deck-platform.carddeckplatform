@@ -105,8 +105,9 @@ public abstract class Game {
 	}
 	
 	//return the next player
-	public utils.Position.Player nextInTurn(){
+	public Integer nextInTurn(){
 		utils.Position.Player next=null;
+		Integer answer=null;
 		if (turnsQueue!=null){
 			ArrayList<Position.Player> availablePos=new ArrayList<Position.Player>();
 			for (Player player : players){
@@ -118,10 +119,16 @@ public abstract class Game {
 			}	
 			
 			turnsQueue.add(next);
-			
+			if (next!=null){
+				for (Player player : players){
+					if (player.getGlobalPosition().equals(next)){
+						answer=player.getId();
+					}
+				}
+			}
 		}		
 		
-		return next;		
+		return answer;		
 	}
 	
 	public void addPlayer(Player newPlayer) {
@@ -146,7 +153,7 @@ public abstract class Game {
 
 	public void positionUpdate(Player player, Position.Player newPosition) {
 		Position.Player oldPosition=getMe().getGlobalPosition();
-		Player swappedWith=(Player) ClientController.get().getZone(newPosition.getRelativePosition(oldPosition));
+		Player swappedWith=(Player) ClientController.get().getSwappingZone(newPosition.getRelativePosition(oldPosition));
 		
 		if (swappedWith==null){
 			player.setGlobalPosition(newPosition);
@@ -159,7 +166,7 @@ public abstract class Game {
 	}
 	private void setRelativePositions(Player player,Player swappedWith, Position.Player oldPosition){
 		//check if I moved
-				if (player.equals(getMe()) || swappedWith.equals(getMe())){
+				if (player.equals(getMe()) || (swappedWith!=null && swappedWith.equals(getMe()))){
 					
 					for (int i=1;i<players.size();i++){				
 						players.get(i).setRelativePosition(player.getGlobalPosition());

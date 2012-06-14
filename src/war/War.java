@@ -113,9 +113,11 @@ public class War extends Game{
 		War.tie=false;
 		Player winner=getWinner(public1,public2);
 		if (winner!=null){
-			//move cards from public areas to winner			
-			getCards(public1,winner);								
-			getCards(public2,winner);
+			//move cards from public areas to winner
+			Card.moveTo(public1, winner, public1.getCards(),false);
+			Card.moveTo(public2, winner, public2.getCards(),true);
+//			getCards(public1,winner);								
+//			getCards(public2,winner);
 			answer=winner.getId();
 		}else{
 			ClientController.get().enableUi();	
@@ -129,12 +131,20 @@ public class War extends Game{
 	private boolean checkAndDeclareGameWinner() {
 		boolean answer=false;
 		if (!War.tie){
+			Player me=ClientController.get().getMe();
 			if (ClientController.get().getMe().isEmpty()){
 				ClientController.get().disableUi();
 				ClientController.get().declareLoser();
 				answer=true;
 			}else{
-				if (ClientController.get().getZone(Position.Player.TOP).isEmpty()){
+				Player other=null;
+				for (Player player : players){
+					if (player.getId()!=me.getId()){
+						other=player;
+						break;
+					}
+				}
+				if (other.isEmpty()){
 					ClientController.get().disableUi();
 					ClientController.get().declareWinner();
 					answer=true;
@@ -144,28 +154,32 @@ public class War extends Game{
 		return answer;
 		
 	}	
-	private void calculateRoundWinner(Public public1, Public public2) {		
-		Player me=getMe();					
-		War.tie=false;
-			
-		Player winner=getWinner(public1,public2);
-		if (winner!=null){
-			//move cards from public areas to winner			
-			getCards(public1,winner);								
-			getCards(public2,winner);				
-			
-		}else{			
-				ClientController.get().enableUi();			
-		}
-	}
-	private void getCards(Public publicArea, Player player){
-		for (StandartCard card : ((ArrayList<StandartCard>)((ArrayList)publicArea.getCards()))){
-			card.moveTo(publicArea,player);
-			
-		}
-	}
+//	private void calculateRoundWinner(Public public1, Public public2) {		
+//		Player me=getMe();					
+//		War.tie=false;
+//			
+//		Player winner=getWinner(public1,public2);
+//		if (winner!=null){
+//			//move cards from public areas to winner
+//			Card.moveTo(public1, winner, public1.getCards(),false);
+//			Card.moveTo(public2, winner, public2.getCards(),true);
+//			//getCards(public1,winner);								
+//			//getCards(public2,winner);			
+//			
+//		}else{			
+//				ClientController.get().enableUi();			
+//		}
+//	}
+//	private ArrayList<Card> getCards(Public publicArea, Player player){
+//		ArrayList<Card>cardsToMove=new ArrayList<Card>();
+//		for (StandartCard card : ((ArrayList<StandartCard>)((ArrayList)publicArea.getCards()))){
+//			//card.moveTo(publicArea,player);
+//			cardsToMove.add(card);
+//			
+//		}
+//		return cardsToMove;
+//	}
 	private Player getWinner(Public public1,Public public2){
-		
 		int comparisonAnswer=((StandartCard)public1.peek()).compareTo((StandartCard)public2.peek());
 		if (comparisonAnswer>0){
 			return (Player)(ClientController.get().getZone(public1.peek().getOwner()));			
@@ -177,6 +191,7 @@ public class War extends Game{
 			War.tie=true;
 			return null;
 		}
+		
 	}
 
 	@Override

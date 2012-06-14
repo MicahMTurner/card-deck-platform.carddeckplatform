@@ -69,7 +69,7 @@ public class LivePosition implements SensorEventListener{
 					ArrayList<Pair<Position.Player,Position.Player>> movingList;
 
 					//check if place is not occupied
-					if (ClientController.get().getZone(to.getRelativePosition(ClientController.get().getMe().getGlobalPosition()))==null){						
+					if (ClientController.get().getSwappingZone(to.getRelativePosition(ClientController.get().getMe().getGlobalPosition()))==null){						
 					
 						//place isn't occupied
 						movingList=new ArrayList<Pair<Player,Player>>();

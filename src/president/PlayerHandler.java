@@ -45,10 +45,10 @@ public class PlayerHandler implements PlayerEventsHandler{
 
 	@Override
 	public boolean onCardRemoved(Player player, Card card) {
-		if (player.equals(ClientController.get().getMe())){
+		if (card.getOwner().getId()==player.getId()){
 			return true;
 		}
-		return false;
+		return true;
 	}
 
 	@Override
