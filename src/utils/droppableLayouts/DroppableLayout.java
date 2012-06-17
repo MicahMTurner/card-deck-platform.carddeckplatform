@@ -205,6 +205,6 @@ public abstract class DroppableLayout implements Serializable {
 
 		new Thread(animationRunnable).start();
 		
-
+		
 	}
 }

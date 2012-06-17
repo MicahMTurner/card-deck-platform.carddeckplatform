@@ -127,7 +127,13 @@ public class FreePlay extends Game{
 	@Override
 	public utils.Player getPlayerInstance(PlayerInfo playerInfo,
 			Player position, int uniqueId) {
-		return new utils.Player(playerInfo, position, uniqueId, new PlayerHandler(), DroppableLayout.LayoutType.LINE);
+		
+		PlayerHandler playerHandler = new PlayerHandler();
+		
+		utils.Player p = new utils.Player(playerInfo, position, uniqueId, playerHandler, DroppableLayout.LayoutType.LINE);
+		playerHandler.setAttachedPlayer(p);
+		
+		return p;
 	}
 	
 	@Override

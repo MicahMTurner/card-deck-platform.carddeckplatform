@@ -45,8 +45,8 @@ public class ClientDataBase {
 		games.put(freePlay.toString(), freePlay);
 		//BlackJack blackJack=new BlackJack();
 		//games.put(blackJack.toString(), blackJack);
-		FreePlaySingle freePlaySingle = new FreePlaySingle();
-		games.put(freePlaySingle.toString(), freePlaySingle);
+//		FreePlaySingle freePlaySingle = new FreePlaySingle();
+//		games.put(freePlaySingle.toString(), freePlaySingle);
 		
 	}
 	/**

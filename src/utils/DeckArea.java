@@ -27,8 +27,13 @@ import client.gui.entities.MetricsConvertion;
 
 public class DeckArea extends Droppable{
 	
+	
+	boolean firstAdd = true;
+	
+	
+	
 	public DeckArea(Position.Button position) {
-		super(position.getId(),position, new Point(10,13),DroppableLayout.LayoutType.HEAP);
+		super(position.getId(),position, new Point(10,13),DroppableLayout.LayoutType.NONE);
 		this.image = "playerarea";
 	}
 
@@ -55,10 +60,24 @@ public class DeckArea extends Droppable{
 
 	@Override
 	public boolean onCardAdded(Player player, Card card) {
-		card.hide();
-		card.setLocation(getX(), getY());
-		card.setAngle(0);
+		
+		if(firstAdd){
+			Point offset = MetricsConvertion.pointRelativeToPx(new Point(5,0));
+			
+			
+			card.reveal();
+			card.setLocation(getX() - offset.getX() , getY());
+			card.setAngle(270);
+			firstAdd = false;
+		}else{
+			card.hide();
+			card.setLocation(getX(), getY());
+			card.setAngle(0);
+			
+		}
+		
 		cards.addLast(card);
+		
 		return true;
 		
 	}
@@ -93,7 +112,7 @@ public class DeckArea extends Droppable{
 	@Override
 	public void clear() {
 		cards.clear();
-		
+		firstAdd = true;
 	}
 
 

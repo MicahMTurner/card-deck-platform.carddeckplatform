@@ -8,6 +8,13 @@ import handlers.PlayerEventsHandler;
 public class PlayerHandler implements PlayerEventsHandler{
 
 	private boolean playerCardsVisible;
+	private Player attachedPlayer;
+	
+	
+	public void setAttachedPlayer(Player attachedPlayer) {
+		this.attachedPlayer = attachedPlayer;
+	}
+	
 	
 	public void setPlayerCardsVisible(boolean playerCardsVisible) {
 		this.playerCardsVisible = playerCardsVisible;
@@ -27,7 +34,7 @@ public class PlayerHandler implements PlayerEventsHandler{
 
 	@Override
 	public boolean onCardAdded(Player player, Card card) {
-		if(playerCardsVisible || player.equals(ClientController.get().getMe())){
+		if(playerCardsVisible || attachedPlayer.equals(ClientController.get().getMe())){
 			card.reveal();
 		}else{
 			card.hide();
