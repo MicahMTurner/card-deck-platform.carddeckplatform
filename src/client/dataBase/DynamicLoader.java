@@ -27,6 +27,7 @@ import dalvik.system.DexClassLoader;
 import dalvik.system.PathClassLoader;
 
 import logic.client.Game;
+import utils.Pair;
 import utils.Player;
 import utils.Position;
 import war.War;
@@ -122,6 +123,13 @@ public class DynamicLoader {
 		}		
 		return game;
 	}
+	
+	public ArrayList<Pair<String, String>> getInstalledPlugins(){
+		
+		return null;
+	}
+	
+	
 	
 	public String calcMd5(File file){
 		
