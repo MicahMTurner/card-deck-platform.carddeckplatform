@@ -15,11 +15,9 @@ public class PlayerHandler implements PlayerEventsHandler{
 		Public midRightPublic=(Public) (ClientController.get().getZone(Position.Public.MIDRIGHT));	// add methods.
 		Public midLeftPublic=(Public) (ClientController.get().getZone(Position.Public.MIDLEFT));		
 		if (!midRightPublic.isEmpty() && !midLeftPublic.isEmpty()){
-			if (midRightPublic.cardsHolding()==midLeftPublic.cardsHolding() && !War.tie){
-				ClientController.get().disableUi();
-				ClientController.get().getMe().setMyTurn(false);
-				Integer nextPlayerId=ClientController.get().endRound();				
-				ClientController.sendAPI().endRound(nextPlayerId);
+			if (midRightPublic.cardsHolding()==midLeftPublic.cardsHolding() && !War.tie){	
+				ClientController.get().endRound();
+				//ClientController.sendAPI().endRound();
 			}
 		}		
 		return true;
