@@ -154,9 +154,11 @@ public abstract class DroppableLayout implements Serializable {
 
 			}
 			for (int i = 0; i < totalDx.length; i++) {
-				abstractList.get(i).setLocation(reserved[0][i] + curDx[i],
-						reserved[1][i] + curDy[i]);
-				abstractList.get(i).setAngle(reserved[2][i] + curDAngle[i]);
+				setLocationAndAngle(abstractList.get(i),reserved[0][i] + curDx[i],
+						reserved[1][i] + curDy[i],reserved[2][i] + curDAngle[i]);
+				//abstractList.get(i).setLocation(reserved[0][i] + curDx[i],
+						//reserved[1][i] + curDy[i]);
+				//abstractList.get(i).setAngle(reserved[2][i] + curDAngle[i]);
 			}
 			while (percentTime < 1.0 && running) {
 				curTime = System.currentTimeMillis();
@@ -170,18 +172,29 @@ public abstract class DroppableLayout implements Serializable {
 					curDy[i] = percentDistance * totalDy[i];
 					curDAngle[i] = percentDistance * totalDAngle[i];
 					Card card = abstractList.get(i);
-					card.setLocation(reserved[0][i] + curDx[i], reserved[1][i]
-							+ curDy[i]);
-					card.setAngle(reserved[2][i] + curDAngle[i]);
+					setLocationAndAngle(card,reserved[0][i] + curDx[i], reserved[1][i]
+							+ curDy[i],reserved[2][i] + curDAngle[i]);
+					//card.setLocation(reserved[0][i] + curDx[i], reserved[1][i]
+					//		+ curDy[i]);
+					//card.setAngle(reserved[2][i] + curDAngle[i]);
 				}
 
 			}
-			if (running)
+			if (running){
 				for (int i = 0; i < animationArgs[0].length; i++) {
 					Card card = abstractList.get(i);
-					card.setLocation(animationArgs[0][i], animationArgs[1][i]);
-					card.setAngle(animationArgs[2][i]);
+					setLocationAndAngle(card, animationArgs[0][i], animationArgs[1][i], animationArgs[2][i]);
+					//card.setLocation(animationArgs[0][i], animationArgs[1][i]);
+					//card.setAngle(animationArgs[2][i]);
 				}
+			}
+		}
+
+		private void setLocationAndAngle(Card card, float x, float y, float angle) {
+			if (!card.isCarried() && !card.isInHand()){
+				card.setLocation(x, y);
+				card.setAngle(angle);
+			}
 		}
 
 	}
@@ -193,7 +206,7 @@ public abstract class DroppableLayout implements Serializable {
 		if (this.animationRunnable != null)
 			animationRunnable.stopAnimation();
 	}
-
+	
 	public void animate(AbstractList<Card> abstractList,
 			float[][] animationArgs, long duration) {
 
