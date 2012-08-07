@@ -17,6 +17,7 @@ import communication.actions.DraggableMotionAction;
 import communication.actions.EndDraggableMotionAction;
 import communication.actions.EndRoundAction;
 import communication.actions.EndTurnAction;
+import communication.actions.Turn;
 import communication.link.ServerConnection;
 import communication.messages.EndRoundMessage;
 import communication.messages.EndTurnMessage;
@@ -119,9 +120,9 @@ public class ClientController implements Observer {
 		
 		private Send(){}
 		
-		public void endTurn(Position.Player position){
+		public void endTurn(int playerId){
 			gui.setUiEnabled(false);
-			ServerConnection.getConnection().send(new EndTurnMessage(new EndTurnAction(position)));
+			ServerConnection.getConnection().send(new EndTurnMessage(new EndTurnAction(playerId)));
 		}
 		public void cardAdded(Card card,int from,int to,int byWhomId){			
 			ServerConnection.getConnection().send(new Message(new CardAdded(card,from,to,byWhomId)));
@@ -129,8 +130,8 @@ public class ClientController implements Observer {
 		public void cardRemoved(ArrayList<Card> cards,String from){
 			ServerConnection.getConnection().send(new Message(new CardRemoved(cards, from)));
 		}
-		public void endRound(Integer nextPlayerId){							
-			ServerConnection.getConnection().send(new EndRoundMessage(nextPlayerId,new EndRoundAction()));
+		public void endRound(){							
+			ServerConnection.getConnection().send(new Message(new EndRoundAction()));
 		}
 		public void cardRevealed(Card card){
 			//ServerConnection.getConnection().getMessageSender().send(new Message(new CardRevealAction()))
@@ -220,6 +221,13 @@ public class ClientController implements Observer {
 		Player me=game.getMe();
 		if (playerId==me.getId()){
 			me.startTurn();
+		}else{
+			for (Player player : game.getPlayers()){
+				if (player.getId()==playerId){
+					player.setMyTurn(true);
+					break;
+				}
+			}
 		}
 		//glow player icon/name
 		gui.setPlayerTurn(gui.getDroppableById(playerId));//getZone(playerPosition.getRelativePosition(me.getGlobalPosition())));
@@ -239,11 +247,13 @@ public class ClientController implements Observer {
 	//}
 
 	public void declareWinner() {
+		ClientController.get().disableUi();
 		gui.popToast("WINNER!");
 		
 	}
 	
 	public void declareLoser() {
+		ClientController.get().disableUi();
 		gui.popToast("LOSSER!");
 		
 	}
@@ -266,10 +276,18 @@ public class ClientController implements Observer {
 	}
 	
 
-	public void endRound() {
+	public void endRound() {		
 		disableUi();
-		getMe().setMyTurn(false);
-		sendAPI().endRound(game.onRoundEnd());		
+		if(getMe().isMyTurn()){
+			sendAPI().endRound();
+			getMe().setMyTurn(false);
+			ServerConnection.getConnection().send(new Message(new Turn(game.onRoundEnd())));
+			
+		}else{
+			game.onRoundEnd();
+		}
+		
+		
 	}
 	
 	public Player getMe(){
@@ -293,7 +311,7 @@ public class ClientController implements Observer {
 			}
 			else{
 				gui.setUiEnabled(false);
-				send.endTurn(getMe().getGlobalPosition());								
+				send.endTurn(getMe().getId());								
 			}
 		}
 		//if(arg0 instanceof Player)

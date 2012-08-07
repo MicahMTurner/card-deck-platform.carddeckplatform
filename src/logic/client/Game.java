@@ -22,7 +22,7 @@ public abstract class Game {
 		//i'm first in the list
 	
 //	public static GamePrefs receivedGamePrefs=null;
-	
+	protected static ArrayList<Player> staticPlayers;
 	protected ArrayList<Player> players = new ArrayList<Player>();
 	protected Queue<utils.Position.Player> turnsQueue=new LinkedList<utils.Position.Player>();
 	protected ArrayList<Droppable> droppables=new ArrayList<Droppable>();
@@ -43,8 +43,6 @@ public abstract class Game {
 	protected abstract Queue<utils.Position.Player> setTurns();
 	//the minimal players count
 	public abstract int minPlayers();
-	//how many cards to split
-	public abstract int cardsForEachPlayer();
 	
 	//the game split cards on the begginng of the game
 	public abstract void dealCards();	
@@ -86,7 +84,8 @@ public abstract class Game {
 
 		//Position.Player x=Position.Player.BOTTOM;
 		
-		//clearEmptyPositions();		
+		//clearEmptyPositions();	
+		staticPlayers = players;
 		loadPrefs();
 	}
 	

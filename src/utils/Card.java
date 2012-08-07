@@ -69,18 +69,21 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 			coord.setY(y);
 		}
 	}
-	static public void moveTo(final Droppable source,final Droppable destination,AbstractList<Card>cards,boolean wait){
+	static public void moveTo(final ArrayList<Pair<Droppable, Droppable>> srcAndDst){
 		ArrayList<Animation> animations=new ArrayList<Animation>();
-		for (Card card : cards){
-			Animation animation=new FlipAnimation(source, destination, card, false);
-			animations.add(animation);
-			animation.execute();
-		}
-		if (wait){
-			for (Animation animation : animations){
-				animation.waitForMe();
+		
+		for(Pair pair : srcAndDst){
+			for (Card card : ((Droppable)pair.getFirst()).getCards()){
+				Animation animation=new FlipAnimation((Droppable)pair.getFirst(), (Droppable)pair.getSecond(), card, false);
+				animations.add(animation);
+				animation.execute();
 			}
 		}
+		
+		for (Animation animation : animations){
+			animation.waitForMe();
+		}
+		
 	}
 	public void moveTo(final Droppable source,final Droppable destination) {
 		new FlipAnimation(source, destination, this, false).execute();

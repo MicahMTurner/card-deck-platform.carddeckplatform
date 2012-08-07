@@ -12,6 +12,12 @@ public class PlayerHandler implements PlayerEventsHandler{
 
 	@Override
 	public boolean onMyTurn(Player player) {	
+		
+		return true;
+	}
+
+	@Override
+	public boolean onTurnEnd(Player player) {	
 		Public midRightPublic=(Public) (ClientController.get().getZone(Position.Public.MIDRIGHT));	// add methods.
 		Public midLeftPublic=(Public) (ClientController.get().getZone(Position.Public.MIDLEFT));		
 		if (!midRightPublic.isEmpty() && !midLeftPublic.isEmpty()){
@@ -19,12 +25,9 @@ public class PlayerHandler implements PlayerEventsHandler{
 				ClientController.get().endRound();
 				//ClientController.sendAPI().endRound();
 			}
-		}		
-		return true;
-	}
-
-	@Override
-	public boolean onTurnEnd(Player player) {		
+		}else{
+			ClientController.sendAPI().endTurn(player.getId());
+		}
 		return true;
 	}
 

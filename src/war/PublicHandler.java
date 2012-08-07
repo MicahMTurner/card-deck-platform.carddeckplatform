@@ -28,29 +28,19 @@ public class PublicHandler implements PublicEventsHandler{
 						card.hide();
 						++cardsPlacedWhileTie;
 					}else{
-						//already placed 2 cards upside-down
-						card.reveal();
-						Public midright=(Public) ClientController.get().getZone(Position.Public.MIDRIGHT);
-						Public midleft=(Public) ClientController.get().getZone(Position.Public.MIDLEFT);
-						
-						if (byWhom.equals(ClientController.get().getMe())){
-							ClientController.get().disableUi();
-						}
-						
-						if (midright.cardsHolding()==midleft.cardsHolding()){
-							War.tie=false;	
+						if(cardsPlacedWhileTie==3){
+							answer=false;
+						}else{
+							//already placed 2 cards upside-down
+							card.reveal();
+							Public midright=(Public) ClientController.get().getZone(Position.Public.MIDRIGHT);
+							Public midleft=(Public) ClientController.get().getZone(Position.Public.MIDLEFT);
 							
-							Integer nextPlayerId=ClientController.get().endRound();
-							if (nextPlayerId!=null){
-								if (ClientController.get().getMe().getId()!=nextPlayerId){
-									ClientController.get().getMe().endTurn();
-								}else{
-									ClientController.get().enableUi();
-								}
+							++cardsPlacedWhileTie;
+							if (midright.cardsHolding()==midleft.cardsHolding()){
+								War.tie=false;
+								ClientController.get().endRound();
 							}
-//							if (ClientController.get().getMe().equals(byWhom)){
-//								ClientController.get().disableUi();							
-//							}
 						}
 					}
 				}else{					

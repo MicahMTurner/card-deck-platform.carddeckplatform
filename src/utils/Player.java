@@ -103,8 +103,9 @@ public class Player extends Droppable implements  Comparable<Player>{
 	}
 	public void endTurn(){
 		if (myTurn!=false){
-			myTurn=false;		
-			ClientController.sendAPI().endTurn(globalPosition);
+					
+			handler.onTurnEnd(this);
+			myTurn=false;
 		}
 	}
 	public void deltCard(Card card) {

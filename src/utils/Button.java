@@ -21,7 +21,13 @@ public class Button{
 	private Position.Button position;
 	private Point scale;
 	private Paint paint;
+	private boolean enabled;
 	private transient Shape shape;
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
+	
 	public Button(ButtonEventsHandler handler,Position.Button position,String text) {
 		//super(position.getId(), position, new Point(10,13), DroppableLayout.LayoutType.NONE);
 		this.handler=handler;
@@ -41,7 +47,8 @@ public class Button{
 		this.position = position;
 	}
 	public void onClick(){
-		handler.onClick();
+		if(enabled)
+			handler.onClick();
 	}
 	public void draw(Canvas canvas, Context context){
 		Bitmap buttonBitmap=BitmapHolder.get().getBitmap(image);

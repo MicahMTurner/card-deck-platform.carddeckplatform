@@ -18,6 +18,7 @@ import utils.Button;
 import utils.DeckArea;
 import utils.Card;
 import utils.Deck;
+import utils.Pair;
 import utils.Player;
 import utils.Point;
 import utils.Position;
@@ -38,21 +39,13 @@ public class War extends Game{
 	@Override
 	public Queue<Position.Player> setTurns() {
 		return utils.Turns.clockWise(Position.Player.BOTTOM);
-		
 	}
 
 	@Override
 	public int minPlayers() {		
 		return 2;
 	}
-
-	@Override
-	public int cardsForEachPlayer() {
-		return 0;
-	}
-
 	
-
 	@Override
 	public String toString() {		
 		return "War";
@@ -114,10 +107,12 @@ public class War extends Game{
 		Player winner=getWinner(public1,public2);
 		if (winner!=null){
 			//move cards from public areas to winner
-			Card.moveTo(public1, winner, public1.getCards(),false);
-			Card.moveTo(public2, winner, public2.getCards(),true);
-//			getCards(public1,winner);								
-//			getCards(public2,winner);
+			ArrayList<Pair<Droppable , Droppable>> pairs = new ArrayList<Pair<Droppable , Droppable>>();
+			
+			pairs.add(new Pair(public1, winner));
+			pairs.add(new Pair(public2, winner));
+			
+			Card.moveTo(pairs);
 			answer=winner.getId();
 		}else{
 			ClientController.get().enableUi();	
@@ -133,7 +128,6 @@ public class War extends Game{
 		if (!War.tie){
 			Player me=ClientController.get().getMe();
 			if (ClientController.get().getMe().isEmpty()){
-				ClientController.get().disableUi();
 				ClientController.get().declareLoser();
 				answer=true;
 			}else{
@@ -145,7 +139,6 @@ public class War extends Game{
 					}
 				}
 				if (other.isEmpty()){
-					ClientController.get().disableUi();
 					ClientController.get().declareWinner();
 					answer=true;
 				}

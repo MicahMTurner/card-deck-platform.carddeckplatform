@@ -53,11 +53,6 @@ public class FreePlay extends Game{
 		return 1;
 	}
 
-	@Override
-	public int cardsForEachPlayer() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
 	public void dealCards() {
