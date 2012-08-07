@@ -17,6 +17,7 @@ public class PublicHandler implements PublicEventsHandler{
 	
 	@Override
 	public boolean onCardAdded(Public publicArea,Player byWhom, Card card) {
+		
 		boolean answer=false;
 		Card cardInPublic=publicArea.peek();
 
