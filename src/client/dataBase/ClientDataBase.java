@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import durak.Durak;
+
 import president.President;
 
 import freePlaySingle.FreePlaySingle;
@@ -43,6 +45,9 @@ public class ClientDataBase {
 		games.put(war.toString(), war);
 		FreePlay freePlay = new FreePlay();
 		games.put(freePlay.toString(), freePlay);
+		Durak durak = new Durak();
+		games.put(durak.toString(), durak);
+		
 		//BlackJack blackJack=new BlackJack();
 		//games.put(blackJack.toString(), blackJack);
 //		FreePlaySingle freePlaySingle = new FreePlaySingle();

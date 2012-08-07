@@ -154,11 +154,11 @@ public abstract class DroppableLayout implements Serializable {
 
 			}
 			for (int i = 0; i < totalDx.length; i++) {
-				setLocationAndAngle(abstractList.get(i),reserved[0][i] + curDx[i],
-						reserved[1][i] + curDy[i],reserved[2][i] + curDAngle[i]);
-				//abstractList.get(i).setLocation(reserved[0][i] + curDx[i],
-						//reserved[1][i] + curDy[i]);
-				//abstractList.get(i).setAngle(reserved[2][i] + curDAngle[i]);
+				//setLocationAndAngle(abstractList.get(i),reserved[0][i] + curDx[i],
+				//		reserved[1][i] + curDy[i],reserved[2][i] + curDAngle[i]);
+				abstractList.get(i).setLocation(reserved[0][i] + curDx[i],
+						reserved[1][i] + curDy[i]);
+				abstractList.get(i).setAngle(reserved[2][i] + curDAngle[i]);
 			}
 			while (percentTime < 1.0 && running) {
 				curTime = System.currentTimeMillis();
@@ -172,20 +172,20 @@ public abstract class DroppableLayout implements Serializable {
 					curDy[i] = percentDistance * totalDy[i];
 					curDAngle[i] = percentDistance * totalDAngle[i];
 					Card card = abstractList.get(i);
-					setLocationAndAngle(card,reserved[0][i] + curDx[i], reserved[1][i]
-							+ curDy[i],reserved[2][i] + curDAngle[i]);
-					//card.setLocation(reserved[0][i] + curDx[i], reserved[1][i]
-					//		+ curDy[i]);
-					//card.setAngle(reserved[2][i] + curDAngle[i]);
+					//setLocationAndAngle(card,reserved[0][i] + curDx[i], reserved[1][i]
+					//		+ curDy[i],reserved[2][i] + curDAngle[i]);
+					card.setLocation(reserved[0][i] + curDx[i], reserved[1][i]
+							+ curDy[i]);
+					card.setAngle(reserved[2][i] + curDAngle[i]);
 				}
 
 			}
 			if (running){
 				for (int i = 0; i < animationArgs[0].length; i++) {
 					Card card = abstractList.get(i);
-					setLocationAndAngle(card, animationArgs[0][i], animationArgs[1][i], animationArgs[2][i]);
-					//card.setLocation(animationArgs[0][i], animationArgs[1][i]);
-					//card.setAngle(animationArgs[2][i]);
+					//setLocationAndAngle(card, animationArgs[0][i], animationArgs[1][i], animationArgs[2][i]);
+					card.setLocation(animationArgs[0][i], animationArgs[1][i]);
+					card.setAngle(animationArgs[2][i]);
 				}
 			}
 		}

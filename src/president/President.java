@@ -56,12 +56,6 @@ public class President extends Game{
 	}
 
 	@Override
-	public int cardsForEachPlayer() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public void dealCards() {
 		int deckSize=deck.getSize();
 		

@@ -18,8 +18,10 @@ public class PlayerHandler implements PlayerEventsHandler{
 			Card topCard=(ClientController.get().getZone(Position.Public.MID)).peek();
 			//check if no one placed any cards during the entire round
 			if (topCard!=null && topCard.getOwner().equals(ClientController.get().getMe().getPosition())){
-				Integer nextPlayerId=ClientController.get().endRound();
-				ClientController.sendAPI().endRound(nextPlayerId);
+//				Integer nextPlayerId=ClientController.get().endRound();
+//				ClientController.sendAPI().endRound(nextPlayerId);
+				
+				ClientController.get().endRound();
 				
 			}
 			

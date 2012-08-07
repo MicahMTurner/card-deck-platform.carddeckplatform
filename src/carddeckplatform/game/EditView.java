@@ -54,9 +54,9 @@ TouchHandler {
 		table.addDroppable(new CustomizationPublic(null, Position.Public.TOPMIDRIGHT,null , new Point(10,11)));
 		
 		
-//		table.addDroppable(new CustomizationPlayer(Player.BOTTOM));
-//		table.addDroppable(new CustomizationPlayer(Player.TOP));
-//		table.addDroppable(new CustomizationPlayer(Player.LEFT));
+		table.addDroppable(new CustomizationPlayer(Player.BOTTOM));
+		table.addDroppable(new CustomizationPlayer(Player.TOP));
+		table.addDroppable(new CustomizationPlayer(Player.LEFT));
 		table.addDroppable(new CustomizationPlayer(Player.RIGHT));
 		
 		setFocusable(true); // necessary for getting the touch events.
