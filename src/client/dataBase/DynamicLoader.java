@@ -20,6 +20,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+import com.twmacinta.util.MD5;
+
 import communication.actions.AddPlayerAction;
 import dalvik.system.DexClassLoader;
 import dalvik.system.PathClassLoader;
@@ -120,4 +122,16 @@ public class DynamicLoader {
 		}		
 		return game;
 	}
+	
+	public String calcMd5(File file){
+		
+		try {
+			return MD5.asHex(MD5.getHash(file));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	} 
+	
 }
