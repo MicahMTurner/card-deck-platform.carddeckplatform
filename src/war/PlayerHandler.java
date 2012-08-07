@@ -12,7 +12,7 @@ public class PlayerHandler implements PlayerEventsHandler{
 
 	@Override
 	public boolean onMyTurn(Player player) {	
-		Public midRightPublic=(Public) (ClientController.get().getZone(Position.Public.MIDRIGHT));
+		Public midRightPublic=(Public) (ClientController.get().getZone(Position.Public.MIDRIGHT));	// add methods.
 		Public midLeftPublic=(Public) (ClientController.get().getZone(Position.Public.MIDLEFT));		
 		if (!midRightPublic.isEmpty() && !midLeftPublic.isEmpty()){
 			if (midRightPublic.cardsHolding()==midLeftPublic.cardsHolding() && !War.tie){

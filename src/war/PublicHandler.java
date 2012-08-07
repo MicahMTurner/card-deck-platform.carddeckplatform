@@ -20,8 +20,7 @@ public class PublicHandler implements PublicEventsHandler{
 		boolean answer=false;
 		Card cardInPublic=publicArea.peek();
 
-		if (card.getOwner().equals(byWhom.getPosition())){
-			
+		if (card.getOwner().equals(byWhom.getPosition())){	
 			if (card.getOwner().equals(cardInPublic.getOwner())){				
 				if (War.tie){
 					if (cardsPlacedWhileTie<2){				

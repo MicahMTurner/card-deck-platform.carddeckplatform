@@ -110,10 +110,7 @@ public class GameActivity extends Activity {
         context=getApplicationContext();
         intent=getIntent();
         thisActivity=this;
-        Display display = getWindowManager().getDefaultDisplay();        
-        GameEnvironment.get().getDeviceInfo().setScreenWidth(display.getWidth());
-        GameEnvironment.get().getDeviceInfo().setScreenHeight(display.getHeight());
-        GameEnvironment.get().getDeviceInfo().setRotationAngle(display.getRotation());
+        
         
         //GameStatus.metrics = getApplicationContext().getResources().getDisplayMetrics();
         

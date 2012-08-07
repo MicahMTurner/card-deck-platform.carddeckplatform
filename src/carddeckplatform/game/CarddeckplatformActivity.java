@@ -33,6 +33,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
@@ -80,6 +81,11 @@ public class CarddeckplatformActivity extends Activity {
     	//host=null;    	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu);
+        
+        Display display = getWindowManager().getDefaultDisplay();        
+        GameEnvironment.get().getDeviceInfo().setScreenWidth(display.getWidth());
+        GameEnvironment.get().getDeviceInfo().setScreenHeight(display.getHeight());
+        GameEnvironment.get().getDeviceInfo().setRotationAngle(display.getRotation());
         
         context = getApplicationContext();
         
@@ -288,7 +294,8 @@ public class CarddeckplatformActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				Intent i = new Intent(getBaseContext(), PrefsActivity.class);
+				//Intent i = new Intent(getBaseContext(), PrefsActivity.class);
+				Intent i = new Intent(getBaseContext(), FreePlayCustomization.class);
 				startActivity(i);
 			}
 		});
