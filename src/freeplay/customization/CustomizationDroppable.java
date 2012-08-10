@@ -73,5 +73,11 @@ public class CustomizationDroppable extends Droppable {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void simpleAdd(Card card) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

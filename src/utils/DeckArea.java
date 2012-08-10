@@ -28,18 +28,21 @@ import client.gui.entities.MetricsConvertion;
 public class DeckArea extends Droppable{
 	
 	
-	boolean firstAdd = true;
+	private boolean firstAdd = true;
 	
-	
+
+	public LinkedList<Card> cards = new LinkedList<Card>();
 	
 	public DeckArea(Position.Button position) {
 		super(position.getId(),position, new Point(10,13),DroppableLayout.LayoutType.NONE);
 		this.image = "playerarea";
 	}
 
-	//change to queue?
-	public LinkedList<Card> cards = new LinkedList<Card>();
 	
+	@Override
+	public void simpleAdd(Card card) {
+		this.cards.add(card);
+	}
 	@Override
 	public AbstractList<Card> getMyCards() {
 		return cards;

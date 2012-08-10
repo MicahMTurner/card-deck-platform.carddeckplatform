@@ -279,9 +279,16 @@ public class ClientController implements Observer {
 	public void endRound() {		
 		disableUi();
 		if(getMe().isMyTurn()){
-			sendAPI().endRound();
-			getMe().setMyTurn(false);
-			ServerConnection.getConnection().send(new Message(new Turn(game.onRoundEnd())));
+			//sendAPI().endRound();
+			
+			Integer nextPlayerId=game.onRoundEnd();
+			if (nextPlayerId!=null){
+				getMe().setMyTurn(false);
+				ServerConnection.getConnection().send(new EndRoundMessage(nextPlayerId,new Turn(nextPlayerId)));
+				//playerTurn(nextPlayerId);
+			}
+			
+			
 			
 		}else{
 			game.onRoundEnd();

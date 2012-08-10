@@ -40,13 +40,18 @@ public class PublicHandler implements PublicEventsHandler{
 							if (midright.cardsHolding()==midleft.cardsHolding()){
 								War.tie=false;
 								ClientController.get().endRound();
+								//ClientController.get().getMe().endTurn();	
 							}
 						}
 					}
 				}else{					
 					cardsPlacedWhileTie=0;
 					card.reveal();
-					ClientController.get().getMe().endTurn();					
+					if (checkForEndRound()){
+						ClientController.get().endRound();
+					}else{
+						ClientController.get().getMe().endTurn();
+					}
 				}
 				answer=true;
 			}
@@ -54,6 +59,19 @@ public class PublicHandler implements PublicEventsHandler{
 		return answer;
 	}
 	
+	
+	private boolean checkForEndRound() {
+		Public midRightPublic=(Public) (ClientController.get().getZone(Position.Public.MIDRIGHT));	// add methods.
+		Public midLeftPublic=(Public) (ClientController.get().getZone(Position.Public.MIDLEFT));		
+		if (!midRightPublic.isEmpty() && !midLeftPublic.isEmpty()){			
+			if (midRightPublic.cardsHolding()==midLeftPublic.cardsHolding() && !War.tie){
+				return true;
+			}
+		}
+		return false;
+	}
+
+
 	@Override
 	public boolean onCardRemoved(Public publicZone, Player player, Card card) {
 		return false;

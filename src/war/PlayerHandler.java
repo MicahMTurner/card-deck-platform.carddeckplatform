@@ -18,16 +18,23 @@ public class PlayerHandler implements PlayerEventsHandler{
 
 	@Override
 	public boolean onTurnEnd(Player player) {	
-		Public midRightPublic=(Public) (ClientController.get().getZone(Position.Public.MIDRIGHT));	// add methods.
-		Public midLeftPublic=(Public) (ClientController.get().getZone(Position.Public.MIDLEFT));		
-		if (!midRightPublic.isEmpty() && !midLeftPublic.isEmpty()){
-			if (midRightPublic.cardsHolding()==midLeftPublic.cardsHolding() && !War.tie){	
-				ClientController.get().endRound();
-				//ClientController.sendAPI().endRound();
-			}
-		}else{
-			ClientController.sendAPI().endTurn(player.getId());
-		}
+//		boolean answer=false; 
+//		Public midRightPublic=(Public) (ClientController.get().getZone(Position.Public.MIDRIGHT));	// add methods.
+//		Public midLeftPublic=(Public) (ClientController.get().getZone(Position.Public.MIDLEFT));		
+//		if (!midRightPublic.isEmpty() && !midLeftPublic.isEmpty()){			
+//			if (midRightPublic.cardsHolding()==midLeftPublic.cardsHolding() && !War.tie){
+//				ClientController.get().endRound();
+//				if (War.tie){
+//					answer=false;
+//				}else{
+//					//ClientController.sendAPI().endRound();
+//					answer=true;
+//				}
+//			}
+//		}else{			
+//		//ClientController.sendAPI().endTurn(player.getId());
+//			answer=true;
+//		}
 		return true;
 	}
 

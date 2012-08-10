@@ -103,9 +103,11 @@ public class Player extends Droppable implements  Comparable<Player>{
 	}
 	public void endTurn(){
 		if (myTurn!=false){
-					
+			
 			handler.onTurnEnd(this);
+		
 			myTurn=false;
+			ClientController.sendAPI().endTurn(id);
 		}
 	}
 	public void deltCard(Card card) {
@@ -209,6 +211,12 @@ public class Player extends Droppable implements  Comparable<Player>{
 	@Override
 	public Card peek() {
 		return hand.get(0);
+	}
+
+	@Override
+	public void simpleAdd(Card card) {
+		this.hand.add(card);
+		
 	}
 
 }
