@@ -39,6 +39,7 @@ import client.controller.LivePosition;
 import client.dataBase.ClientDataBase;
 import client.gui.entities.Droppable;
 
+import communication.link.HostGameDetails;
 import communication.link.ServerConnection;
 import communication.link.TcpIdListener;
 import communication.messages.RestartMessage;
@@ -50,7 +51,7 @@ public class GameActivity extends Activity {
 	public static Activity thisActivity;
 	private ProgressDialog progDialog;
 	private TableView tableview;
-	private TcpIdListener tcpIdListener;
+	//private TcpIdListener tcpIdListener;
 	private Host host;
 	//private boolean disableLivePosition;
 	
@@ -82,9 +83,9 @@ public class GameActivity extends Activity {
 			host.shutDown();
 			host=null;
 		}
-		if (tcpIdListener!=null){
-			tcpIdListener.stop();
-		}
+		//if (tcpIdListener!=null){
+		//	tcpIdListener.stop();
+		//}
 	}
 	
 	@Override
@@ -100,7 +101,7 @@ public class GameActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); 
         host=null;
-        tcpIdListener=null;       
+        //tcpIdListener=null;       
         //disableLivePosition=false;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); 
@@ -142,18 +143,19 @@ public class GameActivity extends Activity {
     	GameEnvironment.get().getHandler().post(new Runnable() {
 			@Override
 			public void run() {
-
+				host=new Host(ClientDataBase.getDataBase().getGame(gameName));
+				//HostGameDetails gameDetails=host.getDetails();
 				if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){
 		    		  //if in tcp mode start id listener.
-		   			  tcpIdListener = new TcpIdListener(GameEnvironment.get().getPlayerInfo().getUsername() , gameName);
-		    		  tcpIdListener.start();
+		   			 // tcpIdListener = new TcpIdListener(host.getHostGameDetails());//new TcpIdListener(GameEnvironment.get().getPlayerInfo().getUsername() , gameName);
+		    		 // tcpIdListener.start();
 		    	  }
 		    	  else if(GameEnvironment.get().getConnectionType()==ConnectionType.BLUETOOTH){
 		    		// in blue-tooth mode there is no need for host id listener.
 		          	GameEnvironment.get().getBluetoothInfo().initServerSocket();
 		    	  }
 				
-		    	host=new Host(ClientDataBase.getDataBase().getGame(gameName));
+		    	
 		    	new Thread(host).start();
 		    	//cdl.countDown();
 			}

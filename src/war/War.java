@@ -193,6 +193,12 @@ public class War extends Game{
 		
 		return new Player(playerInfo, position, uniqueId, new PlayerHandler(), DroppableLayout.LayoutType.HEAP);
 	}
+
+	@Override
+	public String instructions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
 	

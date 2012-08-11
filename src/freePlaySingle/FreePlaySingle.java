@@ -82,4 +82,10 @@ public class FreePlaySingle extends Game{
 		return new utils.Player(playerInfo, position, uniqueId, new PlayerHandler(), DroppableLayout.LayoutType.LINE);
 	}
 
+	@Override
+	public String instructions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
