@@ -227,5 +227,7 @@ public abstract class Game {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	public abstract String instructions();
+	
 
 }

@@ -171,4 +171,10 @@ public class FreePlay extends Game{
 		return new GamePrefs(publicLayout, playerCardsVisible, publicCardsVisible);
 	}
 
+	@Override
+	public String instructions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
