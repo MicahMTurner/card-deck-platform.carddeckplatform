@@ -21,7 +21,9 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableLayout.LayoutParams;
@@ -39,8 +41,7 @@ public class AvailableHosts implements Observer{
 
 		@Override
 		public void onClick(View v) {
-			GameEnvironment.get().getTcpInfo().setHostIp(foundHostIds.get(v.getId()-2).getAddress());
-			//enterGame.onClick(v);
+			GameEnvironment.get().getTcpInfo().setHostIp(foundHostIds.get(v.getId()-2).getAddress());			
 			Intent i = new Intent(context, GameActivity.class);
 			context.startActivity(i);
 			dialog.dismiss();
@@ -52,7 +53,23 @@ public class AvailableHosts implements Observer{
 
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
+			final Dialog dialog=new Dialog(context);
+			dialog.setContentView(R.layout.instructionsdialog);
+			dialog.setTitle("Instructions");
+			
+			TextView instructions=(TextView) dialog.findViewById(R.id.instructionsText);
+			instructions.setText(foundHostIds.get(v.getId()-2).getInstructions());
+			Button closeButton = (Button) dialog.findViewById(R.id.closingButton);
+			closeButton.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					dialog.dismiss();
+				}
+			});
+
+			dialog.show();
+			
 			
 		}
 		
@@ -70,7 +87,8 @@ public class AvailableHosts implements Observer{
 		scrollView = new ScrollView(context);		
 		table= new TableLayout(context);
 		foundHostIds=new ArrayList<HostGameDetails>();	
-		table.setColumnStretchable(0,true);		
+		table.setColumnStretchable(0,true);
+		table.setColumnStretchable(10,true);
 		table.setShrinkAllColumns(true);
 		
 		//make title row
@@ -83,14 +101,15 @@ public class AvailableHosts implements Observer{
 		title.setText("Available Games");
 		title.setGravity(Gravity.CENTER);		
 		title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);  
-	    title.setTypeface(Typeface.SERIF, Typeface.BOLD);  
-	  	rowTitle.addView(title);
+	    title.setTypeface(Typeface.SERIF, Typeface.BOLD); 
+	    TableRow.LayoutParams params = new TableRow.LayoutParams();  
+	    params.span = 11;  
+	  	rowTitle.addView(title,params);
 	  	table.addView(rowTitle);
 	  	
 	  	//make mapping row
 	  	TableRow mappingRow = new TableRow(context);	  	
-	  	mappingRow.setPadding(0, 0, 0, 10);
-	  	TableRow.LayoutParams params = new TableRow.LayoutParams();  
+	  	mappingRow.setPadding(0, 0, 0, 10);	  	
 	    params.span = 4; 
 	    mappingRow.setId(getId());
 	  	mappingRow.addView(getTextView("Game Name"));
@@ -124,7 +143,7 @@ public class AvailableHosts implements Observer{
 				HostGameDetails gameDetails=(HostGameDetails)data;
 				if (!foundHostIds.contains(gameDetails)){
 					foundHostIds.add(gameDetails);
-					TableRow availableGame=new TableRow(context);
+					TableRow availableGame=new TableRow(context);					
 					availableGame.setId(getId());
 					availableGame.setLayoutParams(new LayoutParams(TableRow.LayoutParams.FILL_PARENT,TableRow.LayoutParams.WRAP_CONTENT));
 					availableGame.setOnClickListener(new enterGameClickListener());
@@ -135,7 +154,7 @@ public class AvailableHosts implements Observer{
 					TextView gameId=new TextView(context);
 					gameId.setText(gameDetails.getGameName()+" By "+gameDetails.getOwner());
 					gameId.setGravity(Gravity.CENTER);
-					//gameId.setPadding(0, 0, 0, 0);
+					
 					gameId.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);  
 					gameId.setTypeface(Typeface.SERIF, Typeface.BOLD);
 					availableGame.addView(gameId);
@@ -157,20 +176,24 @@ public class AvailableHosts implements Observer{
 					ImageView instructionIcon = new ImageView(context);
 					instructionIcon.setOnClickListener(new showInstructionsClickListener());
 					instructionIcon.setImageResource(R.drawable.info);
-					instructionIcon.setPadding(60, 0, 40, 0);
-					
+					instructionIcon.setPadding(40, 0, 40, 0);
+					instructionIcon.setId(availableGame.getId());
 					//change color when pressed
+					
 					instructionIcon.setOnTouchListener(new View.OnTouchListener(){
 					
 						@Override
 						public boolean onTouch(View v, MotionEvent event) {
+							if (event.getActionMasked()==MotionEvent.ACTION_DOWN 
+									|| event.getActionMasked()==MotionEvent.ACTION_MOVE){
+								((ImageView)v).setImageResource(R.drawable.pressedinfo);
+								return true;
+							}else if (event.getActionMasked()==MotionEvent.ACTION_UP){
+								v.performClick();
+							}						
+							((ImageView)v).setImageResource(R.drawable.info);
 							
-							((ImageView)v).setImageResource(R.drawable.pressedinfo);
-							if (event.getActionMasked()==MotionEvent.ACTION_CANCEL 
-									|| event.getActionMasked()==MotionEvent.ACTION_UP){
-								
-								((ImageView)v).setImageResource(R.drawable.info);
-							}
+							
 							return true;
 						}
 						
