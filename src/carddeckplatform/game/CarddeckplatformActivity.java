@@ -234,10 +234,6 @@ public class CarddeckplatformActivity extends Activity {
            	         }
            	     }
             	}
-            	
-            	//making blur when button pressed
-            //	dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
-            //            WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
             	dialog.show();
 
                 } 

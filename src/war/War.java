@@ -196,8 +196,9 @@ public class War extends Game{
 
 	@Override
 	public String instructions() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Each player puts one card on a public area, the player with the biggest card wins and start the next turn, in case" +
+				"of tie, both players put 3 cards on the same public area and the highest third card wins, its owner starts" +
+				"the next turn. loser: no cards left in hand. ";
 	}
 	
 }
