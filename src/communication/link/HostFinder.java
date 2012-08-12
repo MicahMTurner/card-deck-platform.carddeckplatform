@@ -32,7 +32,7 @@ public class HostFinder extends Observable implements Runnable{
 	private class Broadcast extends TimerTask{		
 		@Override
 		public void run() {
-			//try {
+		try {
 			byte[] sendData=UDPSENDAUTHENTICATE.getBytes();
 			//tyring broadcasting to 255.255.255.255
 			try{
@@ -45,36 +45,36 @@ public class HostFinder extends Observable implements Runnable{
 				e.printStackTrace();
 			}
 			//***----***DO NOT DELETE THIS***----***//
-//			//broadcast all over the network intefaces
-//			Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-//			while (interfaces.hasMoreElements()){
-//				NetworkInterface networkInterface = interfaces.nextElement();
-//				
-//				if (networkInterface.isLoopback() || !networkInterface.isUp()){
-//					//don't broadcast to loopback interfaces or interfaces that are down
-//					continue;
-//				}
-//				for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()){
-//					InetAddress broadcast = interfaceAddress.getBroadcast();
-//					if (broadcast==null){
-//						continue;
-//					}
-//					//send broadcast package
-//					try {
-//						DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length,broadcast
-//																	,GameEnvironment.get().getTcpInfo().getBroadcastPort());
-//						
-//						socket.send(sendPacket);
-//					} catch (IOException e) {
-//					
-//						e.printStackTrace();
-//					}
-//				}
-//			}
+			//broadcast all over the network interfaces
+			Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+			while (interfaces.hasMoreElements()){
+				NetworkInterface networkInterface = interfaces.nextElement();
+				
+				if (networkInterface.isLoopback() || !networkInterface.isUp()){
+					//don't broadcast to loopback interfaces or interfaces that are down
+					continue;
+				}
+				for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()){
+					InetAddress broadcast = interfaceAddress.getBroadcast();
+					if (broadcast==null){
+						continue;
+					}
+					//send broadcast package
+					try {
+						DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length,broadcast
+																	,GameEnvironment.get().getTcpInfo().getBroadcastPort());
+						
+						socket.send(sendPacket);
+					} catch (IOException e) {
+					
+						e.printStackTrace();
+					}
+				}
+			}
 		
-//		} catch (SocketException e) {
-//			e.printStackTrace();
-//		} 
+		} catch (SocketException e) {
+			e.printStackTrace();
+		} 
 	
 		}
 			

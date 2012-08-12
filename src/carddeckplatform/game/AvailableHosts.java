@@ -53,6 +53,7 @@ public class AvailableHosts implements Observer{
 
 		@Override
 		public void onClick(View v) {
+			((ImageView)v).setImageResource(R.drawable.info);
 			final Dialog dialog=new Dialog(context);
 			dialog.setContentView(R.layout.instructionsdialog);
 			dialog.setTitle("Instructions");
@@ -190,8 +191,9 @@ public class AvailableHosts implements Observer{
 								return true;
 							}else if (event.getActionMasked()==MotionEvent.ACTION_UP){
 								v.performClick();
-							}						
-							((ImageView)v).setImageResource(R.drawable.info);
+							}else{						
+								((ImageView)v).setImageResource(R.drawable.info);
+							}
 							
 							
 							return true;
