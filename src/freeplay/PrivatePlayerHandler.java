@@ -1,5 +1,6 @@
 package freeplay;
 
+import client.controller.ClientController;
 import utils.Card;
 import utils.Player;
 import utils.Position;
@@ -23,11 +24,11 @@ public class PrivatePlayerHandler implements PlayerEventsHandler  {
 	}
 
 	@Override
-	public boolean onCardAdded(Player player, Card card) {
-//		if(isMe)
+	public boolean onCardAdded(Player target, Player player, Card card) {
+		if(ClientController.get().getMe().equals(target))
 			card.reveal();
-//		else
-//			card.hide();
+		else
+			card.hide();
 		return true;
 	}
 

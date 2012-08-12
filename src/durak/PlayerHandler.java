@@ -20,7 +20,7 @@ public class PlayerHandler implements PlayerEventsHandler {
 	}
 
 	@Override
-	public boolean onCardAdded(Player player, Card card) {
+	public boolean onCardAdded(Player target, Player player, Card card) {
 		// TODO Auto-generated method stub
 		if(ClientController.get().getMe().equals(player))
 			card.setRevealed(true);

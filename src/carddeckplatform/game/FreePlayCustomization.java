@@ -64,7 +64,8 @@ public class FreePlayCustomization extends Activity {
     			dialog.show();
     			Button saveProfileButton = (Button) dialog.findViewById(R.id.saveProfileButton);
     			final EditText profileName = (EditText) dialog.findViewById(R.id.profileName);
-    			profileName.setText(((FreePlayProfile)getIntent().getSerializableExtra("profile")).getProfileName());
+    			if((FreePlayProfile)getIntent().getSerializableExtra("profile")!=null)
+    					profileName.setText(((FreePlayProfile)getIntent().getSerializableExtra("profile")).getProfileName());
     			saveProfileButton.setOnClickListener(new OnClickListener() {
 					
 					@Override
