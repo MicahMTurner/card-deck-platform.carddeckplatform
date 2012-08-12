@@ -19,7 +19,7 @@ public class RevealedPlayerHandler implements PlayerEventsHandler  {
 	}
 
 	@Override
-	public boolean onCardAdded(Player player, Card card) {
+	public boolean onCardAdded(Player target, Player player, Card card) {
 		// TODO Auto-generated method stub
 		card.reveal();
 		return true;
