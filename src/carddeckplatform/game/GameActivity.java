@@ -12,6 +12,7 @@ import president.PublicAndButtonHandler;
 import utils.Button;
 import utils.Pair;
 
+import logic.client.Game;
 import logic.host.Host;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -42,6 +43,7 @@ import client.gui.entities.Droppable;
 import communication.link.ServerConnection;
 import communication.link.TcpIdListener;
 import communication.messages.RestartMessage;
+import freeplay.customization.FreePlayProfile;
 
 public class GameActivity extends Activity {
 	private final int SPINNERPROGBAR=0;
@@ -152,8 +154,11 @@ public class GameActivity extends Activity {
 		    		// in blue-tooth mode there is no need for host id listener.
 		          	GameEnvironment.get().getBluetoothInfo().initServerSocket();
 		    	  }
+				Game game = ClientDataBase.getDataBase().getGame(gameName);
 				
-		    	host=new Host(ClientDataBase.getDataBase().getGame(gameName));
+				if(gameName.equals("free play"))
+					game.setFreePlayProfile((FreePlayProfile)getIntent().getSerializableExtra("profile"));
+		    	host=new Host(game);
 		    	new Thread(host).start();
 		    	//cdl.countDown();
 			}

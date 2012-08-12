@@ -209,4 +209,11 @@ public class Table {
 		}
 	}
 	
+	public void clearDroppables(){
+		droppables.clear();
+	}
+	
+	public ArrayBlockingQueue<Droppable> getDroppables() {
+		return droppables;
+	}
 }

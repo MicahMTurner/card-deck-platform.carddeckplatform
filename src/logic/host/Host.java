@@ -74,9 +74,9 @@ public class Host implements Runnable{
 	}
 	
 	public void waitForPlayers() throws Exception{
-		ConnectionsManager.getConnectionsManager().connectHostingPlayer(availablePositions.pop(),game.toString(),game.getPlayers());
+		ConnectionsManager.getConnectionsManager().connectHostingPlayer(availablePositions.pop(),game.toString(),game.getPlayers(), game.getFreePlayProfile());
 		while(ConnectionsManager.getConnectionsManager().getNumberOfConnections()<game.getNumberOfParticipants()){
-			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions.pop(),game.toString(),game.getPlayers(), game.getPrefs());
+			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions.pop(),game.toString(),game.getPlayers(), game.getFreePlayProfile());
 			if (shutDown){
 				throw new Exception("server shutting down");
 			}

@@ -1,6 +1,19 @@
 package carddeckplatform.game;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.util.ArrayList;
+
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
+import freeplay.customization.FreePlayProfile;
 
 import utils.Point;
 
@@ -175,4 +188,46 @@ public class StaticFunctions {
 		}
 		return points;
 	}
+	
+	
+	public static Object readFile(String path){
+		Object res=null;
+		String appPath = GameEnvironment.path;
+		File myFile=new File(appPath + path);
+		
+		FileInputStream fOut;
+		try {
+			fOut = new FileInputStream(myFile);
+			ObjectInput myOutWriter = new ObjectInputStream(fOut);
+			res = myOutWriter.readObject();	
+			myOutWriter.close();
+			fOut.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (StreamCorruptedException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	public static void writeFile(Object obj, String path){
+		String appPath = GameEnvironment.path;
+		File myFile=new File(appPath + path);
+		try {
+			myFile.createNewFile();
+			FileOutputStream fOut = new FileOutputStream(myFile);
+			ObjectOutput myOutWriter = new ObjectOutputStream(fOut);
+			myOutWriter.writeObject(obj);
+			myOutWriter.close();
+			fOut.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }
