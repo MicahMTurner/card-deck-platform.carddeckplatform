@@ -13,6 +13,7 @@ import utils.Position;
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
+import freeplay.customization.FreePlayProfile;
 
 
 
@@ -32,7 +33,7 @@ public abstract class Game {
 	//private ToolsFactory tools=new DefaultTools();
 	//private Player.Position currentTurn;
 	protected Deck deck;
-	
+	protected FreePlayProfile freePlayProfile=null;
 	 
 
 	//protected abstract Player createPlayer(String userName, Position.Player position);
@@ -86,7 +87,7 @@ public abstract class Game {
 		
 		//clearEmptyPositions();	
 		staticPlayers = players;
-		loadPrefs();
+		//loadPrefs();
 	}
 	
 	private void clearEmptyPositions() {
@@ -211,22 +212,33 @@ public abstract class Game {
 		}
 		
 	}
-	public String getPrefsName(){
-		return "";
+	
+	
+	public FreePlayProfile getFreePlayProfile() {
+		return freePlayProfile;
 	}
 	
-	public void loadPrefs(){
-		
+	public void setFreePlayProfile(FreePlayProfile freePlayProfile) {
+		this.freePlayProfile = freePlayProfile;
+		numberOfParticipants = freePlayProfile.getPlayerHandlers().size();
 	}
 	
-	public void applyReceivedPrefs(GamePrefs gamePrefs){
-		
-	}
 	
-	public GamePrefs getPrefs() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+//	public String getPrefsName(){
+//		return "";
+//	}
+	
+//	public void loadProfile(){
+//		
+//	}
+//	
+
+//	
+//	public GamePrefs getPrefs() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 	public abstract String instructions();
 	
 
