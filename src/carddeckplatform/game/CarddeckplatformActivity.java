@@ -147,6 +147,7 @@ public class CarddeckplatformActivity extends Activity {
             	LinearLayout ll = (LinearLayout)dialog.findViewById(R.id.gameListLayout);
             	for(final String gameName : games){
             		Button gameBtn = new Button(getApplicationContext());
+            		gameBtn.setBackgroundDrawable( getResources().getDrawable( R.drawable.graybutton));
             		gameBtn.setText(gameName);
             		gameBtn.setOnClickListener(new OnClickListener() {
 						
