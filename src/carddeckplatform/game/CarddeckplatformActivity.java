@@ -148,15 +148,15 @@ public class CarddeckplatformActivity extends Activity {
 							GameEnvironment.get().getPlayerInfo().setServer(true);							
 							GameEnvironment.get().getTcpInfo().setHostIp("127.0.0.1");			
 							GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
-			                Intent i = new Intent(CarddeckplatformActivity.this, GamePrefsActivity.class);
-			                // always use the tcp server socket since we always need it to connect the hosting player.
+							
+							Intent i;
+							if(gameName.equals("free play"))
+								i = new Intent(CarddeckplatformActivity.this, ProfileCatalogActivity.class);
+							else
+								i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
+							// always use the tcp server socket since we always need it to connect the hosting player.
 			                GameEnvironment.get().getTcpInfo().initServerSocket();
 			                
-			                
-			                // TODO: Correct this.
-			                String prefs = ClientDataBase.getDataBase().getGame(gameName).getPrefsName();
-			                
-			                i.putExtra("gamePrefs", prefs);
 			                i.putExtra("gameName", gameName);			                
 			                i.putExtra("livePosition", livePosition);			               
 			                startActivity(i);
@@ -294,8 +294,7 @@ public class CarddeckplatformActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				//Intent i = new Intent(getBaseContext(), PrefsActivity.class);
-				Intent i = new Intent(getBaseContext(), FreePlayCustomization.class);
+				Intent i = new Intent(getBaseContext(), PrefsActivity.class);
 				startActivity(i);
 			}
 		});

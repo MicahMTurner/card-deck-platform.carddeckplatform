@@ -1,5 +1,7 @@
 package freeplay;
 
+import freeplay.customization.FreePlayProfile;
+import handlers.Handler;
 import handlers.PlayerEventsHandler;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import communication.server.ConnectionsManager;
 
 import carddeckplatform.game.CarddeckplatformActivity;
 import carddeckplatform.game.GameActivity;
+import carddeckplatform.game.StaticFunctions;
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
@@ -36,7 +39,10 @@ public class FreePlay extends Game{
 	private boolean playerCardsVisible;
 	private boolean publicCardsVisible;
 	
-	
+//	public FreePlay(){
+//		freePlayProfile = FreePlayProfile.loadProfile("profile1");
+//		
+//	}
 	
 	@Override
 	public Deck getDeck() {
@@ -71,34 +77,38 @@ public class FreePlay extends Game{
 		PublicHandler publicArea = new PublicHandler();	
 		publicArea.setPublicCardsVisible(publicCardsVisible);
 		droppables.add(new DeckArea(Position.Button.TOPRIGHT));
-		if(publicLayout.equals("free")){
-			droppables.add(new Public(publicArea, Position.Public.MID,DroppableLayout.LayoutType.NONE , new Point(65,65)));
-		} else if(publicLayout.equals("five")){
-			droppables.add(new Public(publicArea, Position.Public.LEFT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));
-			droppables.add(new Public(publicArea, Position.Public.MIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));
-			droppables.add(new Public(publicArea, Position.Public.MID,DroppableLayout.LayoutType.HEAP , new Point(10,13)));
-			droppables.add(new Public(publicArea, Position.Public.MIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));
-			droppables.add(new Public(publicArea, Position.Public.RIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));
-		} else if(publicLayout.equals("all")){
-			droppables.add(new Public(publicArea, Position.Public.BOT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-			droppables.add(new Public(publicArea, Position.Public.BOTMID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-			droppables.add(new Public(publicArea, Position.Public.BOTMIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-			droppables.add(new Public(publicArea, Position.Public.BOTMIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-			droppables.add(new Public(publicArea, Position.Public.LEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-			droppables.add(new Public(publicArea, Position.Public.MID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-			droppables.add(new Public(publicArea, Position.Public.MIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-			droppables.add(new Public(publicArea, Position.Public.MIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-			droppables.add(new Public(publicArea, Position.Public.RIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-			droppables.add(new Public(publicArea, Position.Public.TOP,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-			droppables.add(new Public(publicArea, Position.Public.TOPMID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-			droppables.add(new Public(publicArea, Position.Public.TOPMIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-			droppables.add(new Public(publicArea, Position.Public.TOPMIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		} else if(publicLayout.equals("cross")){
-			droppables.add(new Public(publicArea, Position.Public.MIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-			droppables.add(new Public(publicArea, Position.Public.MIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-			droppables.add(new Public(publicArea, Position.Public.TOPMID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-			droppables.add(new Public(publicArea, Position.Public.BOTMID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));			
-		}		
+//		if(publicLayout.equals("free")){
+//			droppables.add(new Public(publicArea, Position.Public.MID,DroppableLayout.LayoutType.NONE , new Point(65,65)));
+//		} else if(publicLayout.equals("five")){
+//			droppables.add(new Public(publicArea, Position.Public.LEFT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));
+//			droppables.add(new Public(publicArea, Position.Public.MIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));
+//			droppables.add(new Public(publicArea, Position.Public.MID,DroppableLayout.LayoutType.HEAP , new Point(10,13)));
+//			droppables.add(new Public(publicArea, Position.Public.MIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));
+//			droppables.add(new Public(publicArea, Position.Public.RIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));
+//		} else if(publicLayout.equals("all")){
+//			droppables.add(new Public(publicArea, Position.Public.BOT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+//			droppables.add(new Public(publicArea, Position.Public.BOTMID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+//			droppables.add(new Public(publicArea, Position.Public.BOTMIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+//			droppables.add(new Public(publicArea, Position.Public.BOTMIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+//			droppables.add(new Public(publicArea, Position.Public.LEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+//			droppables.add(new Public(publicArea, Position.Public.MID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+//			droppables.add(new Public(publicArea, Position.Public.MIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+//			droppables.add(new Public(publicArea, Position.Public.MIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+//			droppables.add(new Public(publicArea, Position.Public.RIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+//			droppables.add(new Public(publicArea, Position.Public.TOP,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+//			droppables.add(new Public(publicArea, Position.Public.TOPMID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+//			droppables.add(new Public(publicArea, Position.Public.TOPMIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+//			droppables.add(new Public(publicArea, Position.Public.TOPMIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+//		} else if(publicLayout.equals("cross")){
+//			droppables.add(new Public(publicArea, Position.Public.MIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+//			droppables.add(new Public(publicArea, Position.Public.MIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+//			droppables.add(new Public(publicArea, Position.Public.TOPMID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+//			droppables.add(new Public(publicArea, Position.Public.BOTMID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));			
+//		}		
+		for(Droppable d : freePlayProfile.getPublics()){
+			if(d!=null)
+				droppables.add(d);
+		}
 	}
 	
 //	@Override
@@ -123,52 +133,56 @@ public class FreePlay extends Game{
 	public utils.Player getPlayerInstance(PlayerInfo playerInfo,
 			Player position, int uniqueId) {
 		
-		PlayerHandler playerHandler = new PlayerHandler();
+		PlayerEventsHandler playerHandler = freePlayProfile.getPlayerHandlers().get(position);
 		
-		utils.Player p = new utils.Player(playerInfo, position, uniqueId, playerHandler, DroppableLayout.LayoutType.LINE);
-		playerHandler.setAttachedPlayer(p);
+		utils.Player p = new utils.Player(playerInfo, position, uniqueId, (PlayerEventsHandler)playerHandler, DroppableLayout.LayoutType.LINE);
+		//playerHandler.setAttachedPlayer(p);
 		
 		return p;
 	}
 	
-	@Override
-	public String getPrefsName(){
-		return "freeplay";
-	}
-	
-	@Override
-	public void loadPrefs(){
-		try {
-			SharedPreferences preferences = CarddeckplatformActivity.getContext().getSharedPreferences(getPrefsName(), Context.MODE_PRIVATE);		
-			String numberOfPlayers = preferences.getString("playersNum", String.valueOf(minPlayers()));		
-			numberOfParticipants = Integer.parseInt(numberOfPlayers);
-			
-			publicLayout = preferences.getString("publicLayout", "free");
-			playerCardsVisible = preferences.getBoolean("playerCardsVisible" , false);
-			publicCardsVisible = preferences.getBoolean("publicCardsVisible" , true);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			// TODO: handle exception
-		}
-		
-		
-		
-//		String somePreference = preferences.getString("somePreference", defaultValue);
-	}
+//	@Override
+//	public String getPrefsName(){
+//		return "freeplay";
+//	}
 	
 	
-	@Override
-	public void applyReceivedPrefs(GamePrefs gamePrefs){
-		this.publicLayout = new String(gamePrefs.getPublicLayout());
-		this.playerCardsVisible = gamePrefs.getPlayerCardsVisible();
-		this.publicCardsVisible = gamePrefs.getPublicCardsVisible();
+	public void applyProfile(FreePlayProfile freePlayProfile){
+		this.freePlayProfile = freePlayProfile;
 	}
-	
-	@Override
-	public GamePrefs getPrefs() {
-		// TODO Auto-generated method stub
-		return new GamePrefs(publicLayout, playerCardsVisible, publicCardsVisible);
-	}
+
+//	public void loadProfile(){
+//		try {
+//			SharedPreferences preferences = CarddeckplatformActivity.getContext().getSharedPreferences(getPrefsName(), Context.MODE_PRIVATE);		
+//			String numberOfPlayers = preferences.getString("playersNum", String.valueOf(minPlayers()));		
+//			numberOfParticipants = Integer.parseInt(numberOfPlayers);
+//			
+//			publicLayout = preferences.getString("publicLayout", "free");
+//			playerCardsVisible = preferences.getBoolean("playerCardsVisible" , false);
+//			publicCardsVisible = preferences.getBoolean("publicCardsVisible" , true);
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			// TODO: handle exception
+//		}
+//		
+//		
+//		
+////		String somePreference = preferences.getString("somePreference", defaultValue);
+//	}
+//	
+//	
+//
+//	public void applyReceivedProfile(FreePlayProfile gamePrefs){
+//		this.publicLayout = new String(gamePrefs.getPublicLayout());
+//		this.playerCardsVisible = gamePrefs.getPlayerCardsVisible();
+//		this.publicCardsVisible = gamePrefs.getPublicCardsVisible();
+//	}
+//	
+//	@Override
+//	public GamePrefs getPrefs() {
+//		// TODO Auto-generated method stub
+//		return new GamePrefs(publicLayout, playerCardsVisible, publicCardsVisible);
+//	}
 
 }

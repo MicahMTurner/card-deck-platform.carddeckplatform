@@ -1,5 +1,5 @@
-package freeplay.customization;
 
+package freeplay.customization;
 import java.util.AbstractList;
 
 import utils.Card;

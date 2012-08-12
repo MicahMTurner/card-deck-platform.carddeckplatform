@@ -78,9 +78,8 @@ public interface Position extends Serializable{
 	  
 	public enum Public implements Position{
 		MIDRIGHT(new Point(60,50)),BOTMID(new Point(50,60)),MIDLEFT(new Point(40,50)),TOPMID(new Point(50,40)),
-		MID(new Point(50,50)),
 		TOPMIDRIGHT(new Point(60,40)),BOTMIDRIGHT(new Point(60,60)),BOTMIDLEFT(new Point(40,60)),TOPMIDLEFT(new Point(40,40)),		
-		BOT(new Point(50,70)),LEFT(new Point(30,50)),TOP(new Point(50,30)),RIGHT(new Point(70,50));
+		BOT(new Point(50,70)),LEFT(new Point(30,50)),TOP(new Point(50,30)),RIGHT(new Point(70,50)), MID(new Point(50,50));
 		private final Point point;
 		private final int ROWS=4;
 		private int id;		

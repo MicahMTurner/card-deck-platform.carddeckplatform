@@ -1,5 +1,6 @@
 package carddeckplatform.game.gameEnvironment;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.ServerSocket;
@@ -28,6 +29,24 @@ public class GameEnvironment {
 	private Handler handler;
 	private Paint paint;
 	private ExecutorService executor;
+	public final static String path="/sdcard/carddeckplatform/";
+	
+	
+	static{
+		try {
+			File f = new File(path);
+			f.mkdir();
+			
+			f =  new File(path + "profiles/");
+			f.mkdir();
+			
+			f =  new File(path + "plugins/");
+			f.mkdir();
+		} catch (Exception e) {
+			
+		}
+	}
+	
 	
 	/*---Singleton implementation---*/
 	private static class GameEnvironmentHolder
