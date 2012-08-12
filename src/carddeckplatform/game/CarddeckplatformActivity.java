@@ -10,7 +10,7 @@ import java.util.Set;
 import org.newdawn.slick.geom.Circle;
 
 import communication.link.HostFinder;
-import communication.link.HostGameDetails;
+//import communication.link.HostId;
 import communication.link.TcpHostFinder;
 import communication.link.TcpIdListener;
 
@@ -153,15 +153,15 @@ public class CarddeckplatformActivity extends Activity {
 						@Override
 						public void onClick(View v) {							
 							
-			                Intent i = new Intent(CarddeckplatformActivity.this, GamePrefsActivity.class);
-			                // always use the tcp server socket since we always need it to connect the hosting player.
+							
+							Intent i;
+							if(gameName.equals("free play"))
+								i = new Intent(CarddeckplatformActivity.this, ProfileCatalogActivity.class);
+							else
+								i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
+							// always use the tcp server socket since we always need it to connect the hosting player.
 			                GameEnvironment.get().getTcpInfo().initServerSocket();
 			                
-			                
-			                // TODO: Correct this.
-			                String prefs = ClientDataBase.getDataBase().getGame(gameName).getPrefsName();
-			                
-			                i.putExtra("gamePrefs", prefs);
 			                i.putExtra("gameName", gameName);			                
 			                i.putExtra("livePosition", livePosition);			               
 			                startActivity(i);
@@ -245,8 +245,7 @@ public class CarddeckplatformActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				//Intent i = new Intent(getBaseContext(), PrefsActivity.class);
-				Intent i = new Intent(getBaseContext(), FreePlayCustomization.class);
+				Intent i = new Intent(getBaseContext(), PrefsActivity.class);
 				startActivity(i);
 			}
 		});

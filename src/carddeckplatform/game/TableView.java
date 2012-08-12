@@ -68,6 +68,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 
 	public void onMove(float dx, float dy) {
 		translate.postTranslate(dx, dy);
+		
 	}
 	public void startDraggableMotion(String username, int id){
 		Draggable draggable = table.getDraggableById(id);
