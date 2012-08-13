@@ -162,7 +162,8 @@ public class MarketActivity extends Activity {
 				InputStream input = new BufferedInputStream(connection.getInputStream());
 				FileOutputStream output=openFileOutput("file.txt", MODE_PRIVATE);
 //				OutputStream output = new FileOutputStream(ROOT+System.getProperty("file.separator")+"testMe");
-
+				
+				
 				byte data[] = new byte[1024];
 				long total = 0;
 				int count;
