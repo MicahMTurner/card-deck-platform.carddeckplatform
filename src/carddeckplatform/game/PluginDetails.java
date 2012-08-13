@@ -7,17 +7,24 @@ public class PluginDetails {
 	int rank;
 	long sum;
 	long numOfvotes;
+	long size;
 	
 	public PluginDetails(String name, String date, String address, long sum,
-			long numOfvotes) {
+			long numOfvotes,long size) {
 		super();
 		this.name = name;
 		this.date = date;
 		this.address = address;
 		this.sum = sum;
 		this.numOfvotes = numOfvotes;
-		System.out.println((double)sum/(numOfvotes*10));
 		this.rank=(int) Math.round((double)sum/(numOfvotes*10)*10)-1;
+		this.size=size;
+	}
+	public long getSize() {
+		return size;
+	}
+	public void setSize(long size) {
+		this.size = size;
 	}
 	public String getName() {
 		return name;

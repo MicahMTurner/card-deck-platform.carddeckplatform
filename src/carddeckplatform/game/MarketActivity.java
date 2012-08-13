@@ -25,6 +25,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -38,7 +39,7 @@ import com.google.gson.reflect.TypeToken;
 public class MarketActivity extends Activity {
 	Collection<PluginDetails> plugins = new ArrayList<PluginDetails>();
 
-	String ROOT = "";
+	String ROOT = "data";
 	ProgressDialog mProgressDialog;
 	private int progressBarStatus = 0;
 	private Handler progressBarHandler = new Handler();
@@ -47,29 +48,38 @@ public class MarketActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		TableLayout tl = (TableLayout) findViewById(R.id.tablelayout2);
+		setContentView(R.layout.downloadplugin);
+		TableLayout tl = (TableLayout) findViewById(R.id.markettable);
+		Thread thread= new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+					executeHttpGet();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		thread.start();
 		try {
-			executeHttpGet();
-		} catch (Exception e) {
+			thread.join();
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		plugins.getClass();
+			
+			
 		for (Iterator iter = plugins.iterator(); iter.hasNext();) {
 			PluginDetails pd = (PluginDetails) iter.next();
 			TableRow tr = new TableRow(this);
+			tr.setGravity(Gravity.CENTER);
+			
 			Button button = new Button(this);
 			button.setText(pd.getName());
-
-			button.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-
-				}
-			});
+			button.setGravity(Gravity.CENTER);
+			addListenerOnButton(button, pd);
 			tr.addView(button);
 
 			// add his rank
@@ -78,6 +88,7 @@ public class MarketActivity extends Activity {
 			rb.setEnabled(false);
 			rb.setRating((float) ((float) pd.rank * 0.5));
 			tr.addView(rb);
+			tl.addView(tr);
 		}
 	}
 
@@ -115,8 +126,7 @@ public class MarketActivity extends Activity {
 		}
 	}
 
-	public void addListenerOnButton(Button btnStartProgress, final String url) {
-
+	public void addListenerOnButton(Button btnStartProgress, final PluginDetails url) {
 		btnStartProgress.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -126,7 +136,7 @@ public class MarketActivity extends Activity {
 				mProgressDialog.setMessage("Downloading File");
 				mProgressDialog.setIndeterminate(false);
 				mProgressDialog.setMax(100);
-				mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 
 				// execute this when the downloader must be fired
 				DownloadFile downloadFile = new DownloadFile();
@@ -136,58 +146,58 @@ public class MarketActivity extends Activity {
 
 	}
 
-
-	private class DownloadFile extends AsyncTask<String, Integer, String> {
+	private class DownloadFile extends AsyncTask<PluginDetails, Integer, String> {
 		@Override
-		protected String doInBackground(String... sUrl) {
+		protected String doInBackground(PluginDetails... pluginDetail) {
 			try {
-				URL url = new URL(sUrl[0]);
+				
+				URL url = new URL("http://cardsplatform.appspot.com"+pluginDetail[0].getAddress());
 				URLConnection connection = url.openConnection();
 				connection.connect();
 				// this will be useful so that you can show a typical 0-100%
 				// progress bar
-				int fileLength = connection.getContentLength();
+				long fileLength = pluginDetail[0].getSize();
 
 				// download the file
-				InputStream input = new BufferedInputStream(url.openStream());
-				OutputStream output = new FileOutputStream(ROOT);
+				InputStream input = new BufferedInputStream(connection.getInputStream());
+				FileOutputStream output=openFileOutput("file.txt", MODE_PRIVATE);
+//				OutputStream output = new FileOutputStream(ROOT+System.getProperty("file.separator")+"testMe");
 
 				byte data[] = new byte[1024];
 				long total = 0;
 				int count;
 				while ((count = input.read(data)) != -1) {
 					total += count;
+					System.out.println((int) (total * 100 / fileLength));
 					// publishing the progress....
-					publishProgress((int) ((total / fileLength) * 100));
+					publishProgress((int) (total * 100 / fileLength));
 					output.write(data, 0, count);
 				}
-
+				System.out.println("DOWNLOADED");
 				output.flush();
 				output.close();
 				input.close();
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			return null;
 		}
 
 		@Override
 		protected void onPreExecute() {
-			super.onPreExecute();
 			mProgressDialog.show();
 		}
 
 		@Override
 		protected void onProgressUpdate(Integer... progress) {
-			super.onProgressUpdate(progress);
 			mProgressDialog.setProgress(progress[0]);
 		}
+
 		@Override
 		protected void onPostExecute(String result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
 			mProgressDialog.dismiss();
 		}
-		
+
 	}
 
 }

@@ -35,6 +35,8 @@
         <activity android:name=".GetIPActivity" android:screenOrientation="landscape"></activity>
         <activity android:name="PrefsActivity" android:screenOrientation="landscape"></activity>
         <activity android:name="GamePrefsActivity" android:screenOrientation="landscape"></activity>
+        <activity android:name="RankingActivity" android:screenOrientation="landscape"></activity>
+        <activity android:name="MarketActivity" android:screenOrientation="landscape"></activity>
         
         
     </application>
