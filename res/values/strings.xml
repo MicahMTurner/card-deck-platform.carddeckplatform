@@ -13,5 +13,7 @@
     </style>
     <string name="chooseGame">Please choose a game:</string>
     <string name="options">Options</string>
+    <string name="market">Our Market</string>
+    <string name="rating">Plugin Rate</string>
 
 </resources>
