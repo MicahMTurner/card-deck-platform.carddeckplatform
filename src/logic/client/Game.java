@@ -94,6 +94,7 @@ public abstract class Game {
 		
 		//clearEmptyPositions();	
 		staticPlayers = players;
+		roundNumber=0;
 		//loadPrefs();
 	}
 	
