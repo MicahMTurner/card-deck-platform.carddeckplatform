@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
@@ -43,10 +44,10 @@ public class ConnectionsManager {
 		return ConnectionsManagerHolder.connectionsManager;
 	}
 			
-	private ArrayList<Connection> connections;
+	private ArrayBlockingQueue<Connection> connections;
 	
 	private ConnectionsManager() {
-		connections = new ArrayList<Connection>();
+		connections = new ArrayBlockingQueue<Connection>(4);
 //		try {
 //			if(GameEnvironment.getGameEnvironment().getConnectionType()==ConnectionType.TCP || GameEnvironment.getGameEnvironment().getPlayerInfo().isServer()){
 //				serverSocket = new ServerSocket(GameEnvironment.getGameEnvironment().getTcpInfo().getHostPort());
