@@ -20,16 +20,12 @@ import client.dataBase.DynamicLoader;
 
 public class RankingActivity extends Activity {
 
-	private DynamicLoader dl;
-
-	public RankingActivity(DynamicLoader dl) {
-		this.dl = dl;
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		setContentView(R.layout.rankinglayout);
+		DynamicLoader dl=new DynamicLoader();
 		TableLayout tl = (TableLayout) findViewById(R.id.rankTable);
 		ArrayList<Pair<String, String>> plugins = dl.getInstalledPlugins();
 		for (int i = 0; i < plugins.size(); i++) {
