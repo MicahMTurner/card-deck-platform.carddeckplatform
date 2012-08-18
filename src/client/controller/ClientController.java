@@ -130,8 +130,9 @@ public class ClientController implements Observer {
 		public void cardRemoved(ArrayList<Card> cards,String from){
 			ServerConnection.getConnection().send(new Message(new CardRemoved(cards, from)));
 		}
-		public void endRound(){							
-			ServerConnection.getConnection().send(new Message(new EndRoundAction()));
+		public void endRound(Integer nextPlayerId){
+			ServerConnection.getConnection().send(new EndRoundMessage(nextPlayerId,new Turn(nextPlayerId)));
+			//ServerConnection.getConnection().send(new Message(new EndRoundAction()));
 		}
 		public void cardRevealed(Card card){
 			//ServerConnection.getConnection().getMessageSender().send(new Message(new CardRevealAction()))
@@ -278,22 +279,27 @@ public class ClientController implements Observer {
 
 	public void endRound() {		
 		disableUi();
-		if(getMe().isMyTurn()){
-			//sendAPI().endRound();
-			
-			Integer nextPlayerId=game.onRoundEnd();
-			if (nextPlayerId!=null){
-				getMe().setMyTurn(false);
-				ServerConnection.getConnection().send(new EndRoundMessage(nextPlayerId,new Turn(nextPlayerId)));
-				//playerTurn(nextPlayerId);
-			}
-			
-			
-			
-		}else{
-			game.onRoundEnd();
+		Integer nextPlayerId=game.endRound();
+		if (nextPlayerId!=null){
+			playerTurn(nextPlayerId);
 		}
-		
+//		if(getMe().isMyTurn()){
+//			//sendAPI().endRound();
+//			
+//			
+//			if (nextPlayerId!=null){
+//				getMe().setMyTurn(false);
+//				sendAPI().endRound(nextPlayerId);
+//				//ServerConnection.getConnection().send(new EndRoundMessage(nextPlayerId,new Turn(nextPlayerId)));
+//				//playerTurn(nextPlayerId);
+//			}
+//			
+//			
+//			
+//		}else{
+//			game.endRound();
+//		}
+//		
 		
 	}
 	
