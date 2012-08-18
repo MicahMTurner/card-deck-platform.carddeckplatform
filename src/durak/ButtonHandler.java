@@ -12,9 +12,9 @@ public class ButtonHandler implements ButtonEventsHandler {
 	
 	@Override
 	public void onClick() {
-
-			
-		ClientController.get().endRound();
+		System.out.println("bla bla");
+		if(Durak.isAttacked(ClientController.get().getMe()))	
+			ClientController.get().endRound();
 		
 	}
 

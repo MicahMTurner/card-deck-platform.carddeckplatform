@@ -38,6 +38,7 @@ public class Button{
 		this.paint=new Paint();
 		paint.setTextSize(20);
 		paint.setColor(Color.argb(170, 0, 0, 0));
+		enabled = true;
 		//image="button.png";
 	}
 	public Position.Button getPosition() {
