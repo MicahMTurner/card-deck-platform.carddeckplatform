@@ -282,9 +282,9 @@ public class ClientController implements Observer {
 		disableUi();
 		Integer nextPlayerId=game.endRound();
 		if (nextPlayerId!=null){
-			if (GameEnvironment.get().getPlayerInfo().isServer()){
+			//if (GameEnvironment.get().getPlayerInfo().isServer()){
 				game.reArrangeQueue(nextPlayerId);
-			}
+			//}
 			playerTurn(nextPlayerId);
 		}
 //		if(getMe().isMyTurn()){
