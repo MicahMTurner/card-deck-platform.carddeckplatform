@@ -12,6 +12,7 @@ public class PublicHandler implements PublicEventsHandler {
 	@Override
 	public boolean onCardAdded(Public publicZone, Player player, Card card) {
 		boolean answer=false; 
+		// first move.
 		if((player.isMyTurn() && !Durak.hasActiveNumber()) || 
 		   (!Durak.isAttacked(player) && Durak.getActiveNumber(((StandartCard)card).getValue()) && publicZone.cardsHolding()==1)){
 			
@@ -29,6 +30,7 @@ public class PublicHandler implements PublicEventsHandler {
 		if(answer)
 			card.reveal();
 			
+		ClientController.get().getMe().endTurn();
 		return answer;
 	}
 

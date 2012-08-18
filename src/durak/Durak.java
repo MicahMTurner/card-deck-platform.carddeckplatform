@@ -113,7 +113,6 @@ public class Durak extends Game{
 			pairs.add(new Pair(public6, junk));
 			Card.moveTo(pairs);	
 		}else{
-			
 			utils.Player attacktedPlayer = getAttackedPlayer();	
 			ArrayList<Pair<Droppable , Droppable>> pairs = new ArrayList<Pair<Droppable , Droppable>>();		
 			pairs.add(new Pair(public1, attacktedPlayer));
