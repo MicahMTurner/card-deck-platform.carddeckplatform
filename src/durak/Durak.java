@@ -84,7 +84,7 @@ public class Durak extends Game{
 
 	@Override
 	public Integer onRoundEnd() {
-
+		
 		Public public1 =  (Public)ClientController.get().getZone(Position.Public.BOTMID);
 		Public public2 =  (Public)ClientController.get().getZone(Position.Public.BOTMIDLEFT);
 		Public public3 =  (Public)ClientController.get().getZone(Position.Public.BOTMIDRIGHT);
@@ -92,7 +92,8 @@ public class Durak extends Game{
 		Public public5 =  (Public)ClientController.get().getZone(Position.Public.TOPMIDLEFT);
 		Public public6 =  (Public)ClientController.get().getZone(Position.Public.TOPMIDRIGHT);
 		
-		DeckArea junk = (DeckArea)ClientController.get().getZone(Position.Button.BOTLEFT);
+		Public junk = (Public)ClientController.get().getZone(Position.Public.RIGHT.getRelativePosition(ClientController.get().getMe().getGlobalPosition()));
+		
 		
 		
 		// The attacked player managed to beat all cards.
@@ -174,6 +175,7 @@ public class Durak extends Game{
 		PublicHandler publicArea = new PublicHandler();
 		JunkHandler junkHandler = new JunkHandler();
 		
+		// the public areas.
 		droppables.add(new Public(publicArea, Position.Public.BOTMID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
 		droppables.add(new Public(publicArea, Position.Public.BOTMIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
 		droppables.add(new Public(publicArea, Position.Public.BOTMIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
@@ -181,9 +183,13 @@ public class Durak extends Game{
 		droppables.add(new Public(publicArea, Position.Public.TOPMIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
 		droppables.add(new Public(publicArea, Position.Public.TOPMIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
 		
+		// the junk area.
+		droppables.add(new Public(junkHandler, Position.Public.RIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+		
+		// the pass button.
 		buttons.add(new Button(new ButtonHandler(), Position.Button.BOTRIGHT, "Pass"));
 		
-		droppables.add(new DeckArea(Position.Button.BOTLEFT));
+		
 	}
 
 	@Override

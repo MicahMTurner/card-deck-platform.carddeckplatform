@@ -30,7 +30,7 @@ public class PublicHandler implements PublicEventsHandler {
 		if(answer)
 			card.reveal();
 			
-		ClientController.get().getMe().endTurn();
+		//ClientController.get().getMe().endTurn();
 		return answer;
 	}
 
