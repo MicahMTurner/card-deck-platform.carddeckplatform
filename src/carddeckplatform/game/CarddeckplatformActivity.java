@@ -251,6 +251,16 @@ public class CarddeckplatformActivity extends Activity {
 			}
 		});
         
+        Button market= (Button) findViewById(R.id.market);
+        market.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(getBaseContext(), MarketActivity.class);
+				startActivity(i);				
+			}
+		});
+        
     }
 }
 

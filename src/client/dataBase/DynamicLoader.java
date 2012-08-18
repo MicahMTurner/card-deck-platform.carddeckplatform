@@ -136,6 +136,13 @@ public class DynamicLoader {
 		return namesAndMD5;
 	}
 	
+	public ArrayList<Pair<String, String>> getInstalledPlugins(){
+		
+		return null;
+	}
+	
+	
+	
 	public String calcMd5(File file){
 		
 		try {
