@@ -68,6 +68,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 
 	public void onMove(float dx, float dy) {
 		translate.postTranslate(dx, dy);
+		
 	}
 	public void startDraggableMotion(String username, int id){
 		Draggable draggable = table.getDraggableById(id);
@@ -180,10 +181,9 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	public void moveCards(ArrayList<Card> cards, int from, int to, Player byWhom) {
 		Droppable destination = table.getDroppableById(to);
 		Droppable source = table.getDroppableById(from);
-		for (Card card : cards) {		
-			if (destination.addCard(byWhom, card)){
-				source.removeCard(byWhom, card);
-			}else{
+		for (Card card : cards) {
+			if (source.removeCard(byWhom, card) && !destination.addCard(byWhom, card)){				
+				source.simpleAdd(card);
 				card.invalidMove();
 			}
 		}

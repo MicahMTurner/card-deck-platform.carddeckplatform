@@ -17,46 +17,41 @@ public class PublicHandler implements PublicEventsHandler{
 	
 	@Override
 	public boolean onCardAdded(Public publicArea,Player byWhom, Card card) {
+		
 		boolean answer=false;
 		Card cardInPublic=publicArea.peek();
 
-		if (card.getOwner().equals(byWhom.getPosition())){
-			
+		if (card.getOwner().equals(byWhom.getPosition())){	
 			if (card.getOwner().equals(cardInPublic.getOwner())){				
 				if (War.tie){
 					if (cardsPlacedWhileTie<2){				
 						card.hide();
 						++cardsPlacedWhileTie;
 					}else{
-						//already placed 2 cards upside-down
-						card.reveal();
-						Public midright=(Public) ClientController.get().getZone(Position.Public.MIDRIGHT);
-						Public midleft=(Public) ClientController.get().getZone(Position.Public.MIDLEFT);
-						
-						if (byWhom.equals(ClientController.get().getMe())){
-							ClientController.get().disableUi();
-						}
-						
-						if (midright.cardsHolding()==midleft.cardsHolding()){
-							War.tie=false;	
+						if(cardsPlacedWhileTie==3){
+							answer=false;
+						}else{
+							//already placed 2 cards upside-down
+							card.reveal();
+							Public midright=(Public) ClientController.get().getZone(Position.Public.MIDRIGHT);
+							Public midleft=(Public) ClientController.get().getZone(Position.Public.MIDLEFT);
 							
-							Integer nextPlayerId=ClientController.get().endRound();
-							if (nextPlayerId!=null){
-								if (ClientController.get().getMe().getId()!=nextPlayerId){
-									ClientController.get().getMe().endTurn();
-								}else{
-									ClientController.get().enableUi();
-								}
+							++cardsPlacedWhileTie;
+							if (midright.cardsHolding()==midleft.cardsHolding()){
+								War.tie=false;
+								ClientController.get().endRound();
+								//ClientController.get().getMe().endTurn();	
 							}
-//							if (ClientController.get().getMe().equals(byWhom)){
-//								ClientController.get().disableUi();							
-//							}
 						}
 					}
 				}else{					
 					cardsPlacedWhileTie=0;
 					card.reveal();
-					ClientController.get().getMe().endTurn();					
+					if (checkForEndRound()){
+						ClientController.get().endRound();
+					}else{
+						ClientController.get().getMe().endTurn();
+					}
 				}
 				answer=true;
 			}
@@ -64,6 +59,19 @@ public class PublicHandler implements PublicEventsHandler{
 		return answer;
 	}
 	
+	
+	private boolean checkForEndRound() {
+		Public midRightPublic=(Public) (ClientController.get().getZone(Position.Public.MIDRIGHT));	// add methods.
+		Public midLeftPublic=(Public) (ClientController.get().getZone(Position.Public.MIDLEFT));		
+		if (!midRightPublic.isEmpty() && !midLeftPublic.isEmpty()){			
+			if (midRightPublic.cardsHolding()==midLeftPublic.cardsHolding() && !War.tie){
+				return true;
+			}
+		}
+		return false;
+	}
+
+
 	@Override
 	public boolean onCardRemoved(Public publicZone, Player player, Card card) {
 		return false;

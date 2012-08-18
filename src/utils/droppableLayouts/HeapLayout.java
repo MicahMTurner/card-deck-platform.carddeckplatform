@@ -22,15 +22,12 @@ public class HeapLayout extends DroppableLayout {
 		for (int i = 0; i < numberOfCards; i++) {
 			animationArgs[0][i] = i+1;
 			animationArgs[1][i] = i+1;
-			animationArgs[2][i] = 0;
+			animationArgs[2][i] = 0;	
 		}
 		
 		animate(droppable.getCards(),
 				shift(normalizePosition(animationArgs, width/4, height/4),
 						location.getX(), location.getY()), 1000);
-		
-		
-		
 	}
 
 	@Override

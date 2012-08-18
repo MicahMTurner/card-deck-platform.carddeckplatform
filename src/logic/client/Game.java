@@ -13,6 +13,7 @@ import utils.Position;
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
+import freeplay.customization.FreePlayProfile;
 
 
 
@@ -22,7 +23,7 @@ public abstract class Game {
 		//i'm first in the list
 	
 //	public static GamePrefs receivedGamePrefs=null;
-	
+	protected static ArrayList<Player> staticPlayers;
 	protected ArrayList<Player> players = new ArrayList<Player>();
 	protected Queue<utils.Position.Player> turnsQueue=new LinkedList<utils.Position.Player>();
 	protected ArrayList<Droppable> droppables=new ArrayList<Droppable>();
@@ -32,7 +33,7 @@ public abstract class Game {
 	//private ToolsFactory tools=new DefaultTools();
 	//private Player.Position currentTurn;
 	protected Deck deck;
-	
+	protected FreePlayProfile freePlayProfile=null;
 	 
 
 	//protected abstract Player createPlayer(String userName, Position.Player position);
@@ -43,8 +44,6 @@ public abstract class Game {
 	protected abstract Queue<utils.Position.Player> setTurns();
 	//the minimal players count
 	public abstract int minPlayers();
-	//how many cards to split
-	public abstract int cardsForEachPlayer();
 	
 	//the game split cards on the begginng of the game
 	public abstract void dealCards();	
@@ -86,8 +85,9 @@ public abstract class Game {
 
 		//Position.Player x=Position.Player.BOTTOM;
 		
-		//clearEmptyPositions();		
-		loadPrefs();
+		//clearEmptyPositions();	
+		staticPlayers = players;
+		//loadPrefs();
 	}
 	
 	private void clearEmptyPositions() {
@@ -212,21 +212,34 @@ public abstract class Game {
 		}
 		
 	}
-	public String getPrefsName(){
-		return "";
+	
+	
+	public FreePlayProfile getFreePlayProfile() {
+		return freePlayProfile;
 	}
 	
-	public void loadPrefs(){
-		
+	public void setFreePlayProfile(FreePlayProfile freePlayProfile) {
+		this.freePlayProfile = freePlayProfile;
+		numberOfParticipants = freePlayProfile.getPlayerHandlers().size();
 	}
 	
-	public void applyReceivedPrefs(GamePrefs gamePrefs){
-		
-	}
 	
-	public GamePrefs getPrefs() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+//	public String getPrefsName(){
+//		return "";
+//	}
+	
+//	public void loadProfile(){
+//		
+//	}
+//	
+
+//	
+//	public GamePrefs getPrefs() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+	public abstract String instructions();
+	
 
 }

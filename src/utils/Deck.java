@@ -51,6 +51,10 @@ public class Deck{
 		return cards.pop();
 		
 	}
+	
+	public Stack<Card> getCards() {
+		return cards;
+	}
 
 	public int getSize() {
 		return cards.size();

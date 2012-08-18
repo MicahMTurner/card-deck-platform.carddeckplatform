@@ -118,38 +118,7 @@ public class AutoHide implements SensorEventListener {
     	    	 }
     	    	 revealedCards.clear();
     	    	 cardsInHand=0;
-    	     }
-	//} catch (Exception e) {
-		// TODO: handle exception
-	//}
-     
-
-//		float x = event.values[0];
-//		
-//		if(x<5 && !protect){
-//			protect = true;
-//			ArrayList<Card> cards = ClientController.get().getMe().getCards();
-//			hiddenCards = new ArrayList<Card>();
-//			for(Card c : cards){
-//				if(c.isRevealed()){
-//					hiddenCards.add(c);
-//					c.hide();
-//				}
-//			}
-//		}
-//		
-//		if(x>=5 && protect){
-//			protect = false;
-//			for(Card c : hiddenCards){
-//				c.reveal();
-//			}
-//			
-//		}
-	
-		
-		
-		
-		
+    	     }	
 	}
 
 }

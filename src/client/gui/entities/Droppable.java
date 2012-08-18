@@ -110,17 +110,21 @@ public abstract class Droppable implements Serializable {
 
 	public boolean onDrop(Player player, Droppable from, Card card) {		
 		boolean answer=false;		
-		ClientController.sendAPI().cardAdded(card, from.getId(), id, player.getId());				
-		if (addCard(player, card) && from.removeCard(player, card)){
-			answer=true;
+		ClientController.sendAPI().cardAdded(card, from.getId(), id, player.getId());	
+		
+		if (from.removeCard(player, card) && !addCard(player, card)){
+			from.simpleAdd(card);			
 //			if (droppableLayout != null && answer){
 //				rearrange(0);
 //			}
+		}else{
+			answer=true;
 		}
 		
 		return answer;
 
 	}
+	public abstract void simpleAdd(Card card);
 	public boolean isFlingabble(){
 		if(getDroppableLayout()==null)
 			return false;

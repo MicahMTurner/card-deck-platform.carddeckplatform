@@ -12,26 +12,34 @@ public class PlayerHandler implements PlayerEventsHandler{
 
 	@Override
 	public boolean onMyTurn(Player player) {	
-		Public midRightPublic=(Public) (ClientController.get().getZone(Position.Public.MIDRIGHT));
-		Public midLeftPublic=(Public) (ClientController.get().getZone(Position.Public.MIDLEFT));		
-		if (!midRightPublic.isEmpty() && !midLeftPublic.isEmpty()){
-			if (midRightPublic.cardsHolding()==midLeftPublic.cardsHolding() && !War.tie){
-				ClientController.get().disableUi();
-				ClientController.get().getMe().setMyTurn(false);
-				Integer nextPlayerId=ClientController.get().endRound();				
-				ClientController.sendAPI().endRound(nextPlayerId);
-			}
-		}		
+		
 		return true;
 	}
 
 	@Override
-	public boolean onTurnEnd(Player player) {		
+	public boolean onTurnEnd(Player player) {	
+//		boolean answer=false; 
+//		Public midRightPublic=(Public) (ClientController.get().getZone(Position.Public.MIDRIGHT));	// add methods.
+//		Public midLeftPublic=(Public) (ClientController.get().getZone(Position.Public.MIDLEFT));		
+//		if (!midRightPublic.isEmpty() && !midLeftPublic.isEmpty()){			
+//			if (midRightPublic.cardsHolding()==midLeftPublic.cardsHolding() && !War.tie){
+//				ClientController.get().endRound();
+//				if (War.tie){
+//					answer=false;
+//				}else{
+//					//ClientController.sendAPI().endRound();
+//					answer=true;
+//				}
+//			}
+//		}else{			
+//		//ClientController.sendAPI().endTurn(player.getId());
+//			answer=true;
+//		}
 		return true;
 	}
 
 	@Override
-	public boolean onCardAdded(Player player, Card card) {
+	public boolean onCardAdded(Player target, Player player, Card card) {
 		//card.setLocation(player.getX(), player.getY());
 		if (player==null){
 			card.hide();

@@ -23,6 +23,7 @@ import communication.actions.PlayerLeftAction;
 import communication.link.Streams;
 import communication.messages.InitialMessage;
 import communication.messages.Message;
+import freeplay.customization.FreePlayProfile;
 
 public class ConnectionsManager {
 	private ServerSocket serverSocket=null;
@@ -109,10 +110,10 @@ public class ConnectionsManager {
 	 * @param gameId
 	 * @param playersInfo
 	 */
-	public void connectHostingPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo){
+	public void connectHostingPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo, FreePlayProfile freePlayProfile){
 		Acceptor acceptor = new TcpAcceptor();
 		Streams s = acceptor.accept();
-		addConnection(s, position, gameId, playersInfo, null);
+		addConnection(s, position, gameId, playersInfo, freePlayProfile);
 	}
 	
 	
@@ -122,7 +123,7 @@ public class ConnectionsManager {
 	 * @param gameId
 	 * @param playersInfo
 	 */
-	public void connectPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo, GamePrefs gamePrefs){			
+	public void connectPlayer(Position.Player position,String gameId,ArrayList<Player> playersInfo, FreePlayProfile freePlayProfile){			
 		Acceptor acceptor=null;
 		// accept connections according to the connection type specified by the user.
 		if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP)
@@ -132,7 +133,7 @@ public class ConnectionsManager {
 		
 		Streams s = acceptor.accept();
 		if (s!=null){
-			addConnection(s, position, gameId, playersInfo, gamePrefs);
+			addConnection(s, position, gameId, playersInfo, freePlayProfile);
 		}
 	}
 	
@@ -143,13 +144,13 @@ public class ConnectionsManager {
 	 * @param gameId
 	 * @param playersInfo
 	 */
-	public void addConnection(Streams s, Position.Player position,String gameId,ArrayList<Player> playersInfo, GamePrefs gamePrefs){
+	public void addConnection(Streams s, Position.Player position,String gameId,ArrayList<Player> playersInfo, FreePlayProfile freePlayProfile){
 			ObjectOutputStream out=s.getOut();
 			ObjectInputStream in=s.getIn();
 			
 			Connection connection = new Connection(position.getId(),in, out);
 			connections.add(connection);
-			sendTo(new InitialMessage(new InitialConnectionAction(gameId,position,playersInfo, gamePrefs)),connection.getId());
+			sendTo(new InitialMessage(new InitialConnectionAction(gameId,position,playersInfo, freePlayProfile)),connection.getId());
 			connection.getInitialMessage();			
 		    new Thread(connection).start();	
 			

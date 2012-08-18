@@ -12,6 +12,7 @@ import client.controller.ClientController;
 import client.controller.LivePosition;
 import client.dataBase.ClientDataBase;
 import freeplay.FreePlayPrefs;
+import freeplay.customization.FreePlayProfile;
 import logic.client.Game;
 
 
@@ -20,16 +21,15 @@ public class InitialConnectionAction implements Action{
 	private String gameId;
 	private Position.Player position;
 	private ArrayList<Player> newPlayers;
-	private GamePrefs gamePrefs;
+	FreePlayProfile freePlayProfile;
 	
 	
-	public InitialConnectionAction(String gameId, Position.Player position, ArrayList<Player> newPlayers, GamePrefs gamePrefs) {
+	
+	public InitialConnectionAction(String gameId, Position.Player position, ArrayList<Player> newPlayers, FreePlayProfile freePlayProfile) {
 		this.gameId=gameId;
 		this.position=position;
 		this.newPlayers=newPlayers;
-		this.gamePrefs = gamePrefs;
-		
-		
+		this.freePlayProfile = freePlayProfile;
 	}
 	
 //	public InitialConnectionAction(String gameId, Position.Player position, ArrayList<Player> newPlayers) {		
@@ -44,32 +44,11 @@ public class InitialConnectionAction implements Action{
 //		Game.receivedGamePrefs = gamePrefs;
 
 		Game game=ClientDataBase.getDataBase().getGame(gameId);
-		
-		
-		
-//		if(gamePrefs!=null && !GameEnvironment.get().getPlayerInfo().isServer()){
-//			game.applyReceivedPrefs(gamePrefs);
-//		}
-//		else{
-			
-			
-//		}
-			
-		if(!game.getPrefsName().equals("") && !GameEnvironment.get().getPlayerInfo().isServer()){
-			game.applyReceivedPrefs(gamePrefs);
-		}else{
-			game.loadPrefs();
-		}
-		
+		if(freePlayProfile!=null)
+			game.setFreePlayProfile(freePlayProfile);
 		game.setLayouts();
-//		try {
-//			game.setLayouts();
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//		}
 		
 		
-		//game.setLayouts();
 		ClientController.get().setGame(game);
 		
 		//create my instance	
@@ -109,4 +88,5 @@ public class InitialConnectionAction implements Action{
 		
 	}
 
+	
 }
