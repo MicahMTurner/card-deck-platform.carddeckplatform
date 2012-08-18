@@ -71,6 +71,7 @@ public class Durak extends Game{
 		return null;
 	}
 	
+	
 	@Override
 	public Deck getDeck() {	
 		ArrayList<Card> cardsToRemove = new ArrayList<Card>();

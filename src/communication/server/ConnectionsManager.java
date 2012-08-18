@@ -64,7 +64,7 @@ public class ConnectionsManager {
 		return connections.size();
 	}
 
-		
+		 
 	/**
 	 * sendToAll - sends the message to every user.
 	 * @param msg
