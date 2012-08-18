@@ -35,7 +35,9 @@ import logic.client.Game;
 public class War extends Game{
 	static public boolean tie=false;
 
-
+	public War() {
+		tie=false;
+	}
 	@Override
 	public Queue<Position.Player> setTurns() {
 		return utils.Turns.clockWise(Position.Player.BOTTOM);
