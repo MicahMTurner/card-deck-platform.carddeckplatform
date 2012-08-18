@@ -32,13 +32,13 @@ public class BitmapHolder {
 	}
 		
 	public Bitmap getBitmap(String bitmapName){
-		Context context = GameActivity.getContext();
+		Context context =  CarddeckplatformActivity.getContext();
 		Bitmap img=bitmaps.get(bitmapName);
-			if (img==null){			
-				int resourceId=context.getResources().getIdentifier(bitmapName, "drawable", "carddeckplatform.game");
-				img = BitmapFactory.decodeResource(context.getResources(), resourceId);
-				bitmaps.put(bitmapName, img);
-			}
+		if (img==null){			
+			int resourceId=context.getResources().getIdentifier(bitmapName, "drawable", "carddeckplatform.game");
+			img = BitmapFactory.decodeResource(context.getResources(), resourceId);
+			bitmaps.put(bitmapName, img);
+		}
 		
 		
 		return img;

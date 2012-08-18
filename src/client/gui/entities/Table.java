@@ -205,8 +205,15 @@ public class Table {
 
 	public void clearCards() {
 		for(Droppable d : droppables){
-			d.getMyCards().clear();
+			d.clear();
 		}
 	}
 	
+	public void clearDroppables(){
+		droppables.clear();
+	}
+	
+	public ArrayBlockingQueue<Droppable> getDroppables() {
+		return droppables;
+	}
 }

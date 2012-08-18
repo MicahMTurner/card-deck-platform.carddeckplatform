@@ -12,6 +12,7 @@ import president.PublicAndButtonHandler;
 import utils.Button;
 import utils.Pair;
 
+import logic.client.Game;
 import logic.host.Host;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -39,9 +40,11 @@ import client.controller.LivePosition;
 import client.dataBase.ClientDataBase;
 import client.gui.entities.Droppable;
 
+import communication.link.HostGameDetails;
 import communication.link.ServerConnection;
 import communication.link.TcpIdListener;
 import communication.messages.RestartMessage;
+import freeplay.customization.FreePlayProfile;
 
 public class GameActivity extends Activity {
 	private final int SPINNERPROGBAR=0;
@@ -50,7 +53,7 @@ public class GameActivity extends Activity {
 	public static Activity thisActivity;
 	private ProgressDialog progDialog;
 	private TableView tableview;
-	private TcpIdListener tcpIdListener;
+	//private TcpIdListener tcpIdListener;
 	private Host host;
 	//private boolean disableLivePosition;
 	
@@ -82,9 +85,9 @@ public class GameActivity extends Activity {
 			host.shutDown();
 			host=null;
 		}
-		if (tcpIdListener!=null){
-			tcpIdListener.stop();
-		}
+		//if (tcpIdListener!=null){
+		//	tcpIdListener.stop();
+		//}
 	}
 	
 	@Override
@@ -100,7 +103,7 @@ public class GameActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); 
         host=null;
-        tcpIdListener=null;       
+        //tcpIdListener=null;       
         //disableLivePosition=false;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); 
@@ -110,10 +113,7 @@ public class GameActivity extends Activity {
         context=getApplicationContext();
         intent=getIntent();
         thisActivity=this;
-        Display display = getWindowManager().getDefaultDisplay();        
-        GameEnvironment.get().getDeviceInfo().setScreenWidth(display.getWidth());
-        GameEnvironment.get().getDeviceInfo().setScreenHeight(display.getHeight());
-        GameEnvironment.get().getDeviceInfo().setRotationAngle(display.getRotation());
+        
         
         //GameStatus.metrics = getApplicationContext().getResources().getDisplayMetrics();
         
@@ -145,18 +145,22 @@ public class GameActivity extends Activity {
     	GameEnvironment.get().getHandler().post(new Runnable() {
 			@Override
 			public void run() {
-
+				host=new Host(ClientDataBase.getDataBase().getGame(gameName));
+				//HostGameDetails gameDetails=host.getDetails();
 				if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){
 		    		  //if in tcp mode start id listener.
-		   			  tcpIdListener = new TcpIdListener(GameEnvironment.get().getPlayerInfo().getUsername() , gameName);
-		    		  tcpIdListener.start();
+		   			 // tcpIdListener = new TcpIdListener(host.getHostGameDetails());//new TcpIdListener(GameEnvironment.get().getPlayerInfo().getUsername() , gameName);
+		    		 // tcpIdListener.start();
 		    	  }
 		    	  else if(GameEnvironment.get().getConnectionType()==ConnectionType.BLUETOOTH){
 		    		// in blue-tooth mode there is no need for host id listener.
 		          	GameEnvironment.get().getBluetoothInfo().initServerSocket();
 		    	  }
+				Game game = ClientDataBase.getDataBase().getGame(gameName);
 				
-		    	host=new Host(ClientDataBase.getDataBase().getGame(gameName));
+				if(gameName.equals("free play"))
+					game.setFreePlayProfile((FreePlayProfile)getIntent().getSerializableExtra("profile"));
+		    	host=new Host(game);
 		    	new Thread(host).start();
 		    	//cdl.countDown();
 			}
