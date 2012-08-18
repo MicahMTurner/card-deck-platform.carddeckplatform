@@ -35,7 +35,7 @@ public abstract class Game {
 	protected Deck deck;
 	protected FreePlayProfile freePlayProfile=null;
 	 
-
+	protected int roundNumber;
 	//protected abstract Player createPlayer(String userName, Position.Player position);
 	public abstract Deck getDeck();
 	//what to do when round has ended
@@ -71,11 +71,18 @@ public abstract class Game {
 	public void initiate(){
 		deck=getDeck();	
 	}
+	public Integer endRound(){
+		roundNumber++;
+		return onRoundEnd();
+	}
 	
 	public int getNumberOfParticipants() {
 		if(numberOfParticipants==0)
 			return minPlayers();
 		return numberOfParticipants;
+	}
+	public int getRoundNumber() {
+		return roundNumber;
 	}
 	
 	public void setupTurns(){
