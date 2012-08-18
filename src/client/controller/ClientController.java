@@ -132,7 +132,7 @@ public class ClientController implements Observer {
 		}
 		public void endRound(){
 			//Integer nextPlayerId=game.endRound();
-			ServerConnection.getConnection().send(new EndRoundMessage(new EndRoundAction()));
+			ServerConnection.getConnection().send(new Message(new EndRoundAction()));
 			//ServerConnection.getConnection().send(new Message(new EndRoundAction()));
 		}
 		public void cardRevealed(Card card){
