@@ -103,16 +103,18 @@ public class OvershootAnimation extends Animation {
 	}
 	@Override
 	protected void postAnimation() {
+		card.onRelease();
 		if(sendToCommunication){
 			
 			ClientController.sendAPI().endDragMotion(card.getId());
+			
 			if (!destination.onDrop(ClientController.get().getMe(), source,
 					((Card) card))){
 				card.invalidMove();
 			}
 			
 		}
-		card.onRelease();
+		
 		
 	}
 	

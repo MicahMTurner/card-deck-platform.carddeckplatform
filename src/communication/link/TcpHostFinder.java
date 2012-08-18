@@ -3,12 +3,20 @@ package communication.link;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Enumeration;
+
+import javax.sound.midi.ControllerEventListener;
 
 
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
@@ -17,7 +25,10 @@ import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 import android.widget.TextView;
 
-public class TcpHostFinder extends HostFinder {
+public class TcpHostFinder extends HostFinder{
+	private final String UDPSENDAUTHENTICATE="cardDeckPlatfromUDPBroadcast";
+	private final String UDPRESPONSEAUTH="cardDeckPlatformUDPBroadcastResponse";
+	
 	public String   s_dns1 ;
 	public String   s_dns2;     
 	public String   s_gateway;  
@@ -28,83 +39,110 @@ public class TcpHostFinder extends HostFinder {
 	TextView info;
 	DhcpInfo d;
 	WifiManager wifii;
+	DatagramSocket socket;
 	
 	private ArrayList<String> connectedDevices = new ArrayList<String>();
 	
 	
 	public TcpHostFinder(WifiManager wifii){
 		this.wifii = wifii;
-	}
-	
-	public String intToIp(int i, int offset) {
-
-		String str1 = String.valueOf(((i >> 24 ) + offset) & 0xFF);
-		String str2 = ((i >> 16 ) & 0xFF) + ".";
-	    String str3 = ((i >> 8 ) & 0xFF) + ".";
-	    String str4 = ( i & 0xFF)+ ".";
-		   return str4 + str3 + str2 + str1;
-	}
-	
-//	public void checkHosts(){
-//		   int timeout=100;
-//		   for (int i=1;i<254;i++){
-//		       try {
-//		    	   if (InetAddress.getByName(intToIp(d.gateway,i)).isReachable(timeout)){
-//				       System.out.println(intToIp(d.gateway,i) + " is reachable");
-//				       connectedDevices.add(intToIp(d.gateway,i));
-//		    	   }
-//		       } catch (UnknownHostException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//		       } catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//		       }
-//		   }
-//		}
-	
-	@Override
-	public void findAvailableHosts(ArrayList<HostId> hosts){
-		Socket socket = null;
-		ObjectOutputStream out = null;
-		ObjectInputStream in = null;
-		HostId hostId = null;		
-		
-        d=wifii.getDhcpInfo();
-//        checkHosts();
-//        s_dns1="DNS 1: "+String.valueOf(intToIp(d.dns1,0)) + " " + String.valueOf(d.dns1);
-//        s_dns2="DNS 2: "+String.valueOf(intToIp(d.dns2,0)) + " " + String.valueOf(d.dns2);   
-//        s_gateway="Default Gateway: "+String.valueOf(intToIp(d.gateway,0)) + " " + String.valueOf(d.gateway);    
-//        s_ipAddress="IP Address: "+String.valueOf(intToIp(d.ipAddress,0)) + " " + String.valueOf(d.ipAddress); 
-//        s_leaseDuration="Lease Time: "+String.valueOf(d.leaseDuration);     
-//        s_netmask="Subnet Mask: "+String.valueOf(intToIp(d.netmask,0)) + " " + String.valueOf(d.netmask);    
-//        s_serverAddress="Server IP: "+String.valueOf(intToIp(d.serverAddress,0)) + " " + String.valueOf(d.serverAddress);
-		
-        // scans the network and try to find hosts
-        System.out.println("scanning ");
-		for(int i=1; i<254; i++){
-			try {
-				socket = new Socket();
-				SocketAddress sockaddr = new InetSocketAddress(intToIp(d.gateway,i), GameEnvironment.get().getTcpInfo().getIdPort());
-				socket.connect(sockaddr, 100);
-				System.out.println(intToIp(d.gateway,i) + " is reachable");
-				if(!socket.isConnected())
-					continue;
-				out = new ObjectOutputStream(socket.getOutputStream());
-				in = new ObjectInputStream(socket.getInputStream());		
-				hostId = (HostId) in.readObject();
-				hostId.setAddress(intToIp(d.gateway,i));
-				hosts.add(hostId);
-				hostId = null;
-				out.close();
-				in.close();
-				socket.close();
-			} catch (Exception e) {
-				int x=5;
-				// TODO: handle exception
-				//System.out.println(intToIp(d.gateway,i) + " is not reachable");
-				//System.out.println(e.getMessage());
-			}
+		try {
+			socket=new DatagramSocket();				
+			socket.setBroadcast(true);
+		} catch (SocketException e) {			
+			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void findAvailableHosts(ArrayList<HostGameDetails> hosts){
+		broadcast();
+		//while (!stop){
+		//	hosts.add(waitForResponse());
+		//}
+		
+	}
+
+	private void waitForResponse() {
+		try{
+			byte[] rcvBuffer = new byte[15000];
+			DatagramPacket rcvPacket = new DatagramPacket(rcvBuffer, rcvBuffer.length);
+			socket.receive(rcvPacket);
+		
+			//got a response, check if message is valid
+			String message = new String(rcvPacket.getData()).trim();
+			if (message.equals(UDPRESPONSEAUTH)){
+				
+				getHostId(rcvPacket.getAddress(),rcvPacket.getPort());
+			}
+			socket.close();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+
+	private void getHostId(InetAddress inetAddress,int port) {
+		try {
+			Socket socket;
+		
+			socket = new Socket(inetAddress,port);		
+			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+			HostGameDetails hostId=(HostGameDetails) in.readObject();
+			//hostId.setAddress(inetAddress.getHostAddress());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+	private void broadcast() {
+		try {
+			byte[] sendData=UDPSENDAUTHENTICATE.getBytes();
+			//tyring broadcasting to 255.255.255.255
+			try{
+				DatagramPacket sendPacket= new DatagramPacket(sendData, sendData.length,InetAddress.getByName("255.255.255.255")
+															,GameEnvironment.get().getTcpInfo().getBroadcastPort());
+				socket.send(sendPacket);
+			}catch (UnknownHostException e) {			
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			//broadcast all over the network intefaces
+			Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+			while (interfaces.hasMoreElements()){
+				NetworkInterface networkInterface = interfaces.nextElement();
+				
+				if (networkInterface.isLoopback() || !networkInterface.isUp()){
+					//don't broadcast to loopback interfaces or interfaces that are down
+					continue;
+				}
+				for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()){
+					InetAddress broadcast = interfaceAddress.getBroadcast();
+					if (broadcast==null){
+						continue;
+					}
+					//send broadcast package
+					try {
+						DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length,broadcast
+																	,GameEnvironment.get().getTcpInfo().getBroadcastPort());
+						
+						socket.send(sendPacket);
+					} catch (IOException e) {
+					
+						e.printStackTrace();
+					}
+				}
+			}
+		socket.close();	
+		} catch (SocketException e) {
+			e.printStackTrace();
+		} 
+	
 	}
 }

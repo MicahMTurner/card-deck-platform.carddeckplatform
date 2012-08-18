@@ -56,12 +56,6 @@ public class President extends Game{
 	}
 
 	@Override
-	public int cardsForEachPlayer() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public void dealCards() {
 		int deckSize=deck.getSize();
 		
@@ -110,6 +104,12 @@ public class President extends Game{
 	public utils.Player getPlayerInstance(PlayerInfo playerInfo,
 			Player position, int uniqueId) {		
 		return new utils.Player(playerInfo, position, uniqueId, new PlayerHandler(), DroppableLayout.LayoutType.LINE);
+	}
+
+	@Override
+	public String instructions() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

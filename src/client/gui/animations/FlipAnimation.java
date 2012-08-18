@@ -13,7 +13,6 @@ import android.os.AsyncTask;
 public class FlipAnimation extends Animation {
 
 	public FlipAnimation(Droppable source, Droppable destination,Card card,boolean sendToCommunication) {
-		super();
 		this.source = source;
 		this.destination = destination;
 		this.card=card;

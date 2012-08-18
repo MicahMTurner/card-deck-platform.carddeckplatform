@@ -123,6 +123,18 @@ public class DynamicLoader {
 		}		
 		return game;
 	}
+	//maybe if we return HASH-MAP , the performance would be better
+	public ArrayList<Pair<String, String>> getFileNamesAndMD5(){
+		
+		ArrayList<Pair<String, String>>namesAndMD5 = new ArrayList<Pair<String,String>>();
+		//go over mapping game names
+		for (String gameName : mapping.keySet()){
+			//add game name ".jar" , create new file instance from plugin dir.
+			Pair<String,String> nameAndMD5= new Pair<String, String>(gameName+".jar", calcMd5(new File(PLUGINDIR+"/"+gameName+".jar")));
+			namesAndMD5.add(nameAndMD5);
+		}
+		return namesAndMD5;
+	}
 	
 	public ArrayList<Pair<String, String>> getInstalledPlugins(){
 		

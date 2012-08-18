@@ -30,7 +30,7 @@ public  class StandartCard extends Card {
 		super(handler,frontImg,backImg);
 		this.value=value;	
 		this.color=color;
-		this.scale = new Point(6,10);
+		this.scale = new Point(5,10);
 		this.handScale = new Point(3,5);
 		BitmapHolder.get().scaleBitmap(frontImg, this.scale);
 		BitmapHolder.get().scaleBitmap(backImg, this.scale);

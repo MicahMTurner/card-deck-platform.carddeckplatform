@@ -11,7 +11,7 @@ import client.gui.entities.Droppable;
 public class Public extends Droppable{	
 	private PublicEventsHandler handler;
 	
-	private LinkedList<Card> cards=new LinkedList<Card>();	
+	protected LinkedList<Card> cards=new LinkedList<Card>();	
 	
 	
 	
@@ -61,7 +61,11 @@ public class Public extends Droppable{
 		card.setLocation(getX(), getY());
 		
 	}
-
+	@Override
+	public void simpleAdd(Card card) {
+		this.cards.add(card);
+		
+	}
 	@Override
 	public int cardsHolding() {		
 		return cards.size();

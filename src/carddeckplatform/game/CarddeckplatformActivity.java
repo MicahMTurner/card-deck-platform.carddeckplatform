@@ -10,7 +10,7 @@ import java.util.Set;
 import org.newdawn.slick.geom.Circle;
 
 import communication.link.HostFinder;
-import communication.link.HostId;
+//import communication.link.HostId;
 import communication.link.TcpHostFinder;
 import communication.link.TcpIdListener;
 
@@ -33,13 +33,17 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.ViewFlipper;
 
 
@@ -80,6 +84,11 @@ public class CarddeckplatformActivity extends Activity {
     	//host=null;    	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu);
+        
+        Display display = getWindowManager().getDefaultDisplay();        
+        GameEnvironment.get().getDeviceInfo().setScreenWidth(display.getWidth());
+        GameEnvironment.get().getDeviceInfo().setScreenHeight(display.getHeight());
+        GameEnvironment.get().getDeviceInfo().setRotationAngle(display.getRotation());
         
         context = getApplicationContext();
         
@@ -125,6 +134,10 @@ public class CarddeckplatformActivity extends Activity {
         hostBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
             	final Dialog dialog = new Dialog(CarddeckplatformActivity.this);
+            	GameEnvironment.get().getPlayerInfo().setServer(true);							
+				GameEnvironment.get().getTcpInfo().setHostIp("127.0.0.1");			
+				GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
+				
             	dialog.setContentView(R.layout.gamelistdialog);
             	// gets user prefs.
                 getPrefs();
@@ -134,23 +147,22 @@ public class CarddeckplatformActivity extends Activity {
             	LinearLayout ll = (LinearLayout)dialog.findViewById(R.id.gameListLayout);
             	for(final String gameName : games){
             		Button gameBtn = new Button(getApplicationContext());
+            		gameBtn.setBackgroundDrawable( getResources().getDrawable( R.drawable.graybutton));
             		gameBtn.setText(gameName);
             		gameBtn.setOnClickListener(new OnClickListener() {
 						
 						@Override
 						public void onClick(View v) {							
-							GameEnvironment.get().getPlayerInfo().setServer(true);							
-							GameEnvironment.get().getTcpInfo().setHostIp("127.0.0.1");			
-							GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
-			                Intent i = new Intent(CarddeckplatformActivity.this, GamePrefsActivity.class);
-			                // always use the tcp server socket since we always need it to connect the hosting player.
+							
+							
+							Intent i;
+							if(gameName.equals("free play"))
+								i = new Intent(CarddeckplatformActivity.this, ProfileCatalogActivity.class);
+							else
+								i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
+							// always use the tcp server socket since we always need it to connect the hosting player.
 			                GameEnvironment.get().getTcpInfo().initServerSocket();
 			                
-			                
-			                // TODO: Correct this.
-			                String prefs = ClientDataBase.getDataBase().getGame(gameName).getPrefsName();
-			                
-			                i.putExtra("gamePrefs", prefs);
 			                i.putExtra("gameName", gameName);			                
 			                i.putExtra("livePosition", livePosition);			               
 			                startActivity(i);
@@ -166,77 +178,27 @@ public class CarddeckplatformActivity extends Activity {
         
         joinBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
-            	//GameStatus.isServer = false;
-            	GameEnvironment.get().getPlayerInfo().setServer(false);
-            	//making dialog to get ip
-            	//GameStatus.me=new Player(GameStatus.username,GameStatus.localIp);
+            	
+            	GameEnvironment.get().getPlayerInfo().setServer(false);            	
+
+            	GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
+            	
+            	//making dialog to get ip            
             	final Dialog dialog = new Dialog(CarddeckplatformActivity.this);
-            	dialog.setContentView(R.layout.hostlist);
-            	dialog.setTitle("List of available games");
-            	LinearLayout ll = (LinearLayout)dialog.findViewById(R.id.hostListLayout);
+            	AvailableHosts availableHosts= new AvailableHosts(CarddeckplatformActivity.this,dialog);
+            	//set table size
+            	LayoutParams params=new LayoutParams(700, 500);
+            	dialog.setContentView(availableHosts.getTable(),params);           	
+            	
+            	LinearLayout ll = (LinearLayout)dialog.findViewById(R.id.gameListLayout);
             	// gets user prefs.
                 getPrefs();
-            	// finds all available 
-            	ArrayList<HostId> hosts;
-            	
-            	
-            	// adds the localhost option for emulator debug (should be removed in the release version).
-            	Button hostBtn = new Button(getApplicationContext());
-            	hostBtn.setText("Local host");
-            	hostBtn.setOnClickListener(new OnClickListener(){
-					@Override
-					public void onClick(View arg0) {
-						
-						GameEnvironment.get().getPlayerInfo().setServer(false);
-						GameEnvironment.get().getTcpInfo().setHostIp("192.168.2.102");
-		            	GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
-		            	
-		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
-		                startActivity(i);
-		                dialog.dismiss();
-					}    		
-            	});
-            	ll.addView(hostBtn);
-            	
-            	hostBtn = new Button(getApplicationContext());
-            	hostBtn.setText("Default tethering");
-            	hostBtn.setOnClickListener(new OnClickListener(){
-					@Override
-					public void onClick(View arg0) {
-						
-						GameEnvironment.get().getPlayerInfo().setServer(false);
-						GameEnvironment.get().getTcpInfo().setHostIp("192.168.43.1");
-		            	GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
-		            	
-		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
-		                startActivity(i);
-		                dialog.dismiss();
-					}    		
-            	});
-            	ll.addView(hostBtn);
-            	
+
             	if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){
-//            		HostFinder hostFinder = new TcpHostFinder((WifiManager) getSystemService(Context.WIFI_SERVICE));
-//                	hosts = hostFinder.findHosts();
-//	            	for(final HostId hostId : hosts){
-//	            		hostBtn = new Button(getApplicationContext());
-//	            		hostBtn.setText("Play " + hostId.getGameName() + " with " + hostId.getOwner());
-//	            		hostBtn.setOnClickListener(new OnClickListener(){
-//	    					@Override
-//	    					public void onClick(View arg0) {
-//	    						
-//	    		            	
-//	    		            	GameEnvironment.get().getPlayerInfo().setServer(false);
-//	    						GameEnvironment.get().getTcpInfo().setHostIp(hostId.getAddress());
-//	    		            	GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
-//	    		            	
-//	    		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
-//	    		                startActivity(i);
-//	    		                dialog.dismiss();
-//	    					}                		
-//	                	});
-//	            		ll.addView(hostBtn);
-	            	//}
+            		HostFinder hostFinder = new HostFinder();
+            		hostFinder.addObserver(availableHosts);
+                	hostFinder.findHosts();
+
             	}else if(GameEnvironment.get().getConnectionType()==ConnectionType.BLUETOOTH){
             		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             		if (mBluetoothAdapter == null) {
@@ -253,7 +215,7 @@ public class CarddeckplatformActivity extends Activity {
            	             System.out.println("found");
            	             String name = device.getName();
            	             String Address = device.getAddress(); 
-           	             hostBtn = new Button(getApplicationContext());
+           	             Button hostBtn = new Button(getApplicationContext());
            	             hostBtn.setText(name);
            	             hostBtn.setOnClickListener(new OnClickListener(){
 	    					@Override
@@ -273,10 +235,6 @@ public class CarddeckplatformActivity extends Activity {
            	         }
            	     }
             	}
-            	
-            	//making blur when button pressed
-            	dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
-                        WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
             	dialog.show();
 
                 } 

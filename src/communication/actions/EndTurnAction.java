@@ -6,10 +6,10 @@ import utils.Position;
 
 public class EndTurnAction implements Action{
 	
-	Position.Player position;
+	int playerId;
 	
-	public EndTurnAction(Position.Player position) {
-		this.position=position;
+	public EndTurnAction(int playerId) {
+		this.playerId=playerId;
 	}
 	
 	@Override

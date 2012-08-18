@@ -42,12 +42,6 @@ public class FreePlaySingle extends Game{
 	}
 
 	@Override
-	public int cardsForEachPlayer() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public void dealCards() {
 		int size=deck.getSize();
 		ArrayList<Card>cards=new ArrayList<Card>();
@@ -86,6 +80,12 @@ public class FreePlaySingle extends Game{
 	public utils.Player getPlayerInstance(PlayerInfo playerInfo,
 			Player position, int uniqueId) {
 		return new utils.Player(playerInfo, position, uniqueId, new PlayerHandler(), DroppableLayout.LayoutType.LINE);
+	}
+
+	@Override
+	public String instructions() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
