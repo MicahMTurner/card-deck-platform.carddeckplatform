@@ -211,12 +211,14 @@ public abstract class Game {
 					break;
 				}
 			}
-			Position.Player next=turnsQueue.poll();
-			while (!next.equals(startingPlayer)){
+			Position.Player next=turnsQueue.poll();	
+			if (next!=null){
+				while (!next.equals(startingPlayer)){
+					turnsQueue.add(next);
+					next=turnsQueue.poll();
+				}
 				turnsQueue.add(next);
-				next=turnsQueue.poll();
 			}
-			turnsQueue.add(next);
 		}
 		
 	}
