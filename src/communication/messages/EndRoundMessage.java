@@ -13,16 +13,16 @@ public class EndRoundMessage extends Message{
 		this.nextPlayerId=nextPlayerId;
 		super.action=action;
 	}	
-	public EndRoundMessage(Action action) {
-		this.action=action;
-		this.nextPlayerId=null;
+	public EndRoundMessage(Integer nextPlayerId) {
+		this.nextPlayerId=nextPlayerId;
 	}
+	
 	@Override
 	public void actionOnServer(int id){
 		if (nextPlayerId!=null){
 			Host.reArrangeQueue(nextPlayerId);
 		}
-		ConnectionsManager.getConnectionsManager().sendToAllExcptMe(this, id);
+		//ConnectionsManager.getConnectionsManager().sendToAllExcptMe(this, id);
 	}
 	
 	@Override

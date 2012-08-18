@@ -132,7 +132,7 @@ public class ClientController implements Observer {
 		}
 		public void endRound(){
 			//Integer nextPlayerId=game.endRound();
-			ServerConnection.getConnection().send(new EndRoundMessage(new EndRoundAction()));
+			ServerConnection.getConnection().send(new Message(new EndRoundAction()));
 			//ServerConnection.getConnection().send(new Message(new EndRoundAction()));
 		}
 		public void cardRevealed(Card card){
@@ -284,7 +284,7 @@ public class ClientController implements Observer {
 		getMe().setMyTurn(false);
 		if (nextPlayerId!=null){
 			if (GameEnvironment.get().getPlayerInfo().isServer()){
-				game.reArrangeQueue(nextPlayerId);
+				ServerConnection.getConnection().send(new EndRoundMessage(nextPlayerId));//game.reArrangeQueue(nextPlayerId);
 			}
 			playerTurn(nextPlayerId);
 		}
