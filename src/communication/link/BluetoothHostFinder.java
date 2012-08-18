@@ -9,7 +9,7 @@ import android.bluetooth.BluetoothDevice;
 public class BluetoothHostFinder extends HostFinder {
 
 	@Override
-	public void findAvailableHosts(ArrayList<HostId> hosts) {
+	public void findAvailableHosts(ArrayList<HostGameDetails> hosts) {
 		// TODO Auto-generated method stub
 		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (mBluetoothAdapter == null) {

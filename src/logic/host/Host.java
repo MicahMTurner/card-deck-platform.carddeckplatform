@@ -11,7 +11,9 @@ import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import utils.Player;
 import utils.Position;
 import communication.actions.Turn;
+import communication.link.HostGameDetails;
 import communication.link.Streams;
+import communication.link.TcpIdListener;
 import communication.messages.Message;
 import communication.server.ConnectionsManager;
 import logic.client.Game;
@@ -20,7 +22,7 @@ import logic.client.Game;
 
 
 public class Host implements Runnable{
-	
+	private TcpIdListener tcpIdListener;
 	private final int maxPlayers=4;
 	//public static ArrayList<Player> playersInfo = new ArrayList<Player>();	
 	
@@ -37,6 +39,7 @@ public class Host implements Runnable{
 		game.getPlayers().clear();
 		availablePositions.clear();
 		ConnectionsManager.getConnectionsManager().shutDown();
+		tcpIdListener.stop();
 //		ServerSocket ss=GameEnvironment.get().getTcpInfo().getServerSocket();
 //		if (ss!=null){
 //			try {
@@ -50,6 +53,7 @@ public class Host implements Runnable{
 		setPositions();
 		shutDown=false;
 		Host.game=game;
+		tcpIdListener=new TcpIdListener(getHostGameDetails());
 		//this.playersInfo=new ArrayList<Host.PlayersInfo>();
 		
 	}
@@ -74,9 +78,9 @@ public class Host implements Runnable{
 	}
 	
 	public void waitForPlayers() throws Exception{
-		ConnectionsManager.getConnectionsManager().connectHostingPlayer(availablePositions.pop(),game.toString(),game.getPlayers());
+		ConnectionsManager.getConnectionsManager().connectHostingPlayer(availablePositions.pop(),game.toString(),game.getPlayers(), game.getFreePlayProfile());
 		while(ConnectionsManager.getConnectionsManager().getNumberOfConnections()<game.getNumberOfParticipants()){
-			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions.pop(),game.toString(),game.getPlayers(), game.getPrefs());
+			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions.pop(),game.toString(),game.getPlayers(), game.getFreePlayProfile());
 			if (shutDown){
 				throw new Exception("server shutting down");
 			}
@@ -87,7 +91,9 @@ public class Host implements Runnable{
 	public void run() {
 
 		try {
+			tcpIdListener.start();
 			waitForPlayers();
+			tcpIdListener.stop();
 			startGame();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -120,6 +126,11 @@ public class Host implements Runnable{
 				ConnectionsManager.getConnectionsManager().sendToAll(new Message(new Turn(player.getId())));
 			}
 		}
+	}
+	private HostGameDetails getHostGameDetails() {
+		return new HostGameDetails(GameEnvironment.get().getPlayerInfo().getUsername()
+		 				 , game.toString(), game.minPlayers(), game.minPlayers(), game.instructions());
+		
 	}
 
 	
