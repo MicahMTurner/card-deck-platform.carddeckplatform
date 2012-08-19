@@ -27,6 +27,8 @@ import logic.client.Game;
 
 public class Durak extends Game{
 	
+
+	
 	public Durak(){
 		initActiveNumbers();
 	}
@@ -63,8 +65,8 @@ public class Durak extends Game{
 		return false;
 	}
 	
-	private utils.Player getAttackedPlayer(){
-		for(utils.Player player : super.players){
+	public utils.Player getAttackedPlayer(){
+		for(utils.Player player : players){
 			if(isAttacked(player))
 				return player;
 		}
@@ -82,6 +84,16 @@ public class Durak extends Game{
 		deck.getCards().removeAll(cardsToRemove);
 		return deck;
 	}
+	
+	
+	public utils.Player getCurrentAttacker(){
+		for(int i=0; i<players.size() ; i++){
+			if(players.get(i).isMyTurn()){
+				return players.get(i);
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public Integer onRoundEnd() {
@@ -95,7 +107,7 @@ public class Durak extends Game{
 		
 		Public junk = (Public)ClientController.get().getZone(Position.Public.RIGHT.getRelativePosition(ClientController.get().getMe().getGlobalPosition()));
 		
-		
+		Integer answer=-1;
 		
 		// The attacked player managed to beat all cards.
 		if(		public1.cardsHolding()%2==0 &&
@@ -114,6 +126,7 @@ public class Durak extends Game{
 			pairs.add(new Pair(public5, junk));
 			pairs.add(new Pair(public6, junk));
 			Card.moveTo(pairs);	
+			answer=getAttackedPlayer().getId();
 		}else{
 			utils.Player attacktedPlayer = getAttackedPlayer();	
 			ArrayList<Pair<Droppable , Droppable>> pairs = new ArrayList<Pair<Droppable , Droppable>>();		
@@ -124,10 +137,11 @@ public class Durak extends Game{
 			pairs.add(new Pair(public5, attacktedPlayer));
 			pairs.add(new Pair(public6, attacktedPlayer));		
 			Card.moveTo(pairs);
+			answer=getCurrentAttacker().getId();
 		}
 			
-		
-		return null;
+		initActiveNumbers();
+		return answer;
 	}
 
 	@Override
