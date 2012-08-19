@@ -10,7 +10,14 @@ import java.util.ArrayList;
 
 import utils.Pair;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TableLayout;
@@ -19,7 +26,7 @@ import android.widget.TextView;
 import client.dataBase.DynamicLoader;
 
 public class RankingActivity extends Activity {
-
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
