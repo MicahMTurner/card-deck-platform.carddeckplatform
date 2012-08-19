@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URL;
@@ -22,16 +21,23 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -69,11 +75,45 @@ public class MarketActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-			
-			
+		//START setting layout animation
+		AnimationSet set = new AnimationSet(true);
+
+		  Animation animation = new AlphaAnimation(0.0f, 1.0f);
+		  animation.setDuration(300);
+		  set.addAnimation(animation);
+
+		  animation = new TranslateAnimation(
+		      Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+		      Animation.RELATIVE_TO_SELF, -1.0f, Animation.RELATIVE_TO_SELF, 0.0f
+		  );
+		  animation.setDuration(700);
+		  set.addAnimation(animation);
+
+		  LayoutAnimationController controller =
+		      new LayoutAnimationController(set, 0.25f);
+		//END setting layout animation
+		
+		
+		
+		tl.setLayoutAnimation(controller);
+		TableRow tr = new TableRow(this);
+		tr.setGravity(Gravity.CENTER);
+		
+		TextView textView1 = new TextView(this);
+		textView1.setText("Plugin");
+		textView1.setTypeface(null,Typeface.BOLD_ITALIC);
+		tr.addView(textView1);
+		
+		
+		TextView textView2 = new TextView(this);
+		textView2.setText("Rating");
+		textView2.setTypeface(null,Typeface.BOLD_ITALIC);
+		tr.addView(textView2);
+		
+		
 		for (Iterator iter = plugins.iterator(); iter.hasNext();) {
 			PluginDetails pd = (PluginDetails) iter.next();
-			TableRow tr = new TableRow(this);
+			tr = new TableRow(this);
 			tr.setGravity(Gravity.CENTER);
 			
 			Button button = new Button(this);
@@ -160,11 +200,10 @@ public class MarketActivity extends Activity {
 
 				// download the file
 				InputStream input = new BufferedInputStream(connection.getInputStream());
-				FileOutputStream output=openFileOutput("file.txt", MODE_PRIVATE);
-//				OutputStream output = new FileOutputStream(ROOT+System.getProperty("file.separator")+"testMe");
+				FileOutputStream output=StaticFunctions.getPluginOutputStream(pluginDetail[0].getFilename());
 				
 				
-				byte data[] = new byte[1024];
+				byte data[] = new byte[4096];
 				long total = 0;
 				int count;
 				while ((count = input.read(data)) != -1) {
@@ -174,7 +213,6 @@ public class MarketActivity extends Activity {
 					publishProgress((int) (total * 100 / fileLength));
 					output.write(data, 0, count);
 				}
-				System.out.println("DOWNLOADED");
 				output.flush();
 				output.close();
 				input.close();
@@ -200,5 +238,6 @@ public class MarketActivity extends Activity {
 		}
 
 	}
+	
 
 }
