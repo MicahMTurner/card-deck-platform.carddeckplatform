@@ -20,11 +20,18 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -50,7 +57,10 @@ public class MarketActivity extends Activity {
 	private int progressBarStatus = 0;
 	private Handler progressBarHandler = new Handler();
 	int fileSize;
-
+	
+	
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -133,6 +143,7 @@ public class MarketActivity extends Activity {
 	}
 
 	public void executeHttpGet() throws Exception {
+
 		BufferedReader in = null;
 		try {
 			HttpClient client = new DefaultHttpClient();

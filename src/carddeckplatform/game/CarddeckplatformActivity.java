@@ -23,17 +23,22 @@ import logic.host.Host;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -186,7 +191,7 @@ public class CarddeckplatformActivity extends Activity {
             	
             	//making dialog to get ip            
             	final Dialog dialog = new Dialog(CarddeckplatformActivity.this);
-            	AvailableHosts availableHosts= new AvailableHosts(CarddeckplatformActivity.this,dialog);
+            	final AvailableHosts availableHosts= new AvailableHosts(CarddeckplatformActivity.this,dialog);
             	//set table size
             	LayoutParams params=new LayoutParams(700, 500);
             	dialog.setContentView(availableHosts.getTable(),params);           	
@@ -196,9 +201,17 @@ public class CarddeckplatformActivity extends Activity {
                 getPrefs();
 
             	if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){
-            		HostFinder hostFinder = new HostFinder();
-            		hostFinder.addObserver(availableHosts);
-                	hostFinder.findHosts();
+            		if(!haveInternet(getContext()))
+    					showNoConnectionDialog(getContext(),new Runnable() {
+    						@Override
+    						public void run() {
+    							HostFinder hostFinder = new HostFinder();
+    		            		hostFinder.addObserver(availableHosts);
+    		                	hostFinder.findHosts();
+    						}
+    					});
+            		
+            		
 
             	}else if(GameEnvironment.get().getConnectionType()==ConnectionType.BLUETOOTH){
             		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -257,8 +270,15 @@ public class CarddeckplatformActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(getBaseContext(), MarketActivity.class);
-				startActivity(i);				
+				if(!haveInternet(getContext()))
+					showNoConnectionDialog(getContext(),new Runnable() {
+						@Override
+						public void run() {
+							Intent i = new Intent(getBaseContext(), MarketActivity.class);
+							startActivity(i);
+						}
+					});
+								
 			}
 		});
         
@@ -268,12 +288,72 @@ public class CarddeckplatformActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(getBaseContext(), RankingActivity.class);
-				startActivity(i);				
+				
+				if(!haveInternet(getContext()))
+					showNoConnectionDialog(getContext(),new Runnable() {
+						@Override
+						public void run() {
+							Intent i = new Intent(getBaseContext(), RankingActivity.class);
+							startActivity(i);
+						}
+					});
 			}
 		});
         
         
     }
+    
+    
+    /**
+	 * Checks if we have a valid Internet Connection on the device.
+	 * @param ctx
+	 * @return True if device has internet
+	 *
+	 * Code from: http://www.androidsnippets.org/snippets/131/
+	 */
+	public static boolean haveInternet(Context ctx) {
+	    NetworkInfo info = (NetworkInfo) ((ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+
+	    if (info == null || !info.isConnected()) {
+	        return false;
+	    }
+	    if (info.isRoaming()) {
+	        // here is the roaming option you can change it if you want to
+	        // disable internet while roaming, just return false
+	        return true;
+	    }
+	    return true;
+	}
+	/**
+	     * Display a dialog that user has no internet connection
+	     * @param ctx1
+	     *
+	     * Code from: http://osdir.com/ml/Android-Developers/2009-11/msg05044.html
+	     */
+	    public static void showNoConnectionDialog(Context ctx1,final Runnable runnable) {
+	        final Context ctx = ctx1;
+	        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+	        builder.setCancelable(true);
+	        builder.setMessage(R.string.no_connection);
+	        builder.setTitle(R.string.no_connection_title);
+	        builder.setPositiveButton(R.string.settings, new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int which) {
+	                ctx.startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+	                runnable.run();
+	            }
+	        });
+	        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int which) {
+	                return;
+	            }
+	        });
+	        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+	            public void onCancel(DialogInterface dialog) {
+	                return;
+	            }
+	        });
+
+	        builder.show();
+	    }
 }
 
