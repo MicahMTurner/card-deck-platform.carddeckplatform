@@ -182,7 +182,8 @@ public abstract class Droppable implements Serializable {
 	
 	
 	public boolean addCard(Player player, Card card){
-		boolean answer;
+		boolean answer=false;
+
 		answer = onCardAdded(player, card);
 		if (getDroppableLayout() != null && answer){
 			rearrange(0);

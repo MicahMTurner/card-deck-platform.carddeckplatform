@@ -64,7 +64,7 @@ public class ConnectionsManager {
 	public int getNumberOfConnections(){
 		return connections.size();
 	}
-
+	
 		 
 	/**
 	 * sendToAll - sends the message to every user.
@@ -75,6 +75,23 @@ public class ConnectionsManager {
 			conn.send(msg);
 		}
 	}
+	
+	
+	/**
+	 * sendToAll - sends the message to every user.
+	 * @param msg
+	 */
+	public void sendToAllExcptHost(Message msg){
+		boolean first=true;
+		for(Connection conn : connections){
+			if(first){
+				first = false;
+				continue;
+			}
+			conn.send(msg);
+		}
+	}
+	
 	
 	/**
 	 * sendToAllExcptMe - sends the message to every user except for the user 'id'.

@@ -31,8 +31,11 @@ public class Host implements Runnable{
 	private static Game game;
 	private volatile boolean shutDown;
 	//synchronized private boolean startGameFlag=false;
+	
+	
+	
 	int playersRdy=0;
-
+	
 
 	public void shutDown(){
 		shutDown=true;

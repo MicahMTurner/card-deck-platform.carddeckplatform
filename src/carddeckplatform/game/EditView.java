@@ -44,7 +44,7 @@ TouchHandler {
 	
 	Mode mode = Mode.ONE_BIG;
 	
-	private carddeckplatform.game.EditView.DrawThread drawThread;
+	private DrawThread drawThread;
 	Table table;
 	private TouchManager touchmanager;
 	
@@ -216,7 +216,7 @@ TouchHandler {
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		drawThread = new DrawThread(holder);
+		drawThread = new DrawThread(holder, table);
 		drawThread.setName("drawThread");
 		drawThread.setRunning(true);
 		drawThread.start();
@@ -229,49 +229,7 @@ TouchHandler {
 		
 	}
 	
-	class DrawThread extends Thread {
-		private SurfaceHolder surfaceHolder;
-
-		private boolean running = false;
-
-		public void setRunning(boolean value) {
-			running = value;
-		}
-
-		public DrawThread(SurfaceHolder surfaceHolder) {
-			this.surfaceHolder = surfaceHolder;
-		}
-
-		@Override
-		public void run() {
-			Canvas c;
-			while (running) {
-				try {
-					// Don't hog the entire CPU
-					Thread.sleep(1);
-				} catch (InterruptedException e) {
-				}
-				c = null;
-				try {
-
-					c = surfaceHolder.lockCanvas(null);
-					synchronized (surfaceHolder) {
-						// System.out.println(c.getDensity());
-						try {
-							table.draw(c);// draw it
-						} catch (Exception e) {
-							// TODO: handle exception
-						}
-						
-					}
-				} finally {
-					if (c != null) {
-						surfaceHolder.unlockCanvasAndPost(c);
-					}
-				}
-			}
-		}
-	}
+	
 	
 	
 	public void saveProfile(String profileName){
@@ -300,5 +258,10 @@ TouchHandler {
 		
 		mode=profile.getMode();
 	}
-	
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight());
+		table.setDimentions(getMeasuredWidth(), getMeasuredHeight());
+	}
 }

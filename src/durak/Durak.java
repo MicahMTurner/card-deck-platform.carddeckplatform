@@ -8,6 +8,7 @@ import client.gui.entities.Droppable;
 
 import communication.actions.DealCardAction;
 import communication.messages.Message;
+import communication.messages.RequestCardMessage;
 import communication.server.ConnectionsManager;
 
 import utils.Button;
@@ -34,6 +35,8 @@ public class Durak extends Game{
 	}
 
 	static private boolean activeNumbers[] = {false,false,false,false,false,false,false,false,false};
+	static public Integer deckId;
+	
 	
 	static public boolean hasActiveNumber(){
 		for(int i=0; i<9;i++)
@@ -139,7 +142,16 @@ public class Durak extends Game{
 			Card.moveTo(pairs);
 			answer=getCurrentAttacker().getId();
 		}
-			
+		
+		
+		// calculating the number of cards that I need to add in order to reach at least 6 cards in hand.
+		int numberOfCardsInHand = ClientController.get().getMe().getCards().size();
+		int cardsNeeded = 6 - numberOfCardsInHand;
+		
+		if(cardsNeeded > 0){
+			ClientController.get().requestCard(deckId, cardsNeeded);
+		}
+		
 		initActiveNumbers();
 		return answer;
 	}
@@ -162,29 +174,40 @@ public class Durak extends Game{
 		ArrayList<Card> deckCards = new ArrayList<Card>();
 		
 		
-		ArrayList<ArrayList<Card>> playersCards= new ArrayList<ArrayList<Card>>();
-		for (int i=0;i<numOfPlayers;i++){
-			playersCards.add(new ArrayList<Card>());
-		}
-		
-		for(int i=0; i<numOfPlayers; i++){
-			for(int j=0; j<6; j++)
-				playersCards.get(i).add(deck.drawCard());
-		}
+//		ArrayList<ArrayList<Card>> playersCards= new ArrayList<ArrayList<Card>>();
+//		for (int i=0;i<numOfPlayers;i++){
+//			playersCards.add(new ArrayList<Card>());
+//		}
+//		
+//		for(int i=0; i<numOfPlayers; i++){
+//			for(int j=0; j<6; j++)
+//				playersCards.get(i).add(deck.drawCard());
+//		}
 		
 		for(Card card : deck.getCards())
 			deckCards.add(card);
 		
-		for (int i=0;i<players.size();i++){
-			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(playersCards.get(i),players.get(i).getId())));
-		}
+//		for (int i=0;i<players.size();i++){
+//			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(playersCards.get(i),players.get(i).getId())));
+//		}
 		
 		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(deckCards,Position.Button.TOPRIGHT.getId())));
+		
+		for(int i=0 ; i<numOfPlayers * 6 ; i++){
+			ConnectionsManager.getConnectionsManager().sendToAll(new RequestCardMessage(players.get(i % numOfPlayers), deckId, deckCards.get(i)));
+			try {
+				Thread.sleep(400);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
 	}
 
 	@Override
 	public void setLayouts() {
-		droppables.add(new DeckArea(Position.Button.TOPRIGHT));
 		
 		
 		PublicHandler publicArea = new PublicHandler();
@@ -203,7 +226,10 @@ public class Durak extends Game{
 		
 		// the pass button.
 		buttons.add(new Button(new ButtonHandler(), Position.Button.BOTRIGHT, "Pass"));
+		DeckArea da = new DeckArea(Position.Button.TOPRIGHT);
+		droppables.add(da);
 		
+		deckId = da.getId();
 		
 	}
 
