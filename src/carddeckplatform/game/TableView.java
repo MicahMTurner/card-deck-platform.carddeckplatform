@@ -186,8 +186,9 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		Droppable destination = table.getDroppableById(to);
 		Droppable source = table.getDroppableById(from);
 		for (Card card : cards) {
+			int cardPlace=source.getCards().indexOf(card);
 			if (source.removeCard(byWhom, card) && !destination.addCard(byWhom, card)){				
-				source.simpleAdd(card);
+				source.AddInPlace(card,cardPlace);
 				card.invalidMove();
 			}
 		}
