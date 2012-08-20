@@ -17,6 +17,7 @@ import communication.link.TcpIdListener;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import carddeckplatform.game.gameEnvironment.GameEnvironment.ConnectionType;
 import client.dataBase.ClientDataBase;
+import client.dataBase.DynamicLoader;
 
 import logic.host.Host;
 
@@ -260,6 +261,18 @@ public class CarddeckplatformActivity extends Activity {
 				startActivity(i);				
 			}
 		});
+        
+        
+        Button rank= (Button) findViewById(R.id.rate);
+        rank.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(getBaseContext(), RankingActivity.class);
+				startActivity(i);				
+			}
+		});
+        
         
     }
 }
