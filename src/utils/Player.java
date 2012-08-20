@@ -215,8 +215,8 @@ public class Player extends Droppable implements  Comparable<Player>{
 	}
 
 	@Override
-	public void simpleAdd(Card card) {
-		this.hand.add(card);
+	public void AddInPlace(Card card,int place) {
+		this.hand.add(place, card);
 		
 	}
 
