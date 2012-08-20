@@ -70,6 +70,8 @@ public abstract class Draggable implements Serializable{
 	protected String frontImg;
 	protected String backImg;
 	
+	
+	
 	public Draggable() {
 		this.id=IDMaker.getMaker().getId();
 		this.prevCoord=new Point(0,0);

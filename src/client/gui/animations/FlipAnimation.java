@@ -38,13 +38,13 @@ public class FlipAnimation extends Animation {
     		final int index = i;
 
     		try {
-    			Thread.sleep(5);
+    			Thread.sleep(2);
     		} catch (InterruptedException e) {			            			
     			e.printStackTrace();
     		}					
     		
     		card.setLocation(vector.get(index).getX(), vector.get(index).getY());
-    		card.setAngle(i*10);            		
+    		card.setAngle(i*2);            		
     	}
     	card.setLocation(destination.getX(), destination.getY());
     	card.setAngle(0);

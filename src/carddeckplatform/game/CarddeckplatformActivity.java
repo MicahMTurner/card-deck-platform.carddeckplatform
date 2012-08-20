@@ -247,7 +247,8 @@ public class CarddeckplatformActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				Intent i = new Intent(getBaseContext(), PrefsActivity.class);
+				//Intent i = new Intent(getBaseContext(), PrefsActivity.class);
+				Intent i = new Intent(getBaseContext(), TutorialActivity.class);
 				startActivity(i);
 			}
 		});

@@ -169,6 +169,10 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	public Droppable getDroppableById(Integer id) {
 		return table.getDroppableById(id);
 	}
+	
+	public Draggable getDraggableById(Integer id){
+		return table.getDraggableById(id);
+	}
 
 	public void moveCard(Card card, int from, int to, int byWhomId) {
 		ArrayList<Card> cards = new ArrayList<Card>();
@@ -210,7 +214,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		System.out.println("TableView.surfaceCreated()");
-		drawThread = new DrawThread(holder);
+		drawThread = new DrawThread(holder, table);
 		drawThread.setName("drawThread");
 		drawThread.setRunning(true);
 		drawThread.start();
@@ -227,45 +231,6 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		}
 	}
 
-	class DrawThread extends Thread {
-		private SurfaceHolder surfaceHolder;
-
-		private boolean running = false;
-
-		public void setRunning(boolean value) {
-			running = value;
-		}
-
-		public DrawThread(SurfaceHolder surfaceHolder) {
-			this.surfaceHolder = surfaceHolder;
-		}
-
-		@Override
-		public void run() {
-			Canvas c;
-			while (running) {
-				try {
-					// Don't hog the entire CPU
-					Thread.sleep(1);
-				} catch (InterruptedException e) {
-				}
-				c = null;
-				try {
-
-					c = surfaceHolder.lockCanvas(null);
-					synchronized (surfaceHolder) {
-						// System.out.println(c.getDensity());
-
-						table.draw(c);// draw it
-					}
-				} finally {
-					if (c != null) {
-						surfaceHolder.unlockCanvasAndPost(c);
-					}
-				}
-			}
-		}
-	}
 
 	public void swapPositions(Player player, Position.Player swappedWith) {
 		// TODO Auto-generated method stub

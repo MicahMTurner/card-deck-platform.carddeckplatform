@@ -1,23 +1,23 @@
-package durak;
+package tutorial;
 
 import utils.Card;
 import utils.Player;
 import utils.Public;
 import handlers.PublicEventsHandler;
 
-public class JunkHandler  implements PublicEventsHandler {
+public class PublicHandler implements PublicEventsHandler {
 
 	@Override
 	public boolean onCardAdded(Public publicZone, Player player, Card card) {
 		// TODO Auto-generated method stub
-		card.hide();
+		card.reveal();
 		return true;
 	}
 
 	@Override
 	public boolean onCardRemoved(Public publicZone, Player player, Card card) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override

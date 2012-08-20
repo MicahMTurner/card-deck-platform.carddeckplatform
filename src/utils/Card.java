@@ -49,6 +49,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		Random rand = new Random();
 		
 		this.backAd = rand.nextInt(3);
+		
 	}
 	
 	@Override
@@ -85,13 +86,41 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		}
 		
 	}
-	public void moveTo(final Droppable source,final Droppable destination) {
-		new FlipAnimation(source, destination, this, false).execute();
+	
+	
+	
+	static public void moveTo(final ArrayList<Pair<Droppable, Droppable>> srcAndDst, int numOfCards){
+		ArrayList<Animation> animations=new ArrayList<Animation>();
+		
+		int counter=0;
+		
+		for(Pair pair : srcAndDst){
+			for (Card card : ((Droppable)pair.getFirst()).getCards()){
+				Animation animation=new FlipAnimation((Droppable)pair.getFirst(), (Droppable)pair.getSecond(), card, false);
+				animations.add(animation);
+				animation.execute();
+				counter++;
+				if(counter==numOfCards)
+					break;
+			}
+		}
+		
+		for (Animation animation : animations){
+			animation.waitForMe();
+		}
+		
 	}
 	
 	
-	
-	
+	public void moveTo(final Droppable source,final Droppable destination) {
+		Animation animation = new FlipAnimation(source, destination, this, false);
+		animation.execute();
+		//animation.waitForMe();
+	}
+		
+	public void setFrontImg(String frontImg) {
+		this.frontImg = frontImg;
+	}
 	
 	public Point getCoord() {
 		synchronized(coord){
@@ -160,20 +189,20 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		if(revealed){				
 			img = BitmapHolder.get().getBitmap(frontImg);
 		}else{
-			switch (backAd) {
-			case 0:
+//			switch (backAd) {
+//			case 0:
+//				img = BitmapHolder.get().getBitmap(backImg);
+//				break;
+//			case 1:
+//				img = BitmapHolder.get().getBitmap("bluead");
+//				break;
+//			case 2:
+//				img = BitmapHolder.get().getBitmap("yellowad");
+//				break;
+//			default:
 				img = BitmapHolder.get().getBitmap(backImg);
-				break;
-			case 1:
-				img = BitmapHolder.get().getBitmap("bluead");
-				break;
-			case 2:
-				img = BitmapHolder.get().getBitmap("yellowad");
-				break;
-			default:
-				img = BitmapHolder.get().getBitmap(backImg);
-				break;
-			}
+//				break;
+//			}
 			
 		}
 		

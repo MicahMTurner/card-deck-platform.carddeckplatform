@@ -22,6 +22,7 @@ import communication.link.ServerConnection;
 import communication.messages.EndRoundMessage;
 import communication.messages.EndTurnMessage;
 import communication.messages.Message;
+import communication.messages.RequestCardMessage;
 
 import utils.Button;
 import utils.Card;
@@ -37,6 +38,7 @@ import client.gui.entities.Droppable;
 import carddeckplatform.game.GameActivity;
 import carddeckplatform.game.TableView;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
+import durak.Durak;
 
 
 public class ClientController implements Observer {
@@ -184,6 +186,17 @@ public class ClientController implements Observer {
 		}
 		return answer;
 	}
+	
+	public Droppable getZone(int zoneID){	
+		Droppable answer=gui.getDroppableById(zoneID);
+		return answer;
+	}
+	
+	
+	public Card getCard(int cardId){
+		return (Card)gui.getDraggableById(cardId);
+	}
+	
 	public Pair<ArrayList<Droppable>,ArrayList<Button>>getLayouts() {
 		return game.getLayouts();	
 	}
@@ -306,6 +319,10 @@ public class ClientController implements Observer {
 //		}
 //		
 		
+	}
+	
+	public void requestCard(Integer fromId, int amount){
+		ServerConnection.getConnection().send(new RequestCardMessage(ClientController.get().getMe(), fromId, amount));
 	}
 	
 	public Player getMe(){
