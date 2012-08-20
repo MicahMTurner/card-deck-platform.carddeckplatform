@@ -40,8 +40,8 @@ public class DeckArea extends Droppable{
 
 	
 	@Override
-	public void simpleAdd(Card card) {
-		this.cards.add(card);
+	public void AddInPlace(Card card,int place) {
+		this.cards.add(place,card);
 	}
 	@Override
 	public AbstractList<Card> getMyCards() {
