@@ -1,5 +1,6 @@
-package carddeckplatform.game;
+package carddeckplatform.game.tutorial;
 
+import tutorial.Tutorial;
 import client.controller.ClientController;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import android.app.Activity;
@@ -25,14 +26,15 @@ public class TutorialActivity extends Activity  {
        
         
         // draw the view
-        tableview = new TutorialView(getApplicationContext());
+        tableview = new TutorialView(this);
         setContentView(tableview);
        // tableview = (TableView)findViewById(R.id.TableView1);
         // necessary to transparent background!!!!
         tableview.setZOrderOnTop(true);        
         tableview.getHolder().setFormat(PixelFormat.TRANSPARENT);
         tableview.setxDimention(GameEnvironment.get().getDeviceInfo().getScreenWidth());
-        tableview.setyDimention(GameEnvironment.get().getDeviceInfo().getScreenHeight());
+        tableview.setyDimention(GameEnvironment.get().getDeviceInfo().getScreenHeight());        
+        
         //ClientController.get().setGui(tableview); 
         
     }

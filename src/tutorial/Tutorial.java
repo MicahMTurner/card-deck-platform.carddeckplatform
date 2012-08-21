@@ -2,13 +2,23 @@ package tutorial;
 
 import java.util.Queue;
 
+import tutorial.Tutorial.Stages;
 import utils.Deck;
 import utils.Position.Player;
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import logic.client.Game;
 
 public class Tutorial extends Game {
+	public static Stages currentStage=Stages.WELCOME;
 
+	public static Boolean isBadJob=null;
+	public enum Stages{
+		WELCOME,PLAYERS,AUTOHIDE,CANCELAUTOHIDE,DROPPABLES,DECK,HUGEPUBLIC,ROTATE,FLIP,FLIPAGAIN,END;
+	}
+	public Tutorial() {
+		isBadJob=null;
+		currentStage=Stages.WELCOME;
+	}
 	@Override
 	public Deck getDeck() {
 		return null;
@@ -60,6 +70,15 @@ public class Tutorial extends Game {
 	public String instructions() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public static void nextStage() {
+		currentStage=Stages.values()[Tutorial.currentStage.ordinal()+1];
+		switch(Tutorial.currentStage){
+		case PLAYERS:{
+			
+		}
+		}
 	}
 
 }

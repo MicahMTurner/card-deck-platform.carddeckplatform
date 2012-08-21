@@ -233,6 +233,14 @@ public abstract class Card extends Draggable implements Comparable<Card>{
         } 
        
 	}
+
+	public void flip() {
+		if (this.revealed){
+			this.hide();
+		}else{
+			this.reveal();
+		}		
+	}
 	
 
 }

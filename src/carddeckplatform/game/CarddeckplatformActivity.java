@@ -16,6 +16,7 @@ import communication.link.TcpIdListener;
 
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import carddeckplatform.game.gameEnvironment.GameEnvironment.ConnectionType;
+import carddeckplatform.game.tutorial.TutorialActivity;
 import client.dataBase.ClientDataBase;
 import client.dataBase.DynamicLoader;
 

@@ -50,7 +50,9 @@ public class ServerConnection implements Runnable{
 			}
 			@Override
 			public void execute() {
-				sender.send(msg);
+				if (sender!=null){
+					sender.send(msg);
+				}
 				
 			}
 		}

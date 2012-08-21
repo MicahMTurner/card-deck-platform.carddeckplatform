@@ -28,7 +28,7 @@ public class AutoHide implements SensorEventListener {
 	//-------Singleton implementation--------//
 	private static class AutoHideHolder
 	{
-		private final static AutoHide autoHide=new AutoHide(GameActivity.getContext());
+		private final static AutoHide autoHide=new AutoHide();
 	}
 			
 					
@@ -42,18 +42,22 @@ public class AutoHide implements SensorEventListener {
 	
 	
 	
-	private AutoHide(Context context){
-		  
-		sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-//        if (sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY) != null){
-//        	gravitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
-//        }
-        this.revealedCards=new ArrayList<Card>();
-        this.cardsInHand=0;
+	private AutoHide(){
+		sensorManager=null;
 	}
 	
+	private void initiate(Context context){
+		  
+		sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+//      if (sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY) != null){
+//      	gravitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+//      }
+      this.revealedCards=new ArrayList<Card>();
+      this.cardsInHand=0;
+	}
 	
-	public void start(){
+	public void start(Context context){
+		initiate(context);
 		sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 
                 SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), 
@@ -61,7 +65,9 @@ public class AutoHide implements SensorEventListener {
 	}
 	
 	public void stop(){
-		sensorManager.unregisterListener(this);
+		if (sensorManager!=null){
+			sensorManager.unregisterListener(this);
+		}
 	}
 	
 	@Override
@@ -94,8 +100,7 @@ public class AutoHide implements SensorEventListener {
      }
      
     
-     //System.out.println("test: "+angle1);
-   //  try {
+
     	 if ((angle<17) && cardsInHand!=ClientController.get().getMe().cardsHolding()){
         	 
     	    	// System.out.println("hide");
