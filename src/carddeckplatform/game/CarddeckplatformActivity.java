@@ -39,7 +39,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -309,6 +314,25 @@ public class CarddeckplatformActivity extends Activity {
 				}
 			}
 		});
+		
+		// START setting layout animation
+		AnimationSet set = new AnimationSet(true);
+
+		Animation animation = new AlphaAnimation(0.0f, 1.0f);
+		animation.setDuration(300);
+		set.addAnimation(animation);
+		animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
+				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
+				-1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
+		animation.setDuration(700);
+		set.addAnimation(animation);
+
+		LayoutAnimationController controller = new LayoutAnimationController(
+				set, 0.25f);
+		
+		LinearLayout layout=(LinearLayout) findViewById(R.id.LinearLayout1);
+		layout.setLayoutAnimation(controller);
+		// END setting layout animation
 
 	}
 
