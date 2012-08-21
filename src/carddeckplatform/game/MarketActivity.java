@@ -57,17 +57,14 @@ public class MarketActivity extends Activity {
 	private int progressBarStatus = 0;
 	private Handler progressBarHandler = new Handler();
 	int fileSize;
-	
-	
-	
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.downloadplugin);
 		TableLayout tl = (TableLayout) findViewById(R.id.markettable);
-		Thread thread= new Thread(new Runnable() {
-			
+		Thread thread = new Thread(new Runnable() {
+
 			@Override
 			public void run() {
 				try {
@@ -85,47 +82,42 @@ public class MarketActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//START setting layout animation
+		// START setting layout animation
 		AnimationSet set = new AnimationSet(true);
 
-		  Animation animation = new AlphaAnimation(0.0f, 1.0f);
-		  animation.setDuration(300);
-		  set.addAnimation(animation);
+		Animation animation = new AlphaAnimation(0.0f, 1.0f);
+		animation.setDuration(300);
+		set.addAnimation(animation);
+		animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
+				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
+				-1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
+		animation.setDuration(700);
+		set.addAnimation(animation);
 
-		  animation = new TranslateAnimation(
-		      Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
-		      Animation.RELATIVE_TO_SELF, -1.0f, Animation.RELATIVE_TO_SELF, 0.0f
-		  );
-		  animation.setDuration(700);
-		  set.addAnimation(animation);
+		LayoutAnimationController controller = new LayoutAnimationController(
+				set, 0.25f);
 
-		  LayoutAnimationController controller =
-		      new LayoutAnimationController(set, 0.25f);
-		//END setting layout animation
-		
-		
-		
 		tl.setLayoutAnimation(controller);
+
+		// END setting layout animation
 		TableRow tr = new TableRow(this);
 		tr.setGravity(Gravity.CENTER);
-		
+
 		TextView textView1 = new TextView(this);
 		textView1.setText("Plugin");
-		textView1.setTypeface(null,Typeface.BOLD_ITALIC);
+		textView1.setTypeface(null, Typeface.BOLD_ITALIC);
 		tr.addView(textView1);
-		
-		
+
 		TextView textView2 = new TextView(this);
 		textView2.setText("Rating");
-		textView2.setTypeface(null,Typeface.BOLD_ITALIC);
+		textView2.setTypeface(null, Typeface.BOLD_ITALIC);
 		tr.addView(textView2);
-		
-		
+
 		for (Iterator iter = plugins.iterator(); iter.hasNext();) {
 			PluginDetails pd = (PluginDetails) iter.next();
 			tr = new TableRow(this);
 			tr.setGravity(Gravity.CENTER);
-			
+
 			Button button = new Button(this);
 			button.setText(pd.getName());
 			button.setGravity(Gravity.CENTER);
@@ -177,7 +169,8 @@ public class MarketActivity extends Activity {
 		}
 	}
 
-	public void addListenerOnButton(Button btnStartProgress, final PluginDetails url) {
+	public void addListenerOnButton(Button btnStartProgress,
+			final PluginDetails url) {
 		btnStartProgress.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -187,7 +180,8 @@ public class MarketActivity extends Activity {
 				mProgressDialog.setMessage("Downloading File");
 				mProgressDialog.setIndeterminate(false);
 				mProgressDialog.setMax(100);
-				mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+				mProgressDialog
+						.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 
 				// execute this when the downloader must be fired
 				DownloadFile downloadFile = new DownloadFile();
@@ -197,12 +191,14 @@ public class MarketActivity extends Activity {
 
 	}
 
-	private class DownloadFile extends AsyncTask<PluginDetails, Integer, String> {
+	private class DownloadFile extends
+			AsyncTask<PluginDetails, Integer, String> {
 		@Override
 		protected String doInBackground(PluginDetails... pluginDetail) {
 			try {
-				
-				URL url = new URL("http://cardsplatform.appspot.com"+pluginDetail[0].getAddress());
+
+				URL url = new URL("http://cardsplatform.appspot.com"
+						+ pluginDetail[0].getAddress());
 				URLConnection connection = url.openConnection();
 				connection.connect();
 				// this will be useful so that you can show a typical 0-100%
@@ -210,10 +206,11 @@ public class MarketActivity extends Activity {
 				long fileLength = pluginDetail[0].getSize();
 
 				// download the file
-				InputStream input = new BufferedInputStream(connection.getInputStream());
-				FileOutputStream output=StaticFunctions.getPluginOutputStream(pluginDetail[0].getFilename());
-				
-				
+				InputStream input = new BufferedInputStream(
+						connection.getInputStream());
+				FileOutputStream output = StaticFunctions
+						.getPluginOutputStream(pluginDetail[0].getFilename());
+
 				byte data[] = new byte[4096];
 				long total = 0;
 				int count;
@@ -249,6 +246,5 @@ public class MarketActivity extends Activity {
 		}
 
 	}
-	
 
 }
