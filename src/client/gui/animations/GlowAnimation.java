@@ -7,7 +7,7 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import client.gui.entities.Droppable;
 
-public class GlowAnimation extends AsyncTask<Void, Void, Void> {
+public class GlowAnimation extends Animation {
 	Droppable droppable;
 	long duration;
 	boolean running=true;
@@ -34,8 +34,14 @@ public class GlowAnimation extends AsyncTask<Void, Void, Void> {
 		this.pause = pause;
 	}
 
+//	@Override
+//	protected Void doInBackground(Void... arg0) {
+//		
+//		return null;
+//	}
+
 	@Override
-	protected Void doInBackground(Void... arg0) {
+	protected void animate() {
 		ColorInterpolator colorinterpolator = new ColorInterpolator(
 				Color.TRANSPARENT, Color.argb(255, 255, 255, 255));
 		Interpolator animateInterpolator = new LinearInterpolator();
@@ -69,8 +75,12 @@ public class GlowAnimation extends AsyncTask<Void, Void, Void> {
 
 		}
 		droppable.setGlowColor(Color.TRANSPARENT);
+		
+	}
 
-		return null;
+	@Override
+	protected void postAnimation() {		
+		
 	}
 
 }

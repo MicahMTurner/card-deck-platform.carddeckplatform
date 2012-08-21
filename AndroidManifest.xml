@@ -41,7 +41,7 @@
         <activity android:name="GamePrefsActivity" android:screenOrientation="landscape"></activity>
         <activity android:name="FreePlayCustomization" android:screenOrientation="landscape"></activity>
         <activity android:name="ProfileCatalogActivity" android:screenOrientation="landscape"></activity>
-        <activity android:name="TutorialActivity" android:screenOrientation="landscape"></activity>
+        <activity android:name=".tutorial.TutorialActivity" android:screenOrientation="landscape"></activity>
         
         
         

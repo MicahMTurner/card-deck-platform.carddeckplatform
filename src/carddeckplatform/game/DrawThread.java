@@ -4,7 +4,7 @@ import client.gui.entities.Table;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
-class DrawThread extends Thread {
+public class DrawThread extends Thread {
 	private SurfaceHolder surfaceHolder;
 
 	private boolean running = false;
