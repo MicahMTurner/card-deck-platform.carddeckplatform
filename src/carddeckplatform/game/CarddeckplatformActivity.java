@@ -99,7 +99,7 @@ public class CarddeckplatformActivity extends Activity {
         GameEnvironment.get().getDeviceInfo().setScreenHeight(display.getHeight());
         GameEnvironment.get().getDeviceInfo().setRotationAngle(display.getRotation());
         
-        context = getApplicationContext();
+        context = CarddeckplatformActivity.this;
         
         //making some wifi
         WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
