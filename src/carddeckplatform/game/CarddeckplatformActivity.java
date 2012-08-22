@@ -283,7 +283,7 @@ public class CarddeckplatformActivity extends Activity {
 			}
 		});
 
-		Button market = (Button) findViewById(R.id.market);
+		Button market = (Button) findViewById(R.id.marketButton);
 		market.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -299,7 +299,7 @@ public class CarddeckplatformActivity extends Activity {
 			}
 		});
 
-		Button rank = (Button) findViewById(R.id.rate);
+		Button rank = (Button) findViewById(R.id.rateButton);
 		rank.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -312,6 +312,17 @@ public class CarddeckplatformActivity extends Activity {
 					startActivity(i);
 					
 				}
+			}
+		});
+		
+		Button score = (Button) findViewById(R.id.scoreButton);
+		score.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(getBaseContext(),
+						ScoringActivity.class);
+				startActivity(i);
 			}
 		});
 		

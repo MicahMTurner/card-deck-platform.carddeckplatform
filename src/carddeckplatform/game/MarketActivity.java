@@ -182,6 +182,7 @@ public class MarketActivity extends Activity {
 				mProgressDialog.setMax(100);
 				mProgressDialog
 						.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+				mProgressDialog.setCancelable(false);
 
 				// execute this when the downloader must be fired
 				DownloadFile downloadFile = new DownloadFile();
