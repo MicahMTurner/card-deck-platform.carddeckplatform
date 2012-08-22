@@ -69,7 +69,7 @@ public class GuideCard extends Card {
 		this.scale = new Point(10,20);
 		paint = new Paint();
 		
-		Point textMetrics = new Point(3,0);
+		Point textMetrics = new Point(2.8f,0);
 		paint.setColor(Color.argb(130, 0, 0, 0));
 		textMetrics = MetricsConvertion.pointRelativeToPx(textMetrics);
 		
