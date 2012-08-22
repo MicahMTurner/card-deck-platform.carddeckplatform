@@ -20,6 +20,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
+
 import com.twmacinta.util.MD5;
 
 import communication.actions.AddPlayerAction;
@@ -34,7 +36,7 @@ import war.War;
 
 
 public class DynamicLoader {
-	final static String PLUGINDIR="/sdcard/plugins/";
+	final static String PLUGINDIR=GameEnvironment.path;
 	private HashMap<String, String> mapping;
 	
 	public DynamicLoader() {
@@ -127,6 +129,7 @@ public class DynamicLoader {
 	public ArrayList<Pair<String, String>> getInstalledPlugins(){
 		
 		ArrayList<Pair<String, String>>namesAndMD5 = new ArrayList<Pair<String,String>>();
+		mapPlugins();
 		//go over mapping game names
 		for (String gameName : mapping.keySet()){
 			//add game name ".jar" , create new file instance from plugin dir.
