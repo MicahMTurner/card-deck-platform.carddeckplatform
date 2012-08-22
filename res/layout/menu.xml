@@ -81,7 +81,7 @@
     
     
     <Button
-        android:id="@+id/market"
+        android:id="@+id/marketButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="3dip"
@@ -90,11 +90,22 @@
     
     
     <Button
-        android:id="@+id/rate"
+        android:id="@+id/rateButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="3dip"
         android:text="@string/rating"
         android:textColor="@color/TransparentGrey" />
+     
+    
+    <Button
+        android:id="@+id/scoreButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:text="@string/score"
+        android:textColor="@color/TransparentGrey" />
+    
+    
 
 </LinearLayout>
