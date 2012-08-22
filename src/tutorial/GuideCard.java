@@ -41,27 +41,7 @@ public class GuideCard extends Card {
 	Point textOffset = new Point(15 , 16);
 	private Point screenScale = new Point();
 	
-	private Point getTextBounds(String[] txt){
-		Point bounds = new Point( 0 , txt.length );
-		
-		for(String str : txt){
-			
-			Rect b = new Rect();
-			
-			paint.getTextBounds(str,0,str.length(),b);
-			int width = b.width();
-			
-			
-			
-			if(width > bounds.getX())
-				bounds.setX(width);
-		}
-		
-		bounds.setX(bounds.getX() * 1.3f);
-		bounds.setY(bounds.getY() * textScale);
-		
-		return bounds;
-	}
+	
 	
 	
 	public GuideCard(CardEventsHandler handler,boolean speech) {
@@ -86,6 +66,7 @@ public class GuideCard extends Card {
 		screenScale.setY(GameEnvironment.get().getDeviceInfo().getScreenHeight());
 	}
 	
+	
 	@Override
     public void draw(Canvas canvas,Context context) {
 		super.draw(canvas, context);
@@ -99,14 +80,10 @@ public class GuideCard extends Card {
 		Point cloudPos = new Point(Math.min(getX() , screenScale.getX() - absCloudScale.getX()), Math.max(getY() - cloudOffset.getY() , 0));
 		
 		matrix.postTranslate(cloudPos.getX(), cloudPos.getY());
-		//canvas.drawBitmap(img, matrix, null);
 		if (speech){
 			canvas.drawBitmap(cloud, matrix, null);
 			getRightText();
-			Point bounds = getTextBounds(text);
 			for(int i=0; i< text.length ; i++){
-			
-				//canvas.drawText(text[i], Math.min(getX(), screenScale.getX() - bounds.getX()) + offset.getX() , Math.min(getY(), screenScale.getY() - bounds.getY()) + (i * textScale), paint);
 				canvas.drawText(text[i], cloudPos.getX() + textOffset.getX()  ,cloudPos.getY() + textOffset.getY() + (i * textScale) , paint);
 			}
 		}
