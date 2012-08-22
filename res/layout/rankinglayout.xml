@@ -10,11 +10,36 @@
         android:layout_height="wrap_content"
         android:text="Ranking :"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
+	<Button
+		android:id="@+id/button_open"
+		android:layout_width="100dp"
+		android:layout_height="wrap_content"
+		android:text="@string/open"
+		android:layout_centerInParent="true"
+		android:visibility="gone" />
+		
+	<it.sephiroth.demo.slider.widget.MultiDirectionSlidingDrawer
+		xmlns:my="http://schemas.android.com/apk/res/carddeckplatform.game"
+		android:id="@+id/drawer"
+		my:direction="topToBottom"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		my:handle="@+id/handle"
+		my:content="@+id/content">
+		<include
+			android:id="@id/content"
+			layout="@layout/pen_content" />
+		<ImageView
+			android:id="@id/handle"
+			android:layout_width="wrap_content"
+			android:layout_height="40px"
+			android:src="@drawable/sliding_drawer_handle_bottom" />
+	</it.sephiroth.demo.slider.widget.MultiDirectionSlidingDrawer>
     <TableLayout
         android:id="@+id/rankTable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
     </TableLayout>
+    
 
 </LinearLayout>

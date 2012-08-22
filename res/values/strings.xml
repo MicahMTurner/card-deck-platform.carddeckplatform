@@ -19,7 +19,12 @@
     <string name="settings">settings</string>
     <string name="no_connection">Do you want to connect to the internet?</string>
     <string name="cancel">Cancel</string>
+	<string name="close">Close</string>
+    <string name="open">Open</string>
     
+    <string name="option1">Option 1</string>
+    <string name="option2">Option 2</string>
+    <string name="option3">Option 3</string>
     
 
 </resources>
