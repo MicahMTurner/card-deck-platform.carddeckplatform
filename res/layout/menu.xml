@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/woodtexture"
+    android:orientation="vertical"
+    android:stretchColumns="1" 
+    >
+	
+    	<ViewFlipper
+        android:id="@+id/welcomeFlipper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/WelcomeText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Welcome to :"
+            style="@style/WelcomeFont"/>"
+
+        <TextView
+            android:id="@+id/CardDeckText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Card-Deck-Platform"
+            style="@style/WelcomeFont" />
+    </ViewFlipper>
+
+    <LinearLayout
+        android:id="@+id/LinearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/nickLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nickname:  "
+                android:textAppearance="?android:attr/textAppearanceLarge" android:textColor="@color/TransparentGrey"/>
+
+            <EditText
+                android:id="@+id/nickText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <requestFocus />
+            </EditText>
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/joingamebutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="1dip"
+        android:text="@string/JoinAGame" android:textColor="@color/TransparentGrey"/>
+
+    <Button
+        android:id="@+id/creategameButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:text="@string/StartANewGame" android:textColor="@color/TransparentGrey"/>
+    
+    <Button
+        android:id="@+id/optionsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:text="@string/options"
+        android:textColor="@color/TransparentGrey" />
+    
+    
+    <Button
+        android:id="@+id/market"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:text="@string/market"
+        android:textColor="@color/TransparentGrey" />
+    
+    
+    <Button
+        android:id="@+id/rate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:text="@string/rating"
+        android:textColor="@color/TransparentGrey" />
+
+</LinearLayout>
