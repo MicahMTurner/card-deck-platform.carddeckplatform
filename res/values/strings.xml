@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, CarddeckplatformActivity!</string>
+    <string name="app_name">Carddeckplatform</string>
+    <string name="StartNewGame">Start new game</string>
+    <string name="StartANewGame">Start a new game</string>
+    <string name="JoinAGame">Join a game</string>
+    <style name="flipperView" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textColor">#00FF00</item>
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+    <string name="chooseGame">Please choose a game:</string>
+    <string name="options">Options</string>
+    <string name="market">Our Market</string>
+    <string name="rating">Plugin Rate</string>
+
+</resources>
