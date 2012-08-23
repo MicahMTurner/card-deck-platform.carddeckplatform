@@ -24,6 +24,7 @@ import logic.host.Host;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -33,17 +34,25 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -57,7 +66,12 @@ public class CarddeckplatformActivity extends Activity {
 	private ViewFlipper mFlipper;
 	private boolean livePosition;
 
-	public static Context getContext(){
+	// constatnts for request code
+	final private int MARKET = 50;
+	final private int PLUGINRANK = 51;
+	final private int FINDHOSTS = 51;
+	AvailableHosts availableHosts;
+	public static Context getContext() {
 		return context;
 	}
 	
@@ -95,7 +109,7 @@ public class CarddeckplatformActivity extends Activity {
         GameEnvironment.get().getDeviceInfo().setScreenHeight(display.getHeight());
         GameEnvironment.get().getDeviceInfo().setRotationAngle(display.getRotation());
         
-        context = getApplicationContext();
+        context = CarddeckplatformActivity.this;
         
         //making some wifi
         WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
@@ -273,29 +287,154 @@ public class CarddeckplatformActivity extends Activity {
 				startActivity(i);
 			}
 		});
-        
-        Button market= (Button) findViewById(R.id.market);
-        market.setOnClickListener(new OnClickListener() {
-			
+
+		Button market = (Button) findViewById(R.id.marketButton);
+		market.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(getBaseContext(), MarketActivity.class);
-				startActivity(i);				
+				if (!haveInternet(getContext()))
+					showNoConnectionDialog(getContext(), MARKET);
+				else{
+					Intent i = new Intent(getBaseContext(),
+							MarketActivity.class);
+					startActivity(i);
+					
+				}
 			}
 		});
-        
-        
-        Button rank= (Button) findViewById(R.id.rate);
-        rank.setOnClickListener(new OnClickListener() {
-			
+
+		Button rank = (Button) findViewById(R.id.rateButton);
+		rank.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(getBaseContext(), RankingActivity.class);
-				startActivity(i);				
+				if (!haveInternet(getContext()))
+					showNoConnectionDialog(getContext(), PLUGINRANK);
+				else{
+					Intent i = new Intent(getBaseContext(),
+							RankingActivity.class);
+					startActivity(i);
+					
+				}
 			}
 		});
-        
-        
-    }
+		
+		Button score = (Button) findViewById(R.id.scoreButton);
+		score.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(getBaseContext(),
+						ScoringActivity.class);
+				startActivity(i);
+			}
+		});
+		
+		// START setting layout animation
+		AnimationSet set = new AnimationSet(true);
+
+		Animation animation = new AlphaAnimation(0.0f, 1.0f);
+		animation.setDuration(300);
+		set.addAnimation(animation);
+		animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
+				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
+				-1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
+		animation.setDuration(700);
+		set.addAnimation(animation);
+
+		LayoutAnimationController controller = new LayoutAnimationController(
+				set, 0.25f);
+		
+		LinearLayout layout=(LinearLayout) findViewById(R.id.LinearLayout1);
+		layout.setLayoutAnimation(controller);
+		// END setting layout animation
+
+	}
+
+	/**
+	 * Checks if we have a valid Internet Connection on the device.
+	 * 
+	 * @param ctx
+	 * @return True if device has internet
+	 * 
+	 *         Code from: http://www.androidsnippets.org/snippets/131/
+	 */
+	public static boolean haveInternet(Context ctx) {
+		NetworkInfo info = (NetworkInfo) ((ConnectivityManager) ctx
+				.getSystemService(Context.CONNECTIVITY_SERVICE))
+				.getActiveNetworkInfo();
+
+		if (info == null || !info.isConnected()) {
+			return false;
+		}
+		if (info.isRoaming()) {
+			// here is the roaming option you can change it if you want to
+			// disable internet while roaming, just return false
+			return true;
+		}
+		return true;
+	}
+
+	/**
+	 * Display a dialog that user has no internet connection
+	 * 
+	 * @param ctx1
+	 * 
+	 *            Code from:
+	 *            http://osdir.com/ml/Android-Developers/2009-11/msg05044.html
+	 */
+	public void showNoConnectionDialog(Context ctx1, final int requestCode) {
+		final Context ctx = ctx1;
+		AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+		builder.setCancelable(true);
+		builder.setMessage(R.string.no_connection);
+		builder.setTitle(R.string.no_connection_title);
+		builder.setPositiveButton(R.string.settings,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						startActivityForResult(new Intent(
+								Settings.ACTION_WIRELESS_SETTINGS), requestCode);
+					}
+				});
+		builder.setNegativeButton(R.string.cancel,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						return;
+					}
+				});
+		builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			public void onCancel(DialogInterface dialog) {
+				return;
+			}
+		});
+
+		builder.show();
+	}	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+//		if(resultCode==RESULT_OK){
+			if(resultCode==this.MARKET){
+				Intent i = new Intent(getBaseContext(),
+						MarketActivity.class);
+				startActivity(i);
+			}
+			else if(resultCode==this.PLUGINRANK){
+				Intent i = new Intent(getBaseContext(),
+						RankingActivity.class);
+				startActivity(i);
+				
+			}
+			else if(resultCode==this.FINDHOSTS){
+				HostFinder hostFinder = new HostFinder();
+				hostFinder.addObserver(availableHosts);
+				hostFinder.findHosts();
+			}
+			
+			
+//		}
+		
+	}
 }
 
