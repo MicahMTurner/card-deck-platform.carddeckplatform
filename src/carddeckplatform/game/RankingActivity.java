@@ -10,7 +10,19 @@ import java.util.ArrayList;
 
 import utils.Pair;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TableLayout;
@@ -19,7 +31,7 @@ import android.widget.TextView;
 import client.dataBase.DynamicLoader;
 
 public class RankingActivity extends Activity {
-
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +89,24 @@ public class RankingActivity extends Activity {
 			tr.addView(tv);
 			tr.addView(rb);
 			tl.addView(tr);
+			// START setting layout animation
+			AnimationSet set = new AnimationSet(true);
+
+			Animation animation = new AlphaAnimation(0.0f, 1.0f);
+			animation.setDuration(300);
+			set.addAnimation(animation);
+			animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
+					Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
+					-1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
+			animation.setDuration(700);
+			set.addAnimation(animation);
+
+			LayoutAnimationController controller = new LayoutAnimationController(
+					set, 0.25f);
+
+			tl.setLayoutAnimation(controller);
+
+			// END setting layout animation
 
 		}
 
