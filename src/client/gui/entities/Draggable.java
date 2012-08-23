@@ -93,10 +93,10 @@ public abstract class Draggable implements Serializable{
 		prevCoord.setX(getCoord().getX());
 		prevCoord.setY(getCoord().getY());
 	}
-	public void onClick() {		
+	public void onClick(int fromId) {		
 		saveOldCoord();
 		inHand = true;
-		ServerConnection.getConnection().send(new Message(new StartDraggableMotionAction(id, GameEnvironment.get().getPlayerInfo().getUsername())));
+		ServerConnection.getConnection().send(new Message(new StartDraggableMotionAction(id,fromId, GameEnvironment.get().getPlayerInfo().getUsername())));
 		//setCarried(true);
 	}
 	public void onDrag() {		

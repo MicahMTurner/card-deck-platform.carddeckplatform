@@ -203,8 +203,8 @@ public class ClientController implements Observer {
 	public void cardMoved(Card card,int from, int to, int byWhomId){
 		gui.moveCard(card, from, to,byWhomId);		
 	}
-	public void startDraggableMotion(int cardId, String username){
-		gui.startDraggableMotion(username, cardId);
+	public void startDraggableMotion(int cardId,int fromId, String username){
+		gui.startDraggableMotion(username, cardId,fromId);
 	}
 	public void addPlayer(Player newPlayer) {
 		newPlayer.setRelativePosition(game.getMe().getGlobalPosition());
@@ -398,8 +398,8 @@ public class ClientController implements Observer {
 		
 	}
 
-	public void invalidMove(int cardId){
-		gui.invalidMove(cardId);
+	public void invalidMove(int cardId,int fromId){
+		gui.invalidMove(cardId,fromId);
 	}
 
 	public void restart() {

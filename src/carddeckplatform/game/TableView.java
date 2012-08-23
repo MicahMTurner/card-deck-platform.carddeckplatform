@@ -70,11 +70,15 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		translate.postTranslate(dx, dy);
 		
 	}
-	public void startDraggableMotion(String username, int id){
-		Draggable draggable = table.getDraggableById(id);
+	public void startDraggableMotion(String username, int draggableId, int fromId){
+		Draggable draggable = table.getDraggableById(draggableId);
+		Droppable from = table.getDroppableById(fromId);
+		
 		synchronized (draggable) {
 			draggable.setCarried(true);
 			draggable.setCarrier(username);
+			from.detachCard((Card)draggable);
+			
 		}
 		draggable.saveOldCoord();
 	}
@@ -186,17 +190,20 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		Droppable destination = table.getDroppableById(to);
 		Droppable source = table.getDroppableById(from);
 		for (Card card : cards) {
-			int cardPlace=source.getCards().indexOf(card);
-			if (source.removeCard(byWhom, card) && !destination.addCard(byWhom, card)){				
-				source.AddInPlace(card,cardPlace);
+			//int cardPlace=source.getCards().indexOf(card);
+			if (!destination.moveCardIfLegal(byWhom, source, card)){				
+				//source.reAttached(card);
+				//source.AddInPlace(card,cardPlace);
 				card.invalidMove();
 			}
 		}
 	}
 	
-	public void invalidMove(int cardId){
-		Draggable draggable = table.getDraggableById(cardId);
+	public void invalidMove(int cardId,int fromId){
+		Droppable droppable = table.getDroppableById(fromId);
+		Draggable draggable = table.getDraggableById(cardId);		
 		draggable.invalidMove();
+		droppable.reAttached((Card)draggable);
 	}
 
 	public void addPlayer(Player newPlayer) {
@@ -267,13 +274,15 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	public boolean onDown(MotionEvent event) {
 		float X = event.getX();
 		float Y = event.getY();
+		System.out.println("on down()");
 		if (uiEnabled) {
 			draggableInHand = table.getNearestDraggable(X, Y);//check if its a card
 			if (draggableInHand != null) {
 				if (draggableInHand.isMoveable()) {
 					from = table.getNearestDroppable(X, Y);
 					
-					draggableInHand.onClick();
+					draggableInHand.onClick(from.getId());
+					from.detachCard((Card)draggableInHand);
 				} else {
 					popToast("You cannot move this card");
 					draggableInHand = null;
@@ -336,8 +345,9 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 					this.from = null;
 				} else {
 					if((droppable!=null && droppable.isFlingabble())|| droppable==null){
+						from.reAttached((Card)draggableInHand);
 						draggableInHand.invalidMove();
-						ServerConnection.getConnection().send(new Message(new InvalidMoveAction(draggableInHand.getId())));
+						ServerConnection.getConnection().send(new Message(new InvalidMoveAction(draggableInHand.getId(),from.getId())));
 					}
 					else{
 						draggableInHand.onRelease();

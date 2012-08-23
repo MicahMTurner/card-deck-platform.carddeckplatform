@@ -6,13 +6,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.ConcurrentModificationException;
+import java.util.HashMap;
 import java.util.Random;
+import java.util.Set;
 
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 import utils.Card;
+import utils.Pair;
 import utils.Player;
 import utils.Point;
 import utils.Position;
@@ -71,7 +74,7 @@ public abstract class Droppable implements Serializable {
 	protected transient Paint mPaintForGlow;
 	protected int alpha=255;
 	protected int glowColor=0;
-	
+	private HashMap<Draggable,Integer>detachedCards;
 	
 	
 	private DroppableLayout getDroppableLayout() {
@@ -87,6 +90,7 @@ public abstract class Droppable implements Serializable {
 	}
 	public abstract Card peek();
 	public abstract void onRoundEnd(Player player);
+	
 	public void setAlpha(int alpha) {
 		this.alpha = alpha;
 	}
@@ -108,22 +112,27 @@ public abstract class Droppable implements Serializable {
 		this.scale = scale;
 	}
 
-	public boolean onDrop(Player player, Droppable from, Card card) {		
-		boolean answer=false;		
-		ClientController.sendAPI().cardAdded(card, from.getId(), id, player.getId());	
-		int placeOfCard=from.getCards().indexOf(card);
+	public boolean onDrop(Player player, Droppable from, Card card) {
+		ClientController.sendAPI().cardAdded(card, from.getId(), id, player.getId());
+		return moveCardIfLegal(player, from, card);
+	}
+	
+	public boolean moveCardIfLegal(Player player,Droppable from,Card card){
+		boolean answer=false;
 		if (from.removeCard(player, card) && !addCard(player, card)){
-			from.AddInPlace(card,placeOfCard);			
-//			if (droppableLayout != null && answer){
-//				rearrange(0);
-//			}
+			from.reAttached(card);			
 		}else{
+			from.detachedCards.remove(card);
 			answer=true;
 		}
-		
 		return answer;
-
 	}
+	public void reAttached(Card card) {
+		this.AddInPlace(card,detachedCards.get(card));
+		detachedCards.remove(card);
+		
+	}
+
 	public abstract void AddInPlace(Card card,int place);
 	public boolean isFlingabble(){
 		if(getDroppableLayout()==null)
@@ -211,50 +220,65 @@ public abstract class Droppable implements Serializable {
 	public abstract boolean onCardAdded(Player player, Card card);
 	
 	public abstract boolean onCardRemoved(Player player, Card card);
-
-	public ArrayList<Draggable> draw(Canvas canvas, Context context) {
+	
+	public Set<Draggable> drawMyCards(Canvas canvas,Context context){
+		
 		ArrayList<Draggable> holding=null;
-		Bitmap img = BitmapHolder.get().getBitmap(image);
-		if (img!=null){
-			Matrix matrix = new Matrix();
-
-		
-			Point absScale = MetricsConvertion.pointRelativeToPx(getScale());
-
-			matrix.postScale((float) absScale.getX() / (float) img.getWidth(),(float) absScale.getY() / (float) img.getHeight());
-			matrix.postTranslate(getX() - absScale.getX() / 2, getY() - absScale.getY() / 2);
-
-		
-			canvas.drawBitmap(img, matrix, null);
-			if(mPaintForGlow==null){
-				mPaintForGlow=new Paint();			
-				mPaintForGlow.setDither(true);
-				mPaintForGlow.setAntiAlias(true);
-				mPaintForGlow.setFilterBitmap(true);  
-			
-			}		
-			ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE,glowColor);
-			mPaintForGlow.setColorFilter(colorFilterTint);
-			canvas.drawBitmap(img, matrix, mPaintForGlow);
-		
-		}
 		AbstractList<Card>cards = getCards();
 		int size=cards.size()-1;
 		Card card=null;
 		for (int i=size;i>=0;i--){
 			card=cards.get(i);
-				if (!card.isInHand() && !card.isCarried()){
-					card.draw(canvas, context);
-				}else{
-					if (holding==null){
-						holding=new ArrayList<Draggable>();
-					}
-					holding.add(card);
-				}
+			card.draw(canvas, context);
 		}
-		return holding;
-		// canvas.drawBitmap(img,getX()-(img.getWidth() /
-		// 2),getY()-(img.getHeight() / 2),null);
+		return detachedCards.keySet();
+
+		
+	}
+	public void draw(Canvas canvas, Context context) {
+		
+		Bitmap img = BitmapHolder.get().getBitmap(image);
+		if (img!=null){
+			Matrix matrix = new Matrix();
+		
+			Point absScale = MetricsConvertion.pointRelativeToPx(getScale());
+
+			matrix.postScale((float) absScale.getX() / (float) img.getWidth(),(float) absScale.getY() / (float) img.getHeight());
+			matrix.postTranslate(getX() - absScale.getX() / 2, getY() - absScale.getY() / 2);
+		
+			canvas.drawBitmap(img, matrix, null);
+			initiatePaintForGlow();
+//			ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE,glowColor);
+//			mPaintForGlow.setColorFilter(colorFilterTint);	
+			canvas.drawBitmap(img, matrix, mPaintForGlow);		
+		}
+//
+//		ArrayList<Draggable> holding=null;
+//		AbstractList<Card>cards = getCards();
+//		int size=cards.size()-1;
+//		Card card=null;
+//		for (int i=size;i>=0;i--){
+//			card=cards.get(i);
+//				if (!card.isInHand() && !card.isCarried()){
+//					card.draw(canvas, context);
+//				}else{
+//					if (holding==null){
+//						holding=new ArrayList<Draggable>();
+//					}
+//					holding.add(card);
+//				}
+//		}
+//		return holding;
+	}
+
+	private void initiatePaintForGlow() {
+		if(mPaintForGlow==null){
+			mPaintForGlow=new Paint();			
+			mPaintForGlow.setDither(true);
+			mPaintForGlow.setAntiAlias(true);
+			mPaintForGlow.setFilterBitmap(true);  			ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE,glowColor);
+			mPaintForGlow.setColorFilter(colorFilterTint);	
+		}				
 	}
 
 	public Droppable(int id, Position position, Point scale,DroppableLayout.LayoutType layoutType) {
@@ -262,6 +286,7 @@ public abstract class Droppable implements Serializable {
 		this.scale = scale;
 		this.position = position;
 		this.layoutType = layoutType;
+		this.detachedCards=new HashMap<Draggable, Integer>();
 //		this.droppableLayout=layoutType.getLayout(this);
 		// this.shape=getShape();
 		// this.cards=new ArrayList<Card>();
@@ -309,5 +334,14 @@ public abstract class Droppable implements Serializable {
 //		}
 
 	}
+
+	public void detachCard(Card card) {
+		
+		int placeOfCard=getCards().indexOf(card);
+		detachedCards.put(card, placeOfCard);
+		getMyCards().remove(card);
+		
+	}
+	//protected abstract void deleteCard(Card card);
 
 }

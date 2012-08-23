@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -132,33 +133,45 @@ public class Table {
 	public void draw(Canvas canvas){		
 				
 	if (canvas!=null){
-		ArrayList<Draggable>priority=null;
+		//ArrayList<Draggable>priority=null;
 		canvas.drawColor(Color.TRANSPARENT);    	  
         //canvas.scale(1, 1);
         
 		
 			canvas.drawBitmap(img,(float)0,(float)0, null);	
-			
+			ArrayList<Set<Draggable>>priorityDraggableSets=new ArrayList<Set<Draggable>>();
 			for (Button b : buttons){
 				b.draw(canvas, context);
 			}
-			
-			for(Droppable d : droppables){
-					ArrayList<Draggable>holding=d.draw(canvas, context);
-					if (holding!=null){
-						if (priority==null){
-							priority=new ArrayList<Draggable>();
-						}
-						for(Draggable priorityDraggable : holding){
-							priority.add(priorityDraggable);
-						}
-					}
+			for (Droppable d : droppables ){
+				d.draw(canvas, context);
 			}
-			if (priority!=null){
-				for (Draggable priorityDraggable : priority){
-					priorityDraggable.draw(canvas, context);
+			for(Droppable d : droppables){
+				Set<Draggable>holding=d.drawMyCards(canvas, context);
+				priorityDraggableSets.add(holding);
+			}
+			for (Set<Draggable> set : priorityDraggableSets){
+				for (Draggable draggable : set){
+					draggable.draw(canvas, context);
 				}
 			}
+				
+//			for(Droppable d : droppables){
+//					ArrayList<Draggable>holding=d.drawMyCards(canvas, context);
+//					if (holding!=null){
+//						if (priority==null){
+//							priority=new ArrayList<Draggable>();
+//						}
+//						for(Draggable priorityDraggable : holding){
+//							priority.add(priorityDraggable);
+//						}
+//					}
+//			}
+//			if (priority!=null){
+//				for (Draggable priorityDraggable : priority){
+//					priorityDraggable.draw(canvas, context);
+//				}
+//			}
 			
 			if(this.line!=null){
 				Paint paint= new Paint();

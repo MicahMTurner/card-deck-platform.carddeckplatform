@@ -94,6 +94,7 @@ public class HostFinder extends Observable implements Runnable{
 	}
 	public void stop(){
 		stop=true;
+		socket.close();	
 	}
 	
 	public void findAvailableHosts(ArrayList<HostGameDetails> hosts){
@@ -104,7 +105,7 @@ public class HostFinder extends Observable implements Runnable{
 			waitForResponse();
 		}
 		timer.cancel();
-		socket.close();	
+		
 	}
 	
 	private void waitForResponse() {

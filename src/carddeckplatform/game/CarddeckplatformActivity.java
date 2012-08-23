@@ -28,6 +28,9 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
@@ -57,7 +60,7 @@ public class CarddeckplatformActivity extends Activity {
 	public static Context getContext(){
 		return context;
 	}
-
+	
 	private void getPrefs() {
         // Get the xml/preferences.xml preferences
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -197,8 +200,10 @@ public class CarddeckplatformActivity extends Activity {
                 getPrefs();
 
             	if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){
-            		HostFinder hostFinder = new HostFinder();
+            		
+            		final HostFinder hostFinder = new HostFinder();
             		hostFinder.addObserver(availableHosts);
+            		setDialogListeners(dialog, hostFinder);
                 	hostFinder.findHosts();
 
             	}else if(GameEnvironment.get().getConnectionType()==ConnectionType.BLUETOOTH){
@@ -237,9 +242,24 @@ public class CarddeckplatformActivity extends Activity {
            	         }
            	     }
             	}
+            	
             	dialog.show();
 
-                } 
+                }
+
+			private void setDialogListeners(Dialog dialog, final HostFinder hostFinder) {
+
+            	//make sure host finder will stop when dialog is dismissed
+            	dialog.setOnDismissListener(new OnDismissListener() {
+					
+					@Override
+					public void onDismiss(DialogInterface dialog) {
+						hostFinder.stop();
+						
+					}
+				});
+				
+			} 
              });
         
         Button prefsBtn = (Button) findViewById(R.id.optionsButton);
