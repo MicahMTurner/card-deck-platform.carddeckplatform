@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
@@ -124,14 +125,23 @@ public abstract class Droppable implements Serializable {
 		if (from.removeCard(player, card) && !addCard(player, card)){
 			from.reAttached(card);			
 		}else{
-			from.detachedCards.remove(card);
+			synchronized(detachedCards){
+				from.detachedCards.remove(card);
+			}
 			answer=true;
 		}
 		return answer;
 	}
 	public void reAttached(Card card) {
-		this.AddInPlace(card,detachedCards.get(card));
-		detachedCards.remove(card);
+		int cardPlace;
+		synchronized(detachedCards){
+			cardPlace=detachedCards.get(card);
+		}
+		this.AddInPlace(card,cardPlace);
+		synchronized(detachedCards){
+			detachedCards.remove(card);
+		}
+		
 //		if (getDroppableLayout() != null){
 //			rearrange(0);
 //		}
@@ -227,17 +237,20 @@ public abstract class Droppable implements Serializable {
 	
 	public abstract boolean onCardRemoved(Player player, Card card);
 	
-	public Set<Draggable> drawMyCards(Canvas canvas,Context context){
+	public ConcurrentSkipListSet<Draggable> drawMyCards(Canvas canvas,Context context){
+		ConcurrentSkipListSet<Draggable> set;
 		
-		ArrayList<Draggable> holding=null;
-		AbstractList<Card>cards = getCards();
-		int size=cards.size()-1;
-		Card card=null;
-		for (int i=size;i>=0;i--){
-			card=cards.get(i);
-			card.draw(canvas, context);
+			AbstractList<Card>cards = getCards();
+			int size=cards.size()-1;
+			Card card=null;
+			for (int i=size;i>=0;i--){
+				card=cards.get(i);
+				card.draw(canvas, context);
+			}
+		synchronized(this.detachedCards){
+			set=new ConcurrentSkipListSet<Draggable>(detachedCards.keySet());
 		}
-		return detachedCards.keySet();
+		return set;
 
 		
 	}
@@ -344,7 +357,9 @@ public abstract class Droppable implements Serializable {
 	public void detachCard(Card card) {
 		
 		int placeOfCard=getCards().indexOf(card);
-		detachedCards.put(card, placeOfCard);
+		synchronized(detachedCards){
+			detachedCards.put(card, placeOfCard);
+		}
 		getMyCards().remove(card);
 //		if (getDroppableLayout() != null){
 //			rearrange(0);
