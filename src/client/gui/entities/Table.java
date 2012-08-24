@@ -151,7 +151,7 @@ public class Table {
 				d.draw(canvas, context);
 			}
 			for(Droppable d : droppables){
-				ConcurrentSkipListSet<Draggable>holding=new ConcurrentSkipListSet<Draggable>(d.drawMyCards(canvas, context));
+				ConcurrentSkipListSet<Draggable>holding=d.drawMyCards(canvas, context);
 				priorityDraggableSets.add(holding);
 			}
 			for (ConcurrentSkipListSet<Draggable> set : priorityDraggableSets){
