@@ -8,6 +8,7 @@ import java.util.Hashtable;
 import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.newdawn.slick.geom.Line;
 
@@ -139,7 +140,10 @@ public class Table {
         
 		
 			canvas.drawBitmap(img,(float)0,(float)0, null);	
-			ArrayList<Set<Draggable>>priorityDraggableSets=new ArrayList<Set<Draggable>>();
+			
+			ArrayList<ConcurrentSkipListSet<Draggable>>priorityDraggableSets=
+					new ArrayList<ConcurrentSkipListSet<Draggable>>();
+			
 			for (Button b : buttons){
 				b.draw(canvas, context);
 			}
@@ -147,10 +151,10 @@ public class Table {
 				d.draw(canvas, context);
 			}
 			for(Droppable d : droppables){
-				Set<Draggable>holding=d.drawMyCards(canvas, context);
+				ConcurrentSkipListSet<Draggable>holding=new ConcurrentSkipListSet<Draggable>(d.drawMyCards(canvas, context));
 				priorityDraggableSets.add(holding);
 			}
-			for (Set<Draggable> set : priorityDraggableSets){
+			for (ConcurrentSkipListSet<Draggable> set : priorityDraggableSets){
 				for (Draggable draggable : set){
 					draggable.draw(canvas, context);
 				}

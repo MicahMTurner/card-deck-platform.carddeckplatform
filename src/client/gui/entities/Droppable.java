@@ -3,10 +3,12 @@ package client.gui.entities;
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -130,6 +132,9 @@ public abstract class Droppable implements Serializable {
 	public void reAttached(Card card) {
 		this.AddInPlace(card,detachedCards.get(card));
 		detachedCards.remove(card);
+//		if (getDroppableLayout() != null){
+//			rearrange(0);
+//		}
 		
 	}
 
@@ -171,7 +176,7 @@ public abstract class Droppable implements Serializable {
 	}
 
 	public abstract void deltCard(Card card);
-	protected abstract AbstractList<Card> getMyCards();
+	protected abstract List<Card> getMyCards();
 	public AbstractList<Card> getCards(){
 		synchronized(this){		
 			try{
@@ -210,7 +215,8 @@ public abstract class Droppable implements Serializable {
 	}
 	
 	public void sort(){
-		Collections.sort(getMyCards());
+		//Arrays.sort(getMyCards().toArray());
+		//Collections.sort();
 	}
 	
 	public void sort(Comparator comperator){
@@ -340,6 +346,9 @@ public abstract class Droppable implements Serializable {
 		int placeOfCard=getCards().indexOf(card);
 		detachedCards.put(card, placeOfCard);
 		getMyCards().remove(card);
+//		if (getDroppableLayout() != null){
+//			rearrange(0);
+//		}
 		
 	}
 	//protected abstract void deleteCard(Card card);

@@ -38,7 +38,7 @@ public class DrawThread extends Thread {
 					try {
 						table.draw(c);// draw it
 					} catch (Exception e) {
-						// TODO: handle exception
+						e.printStackTrace();
 					}
 					
 				}

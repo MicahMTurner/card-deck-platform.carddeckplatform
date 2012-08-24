@@ -3,6 +3,9 @@ package utils;
 import handlers.PlayerEventsHandler;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import communication.link.ServerConnection;
 import communication.messages.SwapRequestMessage;
 
@@ -31,7 +34,7 @@ import client.gui.entities.MetricsConvertion;
 
 public class Player extends Droppable implements  Comparable<Player>{
 	private PlayerEventsHandler handler;	
-	private ArrayList<Card> hand;
+	private CopyOnWriteArrayList<Card> hand;
 	boolean myTurn;
 	private PlayerInfo playerInfo;
 	private Position.Player globalPosition;
@@ -46,7 +49,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 		this.globalPosition=globalPosition;
 		this.position=Position.Player.BOTTOM;	
 		this.handler=handler;
-		this.hand=new ArrayList<Card>();
+		this.hand=new CopyOnWriteArrayList<Card>();
 		this.myTurn=false;	
 		
 		this.image = "playerarea";
@@ -184,7 +187,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 //	}
 
 	@Override
-	public ArrayList<Card> getMyCards() {		
+	public List<Card> getMyCards() {		
 		return hand;
 	}
 

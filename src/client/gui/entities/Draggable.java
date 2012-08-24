@@ -19,6 +19,7 @@ import utils.Point;
 import carddeckplatform.game.StaticFunctions;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.controller.ClientController;
+import client.gui.animations.Animation;
 import client.gui.animations.OvershootAnimation;
 import IDmaker.IDMaker;
 import android.content.Context;
@@ -111,7 +112,11 @@ public abstract class Draggable implements Serializable{
 	
 	public void invalidMove(){		
 //			setLocation(prevCoord.getX(),prevCoord.getY());	
-			new OvershootAnimation(prevCoord.getX(), prevCoord.getY(),(Card) this, 1000, false).execute();
+			Animation animation=new OvershootAnimation(prevCoord.getX(), prevCoord.getY(),(Card) this, 1000, false);
+			animation.execute();
+			animation.waitForMe();
+			
+			
 			
 			//ClientController.sendAPI().dragMotion(GameEnvironment.get().getPlayerInfo().getUsername(), id, MetricsConvertion.pointPxToRelative(getCoord()));
 			//ClientController.sendAPI().endDragMotion(getMyId());			

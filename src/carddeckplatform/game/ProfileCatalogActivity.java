@@ -31,7 +31,8 @@ public class ProfileCatalogActivity extends Activity {
     	
     	for(final FreePlayProfile fpp : profiles){
     		Button profileBtn = new Button(getApplicationContext());
-    		profileBtn.setText(fpp.getProfileName());
+    		if (fpp!=null)
+    			profileBtn.setText(fpp.getProfileName());
     		profileBtn.setBackgroundDrawable( getResources().getDrawable( R.drawable.greenbutton));
     		
     		profileBtn.setOnClickListener(new OnClickListener() {
