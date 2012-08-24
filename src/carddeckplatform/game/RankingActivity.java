@@ -53,10 +53,16 @@ public class RankingActivity extends Activity {
 			rb.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
 
 				@Override
-				public void onRatingChanged(RatingBar ratingBar, float rating,
+				public void onRatingChanged(final RatingBar ratingBar, final float rating,
 						boolean fromUser) {
 					// TODO Auto-generated method stub
 					if (fromUser) {
+						Thread thread= new Thread(new Runnable() {
+							
+							@Override
+							public void run() {
+								
+							
 						float relativeRate = rating / ratingBar.getNumStars();
 						long rate = Math.round(relativeRate) * 9 + 1;
 
@@ -81,6 +87,9 @@ public class RankingActivity extends Activity {
 						} finally {
 							urlConnection.disconnect();
 						}
+							}
+						});
+						thread.start();
 
 					}
 				}
