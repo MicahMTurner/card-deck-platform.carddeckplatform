@@ -345,8 +345,9 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 					this.from = null;
 				} else {
 					if((droppable!=null && droppable.isFlingabble())|| droppable==null){
-						from.reAttached((Card)draggableInHand);
+						
 						draggableInHand.invalidMove();
+						from.reAttached((Card)draggableInHand);
 						ServerConnection.getConnection().send(new Message(new InvalidMoveAction(draggableInHand.getId(),from.getId())));
 					}
 					else{
