@@ -36,7 +36,7 @@ import war.War;
 
 
 public class DynamicLoader {
-	final static String PLUGINDIR=GameEnvironment.path;
+	final static String PLUGINDIR=GameEnvironment.path+"/plugins";
 	private HashMap<String, String> mapping;
 	
 	public DynamicLoader() {
