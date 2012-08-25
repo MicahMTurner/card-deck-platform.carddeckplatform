@@ -15,21 +15,14 @@ public class Public extends Droppable{
 	
 	
 	
-	public Public(PublicEventsHandler handler,Position.Public position,DroppableLayout.LayoutType layoutType , Point scale) {
-//		super(position.getId(),position, new Point(10,13),layoutType);
-		super(position.getId(),position, scale,layoutType);
+	public Public(PublicEventsHandler handler,Position.Public position,DroppableLayout.LayoutType layoutType) {
+		super(position.getId(),position, layoutType);
 		this.handler=handler;
 		
 		
 		this.image = "freepublic";
 		
-		//BitmapHolder.get().scaleBitmap(image, this.scale);
 	}
-	
-//	public void setPosition(Position.Public position) {
-//		this.position = position;
-//	}
-//	
 	
 	@Override
 	public boolean onCardAdded(Player player,Card card){
@@ -40,6 +33,7 @@ public class Public extends Droppable{
 		}
 		return answer; 
 	}
+	
 	@Override
 	public boolean onCardRemoved(Player player,Card card){
 		boolean answer=handler.onCardRemoved(this,player, card);

@@ -214,15 +214,15 @@ public class Durak extends Game{
 		JunkHandler junkHandler = new JunkHandler();
 		
 		// the public areas.
-		droppables.add(new Public(publicArea, Position.Public.BOTMID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		droppables.add(new Public(publicArea, Position.Public.BOTMIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		droppables.add(new Public(publicArea, Position.Public.BOTMIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		droppables.add(new Public(publicArea, Position.Public.TOPMID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		droppables.add(new Public(publicArea, Position.Public.TOPMIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		droppables.add(new Public(publicArea, Position.Public.TOPMIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+		droppables.add(new Public(publicArea, Position.Public.BOTMID,DroppableLayout.LayoutType.HEAP));
+		droppables.add(new Public(publicArea, Position.Public.BOTMIDLEFT,DroppableLayout.LayoutType.HEAP));
+		droppables.add(new Public(publicArea, Position.Public.BOTMIDRIGHT,DroppableLayout.LayoutType.HEAP));
+		droppables.add(new Public(publicArea, Position.Public.TOPMID,DroppableLayout.LayoutType.HEAP));
+		droppables.add(new Public(publicArea, Position.Public.TOPMIDLEFT,DroppableLayout.LayoutType.HEAP));
+		droppables.add(new Public(publicArea, Position.Public.TOPMIDRIGHT,DroppableLayout.LayoutType.HEAP));
 		
 		// the junk area.
-		droppables.add(new Public(junkHandler, Position.Public.RIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+		droppables.add(new Public(junkHandler, Position.Public.RIGHT,DroppableLayout.LayoutType.HEAP));
 		
 		// the pass button.
 		buttons.add(new Button(new ButtonHandler(), Position.Button.BOTRIGHT, "Pass"));

@@ -16,7 +16,7 @@ public class CustomizationDroppable extends Droppable {
 
 	public CustomizationDroppable(int id, Position position, Point scale,
 			LayoutType layoutType) {
-		super(id, position, scale, layoutType);
+		super(id, position, layoutType);
 		// TODO Auto-generated constructor stub
 	}
 

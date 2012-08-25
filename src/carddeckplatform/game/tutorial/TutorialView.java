@@ -45,7 +45,7 @@ public class TutorialView extends TableView  {
 	
 	public void addManySmall(){
 		for (Position.Public position : Position.Public.values()){
-			Public publicZone=new Public(new BigPublicHandler(), position,DroppableLayout.LayoutType.HEAP, new Point(10,11)) ;
+			Public publicZone=new Public(new BigPublicHandler(), position,DroppableLayout.LayoutType.HEAP);
 			table.addDroppable(publicZone);
 			new GlowAnimation(publicZone, 2000).execute();			
 		}		
@@ -77,7 +77,7 @@ public class TutorialView extends TableView  {
 		// making the UI thread
 		getHolder().addCallback(this);
 		
-		Public p = new Public(new PublicHandler(), Position.Public.LEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11));
+		Public p = new Public(new PublicHandler(), Position.Public.LEFT,DroppableLayout.LayoutType.HEAP);
 		ClientController.get().setGame(game);
 		game.addPlayer(me);
 		

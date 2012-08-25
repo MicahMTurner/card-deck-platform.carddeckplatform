@@ -34,7 +34,7 @@ import client.gui.entities.MetricsConvertion;
 
 public class Player extends Droppable implements  Comparable<Player>{
 	private PlayerEventsHandler handler;	
-	private CopyOnWriteArrayList<Card> hand;
+	private ArrayList<Card> hand;
 	boolean myTurn;
 	private PlayerInfo playerInfo;
 	private Position.Player globalPosition;
@@ -44,12 +44,12 @@ public class Player extends Droppable implements  Comparable<Player>{
 	
 	
 	public Player(PlayerInfo playerInfo,Position.Player globalPosition,int uniqueId, PlayerEventsHandler handler,DroppableLayout.LayoutType layoutType) {
-		super(uniqueId,Position.Player.BOTTOM, new Point(40,13),layoutType);
+		super(uniqueId,Position.Player.BOTTOM, layoutType);
 		this.playerInfo=playerInfo;		
 		this.globalPosition=globalPosition;
 		this.position=Position.Player.BOTTOM;	
 		this.handler=handler;
-		this.hand=new CopyOnWriteArrayList<Card>();
+		this.hand=new ArrayList<Card>();
 		this.myTurn=false;	
 		
 		this.image = "playerarea";
