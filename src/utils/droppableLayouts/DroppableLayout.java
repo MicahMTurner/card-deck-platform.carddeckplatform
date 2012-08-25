@@ -15,6 +15,7 @@ import client.gui.entities.Droppable;
 import utils.Card;
 import utils.Point;
 import utils.Position;
+import utils.StandardSizes;
 import utils.droppableLayouts.line.BottomLineLayout;
 
 public abstract class DroppableLayout implements Serializable {
@@ -37,6 +38,29 @@ public abstract class DroppableLayout implements Serializable {
 				default:{}
 			}
 			return answer;
+		}
+		
+		public Point getScale(){
+			Point answer=null;
+			switch(this){
+			case LINE:{
+				answer=StandardSizes.LINE_AREA;
+				break;
+			}
+			case HEAP:{
+				answer=StandardSizes.HEAP_AREA;
+				break;
+			}
+			case NONE:{
+				answer=StandardSizes.FREE_AREA;
+				break;
+			}
+			default:{
+				answer=StandardSizes.HEAP_AREA;
+				break;
+			}
+		}
+		return answer;
 		}
 	}
 		

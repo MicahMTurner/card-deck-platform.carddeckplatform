@@ -92,28 +92,7 @@ public abstract class Droppable implements Serializable {
 		// this.cards=new ArrayList<Card>();
 		// this.point=new Point(190,175);
 		// this.myId=IDMaker.getMaker().getId(position);
-		
-		
-		switch(layoutType){
-		case HEAP:{
-			this.scale = StandardSizes.HEAP_AREA;
-			break;
-		}
-		case LINE:{
-			this.scale = StandardSizes.LINE_AREA;
-			break;
-		}
-		case NONE:{
-			this.scale = StandardSizes.FREE_AREA;
-			break;
-		}
-		default:{
-			this.scale = StandardSizes.HEAP_AREA;
-			break;
-		}
-		}
-		
-		
+		this.scale = layoutType.getScale();
 	}
 	
 	
