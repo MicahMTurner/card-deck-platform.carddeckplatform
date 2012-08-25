@@ -21,7 +21,7 @@ public class CustomizationPublic extends Public implements CustomizationItem {
 	
 	State state = State.NOT_SELECTED;
 	public CustomizationPublic(PublicEventsHandler handler, utils.Position.Public position, LayoutType layoutType, Point scale) {
-		super(handler, position, layoutType, scale);
+		super(handler, position, layoutType);
 		sc.setLocation(this.getX(), this.getY());
 		// TODO Auto-generated constructor stub
 	}

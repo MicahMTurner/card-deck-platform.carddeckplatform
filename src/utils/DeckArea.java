@@ -34,7 +34,7 @@ public class DeckArea extends Droppable{
 	public LinkedList<Card> cards = new LinkedList<Card>();
 	
 	public DeckArea(Position.Button position) {
-		super(position.getId(),position, new Point(10,13),DroppableLayout.LayoutType.HEAP);
+		super(position.getId(),position, DroppableLayout.LayoutType.HEAP);
 		this.image = "playerarea";
 	}
 

@@ -80,9 +80,9 @@ public class FreePlayProfile implements Serializable {
 		for(Droppable d : droppables)
 			if(((CustomizationItem)d).getType()==Type.PUBLIC && ((CustomizationItem)d).createHandler()!=null)
 				if(mode==Mode.MANY_SMALL)
-					res.add(new Public((PublicEventsHandler)((CustomizationItem)d).createHandler(), (Position.Public)d.getPosition(), DroppableLayout.LayoutType.HEAP, d.getScale()));
+					res.add(new Public((PublicEventsHandler)((CustomizationItem)d).createHandler(), (Position.Public)d.getPosition(), DroppableLayout.LayoutType.HEAP));
 				else
-					res.add(new Public((PublicEventsHandler)((CustomizationItem)d).createHandler(), (Position.Public)d.getPosition(), DroppableLayout.LayoutType.NONE, d.getScale()));
+					res.add(new Public((PublicEventsHandler)((CustomizationItem)d).createHandler(), (Position.Public)d.getPosition(), DroppableLayout.LayoutType.NONE));
 		return res;
 	}
 	

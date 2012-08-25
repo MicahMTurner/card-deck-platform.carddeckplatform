@@ -91,7 +91,7 @@ public class President extends Game{
 
 	@Override
 	public void setLayouts() {
-		droppables.add(new Public(new PublicAndButtonHandler(), Position.Public.MID, DroppableLayout.LayoutType.HEAP, new Point(10,13)));
+		droppables.add(new Public(new PublicAndButtonHandler(), Position.Public.MID, DroppableLayout.LayoutType.HEAP));
 		buttons.add(new Button(new ButtonHandler(),Position.Button.BOTLEFT,"Pass"));
 	}
 

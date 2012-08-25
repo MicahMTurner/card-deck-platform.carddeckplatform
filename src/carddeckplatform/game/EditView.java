@@ -106,23 +106,23 @@ TouchHandler {
 	}
 	
 	public void addManySmall(){
-		table.addDroppable(new CustomizationPublic(null, Position.Public.BOT,null , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.BOTMID,null , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.BOTMIDLEFT,null , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.BOTMIDRIGHT,null , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.LEFT,null , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.MID,null , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.MIDLEFT,null , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.MIDRIGHT,null , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.RIGHT,null , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.TOP,null , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.TOPMID,null , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.TOPMIDLEFT,null , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.TOPMIDRIGHT,null , new Point(10,11)));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.BOT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.BOTMID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.BOTMIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.BOTMIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.LEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.MID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.MIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.MIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.RIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.TOP,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.TOPMID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.TOPMIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.TOPMIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
 	}
 	
 	public void addOneBig(){
-		table.addDroppable(new CustomizationPublic(null, Position.Public.MID,null , new Point(65,65)));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.MID,DroppableLayout.LayoutType.NONE , new Point(65,65)));
 	}
 	
 	// events when touching the screen

@@ -22,6 +22,7 @@ import utils.Pair;
 import utils.Player;
 import utils.Point;
 import utils.Position;
+import utils.StandardSizes;
 import utils.droppableLayouts.DroppableLayout;
 import utils.droppableLayouts.DroppableLayout.LayoutType;
 import android.content.Context;
@@ -78,6 +79,43 @@ public abstract class Droppable implements Serializable {
 	protected int alpha=255;
 	protected int glowColor=0;
 	private HashMap<Draggable,Integer>detachedCards;
+	
+	
+	
+	public Droppable(int id, Position position ,DroppableLayout.LayoutType layoutType) {
+		this.id = id;
+		this.position = position;
+		this.layoutType = layoutType;
+		this.detachedCards=new HashMap<Draggable, Integer>();
+//		this.droppableLayout=layoutType.getLayout(this);
+		// this.shape=getShape();
+		// this.cards=new ArrayList<Card>();
+		// this.point=new Point(190,175);
+		// this.myId=IDMaker.getMaker().getId(position);
+		
+		
+		switch(layoutType){
+		case HEAP:{
+			this.scale = StandardSizes.HEAP_AREA;
+			break;
+		}
+		case LINE:{
+			this.scale = StandardSizes.LINE_AREA;
+			break;
+		}
+		case NONE:{
+			this.scale = StandardSizes.FREE_AREA;
+			break;
+		}
+		default:{
+			this.scale = StandardSizes.HEAP_AREA;
+			break;
+		}
+		}
+		
+		
+	}
+	
 	
 	
 	private DroppableLayout getDroppableLayout() {
@@ -300,18 +338,7 @@ public abstract class Droppable implements Serializable {
 		}				
 	}
 
-	public Droppable(int id, Position position, Point scale,DroppableLayout.LayoutType layoutType) {
-		this.id = id;
-		this.scale = scale;
-		this.position = position;
-		this.layoutType = layoutType;
-		this.detachedCards=new HashMap<Draggable, Integer>();
-//		this.droppableLayout=layoutType.getLayout(this);
-		// this.shape=getShape();
-		// this.cards=new ArrayList<Card>();
-		// this.point=new Point(190,175);
-		// this.myId=IDMaker.getMaker().getId(position);
-	}
+
 
 	public float getX() {
 		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();

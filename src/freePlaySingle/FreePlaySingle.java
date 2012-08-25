@@ -55,7 +55,7 @@ public class FreePlaySingle extends Game{
 	@Override
 	public void setLayouts() {
 		droppables.add(new DeckArea(Position.Button.TOPRIGHT));
-		droppables.add(new Public(new PublicHandler(), Position.Public.MID,DroppableLayout.LayoutType.NONE , new Point(65,65)));		
+		droppables.add(new Public(new PublicHandler(), Position.Public.MID,DroppableLayout.LayoutType.NONE));		
 	}
 	
 //	@Override

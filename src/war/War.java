@@ -88,8 +88,8 @@ public class War extends Game{
 	@Override
 	public void setLayouts() {
 		
-		droppables.add(new Public(new PublicHandler(),Position.Public.MIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));
-		droppables.add(new Public(new PublicHandler(),Position.Public.MIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,13)));		
+		droppables.add(new Public(new PublicHandler(),Position.Public.MIDLEFT,DroppableLayout.LayoutType.HEAP));
+		droppables.add(new Public(new PublicHandler(),Position.Public.MIDRIGHT,DroppableLayout.LayoutType.HEAP));		
 	}
 
 	
