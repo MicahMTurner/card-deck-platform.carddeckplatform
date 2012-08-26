@@ -20,7 +20,7 @@ import utils.droppableLayouts.line.BottomLineLayout;
 
 public abstract class DroppableLayout implements Serializable {
 	public enum LayoutType {
-		NONE, LINE, HEAP;
+		NONE, LINE, HEAP, DECK;
 		public DroppableLayout getLayout(Droppable droppable){
 			DroppableLayout answer=null;
 			switch(this){
@@ -30,6 +30,10 @@ public abstract class DroppableLayout implements Serializable {
 				}
 				case HEAP:{
 					answer=new HeapLayout(droppable); 
+					break;
+				}
+				case DECK:{
+					answer=new DeckLayout(droppable); 
 					break;
 				}
 				case NONE:{
@@ -48,6 +52,10 @@ public abstract class DroppableLayout implements Serializable {
 				break;
 			}
 			case HEAP:{
+				answer=StandardSizes.HEAP_AREA;
+				break;
+			}
+			case DECK:{
 				answer=StandardSizes.HEAP_AREA;
 				break;
 			}
