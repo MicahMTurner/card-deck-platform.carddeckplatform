@@ -10,6 +10,7 @@ public class HeapLayout extends DroppableLayout {
 	public HeapLayout(Droppable droppable) {
 		super(droppable);
 	}
+	
 	@Override
 	public void rearrange(int index, float width, float height) {
 		int numberOfCards = droppable.cardsHolding();

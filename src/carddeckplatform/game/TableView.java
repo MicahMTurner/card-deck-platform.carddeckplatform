@@ -371,6 +371,20 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	@Override
 	public void onLongPress(MotionEvent event) {
 		System.out.println("TableView.onLongPress()");
+		
+		boolean answer=false;
+		
+		float x = event.getX();
+		float y = event.getY();
+		Droppable d = table.getNearestDroppable(x, y);
+		// check if the there is a target droppable.
+		if(d!=null)
+			answer = d.onLongPress(draggableInHand, from);
+		// if the answer is true then release the card.
+		if(answer && draggableInHand!=null){
+			draggableInHand.onRelease();
+			draggableInHand = null;
+		}
 	}
 
 	@Override

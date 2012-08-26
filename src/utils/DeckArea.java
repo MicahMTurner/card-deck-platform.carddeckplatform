@@ -12,6 +12,7 @@ import java.util.Stack;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
 
+import utils.droppableLayouts.DeckLayout;
 import utils.droppableLayouts.DroppableLayout;
 
 import android.content.Context;
@@ -19,6 +20,7 @@ import android.graphics.Canvas;
 
 import IDmaker.IDMaker;
 
+import client.controller.ClientController;
 import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
 import client.gui.entities.MetricsConvertion;
@@ -34,7 +36,7 @@ public class DeckArea extends Droppable{
 	public LinkedList<Card> cards = new LinkedList<Card>();
 	
 	public DeckArea(Position.Button position) {
-		super(position.getId(),position, DroppableLayout.LayoutType.HEAP);
+		super(position.getId(),position, DroppableLayout.LayoutType.DECK);
 		this.image = "playerarea";
 	}
 
@@ -65,22 +67,13 @@ public class DeckArea extends Droppable{
 	public boolean onCardAdded(Player player, Card card) {
 		
 		if(firstAdd){
-			Point offset = MetricsConvertion.pointRelativeToPx(new Point(5,0));
-			
-			
-			card.reveal();
-			card.setLocation(getX() - offset.getX() , getY());
-			card.setAngle(270);
+			cards.addFirst(card);
+			setRulerCard(card);
 			firstAdd = false;
 		}else{
 			card.hide();
-			card.setLocation(getX(), getY());
-			card.setAngle(0);
-			
+			cards.addLast(card);
 		}
-		
-		cards.addLast(card);
-		
 		return true;
 		
 	}
@@ -129,6 +122,28 @@ public class DeckArea extends Droppable{
 	@Override
 	public Card peek() {
 		return cards.peek();
+	}
+	
+	@Override
+	public boolean onLongPress(Draggable draggable, Droppable from){
+		if(hasRulerCard())
+			return false;
+		
+		addCard(null, (Card)draggable);
+		setRulerCard((Card)draggable);
+		
+		rearrange(0);
+		ClientController.sendAPI().cardAdded((Card)draggable, from.getId(), id, ClientController.get().getMe().getId());
+		return true;
+	}
+	
+	public boolean hasRulerCard(){
+		return ((DeckLayout)getDroppableLayout()).hasRulerCard();
+	}
+	
+	public void setRulerCard(Card card){
+		((DeckLayout)getDroppableLayout()).setRulerCard(card);
+
 	}
 //
 }

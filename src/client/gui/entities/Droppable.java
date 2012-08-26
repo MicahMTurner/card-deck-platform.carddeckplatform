@@ -97,7 +97,7 @@ public abstract class Droppable implements Serializable {
 	
 	
 	
-	private DroppableLayout getDroppableLayout() {
+	protected DroppableLayout getDroppableLayout() {
 		if(droppableLayout==null)
 			this.droppableLayout=layoutType.getLayout(this);
 		
@@ -373,5 +373,9 @@ public abstract class Droppable implements Serializable {
 		
 	}
 	//protected abstract void deleteCard(Card card);
+	
+	public boolean onLongPress(Draggable draggable, Droppable from){
+		return false;
+	}
 
 }
