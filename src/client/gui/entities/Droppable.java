@@ -227,6 +227,7 @@ public abstract class Droppable implements Serializable {
 
 		answer = onCardAdded(player, card);
 		if (getDroppableLayout() != null && answer){
+			card.getAnimationFlags().resetFlags();
 			rearrange(0);
 		}
 		return answer;

@@ -37,6 +37,7 @@ public abstract class Draggable implements Serializable{
 	protected boolean inHand=false;
 	protected Point scale;
 	protected transient Shape shape = null;
+	protected AnimationFlags animationFlags = new AnimationFlags();
 	
 	enum CardStatus{
 		MINIMIZED,NORMAl,SELECTED,DRAGGED,
@@ -98,6 +99,7 @@ public abstract class Draggable implements Serializable{
 		saveOldCoord();
 		inHand = true;
 		ServerConnection.getConnection().send(new Message(new StartDraggableMotionAction(id,fromId, GameEnvironment.get().getPlayerInfo().getUsername())));
+		animationFlags.resetFlags();
 		//setCarried(true);
 	}
 	public void onDrag() {		
@@ -168,6 +170,9 @@ public abstract class Draggable implements Serializable{
 	}
 	
 	
+	public AnimationFlags getAnimationFlags() {
+		return animationFlags;
+	}
 	
 	
 }
