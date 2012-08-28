@@ -28,6 +28,10 @@ public class FlipAnimation extends Animation {
 	protected void animate() {
 		float x = card.getX();
 		float y = card.getY();
+		
+		card.getAnimationFlags().resetFlags();
+		card.getAnimationFlags().flip=true;
+		
 		final ArrayList<Point> vector = StaticFunctions.midLine((int)x, (int)y, (int)destination.getX(), (int)destination.getY());
 		try {
 			Thread.sleep(1000);

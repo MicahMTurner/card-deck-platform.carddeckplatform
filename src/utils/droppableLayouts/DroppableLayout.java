@@ -133,6 +133,10 @@ public abstract class DroppableLayout implements Serializable {
 			this.animationArgs = animationArgs;
 			this.abstractList = abstractList;
 			this.duration = duration;
+			
+			for(Card c : abstractList){
+				c.getAnimationFlags().rearrange=true;
+			}
 		}
 
 		public void stopAnimation() {
@@ -206,24 +210,27 @@ public abstract class DroppableLayout implements Serializable {
 					Card card = abstractList.get(i);
 					//setLocationAndAngle(card,reserved[0][i] + curDx[i], reserved[1][i]
 					//		+ curDy[i],reserved[2][i] + curDAngle[i]);
-					card.setLocation(reserved[0][i] + curDx[i], reserved[1][i]
-							+ curDy[i]);
-					card.setAngle(reserved[2][i] + curDAngle[i]);
-				}
-
-			}
-			if (running){
-				for (int i = 0; i < animationArgs[0].length; i++) {
-					Card card = abstractList.get(i);
-					//setLocationAndAngle(card, animationArgs[0][i], animationArgs[1][i], animationArgs[2][i]);
-					card.setLocation(animationArgs[0][i], animationArgs[1][i]);
-					card.setAngle(animationArgs[2][i]);
+					
+					// will rearrange only if there is no other animation that affects the card.
+					if(card.getAnimationFlags().rearrange && !card.getAnimationFlags().fling && !card.getAnimationFlags().flip){
+						card.setLocation(reserved[0][i] + curDx[i], reserved[1][i]
+								+ curDy[i]);
+						card.setAngle(reserved[2][i] + curDAngle[i]);
+					}
 				}
 			}
+//			if (running){
+//				for (int i = 0; i < animationArgs[0].length; i++) {
+//					Card card = abstractList.get(i);
+//					setLocationAndAngle(card, animationArgs[0][i], animationArgs[1][i], animationArgs[2][i]);
+//					//card.setLocation(animationArgs[0][i], animationArgs[1][i]);
+//					//card.setAngle(animationArgs[2][i]);
+//				}
+//			}
 		}
 
 		private void setLocationAndAngle(Card card, float x, float y, float angle) {
-			if (!card.isCarried() && !card.isInHand()){
+			if (!card.getAnimationFlags().rearrange){
 				card.setLocation(x, y);
 				card.setAngle(angle);
 			}
