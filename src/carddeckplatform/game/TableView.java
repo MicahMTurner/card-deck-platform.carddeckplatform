@@ -75,6 +75,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		Droppable from = table.getDroppableById(fromId);
 		
 		synchronized (draggable) {
+			draggable.getAnimationFlags().resetFlags();
 			draggable.setCarried(true);
 			draggable.setCarrier(username);
 			from.detachCard((Card)draggable);
