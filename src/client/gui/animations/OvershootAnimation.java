@@ -76,7 +76,9 @@ public class OvershootAnimation extends Animation {
 		if(sendToCommunication)
 			card.onDrag();
 		
-		while (percentTime < 1.0) {
+		card.getAnimationFlags().resetFlags();
+		card.getAnimationFlags().fling = true;
+		while (percentTime < 1.0 && card.getAnimationFlags().fling) {
 			curTime = System.currentTimeMillis();
 			percentTime = (float) (curTime - startTime)
 					/ (float) (endTime - startTime);
@@ -97,6 +99,7 @@ public class OvershootAnimation extends Animation {
 			}
 
 		}
+		card.getAnimationFlags().fling = false;
 		card.setLocation(destX, destY);
 		System.out.println("END");
 		

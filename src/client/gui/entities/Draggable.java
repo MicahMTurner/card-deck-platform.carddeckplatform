@@ -33,8 +33,8 @@ public abstract class Draggable implements Serializable{
 	private boolean moveable;
 	protected Point prevCoord;
 	protected int id;
-	protected boolean carried=false;
-	protected boolean inHand=false;
+	//protected boolean carried=false;
+	//protected boolean inHand=false;
 	protected Point scale;
 	protected transient Shape shape = null;
 	protected AnimationFlags animationFlags = new AnimationFlags();
@@ -95,11 +95,34 @@ public abstract class Draggable implements Serializable{
 		prevCoord.setX(getCoord().getX());
 		prevCoord.setY(getCoord().getY());
 	}
-	public void onClick(int fromId) {		
+	
+	
+	public void onOtherClick(Droppable from, String username){
 		saveOldCoord();
-		inHand = true;
-		ServerConnection.getConnection().send(new Message(new StartDraggableMotionAction(id,fromId, GameEnvironment.get().getPlayerInfo().getUsername())));
 		animationFlags.resetFlags();
+		animationFlags.carriedByOther=true;
+		setCarrier(username);
+		
+		from.putCardOnTop((Card)this);
+	}
+	
+	public void onOtherDrag(){
+		
+	}
+	
+	public void onOtherRelease(){
+		animationFlags.resetFlags();
+		setCarrier("");
+	}
+	
+	
+	public void onClick(Droppable from) {		
+		saveOldCoord();
+		ServerConnection.getConnection().send(new Message(new StartDraggableMotionAction(id,from.getId(), GameEnvironment.get().getPlayerInfo().getUsername())));
+		animationFlags.resetFlags();
+		animationFlags.carriedByMe=true;
+		
+		from.putCardOnTop((Card)this);
 		//setCarried(true);
 	}
 	public void onDrag() {		
@@ -109,7 +132,7 @@ public abstract class Draggable implements Serializable{
 	public void onRelease() {		
 		//ClientController.sendAPI().dragMotion(GameEnvironment.get().getPlayerInfo().getUsername(), id, MetricsConvertion.pointPxToRelative(getCoord()));
 		ClientController.sendAPI().endDragMotion(id);
-		inHand = false;
+		animationFlags.resetFlags();
 	}
 	
 	public void invalidMove(){		
@@ -144,14 +167,14 @@ public abstract class Draggable implements Serializable{
 	public abstract void moveTo(final Droppable source,final Droppable destination);
 	
 	public void setCarried(boolean carried) {
-		this.carried = carried;
+		animationFlags.carriedByOther = carried;
 	}
 	public boolean isCarried() {
-		return carried;
+		return animationFlags.carriedByOther;
 	}
 	
 	public boolean isInHand(){
-		return inHand;
+		return animationFlags.carriedByMe;
 	}
 	
 	public boolean isMoveable() {
@@ -173,6 +196,8 @@ public abstract class Draggable implements Serializable{
 	public AnimationFlags getAnimationFlags() {
 		return animationFlags;
 	}
+	
+	
 	
 	
 }
