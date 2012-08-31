@@ -213,6 +213,8 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		
 		canvas.drawBitmap(img, matrix, null);
 		
+//		if(getAnimationFlags().isAnimated())
+//			canvas.drawText("Animated",getX() / 2, getY(), GameEnvironment.get().getPaint());
 		// if the card is being carried by another player a hand and the name of the carrier would be drawn near the card's image.
         if(isCarried()){
         	Matrix matrix2 = new Matrix();

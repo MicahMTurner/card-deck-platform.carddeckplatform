@@ -42,7 +42,8 @@ public class Table {
 	
 	//private Matrix matrix;
 	
-
+	static public ArrayList<Card> animatedCards = new ArrayList<Card>();
+	
 	public Table(Context context){
 		//this.matrix=new Matrix();		
 		this.context = context;
@@ -151,9 +152,14 @@ public class Table {
 				d.draw(canvas, context);
 			}
 			for(Droppable d : droppables){
-				ConcurrentSkipListSet<Draggable>holding=d.drawMyCards(canvas, context);
-				priorityDraggableSets.add(holding);
+				d.drawMyCards(canvas, context);
 			}
+			
+			for(Card c : animatedCards){
+				c.draw(canvas, context);
+			}
+			animatedCards.clear();
+			
 			for (ConcurrentSkipListSet<Draggable> set : priorityDraggableSets){
 				for (Draggable draggable : set){
 					draggable.draw(canvas, context);

@@ -3,20 +3,12 @@ package utils.droppableLayouts;
 import java.io.Serializable;
 import java.util.AbstractList;
 
-import logic.client.Game;
-
-import android.os.Handler;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Interpolator;
-import android.view.animation.OvershootInterpolator;
-
-import carddeckplatform.game.gameEnvironment.GameEnvironment;
-import client.gui.entities.Droppable;
 import utils.Card;
 import utils.Point;
-import utils.Position;
 import utils.StandardSizes;
-import utils.droppableLayouts.line.BottomLineLayout;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
+import client.gui.entities.Droppable;
 
 public abstract class DroppableLayout implements Serializable {
 	public enum LayoutType {
@@ -134,9 +126,10 @@ public abstract class DroppableLayout implements Serializable {
 			this.abstractList = abstractList;
 			this.duration = duration;
 			
-			for(Card c : abstractList){
-				c.getAnimationFlags().rearrange=true;
-			}
+//			for(Card c : abstractList){
+//				if(c.getAnimationFlags().checkRearrangeCondition())
+//					c.getAnimationFlags().rearrange=true;
+//			}
 		}
 
 		public void stopAnimation() {
@@ -192,9 +185,8 @@ public abstract class DroppableLayout implements Serializable {
 			for (int i = 0; i < totalDx.length; i++) {
 				//setLocationAndAngle(abstractList.get(i),reserved[0][i] + curDx[i],
 				//		reserved[1][i] + curDy[i],reserved[2][i] + curDAngle[i]);
-				abstractList.get(i).setLocation(reserved[0][i] + curDx[i],
-						reserved[1][i] + curDy[i]);
-				abstractList.get(i).setAngle(reserved[2][i] + curDAngle[i]);
+				Card card = abstractList.get(i);
+				setLocationAndAngle(card, reserved[0][i] + curDx[i], reserved[1][i] + curDy[i], reserved[2][i] + curDAngle[i]);
 			}
 			while (percentTime < 1.0 && running) {
 				curTime = System.currentTimeMillis();
@@ -211,12 +203,8 @@ public abstract class DroppableLayout implements Serializable {
 					//setLocationAndAngle(card,reserved[0][i] + curDx[i], reserved[1][i]
 					//		+ curDy[i],reserved[2][i] + curDAngle[i]);
 					
-					// will rearrange only if there is no other animation that affects the card.
-					if(card.getAnimationFlags().rearrange && !card.getAnimationFlags().fling && !card.getAnimationFlags().flip){
-						card.setLocation(reserved[0][i] + curDx[i], reserved[1][i]
-								+ curDy[i]);
-						card.setAngle(reserved[2][i] + curDAngle[i]);
-					}
+					
+					setLocationAndAngle(card, reserved[0][i] + curDx[i], reserved[1][i] + curDy[i], reserved[2][i] + curDAngle[i]);
 				}
 			}
 //			if (running){
@@ -227,10 +215,22 @@ public abstract class DroppableLayout implements Serializable {
 //					//card.setAngle(animationArgs[2][i]);
 //				}
 //			}
+			
+			for(Card card : abstractList){
+				if(droppable.getCards().contains(card)){
+					card.getAnimationFlags().rearrange = false;
+				}
+			}
 		}
 
 		private void setLocationAndAngle(Card card, float x, float y, float angle) {
-			if (!card.getAnimationFlags().rearrange){
+			// will rearrange if:
+			// (1) the card is still belongs to the droppbale.
+			// (2) the rearrange flag is on.
+			// (3) all the other animation flags are off (no other animation affects the card).
+			
+			// 					(1)									(2)											(3)
+			if (droppable.getCards().contains(card) && card.getAnimationFlags().checkRearrangeCondition()){
 				card.setLocation(x, y);
 				card.setAngle(angle);
 			}

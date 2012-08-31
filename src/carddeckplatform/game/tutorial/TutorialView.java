@@ -122,7 +122,7 @@ public class TutorialView extends TableView  {
 				if (draggableInHand.isMoveable()) {
 					from = table.getNearestDroppable(X, Y);
 					
-					draggableInHand.onClick(from.getId());
+					draggableInHand.onClick(from);
 				} else {
 					popToast("You cannot move this card");
 					draggableInHand = null;

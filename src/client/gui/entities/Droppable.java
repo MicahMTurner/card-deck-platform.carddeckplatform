@@ -78,7 +78,7 @@ public abstract class Droppable implements Serializable {
 	protected transient Paint mPaintForGlow;
 	protected int alpha=255;
 	protected int glowColor=0;
-	private HashMap<Draggable,Integer>detachedCards;
+	//private HashMap<Draggable,Integer>detachedCards;
 	
 	
 	
@@ -86,7 +86,6 @@ public abstract class Droppable implements Serializable {
 		this.id = id;
 		this.position = position;
 		this.layoutType = layoutType;
-		this.detachedCards=new HashMap<Draggable, Integer>();
 //		this.droppableLayout=layoutType.getLayout(this);
 		// this.shape=getShape();
 		// this.cards=new ArrayList<Card>();
@@ -132,38 +131,38 @@ public abstract class Droppable implements Serializable {
 		this.scale = scale;
 	}
 
-	public boolean onDrop(Player player, Droppable from, Card card) {
-		ClientController.sendAPI().cardAdded(card, from.getId(), id, player.getId());
-		return moveCardIfLegal(player, from, card);
-	}
+	public boolean onDrop(Player player, Droppable from, Card card) {               
+        boolean answer=false;           
+        ClientController.sendAPI().cardAdded(card, from.getId(), id, player.getId());   
+        int placeOfCard=from.getCards().indexOf(card);
+        if (from.removeCard(player, card) && !addCard(player, card)){
+                from.AddInPlace(card,placeOfCard);                      
+//              if (droppableLayout != null && answer){
+//                      rearrange(0);
+//              }
+        }else{
+                answer=true;
+        }
+        
+        return answer;
+
+}
 	
-	public boolean moveCardIfLegal(Player player,Droppable from,Card card){
-		boolean answer=false;
-		if (from.removeCard(player, card) && !addCard(player, card)){
-			from.reAttached(card);			
-		}else{
-			synchronized(detachedCards){
-				from.detachedCards.remove(card);
-			}
-			answer=true;
-		}
-		return answer;
-	}
-	public void reAttached(Card card) {
-		int cardPlace;
-		synchronized(detachedCards){
-			cardPlace=detachedCards.get(card);
-		}
-		this.AddInPlace(card,cardPlace);
-		synchronized(detachedCards){
-			detachedCards.remove(card);
-		}
-		
-//		if (getDroppableLayout() != null){
-//			rearrange(0);
+//	public void reAttached(Card card) {
+//		int cardPlace;
+//		synchronized(detachedCards){
+//			cardPlace=detachedCards.get(card);
 //		}
-		
-	}
+//		this.AddInPlace(card,cardPlace);
+//		synchronized(detachedCards){
+//			detachedCards.remove(card);
+//		}
+//		
+////		if (getDroppableLayout() != null){
+////			rearrange(0);
+////		}
+//		
+//	}
 
 	public abstract void AddInPlace(Card card,int place);
 	public boolean isFlingabble(){
@@ -251,27 +250,35 @@ public abstract class Droppable implements Serializable {
 		Collections.sort(getMyCards(), comperator);
 	}
 	
+	public void putCardOnTop(Card card){
+		List<Card> cards = getMyCards();
+		
+		// check if the card is not in the list for some reason.
+		if(!cards.contains(card))
+			return;
+	
+		cards.remove(card);
+		cards.add(0, card);
+	
+	}
+	
 	public abstract boolean onCardAdded(Player player, Card card);
 	
 	public abstract boolean onCardRemoved(Player player, Card card);
 	
-	public ConcurrentSkipListSet<Draggable> drawMyCards(Canvas canvas,Context context){
-		ConcurrentSkipListSet<Draggable> set;
-		
-			AbstractList<Card>cards = getCards();
-			int size=cards.size()-1;
-			Card card=null;
-			for (int i=size;i>=0;i--){
-				card=cards.get(i);
+	public void drawMyCards(Canvas canvas,Context context){
+		AbstractList<Card>cards = getCards();
+		int size=cards.size()-1;
+		Card card=null;
+		for (int i=size;i>=0;i--){
+			card=cards.get(i);
+			if(!card.getAnimationFlags().isAnimated())
 				card.draw(canvas, context);
-			}
-		synchronized(this.detachedCards){
-			set=new ConcurrentSkipListSet<Draggable>(detachedCards.keySet());
-		}
-		return set;
-
-		
+			else
+				Table.animatedCards.add(card);
+		}	
 	}
+	
 	public void draw(Canvas canvas, Context context) {
 		
 		Bitmap img = BitmapHolder.get().getBitmap(image);
@@ -361,18 +368,6 @@ public abstract class Droppable implements Serializable {
 
 	}
 
-	public void detachCard(Card card) {
-		
-		int placeOfCard=getCards().indexOf(card);
-		synchronized(detachedCards){
-			detachedCards.put(card, placeOfCard);
-		}
-		getMyCards().remove(card);
-//		if (getDroppableLayout() != null){
-//			rearrange(0);
-//		}
-		
-	}
 	//protected abstract void deleteCard(Card card);
 	
 	public boolean onLongPress(Draggable draggable, Droppable from){
