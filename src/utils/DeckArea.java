@@ -67,7 +67,7 @@ public class DeckArea extends Droppable{
 	public boolean onCardAdded(Player player, Card card) {
 		
 		if(firstAdd){
-			cards.addFirst(card);
+			//cards.addFirst(card);
 			setRulerCard(card);
 			firstAdd = false;
 		}else{

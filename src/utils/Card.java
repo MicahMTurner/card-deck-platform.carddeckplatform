@@ -11,6 +11,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.view.animation.OvershootInterpolator;
@@ -227,6 +228,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
         	// draws the name of the carrier.
             paint.setColor(android.graphics.Color.BLACK); 
             paint.setTextSize(20); 
+            paint.setColor(Color.WHITE);
             canvas.drawText(getCarrier(),getX()-absScale.getX() / 2, getY()-absScale.getY() / 2, paint);
             // draws the hand.
             //canvas.drawBitmap(BitmapHolder.get().getBitmap("hand"),getX()-absScale.getX(), getY() - absScale.getY()/2 , paint);
