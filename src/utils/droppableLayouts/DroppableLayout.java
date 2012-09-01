@@ -2,6 +2,7 @@ package utils.droppableLayouts;
 
 import java.io.Serializable;
 import java.util.AbstractList;
+import java.util.ArrayList;
 
 import utils.Card;
 import utils.Point;
@@ -126,10 +127,15 @@ public abstract class DroppableLayout implements Serializable {
 			this.abstractList = abstractList;
 			this.duration = duration;
 			
+			AbstractList<Card> toDelete = new ArrayList<Card>();
+			
 //			for(Card c : abstractList){
-//				if(c.getAnimationFlags().checkRearrangeCondition())
-//					c.getAnimationFlags().rearrange=true;
+//				if(c.getAnimationFlags().checkRearrangeCondition()){
+//					toDelete.add(c);
+//				}
 //			}
+//			
+//			this.abstractList.removeAll(toDelete);
 		}
 
 		public void stopAnimation() {
@@ -140,6 +146,7 @@ public abstract class DroppableLayout implements Serializable {
 		boolean running = true;
 		float[][] animationArgs;
 		AbstractList<Card> abstractList;
+		AbstractList<Card> currentCards;
 		long duration;
 
 		@Override
@@ -152,6 +159,8 @@ public abstract class DroppableLayout implements Serializable {
 			float[] totalDAngle = new float[animationArgs[0].length];
 			float[][] reserved = new float[3][animationArgs[0].length];
 
+			currentCards = droppable.getCards();
+			
 			for (int i = 0; i < totalDx.length; i++) {
 				totalDx[i] = animationArgs[0][i] - abstractList.get(i).getX();
 				totalDy[i] = animationArgs[1][i] - abstractList.get(i).getY();
@@ -183,27 +192,20 @@ public abstract class DroppableLayout implements Serializable {
 
 			}
 			for (int i = 0; i < totalDx.length; i++) {
-				//setLocationAndAngle(abstractList.get(i),reserved[0][i] + curDx[i],
-				//		reserved[1][i] + curDy[i],reserved[2][i] + curDAngle[i]);
 				Card card = abstractList.get(i);
 				setLocationAndAngle(card, reserved[0][i] + curDx[i], reserved[1][i] + curDy[i], reserved[2][i] + curDAngle[i]);
 			}
 			while (percentTime < 1.0 && running) {
+				currentCards = droppable.getCards();
 				curTime = System.currentTimeMillis();
-				percentTime = (float) (curTime - startTime)
-						/ (float) (endTime - startTime);
-				percentDistance = animateInterpolator
-						.getInterpolation(percentTime);
+				percentTime = (float) (curTime - startTime) / (float) (endTime - startTime);
+				percentDistance = animateInterpolator.getInterpolation(percentTime);
 
 				for (int i = 0; i < totalDx.length; i++) {
 					curDx[i] = percentDistance * totalDx[i];
 					curDy[i] = percentDistance * totalDy[i];
 					curDAngle[i] = percentDistance * totalDAngle[i];
-					Card card = abstractList.get(i);
-					//setLocationAndAngle(card,reserved[0][i] + curDx[i], reserved[1][i]
-					//		+ curDy[i],reserved[2][i] + curDAngle[i]);
-					
-					
+					Card card = abstractList.get(i);					
 					setLocationAndAngle(card, reserved[0][i] + curDx[i], reserved[1][i] + curDy[i], reserved[2][i] + curDAngle[i]);
 				}
 			}
@@ -226,11 +228,10 @@ public abstract class DroppableLayout implements Serializable {
 		private void setLocationAndAngle(Card card, float x, float y, float angle) {
 			// will rearrange if:
 			// (1) the card is still belongs to the droppbale.
-			// (2) the rearrange flag is on.
-			// (3) all the other animation flags are off (no other animation affects the card).
+			// (2) all animation flags are off (no other animation affects the card).
 			
-			// 					(1)									(2)											(3)
-			if (droppable.getCards().contains(card) && card.getAnimationFlags().checkRearrangeCondition()){
+			// 					(1)									(2)
+			if (currentCards.contains(card) && card.getAnimationFlags().checkRearrangeCondition()){
 				card.setLocation(x, y);
 				card.setAngle(angle);
 			}

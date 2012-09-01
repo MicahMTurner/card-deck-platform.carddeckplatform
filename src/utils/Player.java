@@ -223,4 +223,8 @@ public class Player extends Droppable implements  Comparable<Player>{
 		
 	}
 
+	@Override
+	public void putCardOnTop(Card card){
+	
+	}
 }

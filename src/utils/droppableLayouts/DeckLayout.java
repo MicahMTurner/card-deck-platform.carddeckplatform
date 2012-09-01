@@ -24,6 +24,11 @@ public class DeckLayout extends DroppableLayout  {
 		if (numberOfCards == 0)
 			return;
 		
+		// check if the ruler card steel belongs to the deck area.
+		if(rulerCard!=null && !droppable.getCards().contains(rulerCard))
+			rulerCard=null;
+		
+		
 		if(rulerCard!=null)
 			numberOfCards--;
 		
