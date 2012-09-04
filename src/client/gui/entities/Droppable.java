@@ -262,6 +262,18 @@ public abstract class Droppable implements Serializable {
 	
 	}
 	
+	public void putCardOnBottom(Card card){
+		List<Card> cards = getMyCards();
+		
+		// check if the card is not in the list for some reason.
+		if(!cards.contains(card))
+			return;
+	
+		cards.remove(card);
+		cards.add(cards.size(), card);
+	
+	}
+	
 	public abstract boolean onCardAdded(Player player, Card card);
 	
 	public abstract boolean onCardRemoved(Player player, Card card);

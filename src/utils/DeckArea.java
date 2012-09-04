@@ -65,15 +65,10 @@ public class DeckArea extends Droppable{
 
 	@Override
 	public boolean onCardAdded(Player player, Card card) {
-		
-		if(firstAdd){
-			//cards.addFirst(card);
-			setRulerCard(card);
-			firstAdd = false;
-		}else{
-			card.hide();
-			cards.addLast(card);
-		}
+
+		card.hide();
+		cards.addLast(card);
+
 		return true;
 		
 	}
@@ -126,14 +121,11 @@ public class DeckArea extends Droppable{
 	
 	@Override
 	public boolean onLongPress(Draggable draggable, Droppable from){
-		if(hasRulerCard())
-			return false;
+		if(hasRulerCard() || !getCards().contains(draggable))
+			return false;	
 		
-		addCard(null, (Card)draggable);
 		setRulerCard((Card)draggable);
-		
-		rearrange(0);
-		ClientController.sendAPI().cardAdded((Card)draggable, from.getId(), id, ClientController.get().getMe().getId());
+		ClientController.sendAPI().setRulerCard((Card)draggable, getId());
 		return true;
 	}
 	
@@ -142,7 +134,9 @@ public class DeckArea extends Droppable{
 	}
 	
 	public void setRulerCard(Card card){
+		putCardOnBottom(card);
 		((DeckLayout)getDroppableLayout()).setRulerCard(card);
+		rearrange(0);
 
 	}
 //

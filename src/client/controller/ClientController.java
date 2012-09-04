@@ -17,6 +17,7 @@ import communication.actions.DraggableMotionAction;
 import communication.actions.EndDraggableMotionAction;
 import communication.actions.EndRoundAction;
 import communication.actions.EndTurnAction;
+import communication.actions.SetRulerCardAction;
 import communication.actions.Turn;
 import communication.link.ServerConnection;
 import communication.messages.EndRoundMessage;
@@ -137,6 +138,11 @@ public class ClientController implements Observer {
 			ServerConnection.getConnection().send(new Message(new EndRoundAction()));
 			//ServerConnection.getConnection().send(new Message(new EndRoundAction()));
 		}
+		
+		public void setRulerCard(Card card , Integer targetID){
+			ServerConnection.getConnection().send(new Message(new SetRulerCardAction(card, targetID)));
+		}
+		
 		public void cardRevealed(Card card){
 			//ServerConnection.getConnection().getMessageSender().send(new Message(new CardRevealAction()))
 		}
