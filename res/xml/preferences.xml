@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    	<PreferenceCategory
+                android:title="Player setup">
+                 <EditTextPreference
+                android:name="EditText Preference"
+                android:defaultValue="Guest"
+                android:title="Set your username"
+                android:key="userName" />
+        </PreferenceCategory>
+        
+        <PreferenceCategory
+                android:title="Connection type">
+                <CheckBoxPreference
+                    
+                        android:title="Use bluetooth"
+                        android:defaultValue="false"
+                        android:summary="If selected the application uses bluetooth. Otherwise uses wifi."
+                        android:key="useBluetooth" />
+        </PreferenceCategory>
+        
+        <PreferenceCategory
+                android:title="Live position">
+                <CheckBoxPreference
+                    
+                        android:title="Use live position"
+                        android:defaultValue="false"
+                        android:summary="If selected the application uses live position."
+                        android:key="useLivePosition" />
+        </PreferenceCategory>
+        
+        
+</PreferenceScreen>
