@@ -25,6 +25,7 @@ import communication.actions.DraggableMotionAction;
 import communication.actions.EndDraggableMotionAction;
 import communication.actions.EndRoundAction;
 import communication.actions.EndTurnAction;
+import communication.actions.SetRulerCardAction;
 import communication.link.ServerConnection;
 import communication.messages.EndTurnMessage;
 import communication.messages.Message;
