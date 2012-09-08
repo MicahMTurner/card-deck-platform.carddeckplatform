@@ -203,7 +203,6 @@ public abstract class Droppable implements Serializable {
 
 	public abstract void deltCard(Card card);
 	protected abstract List<Card> getMyCards();
-	protected abstract List<Card> getMyCards();
 	public AbstractList<Card> getCards(){
 		synchronized(this){		
 			try{
