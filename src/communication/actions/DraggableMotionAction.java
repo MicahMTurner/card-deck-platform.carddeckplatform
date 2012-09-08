@@ -42,7 +42,7 @@ public class DraggableMotionAction implements Action {
 			break;
 		}
 		
-		ClientController.get().getGui().draggableMotion(username, cardId, p.getX(), p.getY());
+		ClientController.get().draggableMotion(username, cardId, p.getX(), p.getY());
 		
 	}
 

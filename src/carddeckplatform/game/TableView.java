@@ -231,10 +231,6 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	}
 
 
-	public void swapPositions(Player player, Position.Player swappedWith) {
-		// TODO Auto-generated method stub
-
-	}
 
 	/*************************************************************************************
 	 * 
