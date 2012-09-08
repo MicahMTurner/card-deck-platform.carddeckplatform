@@ -17,6 +17,6 @@ public class StartDraggableMotionAction implements Action  {
 	@Override
 	public void execute() {
 		
-		ClientController.get().getGui().startDraggableMotion(sender, cardId,fromId);
+		ClientController.get().startDraggableMotion(cardId,fromId,sender);
 	}
 }

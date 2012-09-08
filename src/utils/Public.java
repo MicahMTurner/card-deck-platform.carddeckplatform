@@ -5,26 +5,35 @@ import handlers.PublicEventsHandler;
 import java.util.LinkedList;
 
 import utils.droppableLayouts.DroppableLayout;
+import utils.droppableLayouts.DroppableLayout.LayoutType;
 import client.gui.entities.Droppable;
 
-
+/**
+ * this class represents an area where cards can be placed for all to see
+ * (cards can bee seen faced down or up)
+ * @author Yoav
+ *
+ */
 public class Public extends Droppable{	
 	private PublicEventsHandler handler;
 	
 	protected LinkedList<Card> cards=new LinkedList<Card>();	
 	
-	
-	
+	/**
+	 * constructor 
+	 * @param handler the public area handler for the game
+	 * @param position public area's position
+	 * @param layoutType layoutType of the public zone
+	 * @see LayoutType
+	 */
 	public Public(PublicEventsHandler handler,Position.Public position,DroppableLayout.LayoutType layoutType) {
 		super(position.getId(),position, layoutType);
-		this.handler=handler;
-		
-		
+		this.handler=handler;			
 		this.image = "freepublic";
 		
 	}
 	
-	@Override
+	@Override	
 	public boolean onCardAdded(Player player,Card card){
 		cards.addFirst(card);
 		boolean answer=handler.onCardAdded(this,player, card);
@@ -42,7 +51,11 @@ public class Public extends Droppable{
 		}		
 		return answer;
 	}
-	
+	/**
+	 * reaveal a card in this public
+	 * @param player player that did the action
+	 * @param card the card we want to reaveal
+	 */
 	public void revealCard(Player player,Card card){
 		card.reveal();
 		handler.onCardRevealed(this,player, card);
@@ -77,16 +90,14 @@ public class Public extends Droppable{
 	public LinkedList<Card> getMyCards() {
 		return cards;
 	}
+	/**
+	 * get first/top card in this droppable (not removing it from the droppable)
+	 */
 	public Card peek(){
 		if (cards.size()>1){
 			return cards.get(1);
 		}
 		return cards.peek();
-//		if (!cards.isEmpty()){
-//			return cards.get(cards.size()-1);
-//		}else{
-//			return null;
-//		}
 	}
 
 	@Override

@@ -31,7 +31,11 @@ import client.gui.entities.MetricsConvertion;
 
 
 
-
+/**
+ * this class represents a player in the game
+ * @author Yoav
+ *
+ */
 public class Player extends Droppable implements  Comparable<Player>{
 	private PlayerEventsHandler handler;	
 	private ArrayList<Card> hand;

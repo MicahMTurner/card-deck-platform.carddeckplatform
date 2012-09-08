@@ -203,6 +203,7 @@ public abstract class Droppable implements Serializable {
 
 	public abstract void deltCard(Card card);
 	protected abstract List<Card> getMyCards();
+	protected abstract List<Card> getMyCards();
 	public AbstractList<Card> getCards(){
 		synchronized(this){		
 			try{
@@ -261,6 +262,13 @@ public abstract class Droppable implements Serializable {
 		cards.add(0, card);
 	
 	}
+	/**
+	 * happens when a card is being added to this droppable
+	 * @param player the player who added the card (null if logic of the game did it)
+	 * @param card the card that was added
+	 * @return true if adding card to this droppable is valid action, false OW
+	 */
+	public abstract boolean onCardAdded(Player player, Card card);
 	
 	public void putCardOnBottom(Card card){
 		List<Card> cards = getMyCards();
@@ -274,10 +282,18 @@ public abstract class Droppable implements Serializable {
 	
 	}
 	
-	public abstract boolean onCardAdded(Player player, Card card);
-	
+	/**
+	 * happens when a card is being removed to this droppable
+	 * @param player the player who removed the card (null if logic of the game did it)
+	 * @param card the card that was removed
+	 * @return true if removing card to this droppable is valid action, false OW
+	 */
 	public abstract boolean onCardRemoved(Player player, Card card);
-	
+	/**
+	 * drawing method of cards in this public area
+	 * @param canvas canvas instance
+	 * @param context context instance
+	 */
 	public void drawMyCards(Canvas canvas,Context context){
 		AbstractList<Card>cards = getCards();
 		int size=cards.size()-1;
@@ -290,7 +306,11 @@ public abstract class Droppable implements Serializable {
 				Table.animatedCards.add(card);
 		}	
 	}
-	
+	/**
+	 * drawing method of public area
+	 * @param canvas canvas instance
+	 * @param context context instance
+	 */
 	public void draw(Canvas canvas, Context context) {
 		
 		Bitmap img = BitmapHolder.get().getBitmap(image);
@@ -338,14 +358,24 @@ public abstract class Droppable implements Serializable {
 	}
 
 
-
+	/**
+	 * get x point of droppable
+	 * @return x point of droppable
+	 */
 	public float getX() {
 		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();
 	}
-
+	/**
+	 * get y point of droppable
+	 * @return y point of droppable
+	 */
 	public float getY() {
 		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();
 	}
+	/**
+	 * rearrange cards in this droppable
+	 * @param index should be 0
+	 */
 	public void rearrange(int index) {
 		if(cardsHolding()==0)
 			return;
@@ -358,29 +388,42 @@ public abstract class Droppable implements Serializable {
 			getDroppableLayout().rearrange(index, droppableSize.getX()-card.getX(), droppableSize.getY()-card.getY());
 
 	}
+	/**
+	 * get how many cards this public area is holding
+	 * @return the number of cards this public area is holding
+	 */
 	public abstract int cardsHolding();
-
+	
+	/**
+	 * checks if public area is empty from cards 
+	 * @return true is no cards in this public area, false OW
+	 */
 	public abstract boolean isEmpty();
 
+	/**
+	 * clear all cards in this public area
+	 */
 	public abstract void clear();
 
+	/**
+	 * get public area's ID
+	 * @return public area's ID
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * set position of this public area according to the player's relative position around the table
+	 * @param relativePosition player's relative position around the table
+	 */
 	public void setPosition(Position relativePosition) {
 		this.position = relativePosition;
-		AbstractList<Card>cards=getCards();
 		if (getDroppableLayout() != null){
 			rearrange(0);
 		}
-//		for (Card card : cards){
-//			card.setLocation(getX(), getY());
-//		}
-
 	}
 
-	//protected abstract void deleteCard(Card card);
 	
 	public boolean onLongPress(Draggable draggable, Droppable from){
 		return false;

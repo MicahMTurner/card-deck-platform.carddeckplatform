@@ -12,7 +12,7 @@ public class EndDraggableMotionAction implements Action  {
 
 	@Override
 	public void execute() {
-		ClientController.get().getGui().endDraggableMotion(cardId);
+		ClientController.get().endDraggableMotion(cardId);
 		
 	}
 
