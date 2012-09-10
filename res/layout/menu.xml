@@ -56,56 +56,66 @@
             </EditText>
         </LinearLayout>
     </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/joingamebutton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="1dip"
-        android:text="@string/JoinAGame" android:textColor="@color/TransparentGrey"/>
+            <Button
+                android:id="@+id/joingamebutton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="1dip"
+                android:text="@string/JoinAGame"
+                android:textColor="@color/TransparentGrey" />
 
-    <Button
-        android:id="@+id/creategameButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="3dip"
-        android:text="@string/StartANewGame" android:textColor="@color/TransparentGrey"/>
-    
-    <Button
-        android:id="@+id/optionsButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="3dip"
-        android:text="@string/options"
-        android:textColor="@color/TransparentGrey" />
-    
-    
-    <Button
-        android:id="@+id/marketButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="3dip"
-        android:text="@string/market"
-        android:textColor="@color/TransparentGrey" />
-    
-    
-    <Button
-        android:id="@+id/rateButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="3dip"
-        android:text="@string/rating"
-        android:textColor="@color/TransparentGrey" />
-     
-    
-    <Button
-        android:id="@+id/scoreButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="3dip"
-        android:text="@string/score"
-        android:textColor="@color/TransparentGrey" />
-    
-    
+            <Button
+                android:id="@+id/creategameButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"
+                android:text="@string/StartANewGame"
+                android:textColor="@color/TransparentGrey" />
+
+            <Button
+                android:id="@+id/optionsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"
+                android:text="@string/options"
+                android:textColor="@color/TransparentGrey" />
+
+            <Button
+                android:id="@+id/marketButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"
+                android:text="@string/market"
+                android:textColor="@color/TransparentGrey" />
+
+            <Button
+                android:id="@+id/rateButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"
+                android:text="@string/rating"
+                android:textColor="@color/TransparentGrey" />
+
+            <Button
+                android:id="@+id/scoreButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"
+                android:text="@string/score"
+                android:textColor="@color/TransparentGrey" />
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
