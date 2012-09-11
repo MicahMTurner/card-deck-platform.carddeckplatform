@@ -1,25 +1,57 @@
 package client.dataBase;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
+
+import java.net.URLConnection;
 import java.util.ArrayList;
+
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
+
+import java.util.concurrent.CountDownLatch;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import logic.client.Game;
 
+import logic.client.Game;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import utils.Pair;
+import utils.Pair;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
+import carddeckplatform.game.CarddeckplatformActivity;
+import carddeckplatform.game.GameActivity;
+import carddeckplatform.game.MarketActivity;
+import carddeckplatform.game.PluginDetails;
+import carddeckplatform.game.StaticFunctions;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.twmacinta.util.MD5;
 
 import dalvik.system.DexClassLoader;
@@ -27,14 +59,17 @@ import dalvik.system.PathClassLoader;
 
 
 public class DynamicLoader {
-	final static String PLUGINDIR=GameEnvironment.path+"plugins";
 	//mapping between game name and class path.
+	final static String PLUGINDIR = GameEnvironment.path + "plugins";
 	private HashMap<String, String> mapping;
 	//add mapping between game instance and game name. 
 	//change host, so it is holding the same game instance as the client? or sending on end turn, who ended the turn
 	//and then see if he is last in queue... (or first and then remove him to end of line.. something like that...)
+	private Context context;
+	private Collection<PluginDetails> plugins = new ArrayList<PluginDetails>();
+	private CountDownLatch cdl;
 	public DynamicLoader() {
-		mapping=new HashMap<String, String>();
+		mapping = new HashMap<String, String>();
 	}
 
 	private void mapGame(String gameName, URL[] urls) {
@@ -208,11 +243,9 @@ public class DynamicLoader {
 		}
 		return namesAndMD5;
 	}
-	
-	
-	
-	public String calcMd5(File file){
-		
+
+	public String calcMd5(File file) {
+
 		try {
 			return MD5.asHex(MD5.getHash(file));
 		} catch (IOException e) {
