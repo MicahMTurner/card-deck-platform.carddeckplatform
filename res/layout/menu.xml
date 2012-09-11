@@ -5,37 +5,36 @@
     android:layout_height="fill_parent"
     android:background="@drawable/woodtexture"
     android:orientation="vertical"
-    android:stretchColumns="1" 
-    >
-	
-    	<ViewFlipper
+    android:stretchColumns="1" >
+
+    <ViewFlipper
         android:id="@+id/welcomeFlipper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
         <TextView
             android:id="@+id/WelcomeText"
+            style="@style/WelcomeFont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Welcome to :"
-            style="@style/WelcomeFont"/>"
+            android:text="Welcome to :" />
+"
 
         <TextView
             android:id="@+id/CardDeckText"
+            style="@style/WelcomeFont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Card-Deck-Platform"
-            style="@style/WelcomeFont" />
+            android:text="Card-Deck-Platform" />
     </ViewFlipper>
 
-    <LinearLayout
-        android:id="@+id/LinearLayout2"
-        android:layout_width="match_parent"
+    <TableLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_gravity="center_horizontal" >
 
-        <LinearLayout
-            android:id="@+id/linearLayout3"
+        <TableRow
+            android:id="@+id/tableRow3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
@@ -44,78 +43,74 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nickname:  "
-                android:textAppearance="?android:attr/textAppearanceLarge" android:textColor="@color/TransparentGrey"/>
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/TransparentGrey" />
 
             <EditText
                 android:id="@+id/nickText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" >
+                android:layout_weight="1"
+                android:ems="10" >
 
                 <requestFocus />
             </EditText>
-        </LinearLayout>
-    </LinearLayout>
-
-    <ScrollView
-        android:id="@+id/scrollView1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
 
             <Button
                 android:id="@+id/joingamebutton"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="1dip"
-                android:text="@string/JoinAGame"
+                android:background="@drawable/joinicon"
+                android:padding="3dip"
                 android:textColor="@color/TransparentGrey" />
 
             <Button
                 android:id="@+id/creategameButton"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="3dip"
-                android:text="@string/StartANewGame"
-                android:textColor="@color/TransparentGrey" />
+                android:background="@drawable/hosticon"
+                android:padding="3dip" />
 
             <Button
                 android:id="@+id/optionsButton"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="3dip"
-                android:text="@string/options"
-                android:textColor="@color/TransparentGrey" />
+                android:background="@drawable/settingsicon"
+                android:padding="3dip" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
 
             <Button
                 android:id="@+id/marketButton"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="3dip"
-                android:text="@string/market"
-                android:textColor="@color/TransparentGrey" />
+                android:background="@drawable/marketicon"
+                android:padding="3dip" />
 
             <Button
                 android:id="@+id/rateButton"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="3dip"
-                android:text="@string/rating"
-                android:textColor="@color/TransparentGrey" />
+                android:background="@drawable/ratingicon"
+                android:padding="3dip" />
 
             <Button
                 android:id="@+id/scoreButton"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="3dip"
-                android:text="@string/score"
-                android:textColor="@color/TransparentGrey" />
-        </LinearLayout>
-
-    </ScrollView>
+                android:background="@drawable/scoringicon"
+                android:padding="3dip" />
+        </TableRow>
+    </TableLayout>
 
 </LinearLayout>
