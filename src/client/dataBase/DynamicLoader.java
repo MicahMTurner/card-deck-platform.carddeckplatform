@@ -1,63 +1,40 @@
 package client.dataBase;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
+import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.CountDownLatch;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import logic.client.Game;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import utils.Pair;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
-import carddeckplatform.game.CarddeckplatformActivity;
-import carddeckplatform.game.GameActivity;
-import carddeckplatform.game.MarketActivity;
-import carddeckplatform.game.PluginDetails;
-import carddeckplatform.game.StaticFunctions;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.twmacinta.util.MD5;
 
+import dalvik.system.DexClassLoader;
 import dalvik.system.PathClassLoader;
 
+
 public class DynamicLoader {
-	final static String PLUGINDIR = GameEnvironment.path + "plugins";
+	final static String PLUGINDIR=GameEnvironment.path+"plugins";
+	//mapping between game name and class path.
 	private HashMap<String, String> mapping;
-	private Context context;
-	private Collection<PluginDetails> plugins = new ArrayList<PluginDetails>();
-	private CountDownLatch cdl;
+	//add mapping between game instance and game name. 
+	//change host, so it is holding the same game instance as the client? or sending on end turn, who ended the turn
+	//and then see if he is last in queue... (or first and then remove him to end of line.. something like that...)
 	public DynamicLoader() {
-		mapping = new HashMap<String, String>();
+		mapping=new HashMap<String, String>();
 	}
 
 	private void mapGame(String gameName, URL[] urls) {
@@ -103,11 +80,8 @@ public class DynamicLoader {
 
 	/**
 	 * loading an entire jar file with all its classes
-	 * 
-	 * @param path
-	 *            path of jar file to load
-	 * @param gameClassName
-	 *            name of the class that extends Game class
+	 * @param path path of jar file to load
+	 * @param gameClassName name of the class that extends Game class
 	 * @see Game
 	 * @return game instance
 	 */
@@ -138,18 +112,17 @@ public class DynamicLoader {
 					mapPlugins();
 				}
 			}
-			PathClassLoader classLoader = new PathClassLoader(PLUGINDIR + "/"
-					+ gameName + ".jar", getClass().getClassLoader());
-			// DexClassLoader classLoader = new DexClassLoader(
-			// (PLUGINDIR+"/"+gameName+".jar"), PLUGINDIR, null,
-			// getClass().getClassLoader());
-			// Class<?> cls = classLoader.loadClass(mapping.get(gameName));
-			// ClassLoader cl = new URLClassLoader(urls);
-
+			String jarFile = PLUGINDIR+"/"+gameName+".jar";
+			
+			DexClassLoader classLoader = new DexClassLoader(
+			    jarFile, PLUGINDIR, null, getClass().getClassLoader());
 			Class<?> cls = classLoader.loadClass(mapping.get(gameName));
-			game = (Game) cls.newInstance();
 
-		} catch (MalformedURLException e) {
+
+			game=(Game)cls.newInstance();
+		 
+		 
+		} catch (MalformedURLException e) {			
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -159,24 +132,21 @@ public class DynamicLoader {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
+		}		
+		
 		return game;
 	}
 
 	private void downloadGame(final Context context, String gamename) {
-		//gamename="war.jar";
 		try {
 			executeHttpGet();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (this.plugins == null)
-			System.out.println("ERROR of connection");
+
 		PluginDetails gamepd = null;
 		// getting the plugindetails
 		for (PluginDetails pd : this.plugins) {
-			System.out.println(pd.getFilename());
 			if (pd.getFilename().compareTo(gamename+".jar") == 0) {
 				gamepd = pd;
 				break;
@@ -238,13 +208,14 @@ public class DynamicLoader {
 		}
 		return namesAndMD5;
 	}
-
-	public String calcMd5(File file) {
-
+	
+	
+	
+	public String calcMd5(File file){
+		
 		try {
 			return MD5.asHex(MD5.getHash(file));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

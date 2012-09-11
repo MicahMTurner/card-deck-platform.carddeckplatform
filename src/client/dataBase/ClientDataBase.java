@@ -1,9 +1,15 @@
 package client.dataBase;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
+import logic.client.Game;
+import president.President;
+import durak.Durak;
 
 import freeplay.FreePlay;
+
 
 import logic.client.Game;
 
@@ -11,6 +17,7 @@ import logic.client.Game;
 public class ClientDataBase {
 	
 	private DynamicLoader loader;
+	
 	
 	
 	//-------Singleton implementation--------//
@@ -28,12 +35,13 @@ public class ClientDataBase {
 	}
 	private ClientDataBase() {
 		loader=new DynamicLoader();
+
 	}
 	/**
 	 * factory
 	 */
 	public Game getGame(String gameName){
-		if (gameName.equals("free play")){
+	if (gameName.equals("free play")){
 			return new FreePlay();
 		}
 		return loader.LoadPlugin(gameName);	
