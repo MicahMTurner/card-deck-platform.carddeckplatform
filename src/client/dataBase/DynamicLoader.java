@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
@@ -12,21 +11,16 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
-
 import java.net.URLConnection;
 import java.util.ArrayList;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-
 import java.util.concurrent.CountDownLatch;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import logic.client.Game;
 
 import logic.client.Game;
 
@@ -38,14 +32,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import utils.Pair;
-import utils.Pair;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import carddeckplatform.game.CarddeckplatformActivity;
-import carddeckplatform.game.GameActivity;
-import carddeckplatform.game.MarketActivity;
 import carddeckplatform.game.PluginDetails;
 import carddeckplatform.game.StaticFunctions;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
@@ -55,7 +44,6 @@ import com.google.gson.reflect.TypeToken;
 import com.twmacinta.util.MD5;
 
 import dalvik.system.DexClassLoader;
-import dalvik.system.PathClassLoader;
 
 
 public class DynamicLoader {
@@ -65,7 +53,6 @@ public class DynamicLoader {
 	//add mapping between game instance and game name. 
 	//change host, so it is holding the same game instance as the client? or sending on end turn, who ended the turn
 	//and then see if he is last in queue... (or first and then remove him to end of line.. something like that...)
-	private Context context;
 	private Collection<PluginDetails> plugins = new ArrayList<PluginDetails>();
 	private CountDownLatch cdl;
 	public DynamicLoader() {
@@ -137,7 +124,7 @@ public class DynamicLoader {
 				URL url = file.toURI().toURL();
 				URL[] urls = new URL[] { url };
 				mapGame(gameName, urls);
-				// check if game exists in plugin dir(managed to map him)
+				// check if game exists in plug-in dir(managed to map him)
 				if (mapping.get(gameName) == null) {
 					// game doesn't exists, download it automatically
 					cdl=new CountDownLatch(1);
@@ -150,7 +137,7 @@ public class DynamicLoader {
 			String jarFile = PLUGINDIR+"/"+gameName+".jar";
 			
 			DexClassLoader classLoader = new DexClassLoader(
-			    jarFile, PLUGINDIR, null, getClass().getClassLoader());
+			    jarFile, PLUGINDIR+"/temp", null, getClass().getClassLoader());
 			Class<?> cls = classLoader.loadClass(mapping.get(gameName));
 
 
@@ -266,7 +253,7 @@ public class DynamicLoader {
 				connection.connect();
 				// this will be useful so that you can show a typical 0-100%
 				// progress bar
-				long fileLength = pluginDetail[0].getSize();
+				//long fileLength = pluginDetail[0].getSize();
 
 				// download the file
 				InputStream input = new BufferedInputStream(
@@ -275,13 +262,13 @@ public class DynamicLoader {
 						.getPluginOutputStream(pluginDetail[0].getFilename());
 
 				byte data[] = new byte[4096];
-				long total = 0;
+				//long total = 0;
 				int count;
 				while ((count = input.read(data)) != -1) {
-					total += count;
-					System.out.println((int) (total * 100 / fileLength));
+					//total += count;
+					//
 					// publishing the progress....
-					publishProgress((int) (total * 100 / fileLength));
+					//publishProgress((int) (total * 100 / fileLength));
 					output.write(data, 0, count);
 				}
 				output.flush();
