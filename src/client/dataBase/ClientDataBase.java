@@ -12,7 +12,6 @@ public class ClientDataBase {
 	
 	private DynamicLoader loader;
 	
-	Partners  please  use tickets on the google site, if you start working on something. so we can know who works on each subject 
 	
 	//-------Singleton implementation--------//
 	private static class DataBaseHolder
