@@ -1,19 +1,13 @@
 package client.dataBase;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import durak.Durak;
-
-import president.President;
-
-import freePlaySingle.FreePlaySingle;
-import freeplay.FreePlay;
-
-import war.War;
 import logic.client.Game;
+import president.President;
+import durak.Durak;
+import freeplay.FreePlay;
 
 
 public class ClientDataBase {
@@ -37,16 +31,16 @@ public class ClientDataBase {
 	}
 	private ClientDataBase() {
 		loader=new DynamicLoader();
-		President president=new President();
-		games = new HashMap<String, Game>();
-		War war = new War();
-		
-		games.put(president.toString(), president);
-		games.put(war.toString(), war);
-		FreePlay freePlay = new FreePlay();
-		games.put(freePlay.toString(), freePlay);
-		Durak durak = new Durak();
-		games.put(durak.toString(), durak);
+//		President president=new President();
+//		games = new HashMap<String, Game>();
+//		War war = new War();
+//		
+//		games.put(president.toString(), president);
+//		games.put(war.toString(), war);
+//		FreePlay freePlay = new FreePlay();
+//		games.put(freePlay.toString(), freePlay);
+//		Durak durak = new Durak();
+//		games.put(durak.toString(), durak);
 		
 		//BlackJack blackJack=new BlackJack();
 		//games.put(blackJack.toString(), blackJack);
@@ -58,26 +52,26 @@ public class ClientDataBase {
 	 * factory
 	 */
 	public Game getGame(String gameName){
-		try {
-			return games.get(gameName).getClass().newInstance();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//return loader.LoadPlugin(gameName);	
-		return null;
+//		try {
+//			return games.get(gameName).getClass().newInstance();
+//		} catch (InstantiationException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IllegalAccessException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		return loader.LoadPlugin(gameName);	
+//		return null;
 	}
 	
 	
 	public Set<String> getGamesNames(){
-		Set<String> gameNames =new HashSet<String>();
-		for(String gameName : games.keySet()){
-			gameNames.add(gameName);
-		}
-		//Set<String>gameNames=loader.getGameNames();
+//		Set<String> gameNames =new HashSet<String>();
+//		for(String gameName : games.keySet()){
+//			gameNames.add(gameName);
+//		}
+		Set<String>gameNames=loader.getGameNames();
 		return gameNames;
 	}	
 }

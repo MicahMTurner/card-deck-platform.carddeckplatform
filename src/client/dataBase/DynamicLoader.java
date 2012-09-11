@@ -1,44 +1,38 @@
 package client.dataBase;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Method;
+import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import logic.client.Game;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+import utils.Pair;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
 import com.twmacinta.util.MD5;
 
-import communication.actions.AddPlayerAction;
 import dalvik.system.DexClassLoader;
 import dalvik.system.PathClassLoader;
 
-import logic.client.Game;
-import utils.Pair;
-import utils.Player;
-import utils.Position;
-import war.War;
-
 
 public class DynamicLoader {
-	final static String PLUGINDIR=GameEnvironment.path+"/plugins";
+	final static String PLUGINDIR=GameEnvironment.path+"plugins";
+	//mapping between game name and class path.
 	private HashMap<String, String> mapping;
-	
+	//add mapping between game instance and game name. 
+	//change host, so it is holding the same game instance as the client? or sending on end turn, who ended the turn
+	//and then see if he is last in queue... (or first and then remove him to end of line.. something like that...)
 	public DynamicLoader() {
 		mapping=new HashMap<String, String>();
 	}
@@ -105,12 +99,13 @@ public class DynamicLoader {
 				URL[] urls = new URL[]{url};				
 				mapGame(gameName,urls);
 			}
-			 PathClassLoader classLoader= new PathClassLoader(PLUGINDIR+"/"+gameName+".jar", getClass().getClassLoader());
-			//DexClassLoader classLoader = new DexClassLoader(
-			//		(PLUGINDIR+"/"+gameName+".jar"), PLUGINDIR, null, getClass().getClassLoader());
-			//Class<?> cls = classLoader.loadClass(mapping.get(gameName));
-			//ClassLoader cl = new URLClassLoader(urls);	
-			Class<?> cls = classLoader.loadClass(mapping.get(gameName));		
+			String jarFile = PLUGINDIR+"/"+gameName+".jar";
+			
+			DexClassLoader classLoader = new DexClassLoader(
+			    jarFile, PLUGINDIR, null, getClass().getClassLoader());
+			Class<?> cls = classLoader.loadClass(mapping.get(gameName));
+
+
 			game=(Game)cls.newInstance();
 		 
 		 
@@ -122,7 +117,10 @@ public class DynamicLoader {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {			
 			e.printStackTrace();
-		}		
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 		
 		return game;
 	}
 	//maybe if we return HASH-MAP , the performance would be better
