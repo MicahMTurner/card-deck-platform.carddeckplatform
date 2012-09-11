@@ -36,45 +36,48 @@ public class DynamicLoader {
 	public DynamicLoader() {
 		mapping=new HashMap<String, String>();
 	}
-	
-	private void mapGame(String gameName, URL[] urls){
-		try{				
-				ClassLoader cl = new URLClassLoader(urls);
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder builder = factory.newDocumentBuilder();
-				Document doc = builder.parse(cl.getResource("info.xml").openStream());
-				NodeList classPathNode=doc.getElementsByTagName("classPath");
-				if (classPathNode.getLength()==1){
-					mapping.put(gameName, 
-							classPathNode.item(0).getFirstChild().getNodeValue().trim());
-				}			
-		 }
-		 catch (Exception e){	
-			 e.printStackTrace();
-		 }
-	}
-	
-	public Set<String> getGameNames(){
-		mapPlugins();
-		return mapping.keySet();
-	}
-	
-	
-	private void mapPlugins(){
+
+	private void mapGame(String gameName, URL[] urls) {
 		try {
-			File folder = new File(PLUGINDIR);		
-			for (File file : folder.listFiles()){		
-				URL url=file.toURI().toURL();						
-				URL[] urls = new URL[]{url};
-				String gameName=file.getName().substring(0, file.getName().lastIndexOf("."));				
-				mapGame(gameName.toString(),urls);
-			}		
-			
-		} catch (IOException e) {			
+			ClassLoader cl = new URLClassLoader(urls);
+			DocumentBuilderFactory factory = DocumentBuilderFactory
+					.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document doc = builder.parse(cl.getResource("info.xml")
+					.openStream());
+			NodeList classPathNode = doc.getElementsByTagName("classPath");
+			if (classPathNode.getLength() == 1) {
+				mapping.put(gameName, classPathNode.item(0).getFirstChild()
+						.getNodeValue().trim());
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
-		}				
+		}
 	}
-	
+
+	public Set<String> getGameNames() {
+		mapping.clear();
+		mapPlugins();
+		return new HashSet<String>(mapping.keySet());
+	}
+
+	private void mapPlugins() {
+		try {
+			File folder = new File(PLUGINDIR);
+			for (File file : folder.listFiles()) {
+				URL url = file.toURI().toURL();
+				URL[] urls = new URL[] { url };
+				System.out.println(file.getName());
+				String gameName = file.getName().substring(0,
+						file.getName().lastIndexOf("."));
+				mapGame(gameName.toString(), urls);
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * loading an entire jar file with all its classes
 	 * @param path path of jar file to load
@@ -82,22 +85,32 @@ public class DynamicLoader {
 	 * @see Game
 	 * @return game instance
 	 */
-	public Game LoadPlugin(String gameName){		
-		
-		Game game=null;
+	public Game LoadPlugin(String gameName) {
+
+		Game game = null;
 		try {
-			
-			//get the classPath that extends Game class
-			String classPath=mapping.get(gameName);
-			
-			//check if never mapped that game before
-			if (classPath==null){
-				/*we are not the host, therefore we didn't
-				 *map all plug-ins.*/
-				File file = new File(PLUGINDIR+"/"+gameName+".jar");
-				URL url = file.toURI().toURL();				
-				URL[] urls = new URL[]{url};				
-				mapGame(gameName,urls);
+
+			// get the classPath that extends Game class
+			String classPath = mapping.get(gameName);
+
+			// check if never mapped that game before
+			if (classPath == null) {
+				/*
+				 * we are not the host, therefore we didn'tmap all plug-ins.
+				 */
+				File file = new File(PLUGINDIR + "/" + gameName + ".jar");
+				URL url = file.toURI().toURL();
+				URL[] urls = new URL[] { url };
+				mapGame(gameName, urls);
+				// check if game exists in plugin dir(managed to map him)
+				if (mapping.get(gameName) == null) {
+					// game doesn't exists, download it automatically
+					cdl=new CountDownLatch(1);
+					downloadGame(CarddeckplatformActivity.getContext(),
+							gameName);
+					cdl.await();
+					mapPlugins();
+				}
 			}
 			String jarFile = PLUGINDIR+"/"+gameName+".jar";
 			
@@ -115,23 +128,82 @@ public class DynamicLoader {
 			e.printStackTrace();
 		} catch (InstantiationException e) {
 			e.printStackTrace();
-		} catch (IllegalAccessException e) {			
+		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
+		} catch (InterruptedException e) {
 			e.printStackTrace();
-		} 		
+		}		
+		
 		return game;
 	}
-	//maybe if we return HASH-MAP , the performance would be better
-	public ArrayList<Pair<String, String>> getInstalledPlugins(){
+
+	private void downloadGame(final Context context, String gamename) {
+		try {
+			executeHttpGet();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		PluginDetails gamepd = null;
+		// getting the plugindetails
+		for (PluginDetails pd : this.plugins) {
+			if (pd.getFilename().compareTo(gamename+".jar") == 0) {
+				gamepd = pd;
+				break;
+			}
+		}
+		final PluginDetails gamepd2=gamepd;
+		new DownloadFile().execute(gamepd2);
 		
-		ArrayList<Pair<String, String>>namesAndMD5 = new ArrayList<Pair<String,String>>();
+
+	}
+
+	public void executeHttpGet() throws Exception {
+
+		BufferedReader in = null;
+		try {
+			HttpClient client = new DefaultHttpClient();
+			HttpGet request = new HttpGet();
+			request.setURI(new URI(
+					"http://cardsplatform.appspot.com/cardeckplatform_details"));
+			HttpResponse response = client.execute(request);
+			in = new BufferedReader(new InputStreamReader(response.getEntity()
+					.getContent()));
+			StringBuffer sb = new StringBuffer("");
+			String line = "";
+			String NL = System.getProperty("line.separator");
+			while ((line = in.readLine()) != null) {
+				sb.append(line + NL);
+			}
+			in.close();
+			String json = sb.toString();
+			System.out.println(json);
+			Gson gson = new Gson();
+			Type collectionType = new TypeToken<Collection<PluginDetails>>() {
+			}.getType();
+			this.plugins = gson.fromJson(json, collectionType);
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	// maybe if we return HASH-MAP , the performance would be better
+	public ArrayList<Pair<String, String>> getInstalledPlugins() {
+
+		ArrayList<Pair<String, String>> namesAndMD5 = new ArrayList<Pair<String, String>>();
 		mapPlugins();
-		//go over mapping game names
-		for (String gameName : mapping.keySet()){
-			//add game name ".jar" , create new file instance from plugin dir.
-			Pair<String,String> nameAndMD5= new Pair<String, String>(gameName+".jar", calcMd5(new File(PLUGINDIR+"/"+gameName+".jar")));
+		// go over mapping game names
+		for (String gameName : mapping.keySet()) {
+			// add game name ".jar" , create new file instance from plugin dir.
+			Pair<String, String> nameAndMD5 = new Pair<String, String>(gameName
+					+ ".jar", calcMd5(new File(PLUGINDIR + "/" + gameName
+					+ ".jar")));
 			namesAndMD5.add(nameAndMD5);
 		}
 		return namesAndMD5;
@@ -144,10 +216,63 @@ public class DynamicLoader {
 		try {
 			return MD5.asHex(MD5.getHash(file));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
-	} 
-	
+	}
+
+	private class DownloadFile extends
+			AsyncTask<PluginDetails, Integer, String> {
+		@Override
+		protected String doInBackground(PluginDetails... pluginDetail) {
+			try {
+
+				URL url = new URL("http://cardsplatform.appspot.com"
+						+ pluginDetail[0].getAddress());
+				URLConnection connection = url.openConnection();
+				connection.connect();
+				// this will be useful so that you can show a typical 0-100%
+				// progress bar
+				long fileLength = pluginDetail[0].getSize();
+
+				// download the file
+				InputStream input = new BufferedInputStream(
+						connection.getInputStream());
+				FileOutputStream output = StaticFunctions
+						.getPluginOutputStream(pluginDetail[0].getFilename());
+
+				byte data[] = new byte[4096];
+				long total = 0;
+				int count;
+				while ((count = input.read(data)) != -1) {
+					total += count;
+					System.out.println((int) (total * 100 / fileLength));
+					// publishing the progress....
+					publishProgress((int) (total * 100 / fileLength));
+					output.write(data, 0, count);
+				}
+				output.flush();
+				output.close();
+				input.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPreExecute() {
+		}
+
+		@Override
+		protected void onProgressUpdate(Integer... progress) {
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			cdl.countDown();
+		}
+
+	}
+
 }

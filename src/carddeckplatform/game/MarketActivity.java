@@ -112,9 +112,11 @@ public class MarketActivity extends Activity {
 		textView2.setText("Rating");
 		textView2.setTypeface(null, Typeface.BOLD_ITALIC);
 		tr.addView(textView2);
-
+		
 		for (Iterator iter = plugins.iterator(); iter.hasNext();) {
 			PluginDetails pd = (PluginDetails) iter.next();
+			if(getIntent().getStringExtra("game name")!= null && pd.getFilename().compareTo(getIntent().getStringExtra("game name"))!=0)
+				continue;
 			tr = new TableRow(this);
 			tr.setGravity(Gravity.CENTER);
 
@@ -182,7 +184,7 @@ public class MarketActivity extends Activity {
 				mProgressDialog.setMax(100);
 				mProgressDialog
 						.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-				mProgressDialog.setCancelable(false);
+				mProgressDialog.setCancelable(true);
 
 				// execute this when the downloader must be fired
 				DownloadFile downloadFile = new DownloadFile();
