@@ -10,7 +10,26 @@
         android:layout_height="wrap_content"
         android:text="@string/search"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
+	<it.sephiroth.demo.slider.widget.MultiDirectionSlidingDrawer
+        xmlns:my="http://schemas.android.com/apk/res/carddeckplatform.game"
+        android:id="@+id/drawer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        app:content="@+id/content"
+        app:direction="topToBottom"
+        app:handle="@+id/handle" >
+
+        <include
+            android:id="@id/content"
+            layout="@layout/pen_content" />
+
+        <ImageView
+            android:id="@id/handle"
+            android:layout_width="wrap_content"
+            android:layout_height="40px"
+            android:src="@drawable/sliding_drawer_handle_bottom" />
+    </it.sephiroth.demo.slider.widget.MultiDirectionSlidingDrawer>
+    
     <AutoCompleteTextView
         android:id="@+id/autoCompleteTextView1"
         android:layout_width="match_parent"
@@ -35,53 +54,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
 
-                <TableRow
-                    android:id="@+id/tableRow1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
-                </TableRow>
-
-                <TableRow
-                    android:id="@+id/tableRow2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
-                </TableRow>
-
-                <TableRow
-                    android:id="@+id/tableRow3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
-                </TableRow>
-
-                <TableRow
-                    android:id="@+id/tableRow4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
-                </TableRow>
+                
             </TableLayout>
 
         </LinearLayout>
     </ScrollView>
     
-    <it.sephiroth.demo.slider.widget.MultiDirectionSlidingDrawer
-        xmlns:my="http://schemas.android.com/apk/res/carddeckplatform.game"
-        android:id="@+id/drawer"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        app:content="@+id/content"
-        app:direction="topToBottom"
-        app:handle="@+id/handle" >
-
-        <include
-            android:id="@id/content"
-            layout="@layout/pen_content" />
-
-        <ImageView
-            android:id="@id/handle"
-            android:layout_width="wrap_content"
-            android:layout_height="40px"
-            android:src="@drawable/sliding_drawer_handle_bottom" />
-    </it.sephiroth.demo.slider.widget.MultiDirectionSlidingDrawer>
+    
 
     
 
