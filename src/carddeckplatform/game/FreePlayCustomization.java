@@ -22,6 +22,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class FreePlayCustomization extends Activity {
@@ -47,7 +50,7 @@ public class FreePlayCustomization extends Activity {
 	@Override
     public boolean onCreateOptionsMenu(Menu menu){
     	menu.add(0, Menu.FIRST, Menu.NONE, "Save").setIcon(R.drawable.save);
-    	menu.add(0, Menu.FIRST+1, Menu.NONE, "Cancel").setIcon(R.drawable.exit);
+    	menu.add(0, Menu.FIRST+1, Menu.NONE, "More options").setIcon(R.drawable.rank);
     	menu.add(0, Menu.FIRST+2, Menu.NONE, "Help").setIcon(R.drawable.info);    	
     	
     	return true;
@@ -82,6 +85,40 @@ public class FreePlayCustomization extends Activity {
     			return true;
     		}
     		case Menu.FIRST+1:{
+    			final String cardsToEachPlayerStr = "Cards to each player: ";
+    			final Dialog dialog = new Dialog(FreePlayCustomization.this);
+    			dialog.setTitle("More options");
+    			dialog.setContentView(R.layout.freeplaycustomizationoptions);
+    			
+    			final SeekBar sk = (SeekBar) dialog.findViewById(R.id.customizationSeekBar);
+    			sk.setProgress(editView.getCardsToDeal());
+    			final TextView numOfCardsLabel = (TextView) dialog.findViewById(R.id.customizationNumOfCards);
+    			numOfCardsLabel.setText(cardsToEachPlayerStr + sk.getProgress());
+    			
+    			sk.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+					
+					@Override
+					public void onStopTrackingTouch(SeekBar seekBar) {
+						
+						
+					}
+					
+					@Override
+					public void onStartTrackingTouch(SeekBar seekBar) {
+						
+						
+					}
+					
+					@Override
+					public void onProgressChanged(SeekBar seekBar, int progress,
+							boolean fromUser) {
+						numOfCardsLabel.setText(cardsToEachPlayerStr + sk.getProgress());
+						editView.setCardsToDeal(sk.getProgress());
+						
+					}
+				});
+    			
+    			dialog.show();
     			return true;
     		}
     		case Menu.FIRST+2:{

@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import communication.messages.RequestCardMessage;
+import communication.server.ConnectionsManager;
+
 import utils.Button;
+import utils.Card;
 import utils.Deck;
 import utils.GamePrefs;
 import utils.Pair;
@@ -251,5 +255,18 @@ public abstract class Game {
 //	}
 	public abstract String instructions();
 	
+	
 
+	protected void dealCardAnimation(int deckId, ArrayList<Card> deckCards, int cardsToEachPlayer){
+		int numOfPlayers=players.size();
+		for(int i=0 ; i<numOfPlayers * cardsToEachPlayer ; i++){
+			ConnectionsManager.getConnectionsManager().sendToAll(new RequestCardMessage(players.get(i % numOfPlayers), deckId, deckCards.get(i)));
+			try {
+				Thread.sleep(400);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 }
