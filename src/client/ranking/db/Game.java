@@ -9,7 +9,13 @@ public class Game {
 	String date;
 	String gameType;
 	
-//	public Game(long gameId,long lastRoundId,ArrayList<Player> players) {
+public String getGameType() {
+		return gameType;
+	}
+	public void setGameType(String gameType) {
+		this.gameType = gameType;
+	}
+	//	public Game(long gameId,long lastRoundId,ArrayList<Player> players) {
 //		// TODO Auto-generated constructor stub
 //		this.lastRoundId=lastRoundId;
 //		this.gameId=gameId;
@@ -55,7 +61,16 @@ public class Game {
 	public void setDate(String date) {
 		this.date = date;
 	}
-	
-	
+	public String getPlayersInfo() {
+		StringBuilder stringBuilder= new StringBuilder();
+		for(Player player: players){
+			stringBuilder.append(player.getUserName());
+			stringBuilder.append("(");
+			stringBuilder.append(player.getScore());
+			stringBuilder.append(")");
+			
+		}
+		return stringBuilder.toString();
+	}
 	
 }

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -146,7 +147,46 @@ public class ScoringManager {
 			cursor.moveToNext();
 		}
 	}
-	
+	public Round[] showAllRoundsRounds(Game game){
+		Cursor cursor=database.rawQuery(
+				"select R.roundId,R.dateUpdated,UD.userName,UD.point "+
+				"( "+
+				"select roundId,dateUpdated "+
+				"from Rounds "+
+				"where gameId="+game.getGameId()+
+				") "+
+				"R "+
+				"join "+
+				"( "+
+				"select RD.userId,U.userName,RD.roundId,RD.point point "+
+				"from RoundsDetails RD join Users U on RD.userId=U.userId "+
+				") "+
+				"UD "+
+				"UD.roundId=R.roundId "+
+				"Order By R.dateUpdated"
+				,null);
+		HashMap<Long, Round> rounds=new HashMap<Long, Round>();
+		ArrayList<Long> roundsId=new ArrayList<Long>();
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			long roundId=cursor.getLong(0);
+			if(rounds.containsKey(roundId)){
+				rounds.get(roundsId).addUserResult(new Player(cursor.getString(2), cursor.getInt(3)));
+			}
+			else{
+				Round round=new Round(cursor.getString(1));
+				round.addUserResult(new Player(cursor.getString(2), cursor.getInt(3)));
+				roundsId.add(roundId);
+			}
+			cursor.moveToNext();
+		}
+		
+		Round [] roundsArr=new Round[roundsId.size()] ;
+		for(int i=0;i<roundsId.size();i++)
+			roundsArr[i]=rounds.get(rounds.get(i));
+		
+		return roundsArr;
+	}
 	
 	
 	/**
@@ -205,9 +245,6 @@ public class ScoringManager {
 		
 		
 		cursor.moveToFirst();
-		long roundid=-1;
-		Round round= new Round();
-		ArrayList<Round> rounds= new ArrayList<Round>();
 		HashMap<Long, Game> games= new HashMap<Long, Game>();
 		while (!cursor.isAfterLast()){
 			long gameId=cursor.getLong(1);
@@ -228,25 +265,10 @@ public class ScoringManager {
 		
 		Game [] gameArray=(Game[]) games.values().toArray();
 		return gameArray;
-		
-//		while (!cursor.isAfterLast()) {//other iterationss
-//			long currId=cursor.getLong(0);
-//			if (roundid==currId) {//same round
-//				round.addUserResult(new Player(cursor.getLong(1), cursor.getInt(3)));
-//				System.out.println(cursor.getString(1)+","+cursor.getLong(2)+","+ cursor.getInt(3));
-//			}
-//			else{//new round
-//				rounds.add(round);
-//				round= new Round();
-//				round.setDate(cursor.getString(1));
-//				round.addUserResult(new Player(cursor.getLong(1), cursor.getInt(3)));
-//				System.out.println(cursor.getString(1)+","+cursor.getLong(2)+","+ cursor.getInt(3));
-//			}
-//			cursor.moveToNext();
-//			roundid=currId;
-//		}
-		
 	}
+	
+	
+	
 	public void removeGame(Game game){
 		String [] columns={ RoundsColumns.ROUND_ID};
 		Cursor cursor =database.query(Tables.ROUNDS, columns, RoundsColumns.ROUND_GAME_ID+"="+game.getGameId(), null, null, null, null);

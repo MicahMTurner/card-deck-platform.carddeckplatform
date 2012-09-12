@@ -6,8 +6,9 @@ public class Round {
 	ArrayList<Player> roundResult ;
 	String date;
 
-	public Round() {
+	public Round(String date) {
 		roundResult = new ArrayList<Player>();
+		this.date=date;
 	}
 
 	public ArrayList<Player> getRoundResult() {
