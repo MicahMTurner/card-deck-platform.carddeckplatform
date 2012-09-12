@@ -193,15 +193,19 @@ public class Durak extends Game{
 		
 		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(deckCards,Position.Button.TOPRIGHT.getId())));
 		
-		for(int i=0 ; i<numOfPlayers * 6 ; i++){
-			ConnectionsManager.getConnectionsManager().sendToAll(new RequestCardMessage(players.get(i % numOfPlayers), deckId, deckCards.get(i)));
-			try {
-				Thread.sleep(400);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		
+		dealCardAnimation(deckId, deckCards, 6);
+		
+		
+//		for(int i=0 ; i<numOfPlayers * 6 ; i++){
+//			ConnectionsManager.getConnectionsManager().sendToAll(new RequestCardMessage(players.get(i % numOfPlayers), deckId, deckCards.get(i)));
+//			try {
+//				Thread.sleep(400);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 		
 		
 	}
