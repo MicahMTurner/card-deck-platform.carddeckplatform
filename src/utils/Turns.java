@@ -27,10 +27,21 @@ public class Turns {
 		
 	}
 	
+	/**
+	 * creates a turn queue that that goes clock wise.
+	 * @param startingPlayer
+	 * @return
+	 */
 	public static Queue<Position.Player> clockWise(Position.Player startingPlayer){
 		return clockTurns(startingPlayer,true);
 			
 	}
+	
+	/**
+	 * creates a turn queue that that goes counter clock wise.
+	 * @param startingPlayer
+	 * @return
+	 */
 	public static Queue<Position.Player> counterClockWise(Position.Player startingPlayer){
 		return clockTurns(startingPlayer,false);
 		

@@ -78,17 +78,7 @@ public class DeckArea extends Droppable{
 		cards.remove(card);
 		return true;
 	}
-	
 
-//	@Override
-//	public int getX() {
-//		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();		
-//	}
-//
-//	@Override
-//	public int getY() {
-//		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();		
-//	}
 
 	@Override
 	public int cardsHolding() {
