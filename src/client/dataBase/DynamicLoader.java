@@ -53,12 +53,12 @@ public class DynamicLoader {
 	//add mapping between game instance and game name. 
 	//change host, so it is holding the same game instance as the client? or sending on end turn, who ended the turn
 	//and then see if he is last in queue... (or first and then remove him to end of line.. something like that...)
-	private HashMap<String,Game> gameInstance;
+//	private HashMap<String,Game> gameInstance;
 	private Collection<PluginDetails> plugins = new ArrayList<PluginDetails>();
 	private CountDownLatch cdl;
 	public DynamicLoader() {
 		mapping = new HashMap<String, String>();
-		gameInstance = new HashMap<String, Game>();
+		//gameInstance = new HashMap<String, Game>();
 	}
 
 	private void mapGame(String gameName, URL[] urls) {
@@ -81,7 +81,7 @@ public class DynamicLoader {
 
 	public Set<String> getGameNames() {
 		mapping.clear();
-		gameInstance.clear();
+		//gameInstance.clear();
 		mapPlugins();
 		return new HashSet<String>(mapping.keySet());
 	}
@@ -137,14 +137,14 @@ public class DynamicLoader {
 					mapPlugins();
 				}
 			}
-			game=gameInstance.get(gameName);
+			//game=gameInstance.get(gameName);
 			if (game==null){
 				String jarFile = PLUGINDIR+"/"+gameName+".jar";
 				DexClassLoader classLoader = new DexClassLoader(
 						jarFile, GameEnvironment.path+"temp", null, getClass().getClassLoader());
 				Class<?> cls = classLoader.loadClass(mapping.get(gameName));
 				game=(Game)cls.newInstance();
-				gameInstance.put(gameName, game);
+				//gameInstance.put(gameName, game);
 			}
 			System.out.println("loading class: "+getClass().getClassLoader().toString());
 
@@ -166,6 +166,7 @@ public class DynamicLoader {
 		
 		return game;
 	}
+	
 
 	private void downloadGame(final Context context, String gamename) {
 		try {

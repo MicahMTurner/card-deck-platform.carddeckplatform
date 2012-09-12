@@ -7,6 +7,7 @@ import client.controller.ClientController;
 import client.gui.entities.Droppable;
 
 import communication.actions.DealCardAction;
+import communication.actions.SetRulerCardAction;
 import communication.messages.Message;
 import communication.messages.RequestCardMessage;
 import communication.server.ConnectionsManager;
@@ -27,7 +28,8 @@ import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import logic.client.Game;
 
 public class Durak extends Game{
-	
+	Card rulerCard;
+	utils.Player startingPlayer;
 
 	
 	public Durak(){
@@ -158,7 +160,10 @@ public class Durak extends Game{
 
 	@Override
 	protected Queue<Player> setTurns() {
-		return utils.Turns.clockWise(Position.Player.BOTTOM);
+		if(startingPlayer!=null)
+			return utils.Turns.clockWise(startingPlayer.getGlobalPosition());
+		else
+			return utils.Turns.clockWise(Position.Player.BOTTOM);
 	}
 
 	@Override
@@ -167,6 +172,29 @@ public class Durak extends Game{
 		return 2;
 	}
 
+	
+	Card findRulerCard(ArrayList<Card> deckCards, int numOfPlayers){
+		return deckCards.get(numOfPlayers*6);
+	}
+	
+	utils.Player findStartingPlayer(ArrayList<Card> deckCards, Card rulerCard, int numOfPlayers){
+		StandartCard ruler = (StandartCard)rulerCard;
+		int smallestValue=55;
+		int index=-1;
+		
+		for(int i=0; i<numOfPlayers*6; i++){
+			StandartCard sd = (StandartCard)deckCards.get(i);
+			if(sd.getColor().equals(ruler.getColor()) && sd.getValue()<smallestValue){
+				index=i;
+				smallestValue=sd.getValue();
+			}
+		}
+		if(index!=-1)
+			return players.get(index % numOfPlayers);
+		else
+			return null;
+	}
+	
 	@Override
 	public void dealCards() {
 		int deckSize=deck.getSize();
@@ -184,8 +212,13 @@ public class Durak extends Game{
 //				playersCards.get(i).add(deck.drawCard());
 //		}
 		
+		
+		
 		for(Card card : deck.getCards())
 			deckCards.add(card);
+		
+		rulerCard = findRulerCard(deckCards, numOfPlayers);
+		startingPlayer = findStartingPlayer(deckCards, rulerCard, numOfPlayers);
 		
 //		for (int i=0;i<players.size();i++){
 //			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(playersCards.get(i),players.get(i).getId())));
@@ -196,6 +229,8 @@ public class Durak extends Game{
 		
 		dealCardAnimation(deckId, deckCards, 6);
 		
+		
+		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new SetRulerCardAction(rulerCard, Position.Button.TOPRIGHT.getId())));
 		
 //		for(int i=0 ; i<numOfPlayers * 6 ; i++){
 //			ConnectionsManager.getConnectionsManager().sendToAll(new RequestCardMessage(players.get(i % numOfPlayers), deckId, deckCards.get(i)));
