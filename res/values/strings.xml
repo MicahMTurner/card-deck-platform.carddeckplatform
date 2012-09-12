@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, CarddeckplatformActivity!</string>
+    <string name="app_name">Carddeckplatform</string>
+    <string name="StartNewGame">Start new game</string>
+    <string name="StartANewGame">Start a new game</string>
+    <string name="JoinAGame">Join a game</string>
+    <style name="flipperView" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textColor">#00FF00</item>
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+    <string name="chooseGame">Please choose a game:</string>
+    <string name="options">Options</string>
+    <string name="market">Our Market</string>
+    <string name="rating">Plugin Rate</string>
+    <string name="no_connection_title">No Connection</string>
+    <string name="settings">settings</string>
+    <string name="no_connection">Do you want to connect to the internet?</string>
+    <string name="cancel">Cancel</string>
+	<string name="close">Close</string>
+    <string name="open">Open</string>
+    
+    <string name="option1">Option 1</string>
+    <string name="option2">Option 2</string>
+    <string name="option3">Option 3</string>
+    <string name="score">Score</string>
+    <string name="customizationText">In this window you can customize your Free Play game types. \n By clicking on the player areas you can add or remove players and set their card layouts. \n
+    One click on a player area will add the player to this game type and in addition its cards will be visible only to this player. Second time you click a player area will set its cards to be visible to everyone.
+    Third click will set it to hide its cards to everyone (including to the player that holds the cards).\n The fourth time you click on the player area will disable it.\n By clicking on the public areas you can add public areas and and set their layouts in the same manner you can do to the player areas.</string>
+    <string name="rankedSuccessfully">Ranked successfully!</string>
+    <string name="freePlayCardsToDeal">Cards to deal to each player</string>
+    
+
+</resources>
