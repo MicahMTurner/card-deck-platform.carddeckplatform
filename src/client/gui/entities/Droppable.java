@@ -310,6 +310,8 @@ public abstract class Droppable implements Serializable {
 		
 			canvas.drawBitmap(img, matrix, null);
 			initiatePaintForGlow();
+			ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE,glowColor);
+			mPaintForGlow.setColorFilter(colorFilterTint);
 			canvas.drawBitmap(img, matrix, mPaintForGlow);		
 		}
 	}
