@@ -57,6 +57,16 @@ TouchHandler {
 	
 	private CustomizationDeck cd = new CustomizationDeck(Position.Button.TOPRIGHT);
 	
+	private int cardsToDeal=0;
+	
+	public void setCardsToDeal(int cardsToDeal) {
+		this.cardsToDeal = cardsToDeal;
+	}
+	
+	public int getCardsToDeal() {
+		return cardsToDeal;
+	}
+	
 	public EditView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		//setBackgroundResource(R.drawable.boardtest);
@@ -239,6 +249,7 @@ TouchHandler {
 	public void loadProfile(String profileName){
 		table.clearDroppables();
 		setProfile(FreePlayProfile.loadProfile(profileName));
+		
 	}
 	
 	private FreePlayProfile createProfile(){
@@ -247,6 +258,7 @@ TouchHandler {
 		profile.setDroppables(table.getDroppables());
 		profile.setMode(mode);
 		profile.setProfileName("profile1");
+		profile.setCardsToDeal(cardsToDeal);
 		return profile;
 	}
 
@@ -257,11 +269,16 @@ TouchHandler {
 		}
 		
 		mode=profile.getMode();
+		cardsToDeal = profile.getCardsToDeal();
 	}
+	
+	
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight());
 		table.setDimentions(getMeasuredWidth(), getMeasuredHeight());
 	}
+	
+	
 }

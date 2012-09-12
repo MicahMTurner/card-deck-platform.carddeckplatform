@@ -61,6 +61,8 @@ public class FreePlay extends Game{
 			cards.add(deck.drawCard());
 		}
 		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(cards,Position.Button.TOPRIGHT.getId())));
+		
+		dealCardAnimation(Position.Button.TOPRIGHT.getId(), cards, freePlayProfile.getCardsToDeal());
 	}
 	
 	

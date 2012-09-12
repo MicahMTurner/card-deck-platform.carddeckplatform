@@ -27,6 +27,7 @@ public class FreePlayProfile implements Serializable {
 	private String profileName="";
 	private ArrayBlockingQueue<Droppable> droppables;
 	private Mode mode;
+	private int cardsToDeal=0;
 	
 	public void setProfileName(String profileName) {
 		this.profileName = profileName;
@@ -50,6 +51,14 @@ public class FreePlayProfile implements Serializable {
 	
 	public Mode getMode() {
 		return mode;
+	}
+	
+	public void setCardsToDeal(int cardsToDeal) {
+		this.cardsToDeal = cardsToDeal;
+	}
+	
+	public int getCardsToDeal() {
+		return cardsToDeal;
 	}
 	
 	public static FreePlayProfile loadProfile(String name){
@@ -94,24 +103,4 @@ public class FreePlayProfile implements Serializable {
 				res.put((Position.Player)d.getPosition(), (PlayerEventsHandler)((CustomizationItem)d).createHandler());
 		return res;
 	}
-	
-//	public CustomizationPlayer cp1 = new CustomizationPlayer(Position.Player.BOTTOM);
-//	public CustomizationPlayer cp2 = new CustomizationPlayer(Position.Player.TOP);
-//	public CustomizationPlayer cp3 = new CustomizationPlayer(Position.Player.LEFT);
-//	public CustomizationPlayer cp4 = new CustomizationPlayer(Position.Player.RIGHT);
-//	
-//	public CustomizationPublic cb1 = new CustomizationPublic(null, Position.Public.BOT,null , new Point(10,11));
-//	public CustomizationPublic cb2 = new CustomizationPublic(null, Position.Public.BOTMID,null , new Point(10,11));
-//	public CustomizationPublic cb3 = new CustomizationPublic(null, Position.Public.BOTMIDLEFT,null , new Point(10,11));
-//	public CustomizationPublic cb4 = new CustomizationPublic(null, Position.Public.BOTMIDRIGHT,null , new Point(10,11));
-//	public CustomizationPublic cb5 = new CustomizationPublic(null, Position.Public.LEFT,null , new Point(10,11));
-//	public CustomizationPublic cb6 = new CustomizationPublic(null, Position.Public.MID,null , new Point(10,11));
-//	public CustomizationPublic cb7 = new CustomizationPublic(null, Position.Public.MIDLEFT,null , new Point(10,11));
-//	public CustomizationPublic cb8 = new CustomizationPublic(null, Position.Public.MIDRIGHT,null , new Point(10,11));
-//	public CustomizationPublic cb9 = new CustomizationPublic(null, Position.Public.RIGHT,null , new Point(10,11));
-//	public CustomizationPublic cb10 = new CustomizationPublic(null, Position.Public.TOP,null , new Point(10,11));
-//	public CustomizationPublic cb11 = new CustomizationPublic(null, Position.Public.TOPMID,null , new Point(10,11));
-//	public CustomizationPublic cb12 = new CustomizationPublic(null, Position.Public.TOPMIDLEFT,null , new Point(10,11));
-//	public CustomizationPublic cb13 = new CustomizationPublic(null, Position.Public.TOPMIDRIGHT,null , new Point(10,11));
-	
 }
