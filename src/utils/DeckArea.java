@@ -2,39 +2,30 @@ package utils;
 
 
 import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Random;
-import java.util.Stack;
-
-import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Shape;
 
 import utils.droppableLayouts.DeckLayout;
 import utils.droppableLayouts.DroppableLayout;
-
-import android.content.Context;
-import android.graphics.Canvas;
-
-import IDmaker.IDMaker;
-
 import client.controller.ClientController;
 import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
-import client.gui.entities.MetricsConvertion;
 
 
-
+/**
+ * represents a GUI instance of a deck area
+ * @author Yoav
+ *
+ */
 public class DeckArea extends Droppable{
 	
 	
-	private boolean firstAdd = true;
 	
 
 	public LinkedList<Card> cards = new LinkedList<Card>();
-	
+	/**
+	 * constructor
+	 * @param position deck area's position
+	 */
 	public DeckArea(Position.Button position) {
 		super(position.getId(),position, DroppableLayout.LayoutType.DECK);
 		this.image = "playerarea";
@@ -51,7 +42,10 @@ public class DeckArea extends Droppable{
 	}
 		
 
-
+	/**
+	 * get number of cards that are in this deck area
+	 * @return number of cards that are in this deck area
+	 */
 	public int getSize(){
 		return cards.size();
 	}
@@ -62,7 +56,9 @@ public class DeckArea extends Droppable{
 		card.setLocation(getX(), getY());
 		
 	}
-
+	/**
+	 * happens when a card is being added to this deck area
+	 */
 	@Override
 	public boolean onCardAdded(Player player, Card card) {
 
@@ -72,24 +68,15 @@ public class DeckArea extends Droppable{
 		return true;
 		
 	}
-
+	/**
+	 * happens when a card is being removed to this deck area
+	 */
 	@Override
 	public boolean onCardRemoved(Player player, Card card) {
 		cards.remove(card);
 		return true;
 	}
 	
-
-//	@Override
-//	public int getX() {
-//		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();		
-//	}
-//
-//	@Override
-//	public int getY() {
-//		return MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();		
-//	}
-
 	@Override
 	public int cardsHolding() {
 		return cards.size();
@@ -103,7 +90,6 @@ public class DeckArea extends Droppable{
 	@Override
 	public void clear() {
 		cards.clear();
-		firstAdd = true;
 	}
 
 
@@ -128,8 +114,8 @@ public class DeckArea extends Droppable{
 		ClientController.sendAPI().setRulerCard((Card)draggable, getId());
 		return true;
 	}
-	
-	public boolean hasRulerCard(){
+
+	private boolean hasRulerCard(){
 		return ((DeckLayout)getDroppableLayout()).hasRulerCard();
 	}
 	
@@ -139,5 +125,4 @@ public class DeckArea extends Droppable{
 		rearrange(0);
 
 	}
-//
 }
