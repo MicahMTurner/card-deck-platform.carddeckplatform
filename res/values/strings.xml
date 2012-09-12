@@ -31,6 +31,6 @@
     Third click will set it to hide its cards to everyone (including to the player that holds the cards).\n The fourth time you click on the player area will disable it.\n By clicking on the public areas you can add public areas and and set their layouts in the same manner you can do to the player areas.</string>
     <string name="rankedSuccessfully">Ranked successfully!</string>
     <string name="freePlayCardsToDeal">Cards to deal to each player</string>
-    
+     <string name="search">Search :</string>
 
 </resources>

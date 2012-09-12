@@ -41,7 +41,7 @@
         <activity android:name=".tutorial.TutorialActivity" android:screenOrientation="landscape"></activity>
         <activity android:name="RankingActivity" android:screenOrientation="landscape"></activity>
         <activity android:name="MarketActivity" android:screenOrientation="landscape"></activity>
-        <activity android:name="ScoringActivity" android:screenOrientation="landscape"></activity>
+        <activity android:name=".ScoringActivity" android:screenOrientation="landscape"></activity>
         
         
     </application>
