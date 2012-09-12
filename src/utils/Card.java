@@ -37,7 +37,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	
 	private int backAd;
 	
-//	private Paint paint;
+
 	
 	public Card(CardEventsHandler handler,String frontImg,String backImg) {
 		
@@ -71,6 +71,12 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 			coord.setY(y);
 		}
 	}
+	
+	/**
+	 * takes each card in one droppable and move them to another droppable.
+	 * @param srcAndDst ArrayList of Pairs of droppables.
+	 * @see Pair.
+	 */
 	static public void moveTo(final ArrayList<Pair<Droppable, Droppable>> srcAndDst){
 		ArrayList<Animation> animations=new ArrayList<Animation>();
 		
@@ -89,7 +95,12 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	}
 	
 	
-	
+	/**
+	 * takes numOfCards cards in one droppable and move them to another droppable.
+	 * @param srcAndDst ArrayList of Pairs of droppables.
+	 * @see Pair.
+	 * @param numOfCards the number of cards that has to move.
+	 */
 	static public void moveTo(final ArrayList<Pair<Droppable, Droppable>> srcAndDst, int numOfCards){
 		ArrayList<Animation> animations=new ArrayList<Animation>();
 		
@@ -112,16 +123,21 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		
 	}
 	
-	
+
 	public void moveTo(final Droppable source,final Droppable destination) {
 		Animation animation = new FlipAnimation(source, destination, this, false);
 		animation.execute();
 		//animation.waitForMe();
 	}
 		
+	/**
+	 * set the front image
+	 * @param frontImg front image name.
+	 */
 	public void setFrontImg(String frontImg) {
 		this.frontImg = frontImg;
 	}
+	
 	
 	public Point getCoord() {
 		synchronized(coord){
@@ -140,29 +156,67 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	public float getAngle() {
 		return angle;
 	}
+	
+	/**
+	 * reveals the card.
+	 */
 	public void reveal(){
 		this.revealed = true;
 		eventsHandler.onReveal(this);
 	}
+	
+	/**
+	 * 
+	 * @param revealed
+	 */
 	public void setRevealed(boolean revealed) {
 		this.revealed = revealed;
 	}
+	
+	/**
+	 * hides the card.
+	 */
 	public void hide(){
 		this.revealed = false;
 		eventsHandler.OnHide(this);
 	}
+	
+	/**
+	 * returns whether the card is revealed or not.
+	 * @return
+	 */
 	public boolean isRevealed() {
 		return revealed;
 	}
+	
+	/**
+	 * gets the owner card.
+	 * @return
+	 */
 	public Position getOwner() {
 		return owner;
 	}
+	
+	/**
+	 * set the owner.
+	 * @param owner
+	 */
 	public void setOwner(Position owner) {
 		this.owner = owner;
 	}	
+	
+	/**
+	 * gets card's front image.
+	 * @return
+	 */
 	public String getFrontImg() {
 		return frontImg;
 	}
+	
+	/**
+	 * gets card's back image.
+	 * @return
+	 */
 	public String getBackImg() {
 		return backImg;
 	}
@@ -238,6 +292,9 @@ public abstract class Card extends Draggable implements Comparable<Card>{
        
 	}
 
+	/**
+	 * flips the card.
+	 */
 	public void flip() {
 		if (this.revealed){
 			this.hide();

@@ -12,6 +12,12 @@ import utils.Position;
 import client.gui.entities.Droppable;
 import client.gui.entities.MetricsConvertion;
 
+/**
+ * 
+ * Arranges the cards in a line formation.
+ *
+ */
+
 public class LineLayout extends DroppableLayout {
 	
 	
