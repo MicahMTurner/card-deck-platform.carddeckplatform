@@ -34,14 +34,10 @@ public class GameEnvironment {
 	
 	static{
 		try {
-			File f = new File(path);
-			f.mkdir();
-			
-			f =  new File(path + "profiles/");
-			f.mkdir();
-			
-			f =  new File(path + "plugins/");
-			f.mkdir();
+			new File(path).mkdir();		
+			new File(path + "profiles/").mkdir();
+			new File(path + "plugins/").mkdir();
+			new File(path + "temp").mkdir();
 		} catch (Exception e) {
 			
 		}

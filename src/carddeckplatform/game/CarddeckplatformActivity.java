@@ -11,12 +11,15 @@ import org.newdawn.slick.geom.Circle;
 
 import communication.link.HostFinder;
 //import communication.link.HostId;
+import communication.link.ServerConnection;
 import communication.link.TcpHostFinder;
 import communication.link.TcpIdListener;
+import communication.messages.RestartMessage;
 
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import carddeckplatform.game.gameEnvironment.GameEnvironment.ConnectionType;
 import carddeckplatform.game.tutorial.TutorialActivity;
+import client.controller.LivePosition;
 import client.dataBase.ClientDataBase;
 import client.dataBase.DynamicLoader;
 
@@ -32,6 +35,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.pm.ActivityInfo;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -43,7 +47,11 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -55,9 +63,11 @@ import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 
@@ -102,6 +112,12 @@ public class CarddeckplatformActivity extends Activity {
     	//tcpIdListener=null;
     	//host=null;    	
         super.onCreate(savedInstanceState);
+        
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        
+        
         setContentView(R.layout.menu);
         
         Display display = getWindowManager().getDefaultDisplay();        
@@ -129,13 +145,13 @@ public class CarddeckplatformActivity extends Activity {
         //making widgets
         //*********************************************
         
-        //making the flipper
-        mFlipper = ((ViewFlipper) this.findViewById(R.id.welcomeFlipper));
-        mFlipper.startFlipping();
-        mFlipper.setInAnimation(AnimationUtils.loadAnimation(this,
-                R.anim.push_up_in));
-        mFlipper.setOutAnimation(AnimationUtils.loadAnimation(this,
-                R.anim.push_up_out));
+//        //making the flipper
+//        mFlipper = ((ViewFlipper) this.findViewById(R.id.welcomeFlipper));
+//        mFlipper.startFlipping();
+//        mFlipper.setInAnimation(AnimationUtils.loadAnimation(this,
+//                R.anim.push_up_in));
+//        mFlipper.setOutAnimation(AnimationUtils.loadAnimation(this,
+//                R.anim.push_up_out));
         
         
         
@@ -148,10 +164,31 @@ public class CarddeckplatformActivity extends Activity {
         //bring curser to end of text
         username.setSelection(username.length());
         
-        Button hostBtn = (Button) findViewById(R.id.creategameButton);
+        final Button hostBtn = (Button) findViewById(R.id.creategameButton);
+       
         Button joinBtn = (Button) findViewById(R.id.joingamebutton);
+//        hostBtn.setOnTouchListener(new View.OnTouchListener() {
+//        	
+//			
+//			@Override
+//			public boolean onTouch(View v, MotionEvent event) {
+//				if (event.getActionMasked()==MotionEvent.ACTION_DOWN 
+//						|| event.getActionMasked()==MotionEvent.ACTION_MOVE){
+//					((Button)v).setBackgroundResource(R.drawable.hostpressed);
+//					return true;
+//				}else if (event.getActionMasked()==MotionEvent.ACTION_UP){
+//					v.performClick();
+//				}else{						
+//					((Button)v).setBackgroundResource(R.drawable.hosticon);
+//				}
+//				
+//				
+//				return true;
+//			}
+//			});
         hostBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
+            	
             	final Dialog dialog = new Dialog(CarddeckplatformActivity.this);
             	GameEnvironment.get().getPlayerInfo().setServer(true);							
 				GameEnvironment.get().getTcpInfo().setHostIp("127.0.0.1");			
@@ -193,8 +230,7 @@ public class CarddeckplatformActivity extends Activity {
             	}
             	dialog.show();
                 } 
-             });
-        
+             });       
         joinBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
             	
@@ -282,8 +318,8 @@ public class CarddeckplatformActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				//Intent i = new Intent(getBaseContext(), PrefsActivity.class);
-				Intent i = new Intent(getBaseContext(), TutorialActivity.class);
+				Intent i = new Intent(getBaseContext(), PrefsActivity.class);
+				//Intent i = new Intent(getBaseContext(), TutorialActivity.class);
 				startActivity(i);
 			}
 		});
@@ -436,5 +472,29 @@ public class CarddeckplatformActivity extends Activity {
 //		}
 		
 	}
+	
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu){
+    	menu.add(0, Menu.FIRST, Menu.NONE, "Tutorial").setIcon(R.drawable.info);	
+    	return true;
+    }
+    
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {    	
+    	switch(item.getItemId()){
+    		case Menu.FIRST:
+    			Intent i = new Intent(getBaseContext(), TutorialActivity.class);
+				startActivity(i);
+    			return true;		
+    		default:
+    			return true;
+    		
+    	
+    	
+    	}
+
+    } 
 }
 

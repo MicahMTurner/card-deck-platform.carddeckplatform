@@ -35,7 +35,11 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import carddeckplatform.game.BitmapHolder;
 import client.controller.ClientController;
-
+/**
+ * this class represents an area where cards can be placed at
+ * @author Yoav
+ *
+ */
 public abstract class Droppable implements Serializable {
 	public int getGlowColor() {
 		return glowColor;
@@ -44,30 +48,8 @@ public abstract class Droppable implements Serializable {
 	public void setGlowColor(int glowColor) {
 		this.glowColor = glowColor;
 	}
+	
 
-	/**
-	 * **************************************************<br/>
-	 * **************************************************<br/>
-	 * ****18**********************************19********<br/>
-	 * ****************1**2**3**4**5*********************<br/>
-	 * ****************6**7**8**9**10********************<br/>
-	 * ****************11*12*13*14*15********************<br/>
-	 * **************************************************<br/>
-	 * ****16**********************************17********<br/>
-	 * **************************************************<br/>
-	 * 
-	 * @author Yoav
-	 * 
-	 */
-	
-	enum DroppableStatus{
-		MINIMIZED,NORMAl,SELECTED,DRAGGED,
-	}
-	
-	// protected Point point;
-	// public Stack<GuiCard>guiCards=new Stack<GuiCard>();
-	// protected Stack<Card> cards = new Stack<Card>();
-	// protected ArrayList<Card> cards;
 	private DroppableLayout.LayoutType layoutType;
 	protected transient Shape shape = null;
 	protected int id;
@@ -78,19 +60,19 @@ public abstract class Droppable implements Serializable {
 	protected transient Paint mPaintForGlow;
 	protected int alpha=255;
 	protected int glowColor=0;
-	//private HashMap<Draggable,Integer>detachedCards;
+
 	
 	
-	
+	/**
+	 * constructor 
+	 * @param id droppable's id
+	 * @param position droppable's position
+	 * @param layoutType droppable's layout
+	 */
 	public Droppable(int id, Position position ,DroppableLayout.LayoutType layoutType) {
 		this.id = id;
 		this.position = position;
 		this.layoutType = layoutType;
-//		this.droppableLayout=layoutType.getLayout(this);
-		// this.shape=getShape();
-		// this.cards=new ArrayList<Card>();
-		// this.point=new Point(190,175);
-		// this.myId=IDMaker.getMaker().getId(position);
 		this.scale = layoutType.getScale();
 	}
 	
@@ -107,7 +89,15 @@ public abstract class Droppable implements Serializable {
 	public int getAlpha() {
 		return alpha;
 	}
+	/**
+	 * get (but don't remove) the first card in this droppable
+	 * @return
+	 */
 	public abstract Card peek();
+	/**
+	 * called when a round ended
+	 * @param player the player that ended the round
+	 */
 	public abstract void onRoundEnd(Player player);
 	
 	public void setAlpha(int alpha) {
@@ -137,9 +127,6 @@ public abstract class Droppable implements Serializable {
         int placeOfCard=from.getCards().indexOf(card);
         if (from.removeCard(player, card) && !addCard(player, card)){
                 from.AddInPlace(card,placeOfCard);                      
-//              if (droppableLayout != null && answer){
-//                      rearrange(0);
-//              }
         }else{
                 answer=true;
         }
@@ -147,24 +134,13 @@ public abstract class Droppable implements Serializable {
         return answer;
 
 }
-	
-//	public void reAttached(Card card) {
-//		int cardPlace;
-//		synchronized(detachedCards){
-//			cardPlace=detachedCards.get(card);
-//		}
-//		this.AddInPlace(card,cardPlace);
-//		synchronized(detachedCards){
-//			detachedCards.remove(card);
-//		}
-//		
-////		if (getDroppableLayout() != null){
-////			rearrange(0);
-////		}
-//		
-//	}
-
+	/**
+	 * add given card in given place in this droppable
+	 * @param card given card
+	 * @param place given place where card should be inserted
+	 */
 	public abstract void AddInPlace(Card card,int place);
+	
 	public boolean isFlingabble(){
 		if(getDroppableLayout()==null)
 			return false;
@@ -181,16 +157,19 @@ public abstract class Droppable implements Serializable {
 	public boolean isIntersect(Line line) {
 		return line.intersects(getShape()) || getShape().contains(line);
 	}
-
+	/**
+	 * get the droppable's current position (can be changed if using LivePosition feature)
+	 * @return droppable's current position
+	 */
 	public Position getPosition() {
 		return position;
 	}
 	
-	public int indexOfDraggabale(Draggable draggable) {
-
-		return getCards().indexOf(draggable);
-
-	}
+//	public int indexOfDraggabale(Draggable draggable) {
+//
+//		return getCards().indexOf(draggable);
+//
+//	}
 	
 	@Override
 	public boolean equals(Object other) {
@@ -200,9 +179,14 @@ public abstract class Droppable implements Serializable {
 		Droppable otherDroppable = (Droppable) other;
 		return this.id == otherDroppable.id;
 	}
-
+	/**
+	 * deal card to this droppable (without calling the handler's function)
+	 * @param card the card we want to deal
+	 */
 	public abstract void deltCard(Card card);
+	
 	protected abstract List<Card> getMyCards();
+	
 	public AbstractList<Card> getCards(){
 		synchronized(this){		
 			try{
@@ -249,7 +233,10 @@ public abstract class Droppable implements Serializable {
 	public void sort(Comparator comperator){
 		Collections.sort(getMyCards(), comperator);
 	}
-	
+	/**
+	 * move given card to front of this droppable (if it contains the card) 
+	 * @param card given card we want to move to front
+	 */
 	public void putCardOnTop(Card card){
 		List<Card> cards = getMyCards();
 		
@@ -323,27 +310,8 @@ public abstract class Droppable implements Serializable {
 		
 			canvas.drawBitmap(img, matrix, null);
 			initiatePaintForGlow();
-//			ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE,glowColor);
-//			mPaintForGlow.setColorFilter(colorFilterTint);	
 			canvas.drawBitmap(img, matrix, mPaintForGlow);		
 		}
-//
-//		ArrayList<Draggable> holding=null;
-//		AbstractList<Card>cards = getCards();
-//		int size=cards.size()-1;
-//		Card card=null;
-//		for (int i=size;i>=0;i--){
-//			card=cards.get(i);
-//				if (!card.isInHand() && !card.isCarried()){
-//					card.draw(canvas, context);
-//				}else{
-//					if (holding==null){
-//						holding=new ArrayList<Draggable>();
-//					}
-//					holding.add(card);
-//				}
-//		}
-//		return holding;
 	}
 
 	private void initiatePaintForGlow() {

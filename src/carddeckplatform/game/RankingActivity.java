@@ -10,9 +10,15 @@ import java.util.ArrayList;
 
 import utils.Pair;
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -25,6 +31,7 @@ import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import client.controller.ClientController;
 import client.dataBase.DynamicLoader;
 
 public class RankingActivity extends Activity {
@@ -32,15 +39,16 @@ public class RankingActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        
 		setContentView(R.layout.rankinglayout);
 		DynamicLoader dl=new DynamicLoader();
 		TableLayout tl = (TableLayout) findViewById(R.id.rankTable);
 		ArrayList<Pair<String, String>> plugins = dl.getInstalledPlugins();
-		plugins= new ArrayList<Pair<String,String>>();
-		plugins.add(new Pair<String, String>("539811_10150995297405999_728727226_n", "4ebb965f74802469860a0472581f79fc"));
-		plugins.add(new Pair<String, String>("ScoreMe.csv", "8534ad7896c9fba9bb895b2bfc91a896"));
-		plugins.add(new Pair<String, String>("test.jar", "8534ad7896c9fba9bb895b2bfc91a896"));
-		
+		plugins= dl.getInstalledPlugins();
 		for (int i = 0; i < plugins.size(); i++) {
 			final Pair<String, String> pair = plugins.get(i);
 			TableRow tr = new TableRow(this);
@@ -49,8 +57,8 @@ public class RankingActivity extends Activity {
 			// adding to the row views
 			TextView tv = new TextView(this);
 			tv.setText(pair.getFirst());
-
-			
+			tv.setTypeface(null,Typeface.BOLD);
+			tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
 			Button button= new Button(this);
 			final MyButtonListener listener = new MyButtonListener(pair);
 			button.setOnClickListener(listener);
@@ -115,31 +123,38 @@ public class RankingActivity extends Activity {
 				return;
 			}
 			sentFlag=true;
-			
-			// TODO Auto-generated method stub
+			final Dialog dialog = new Dialog(RankingActivity.this);
+			dialog.setTitle("Done");
+			dialog.setContentView(R.layout.ranked);
+			Button button = (Button) dialog.findViewById(R.id.rankedCloseBtn);
+			button.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					dialog.dismiss();
+				}
+			});
+			dialog.show();
+
 			Thread thread= new Thread(new Runnable() {
 				
 				@Override
 				public void run() {
 					
 
-			URL url = null;
-			HttpURLConnection urlConnection = null;
-			try {
-				url = new URL(
+					URL url = null;
+					HttpURLConnection urlConnection = null;
+					try {
+						url = new URL(
 						"http://cardsplatform.appspot.com/rank?id="
 								+ pair.getSecond() + "&rank="
 								+ rate);
-				urlConnection = (HttpURLConnection) url
-						.openConnection();
-				InputStream in = new BufferedInputStream(
-						urlConnection.getInputStream());
-				// readStream(in);
-			} catch (MalformedURLException e2) {
-				// TODO Auto-generated catch block
+						urlConnection = (HttpURLConnection) url.openConnection();
+						
+						//InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+			} catch (MalformedURLException e2) {			
 				e2.printStackTrace();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} finally {
 				urlConnection.disconnect();

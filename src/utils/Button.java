@@ -13,7 +13,11 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import carddeckplatform.game.BitmapHolder;
 import client.gui.entities.MetricsConvertion;
-
+/**
+ * represents a button 
+ * @author Yoav
+ *
+ */
 public class Button{
 	private ButtonEventsHandler handler;
 	private String text;
@@ -23,11 +27,19 @@ public class Button{
 	private Paint paint;
 	private boolean enabled;
 	private transient Shape shape;
-	
+	/**
+	 * 
+	 * @return true if button is enabled, false OW
+	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
-	
+	/**
+	 * constructor 
+	 * @param handler button's handler
+	 * @param position button's position (make sure it is not the same as card deck area
+	 * @param text text to display on button
+	 */
 	public Button(ButtonEventsHandler handler,Position.Button position,String text) {
 		//super(position.getId(), position, new Point(10,13), DroppableLayout.LayoutType.NONE);
 		this.handler=handler;
@@ -39,18 +51,30 @@ public class Button{
 		paint.setTextSize(20);
 		paint.setColor(Color.argb(170, 0, 0, 0));
 		enabled = true;
-		//image="button.png";
 	}
+	/**
+	 * get button's position
+	 * @return button's position
+	 */
 	public Position.Button getPosition() {
 		return position;
 	}
+	/**
+	 * set button's position
+	 * @param position new button's position
+	 */
 	public void setPosition(Position.Button position) {
 		this.position = position;
 	}
+	/**
+	 * perform click action, calling onClick function in handler
+	 * @see ButtonEventsHandler
+	 */
 	public void onClick(){
 		if(enabled)
 			handler.onClick();
 	}
+	
 	public void draw(Canvas canvas, Context context){
 		Bitmap buttonBitmap=BitmapHolder.get().getBitmap(image);
 		Matrix matrix = new Matrix();		 
@@ -86,6 +110,5 @@ public class Button{
 		}
 		return shape;
 	}
-	//
 	
 }
