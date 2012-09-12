@@ -81,6 +81,7 @@ public class DynamicLoader {
 
 	public Set<String> getGameNames() {
 		mapping.clear();
+		gameInstance.clear();
 		mapPlugins();
 		return new HashSet<String>(mapping.keySet());
 	}
@@ -136,14 +137,19 @@ public class DynamicLoader {
 					mapPlugins();
 				}
 			}
-			String jarFile = PLUGINDIR+"/"+gameName+".jar";
-			DexClassLoader classLoader = new DexClassLoader(
-			    jarFile, GameEnvironment.path+"temp", null, getClass().getClassLoader());
-			Class<?> cls = classLoader.loadClass(mapping.get(gameName));
+			game=gameInstance.get(gameName);
+			if (game==null){
+				String jarFile = PLUGINDIR+"/"+gameName+".jar";
+				DexClassLoader classLoader = new DexClassLoader(
+						jarFile, GameEnvironment.path+"temp", null, getClass().getClassLoader());
+				Class<?> cls = classLoader.loadClass(mapping.get(gameName));
+				game=(Game)cls.newInstance();
+				gameInstance.put(gameName, game);
+			}
+			System.out.println("loading class: "+getClass().getClassLoader().toString());
 
-
-			game=(Game)cls.newInstance();
-		 
+			
+			
 		 
 		} catch (MalformedURLException e) {			
 			e.printStackTrace();
@@ -153,7 +159,8 @@ public class DynamicLoader {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-		} catch (InterruptedException e) {
+		}
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}		
 		

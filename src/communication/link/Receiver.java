@@ -4,9 +4,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.OptionalDataException;
 
+import org.apache.commons.io.input.ClassLoaderObjectInputStream;
+
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.controller.ClientController;
 
 import communication.messages.Message;
+import dalvik.system.DexClassLoader;
 
 public class Receiver implements Runnable{
 	private volatile boolean stop;
@@ -73,7 +77,12 @@ public class Receiver implements Runnable{
 
 	public void initializeMode() {
 		try {			
+			//get load game action
 			Message initMessage = (Message)in.readObject();
+			initMessage.actionOnClient();
+			//get initial connection action
+			System.out.println("loading class: "+getClass().getClassLoader().toString());
+			initMessage = (Message)in.readObject();
 			initMessage.actionOnClient();
 			
 		} catch (ClassNotFoundException e) {	

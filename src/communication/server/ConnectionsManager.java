@@ -20,6 +20,7 @@ import utils.GamePrefs;
 import utils.Player;
 import utils.Position;
 import communication.actions.InitialConnectionAction;
+import communication.actions.LoadGameAction;
 import communication.actions.PlayerLeftAction;
 import communication.link.Streams;
 import communication.messages.InitialMessage;
@@ -168,7 +169,8 @@ public class ConnectionsManager {
 			
 			Connection connection = new Connection(position.getId(),in, out);
 			connections.add(connection);
-			sendTo(new InitialMessage(new InitialConnectionAction(gameId,position,playersInfo, freePlayProfile)),connection.getId());
+			sendTo(new Message(new LoadGameAction(gameId, freePlayProfile)),connection.getId());
+			sendTo(new Message(new InitialConnectionAction(position,playersInfo)),connection.getId());
 			connection.getInitialMessage();			
 		    new Thread(connection).start();	
 			
