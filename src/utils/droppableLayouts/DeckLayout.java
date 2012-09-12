@@ -8,6 +8,12 @@ import utils.droppableLayouts.DroppableLayout.LayoutType;
 import client.gui.entities.Droppable;
 import client.gui.entities.MetricsConvertion;
 
+/**
+ * 
+ *	Arranges the cards in a heap formation and take into a count the ruler card option.
+ *
+ */
+
 public class DeckLayout extends DroppableLayout  {
 
 	private Card rulerCard=null;
