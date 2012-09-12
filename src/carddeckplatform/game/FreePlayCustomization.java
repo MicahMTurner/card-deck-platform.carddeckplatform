@@ -48,7 +48,7 @@ public class FreePlayCustomization extends Activity {
     public boolean onCreateOptionsMenu(Menu menu){
     	menu.add(0, Menu.FIRST, Menu.NONE, "Save").setIcon(R.drawable.save);
     	menu.add(0, Menu.FIRST+1, Menu.NONE, "Cancel").setIcon(R.drawable.exit);
-    	    	
+    	menu.add(0, Menu.FIRST+2, Menu.NONE, "Help").setIcon(R.drawable.info);    	
     	
     	return true;
     }
@@ -57,7 +57,7 @@ public class FreePlayCustomization extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {    	
     	switch(item.getItemId()){
-    		case Menu.FIRST:
+    		case Menu.FIRST:{
     			final Dialog dialog = new Dialog(FreePlayCustomization.this);
     			dialog.setContentView(R.layout.saveprofile);
     			dialog.setTitle("Please choose a profile name");
@@ -80,13 +80,23 @@ public class FreePlayCustomization extends Activity {
     			//editView.saveProfile("profile1");
     			
     			return true;
-    		case Menu.FIRST+1:
+    		}
+    		case Menu.FIRST+1:{
     			return true;
-    		default:
+    		}
+    		case Menu.FIRST+2:{
+    			final Dialog dialog = new Dialog(FreePlayCustomization.this);
+    			dialog.setTitle("Help");
+    			dialog.setContentView(R.layout.textlayout);
+    			dialog.show();
+    			Toast.makeText(this, "Help", 2000).show();
+    			return true;
+    		}
+    		default:{
     			Toast.makeText(this, "NOthing", 2000).show();
     			System.out.println(item.getItemId());
     			return true;
-    		
+    		}
     	
     	
     	}
