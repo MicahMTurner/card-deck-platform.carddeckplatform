@@ -23,6 +23,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import carddeckplatform.game.BitmapHolder;
 import carddeckplatform.game.R;
+import carddeckplatform.game.R.layout;
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.controller.LivePosition;
@@ -46,7 +47,15 @@ public class Player extends Droppable implements  Comparable<Player>{
 	
 	
 	
-	
+	/**
+	 * player constructor
+	 * @param playerInfo the info of the player
+	 * @param globalPosition position of the player in the table
+	 * @param uniqueId player's id
+	 * @param handler player's handler
+	 * @param layoutType player's layout
+	 * @see DroppableLayout
+	 */
 	public Player(PlayerInfo playerInfo,Position.Player globalPosition,int uniqueId, PlayerEventsHandler handler,DroppableLayout.LayoutType layoutType) {
 		super(uniqueId,Position.Player.BOTTOM, layoutType);
 		this.playerInfo=playerInfo;		
@@ -54,34 +63,40 @@ public class Player extends Droppable implements  Comparable<Player>{
 		this.position=Position.Player.BOTTOM;	
 		this.handler=handler;
 		this.hand=new ArrayList<Card>();
-		this.myTurn=false;	
-		
+		this.myTurn=false;			
 		this.image = "playerarea";
-		
-		//this.droppableLayout = new BottomLineLayout(this);
-		//BitmapHolder.get().scaleBitmap(image, this.scale);
 	}
-	
+	/**
+	 * the position of the player around the table
+	 * @return global position of the player around the table
+	 */
 	public Position.Player getGlobalPosition() {
 		return globalPosition;
 	}
-	public PlayerEventsHandler getHandler() {
-		return handler;
-	}
+	
+	/**
+	 * get the player's current position
+	 * @return player's current position
+	 */
 	public Position.Player getPosition() {
 		return (Position.Player)position;
 	}
+	/**
+	 * get player's user name
+	 * @return player's user name
+	 */
 	public String getUserName() {
 		return playerInfo.getUsername();
 	}
+	/**
+	 * get player's id
+	 * @return player's id
+	 */
 	public int getId() {
 		return id;
 	}
 	
 	
-//	public void setCoord(Point coord) {
-//		this.coord = coord;
-//	}
 	private boolean removeCard(Card card) {
 		boolean answer=handler.onCardRemoved(this, card);
 		if (answer){
@@ -91,23 +106,42 @@ public class Player extends Droppable implements  Comparable<Player>{
 		
 		
 	}
-	
+	/**
+	 * set player's global position around the table
+	 * @param globalPosition new player's global position
+	 */
 	public void setGlobalPosition(Position.Player globalPosition) {
 		this.globalPosition = globalPosition;
 		
 	}
-	
+	/**
+	 * checks if this is the player's turn
+	 * @return true - if it is the player's turn, false - OW
+	 */
 	public boolean isMyTurn() {
 		return myTurn;
 	}
+	/**
+	 * start player's turn, calling onMyTurn function in handler
+	 * @see PlayerEventsHandler
+	 */
 	public void startTurn(){
 		myTurn=true;
 		ClientController.get().enableUi();
 		handler.onMyTurn(this);
 	}
+	/**
+	 * set the player's turn
+	 * @param myTurn defines what parameter to set the turn variable to
+	 */
 	public void setMyTurn(boolean myTurn) {
 		this.myTurn = myTurn;
 	}
+	/**
+	 * end player's turn, calling onTurnEnd function in handler.</br>
+	 * does nothing if it isn't the player's turn
+	 * @see PlayerEventsHandler
+	 */
 	public void endTurn(){
 		if (myTurn!=false){
 			
@@ -117,6 +151,10 @@ public class Player extends Droppable implements  Comparable<Player>{
 			ClientController.sendAPI().endTurn(id);
 		}
 	}
+	/**
+	 * deal card to this player without calling the handler's function
+	 */
+	@Override
 	public void deltCard(Card card) {
 		card.setOwner((Position.Player)position);
 		hand.add(card);
@@ -124,40 +162,52 @@ public class Player extends Droppable implements  Comparable<Player>{
 		card.setLocation(getX(), getY());
 		super.rearrange(0);
 	}
+	/**
+	 * get how many cards are in player's hand
+	 * @return number of cards the player is holding
+	 */
+	@Override
 	public int cardsHolding() {		
 		return hand.size();
 	}
 
-	
+	/**
+	 * checks if player has no cards
+	 * @return true if player has no cards in hand, false OW
+	 */
+	@Override
 	public boolean isEmpty() {
 		return hand.isEmpty();
 	}
 
-	
+	/**
+	 * clears player's hand (delete all cards)
+	 */
+	@Override
 	public void clear() {
 		hand.clear();
 		
 	}
+	
 	@Override
 	public int compareTo(Player another) {
 		return this.globalPosition.compareTo(another.getGlobalPosition());
 	}
-	
+
 	public void setRelativePosition(utils.Position.Player devicePlayerGlobalPos) {
 		Position.Player newPos=this.globalPosition.getRelativePosition(devicePlayerGlobalPos);;
 		
 		if (!(this.globalPosition.equals(devicePlayerGlobalPos))){			
-//			for (Card card : hand){
-//				CardTransformation.get().transform(card,position,newPos);
-//			}
+
 			position=newPos;
 			super.rearrange(0);
-			
-			//TODO:CHANGE THIS!!!!!
-			//this.droppableLayout = new BottomLineLayout(this);
+
 		}		
 	}
-	
+	/**
+	 * happens when a card is being added to this player, calling onCardAdded function in handler
+	 * @see PlayerEventsHandler
+	 */
 	@Override
 	public boolean onCardAdded(Player player, Card card) {
 		if(!getCards().contains(card))	// if from some reason the card is already in the the player area.
@@ -171,14 +221,10 @@ public class Player extends Droppable implements  Comparable<Player>{
 		}
 		return answer;
 	}
-//	public boolean addCard(Card card) {
-//		
-//		if (answer){
-//			card.setOwner((Position.Player)position);		
-//			hand.add(card);
-//		}
-//		return answer; 		
-//	}
+
+	/**
+	 * happens when a card is being removed to this  player
+	 */
 	@Override
 	public boolean onCardRemoved(Player player, Card card) {
 		return removeCard(card);
