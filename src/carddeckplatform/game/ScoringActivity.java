@@ -31,20 +31,20 @@ public class ScoringActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.scorelayout);
-		TabHost tabHost=(TabHost)findViewById(R.id.tabHost);
-		tabHost.setup();
-		
-		
-		TabSpec spec1=tabHost.newTabSpec("Tab 1");
-		spec1.setContent(R.id.tab1);
-		spec1.setIndicator("Tab 1");
-
-		TabSpec spec2=tabHost.newTabSpec("Tab 2");
-		spec2.setIndicator("Tab 2");
-		spec2.setContent(R.id.tab2);
-		
-		tabHost.addTab(spec1);
-		tabHost.addTab(spec2);
+//		TabHost tabHost=(TabHost)findViewById(R.id.tabHost);
+//		tabHost.setup();
+//		
+//		
+//		TabSpec spec1=tabHost.newTabSpec("Tab 1");
+//		spec1.setContent(R.id.tab1);
+//		spec1.setIndicator("Tab 1");
+//
+//		TabSpec spec2=tabHost.newTabSpec("Tab 2");
+//		spec2.setIndicator("Tab 2");
+//		spec2.setContent(R.id.tab2);
+//		
+//		tabHost.addTab(spec1);
+//		tabHost.addTab(spec2);
 		
 		TableLayout tl=(TableLayout) findViewById(R.id.scoringtable);
 		
@@ -115,6 +115,7 @@ public class ScoringActivity extends Activity {
 					Dialog dialog = new Dialog(ScoringActivity.this);
 					ScrollView scrollView = new ScrollView(ScoringActivity.this);		
 					TableLayout table= new TableLayout(ScoringActivity.this);
+					scrollView.addView(table);
 					table.setColumnStretchable(0,true);
 					table.setColumnStretchable(10,true);
 					table.setShrinkAllColumns(true);
@@ -127,20 +128,22 @@ public class ScoringActivity extends Activity {
 						TextView tv=new TextView(ScoringActivity.this);
 						tv.setText(rounds[i].getDate());
 						tr.addView(tv);
-						for(int j=0;i<rounds[j].getRoundResult().size();j++){
+						for(int j=0;j<rounds[i].getRoundResult().size();j++){
 							tv=new TextView(ScoringActivity.this);
 							StringBuilder sb=new StringBuilder();
-							sb.append(rounds[j].getRoundResult().get(j).getUserName());
+							sb.append(rounds[i].getRoundResult().get(j).getUserName());
 							sb.append("(");
-							sb.append(rounds[j].getRoundResult().get(j).getScore());
+							sb.append(rounds[i].getRoundResult().get(j).getScore());
 							sb.append(")");
 							tv.setText(sb.toString());
 							tr.addView(tv);
 						}
+						table.addView(tr);
 					}
-	            	
+	            	dialog.show();
 				}
 			});
+			tl.addView(tr,new TableRow.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		}
 		
 	}

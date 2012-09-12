@@ -63,7 +63,15 @@ public String getGameType() {
 	}
 	public String getPlayersInfo() {
 		StringBuilder stringBuilder= new StringBuilder();
-		for(Player player: players){
+		if(players.size()!=0){
+			stringBuilder.append(players.get(0).getUserName());
+			stringBuilder.append("(");
+			stringBuilder.append(players.get(0).getScore());
+			stringBuilder.append(")");
+		}
+		for(int i=1;i<players.size();i++){
+			Player player = players.get(i);
+			stringBuilder.append(",");
 			stringBuilder.append(player.getUserName());
 			stringBuilder.append("(");
 			stringBuilder.append(player.getScore());
