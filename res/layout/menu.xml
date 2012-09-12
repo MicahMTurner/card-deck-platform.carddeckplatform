@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/woodtexture"
+    android:orientation="vertical"
+    android:stretchColumns="1" >
+
+    <ViewFlipper
+        android:id="@+id/welcomeFlipper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/WelcomeText"
+            style="@style/WelcomeFont"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Welcome to :" />
+"
+
+        <TextView
+            android:id="@+id/CardDeckText"
+            style="@style/WelcomeFont"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Card-Deck-Platform" />
+    </ViewFlipper>
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" >
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/nickLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nickname:  "
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/TransparentGrey" />
+
+            <EditText
+                android:id="@+id/nickText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10" >
+
+                <requestFocus />
+            </EditText>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/joingamebutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/joinicon"
+                android:padding="3dip"
+                android:textColor="@color/TransparentGrey" />
+
+            <Button
+                android:id="@+id/creategameButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/hosticon"
+                android:padding="3dip" />
+
+            <Button
+                android:id="@+id/optionsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/settingsicon"
+                android:padding="3dip" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/marketButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/marketicon"
+                android:padding="3dip" />
+
+            <Button
+                android:id="@+id/rateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ratingicon"
+                android:padding="3dip" />
+
+            <Button
+                android:id="@+id/scoreButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/scoringicon"
+                android:padding="3dip" />
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>
