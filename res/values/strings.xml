@@ -26,6 +26,10 @@
     <string name="option2">Option 2</string>
     <string name="option3">Option 3</string>
     <string name="score">Score</string>
+    <string name="customizationText">In this window you can customize your Free Play game types. \n By clicking on the player areas you can add or remove players and set their card layouts. \n
+    One click on a player area will add the player to this game type and in addition its cards will be visible only to this player. Second time you click a player area will set its cards to be visible to everyone.
+    Third click will set it to hide its cards to everyone (including to the player that holds the cards).\n The fourth time you click on the player area will disable it.\n By clicking on the public areas you can add public areas and and set their layouts in the same manner you can do to the player areas.</string>
+    <string name="rankedSuccessfully">Ranked successfully!</string>
     <string name="search">Search :</string>
     
 

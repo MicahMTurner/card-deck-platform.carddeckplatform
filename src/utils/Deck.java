@@ -8,10 +8,19 @@ import java.util.Stack;
 
 import handlers.CardEventsHandler;
 
-
+/**
+ * represents a logic instance of a deck
+ * @author Yoav
+ *
+ */
 public class Deck{
 	private Stack<Card> cards = new Stack<Card>();
 	private final int timesToShuffle=2;	
+	/**
+	 * constructor
+	 * @param handler card handler which will be used by all the cards
+	 * @param shuffle true if want to shuffle the deck, false OW
+	 */
 	public Deck(CardEventsHandler handler,boolean shuffle) {
 		for (StandartCard.Color color : StandartCard.Color.values()){
 			
@@ -46,7 +55,10 @@ public class Deck{
 	private void swap(int i, int randomPlace) {
 		Collections.swap(cards,i,randomPlace);
 	}
-
+	/**
+	 * draw card from deck
+	 * @return card from deck
+	 */
 	public Card drawCard() {
 		return cards.pop();
 		
@@ -55,7 +67,10 @@ public class Deck{
 	public Stack<Card> getCards() {
 		return cards;
 	}
-
+	/**
+	 * get how many cards are in the deck
+	 * @return number that represents the number of cards that are currently in the deck
+	 */
 	public int getSize() {
 		return cards.size();
 	}

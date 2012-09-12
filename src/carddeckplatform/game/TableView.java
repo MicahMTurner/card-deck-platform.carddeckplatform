@@ -407,11 +407,11 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 		System.out.println("draggable" + draggable);
 		if (draggable != null) {
 			Droppable droppable = table.getNearestDroppable(x, y);
-			int index = droppable.indexOfDraggabale(draggable);
-			System.out.println("index:" + index);
-			if (index == -1)
-				return true;
-			droppable.rearrange(index);
+//			int index = droppable.indexOfDraggabale(draggable);
+//			System.out.println("index:" + index);
+//			if (index == -1)
+//				return true;
+//			droppable.rearrange(index);
 
 		}
 		return true;

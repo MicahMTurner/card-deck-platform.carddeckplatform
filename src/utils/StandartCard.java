@@ -40,10 +40,18 @@ public  class StandartCard extends Card {
 		
 	}
 	
+	/**
+	 * gets the color of the card.
+	 * @return
+	 */
 	public Color getColor() {
 		return color;
 	}
 	
+	/**
+	 * gets the value of the card.
+	 * @return
+	 */
 	public int getValue() {
 		return value;
 	}
