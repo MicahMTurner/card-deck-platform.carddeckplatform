@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import freeplay.customization.FreePlayProfile;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.WindowManager;
@@ -76,6 +78,11 @@ public class ProfileCatalogActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
+    	requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+    	
     	getWindow().setFormat(PixelFormat.RGBA_8888);
     	getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
     	setContentView(R.layout.profilecatalog);

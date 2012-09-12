@@ -53,10 +53,12 @@ public class DynamicLoader {
 	//add mapping between game instance and game name. 
 	//change host, so it is holding the same game instance as the client? or sending on end turn, who ended the turn
 	//and then see if he is last in queue... (or first and then remove him to end of line.. something like that...)
+	private HashMap<String,Game> gameInstance;
 	private Collection<PluginDetails> plugins = new ArrayList<PluginDetails>();
 	private CountDownLatch cdl;
 	public DynamicLoader() {
 		mapping = new HashMap<String, String>();
+		gameInstance = new HashMap<String, Game>();
 	}
 
 	private void mapGame(String gameName, URL[] urls) {
@@ -135,9 +137,8 @@ public class DynamicLoader {
 				}
 			}
 			String jarFile = PLUGINDIR+"/"+gameName+".jar";
-			
 			DexClassLoader classLoader = new DexClassLoader(
-			    jarFile, PLUGINDIR+"/temp", null, getClass().getClassLoader());
+			    jarFile, GameEnvironment.path+"temp", null, getClass().getClassLoader());
 			Class<?> cls = classLoader.loadClass(mapping.get(gameName));
 
 
