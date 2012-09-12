@@ -15,6 +15,7 @@ import communication.messages.Message;
 //import communication.entities.TcpClient;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import carddeckplatform.game.gameEnvironment.GameEnvironment.ConnectionType;
+import dalvik.system.DexClassLoader;
 
 
 public class ServerConnection implements Runnable{
@@ -113,6 +114,7 @@ public class ServerConnection implements Runnable{
 	private ServerConnection(){
 		commandsQueue=new LinkedBlockingQueue<ActionForQueue>();
 		this.stopped=false;
+		
 		new Thread(this).start();
 	}
 	//---Public methods---//

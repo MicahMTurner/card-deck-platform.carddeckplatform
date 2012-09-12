@@ -18,6 +18,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import carddeckplatform.game.TableView;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
+import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.gui.entities.Droppable;
 
 import communication.actions.CardAdded;
@@ -476,6 +477,19 @@ public class ClientController {//implements Observer {
 	 */
 	public void endDraggableMotion(int cardId) {
 		gui.endDraggableMotion(cardId);
+		
+	}
+
+	/**
+	 * add instance of player that holds the device (used when game starts)
+	 * @param playerInfo player's info
+	 * @param position player's position
+	 * @param id player's unique id
+	 */
+	public void addMe(PlayerInfo playerInfo,
+			utils.Position.Player position, int id) {
+		game.addMe(playerInfo, position, id);
+		gui.addPlayer(game.getMe());
 		
 	}
 	
