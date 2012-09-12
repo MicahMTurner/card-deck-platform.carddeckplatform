@@ -4,31 +4,11 @@ import handlers.PlayerEventsHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import communication.link.ServerConnection;
-import communication.messages.SwapRequestMessage;
-
-
-
-import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
 
 import utils.droppableLayouts.DroppableLayout;
-import utils.droppableLayouts.line.BottomLineLayout;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import carddeckplatform.game.BitmapHolder;
-import carddeckplatform.game.R;
-import carddeckplatform.game.R.layout;
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
-import client.controller.LivePosition;
 import client.gui.entities.Droppable;
-import client.gui.entities.MetricsConvertion;
 
 
 
@@ -229,21 +209,14 @@ public class Player extends Droppable implements  Comparable<Player>{
 	public boolean onCardRemoved(Player player, Card card) {
 		return removeCard(card);
 	}
-//	@Override
-//	public void draw(Canvas canvas, Context context) {
-//		Bitmap img = BitmapHolder.get().getBitmap(image);
-//		canvas.drawBitmap(img,getX()-img.getWidth() / 2,getY()-img.getHeight() / 2,null);
-//		
-//	}
+
 
 	@Override
 	public List<Card> getMyCards() {		
 		return hand;
 	}
 
-//	public void setAzimute(double newAzimute) {
-//		playerInfo.setAzimute(globalPosition,newAzimute);
-//	}
+
 	public Double getAzimute() {
 		return playerInfo.getAzimute();
 	}
@@ -256,12 +229,15 @@ public class Player extends Droppable implements  Comparable<Player>{
 		else
 			return scale;
 	}
-
+	/**
+	 * calls when a round ended, calls handler's onRoundEnd function
+	 * @see PlayerEventsHandler
+	 */
 	@Override
 	public void onRoundEnd(Player player) {
 		handler.onRoundEnd(this);
 	}
-
+	
 	@Override
 	public Card peek() {
 		return hand.get(0);

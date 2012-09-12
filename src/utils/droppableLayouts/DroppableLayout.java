@@ -10,8 +10,17 @@ import utils.StandardSizes;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import client.gui.entities.Droppable;
-
+/**
+ * defines how the cards should be arranged inside a droppable
+ * @author Yoav
+ *
+ */
 public abstract class DroppableLayout implements Serializable {
+	/**
+	 * defines the different layout types
+	 * @author Yoav
+	 *
+	 */
 	public enum LayoutType {
 		NONE, LINE, HEAP, DECK;
 		public DroppableLayout getLayout(Droppable droppable){
@@ -66,10 +75,20 @@ public abstract class DroppableLayout implements Serializable {
 	}
 		
 	protected Droppable droppable;
+	
 	AnimationRunnable animationRunnable = null;
-
+	/**
+	 * rearrange the cards
+	 * @param index 
+	 * @param width droppable's width
+	 * @param height droppable's height
+	 */
 	public abstract void rearrange(int index, float width, float height);
 
+	/**
+	 * constructor
+	 * @param droppable the droppable which this layout works on
+	 */
 	public DroppableLayout(Droppable droppable) {
 		this.droppable = droppable;
 	}
@@ -125,19 +144,12 @@ public abstract class DroppableLayout implements Serializable {
 				AbstractList<Card> abstractList, long duration) {
 			this.animationArgs = animationArgs;
 			this.abstractList = abstractList;
-			this.duration = duration;
-			
-			AbstractList<Card> toDelete = new ArrayList<Card>();
-			
-//			for(Card c : abstractList){
-//				if(c.getAnimationFlags().checkRearrangeCondition()){
-//					toDelete.add(c);
-//				}
-//			}
-//			
-//			this.abstractList.removeAll(toDelete);
-		}
+			this.duration = duration;			
 
+		}
+		/**
+		 * stop current drawing animation
+		 */
 		public void stopAnimation() {
 			running = false;
 
@@ -209,14 +221,7 @@ public abstract class DroppableLayout implements Serializable {
 					setLocationAndAngle(card, reserved[0][i] + curDx[i], reserved[1][i] + curDy[i], reserved[2][i] + curDAngle[i]);
 				}
 			}
-//			if (running){
-//				for (int i = 0; i < animationArgs[0].length; i++) {
-//					Card card = abstractList.get(i);
-//					setLocationAndAngle(card, animationArgs[0][i], animationArgs[1][i], animationArgs[2][i]);
-//					//card.setLocation(animationArgs[0][i], animationArgs[1][i]);
-//					//card.setAngle(animationArgs[2][i]);
-//				}
-//			}
+
 			
 			for(Card card : abstractList){
 				if(droppable.getCards().contains(card)){
@@ -238,15 +243,26 @@ public abstract class DroppableLayout implements Serializable {
 		}
 
 	}
-
+	/**
+	 * get type of layout
+	 * @return type of layout
+	 */
 	public abstract LayoutType getType();
-
+	
+	/**
+	 * stop current running animation
+	 */
 	public void stopAnimation() {
 
 		if (this.animationRunnable != null)
 			animationRunnable.stopAnimation();
 	}
-	
+	/**
+	 * start animating
+	 * @param abstractList cards to animate
+	 * @param animationArgs matrix
+	 * @param duration duration of the animation
+	 */
 	public void animate(AbstractList<Card> abstractList,
 			float[][] animationArgs, long duration) {
 
