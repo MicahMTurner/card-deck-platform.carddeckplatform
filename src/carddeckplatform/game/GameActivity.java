@@ -237,6 +237,7 @@ public class GameActivity extends Activity {
 			//	e.printStackTrace();
 			//}
 	    }
+		ClientDataBase.getDataBase().getGame("war");
 		return setupGame();
 	}
 	
