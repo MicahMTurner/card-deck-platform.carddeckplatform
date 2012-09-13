@@ -23,8 +23,11 @@ public class PublicHandler implements PublicEventsHandler {
 		else if(Durak.isAttacked(player) && (publicZone.isEmpty() || publicZone.cardsHolding()==3)){
 			answer = false;
 		}		
-		else if(Durak.isAttacked(player) && ((StandartCard)publicZone.peek()).getValue() < ((StandartCard)card).getValue()){
-			answer = true;
+		else if(Durak.isAttacked(player)){
+			if(((StandartCard)publicZone.peek()).getValue() < ((StandartCard)card).getValue() && (((StandartCard)publicZone.peek()).getColor() != Durak.rulerColor && ((StandartCard)card).getColor() != Durak.rulerColor || ((StandartCard)publicZone.peek()).getColor() == Durak.rulerColor && ((StandartCard)card).getColor() == Durak.rulerColor))
+				answer = true;
+			if(((StandartCard)card).getColor() == Durak.rulerColor && ((StandartCard)publicZone.peek()).getColor()!=Durak.rulerColor)
+				answer = true;
 		}
 		
 		if(answer)
