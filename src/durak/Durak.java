@@ -3,6 +3,8 @@ package durak;
 import java.util.ArrayList;
 import java.util.Queue;
 
+import javax.tools.StandardLocation;
+
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
 
@@ -31,6 +33,7 @@ public class Durak extends Game{
 	Card rulerCard;
 	utils.Player startingPlayer;
 
+	static public StandartCard.Color rulerColor=null;
 	
 	public Durak(){
 		initActiveNumbers();
@@ -220,6 +223,8 @@ public class Durak extends Game{
 		rulerCard = findRulerCard(deckCards, numOfPlayers);
 		startingPlayer = findStartingPlayer(deckCards, rulerCard, numOfPlayers);
 		
+		rulerColor = ((StandartCard)rulerCard).getColor();
+		
 //		for (int i=0;i<players.size();i++){
 //			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(playersCards.get(i),players.get(i).getId())));
 //		}
@@ -286,9 +291,8 @@ public class Durak extends Game{
 	}
 
 	@Override
-	public String instructions() {
-		// TODO Auto-generated method stub
-		return null;
+	public String instructions() {		
+		return "Durak is a card game that is popular throughout most of the post-Soviet states. The object of the game is to get rid of all one's cards. At the end of the game, the last player with cards in their hand is referred to as the fool (durak).";
 	}
 
 }
