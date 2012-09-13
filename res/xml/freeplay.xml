@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    	<PreferenceCategory
+                android:title="Number of players">               
+                <ListPreference
+	           android:title="Set number of players"
+	           android:key="playersNum"
+	           android:defaultValue="2"
+	           android:entries="@array/number_of_players"
+	           android:entryValues="@array/number_of_players" 
+          	 />   
+        </PreferenceCategory> 
+
+    	<PreferenceCategory
+                android:title="Layout">
+        	<ListPreference
+	           android:title="Choose public layout"
+	           android:summary="Choose public layout"
+	           android:key="publicLayout"
+	           android:defaultValue="free"
+	           android:entries="@array/free_play_layouts"
+	           android:entryValues="@array/free_play_layouts_values" 
+          	 />
+        	
+        	<CheckBoxPreference
+                        android:title="Player cards visible"
+                        android:defaultValue="false"
+                        android:summary="If selected each player's cards are visible."
+                        android:key="playerCardsVisible" />
+        	
+        	
+        	<CheckBoxPreference
+                        android:title="Public visible"
+                        android:defaultValue="true"
+                        android:summary="If selected the cards in the public area are visible."
+                        android:key="publicCardsVisible" />
+        	
+        	
+        
+        </PreferenceCategory>
+    	
+    	
+</PreferenceScreen>
