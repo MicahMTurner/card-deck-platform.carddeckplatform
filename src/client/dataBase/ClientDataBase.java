@@ -44,6 +44,9 @@ public class ClientDataBase {
 	if (gameName.equals("free play")){
 			return new FreePlay();
 		}
+	if (gameName.equals("Durak")){
+		return new Durak();
+	}
 		return loader.LoadPlugin(gameName);	
 	}
 	
@@ -51,6 +54,7 @@ public class ClientDataBase {
 	public Set<String> getGamesNames(){
 		Set<String>gameNames=loader.getGameNames();
 		gameNames.add("free play");
+		gameNames.add("Durak");
 		return gameNames;
 	}	
 }
