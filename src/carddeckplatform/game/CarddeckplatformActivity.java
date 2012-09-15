@@ -117,7 +117,6 @@ public class CarddeckplatformActivity extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         
-        ClientDataBase.getDataBase().getGame("war");
         setContentView(R.layout.menu);
         
         Display display = getWindowManager().getDefaultDisplay();        

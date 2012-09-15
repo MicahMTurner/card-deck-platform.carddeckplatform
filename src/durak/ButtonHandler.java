@@ -1,18 +1,7 @@
 package durak;
 
-import communication.actions.EndTurnAction;
-import communication.link.ServerConnection;
-import communication.messages.EndTurnMessage;
-import communication.messages.RequestCardMessage;
-
-import client.controller.ClientController;
-import utils.Button;
-import utils.DeckArea;
-import utils.Point;
-import utils.Position;
-import utils.Public;
-import utils.droppableLayouts.DroppableLayout;
 import handlers.ButtonEventsHandler;
+import client.controller.ClientController;
 
 public class ButtonHandler implements ButtonEventsHandler {
 	

@@ -158,8 +158,10 @@ public class GameActivity extends Activity {
 		    	  }
 				Game game = ClientDataBase.getDataBase().getGame(gameName);
 				
-				if(gameName.equals("free play"))
+				if(gameName.equals("free play")){
 					game.setFreePlayProfile((FreePlayProfile)getIntent().getSerializableExtra("profile"));
+				}
+				//ClientController.get().setGame(game);
 		    	host=new Host(game);
 		    	new Thread(host).start();
 		    	//cdl.countDown();
@@ -229,15 +231,10 @@ public class GameActivity extends Activity {
 	@Override
 	protected String doInBackground(String... params) {
 		if (GameEnvironment.get().getPlayerInfo().isServer()){
-			//CountDownLatch cdl=new CountDownLatch(1);
 	        initialServer(params[0]);
-	       // try {
-			//	cdl.await();
-			//} catch (InterruptedException e) {		
-			//	e.printStackTrace();
-			//}
 	    }
-		ClientDataBase.getDataBase().getGame("war");
+		//ClientDataBase.getDataBase().getGame("war");
+		//ClassLoaderDelegate.getInstance().setClassLoader(this.getClass().getClassLoader());
 		return setupGame();
 	}
 	
