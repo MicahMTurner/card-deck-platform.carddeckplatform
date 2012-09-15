@@ -26,7 +26,7 @@ public class TcpConnector implements Connector {
 		try {
 			socket = new Socket(GameEnvironment.get().getTcpInfo().getHostIp(), GameEnvironment.get().getTcpInfo().getHostPort());
 			out = new ObjectOutputStream(socket.getOutputStream());
-			in = new ObjectInputStream(socket.getInputStream());
+			in = new ObjectInputStreamWithDelegateClassLoader(socket.getInputStream());
 			
 			return new Streams(out, in);
 		} catch (UnknownHostException e) {

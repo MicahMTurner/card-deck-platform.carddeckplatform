@@ -31,6 +31,7 @@ import communication.link.ServerConnection;
 import communication.messages.EndTurnMessage;
 import communication.messages.Message;
 import communication.messages.RequestCardMessage;
+import freeplay.customization.FreePlayProfile;
 
 /**
  * this is a singleton class that provides an API for the card deck platform
@@ -83,7 +84,9 @@ public class ClientController {//implements Observer {
 	 * @param game the game instance
 	 */
 	public void setGame(Game game) {
-		this.game = game;
+		//if (this.game==null){
+			this.game = game;
+		//}
 	}
 	/**
 	 * set the gui instance
@@ -227,6 +230,13 @@ public class ClientController {//implements Observer {
 	 */
 	public Pair<ArrayList<Droppable>,ArrayList<Button>>getLayouts() {
 		return game.getLayouts();	
+	}
+	public void setLayouts(FreePlayProfile profile){
+		if (profile!=null){
+			game.setFreePlayProfile(profile);
+		}else{
+			game.setLayouts();
+		}
 	}
 	/**
 	 * notify to gui that card was moved from droppable A to droppable B(usually called when incoming card move message)

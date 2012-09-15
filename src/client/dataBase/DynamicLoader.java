@@ -35,6 +35,7 @@ import utils.Pair;
 import android.content.Context;
 import android.os.AsyncTask;
 import carddeckplatform.game.CarddeckplatformActivity;
+import carddeckplatform.game.ClassLoaderDelegate;
 import carddeckplatform.game.PluginDetails;
 import carddeckplatform.game.StaticFunctions;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
@@ -137,15 +138,12 @@ public class DynamicLoader {
 					mapPlugins();
 				}
 			}
-			//game=gameInstance.get(gameName);
-			if (game==null){
-				String jarFile = PLUGINDIR+"/"+gameName+".jar";
-				DexClassLoader classLoader = new DexClassLoader(
-						jarFile, GameEnvironment.path+"temp", null, getClass().getClassLoader());
-				Class<?> cls = classLoader.loadClass(mapping.get(gameName));
-				game=(Game)cls.newInstance();
-				//gameInstance.put(gameName, game);
-			}
+
+			initalizeClassLoader(gameName);
+
+			Class<?> cls =ClassLoaderDelegate.getDelegate().loadClass(mapping.get(gameName));
+			game=(Game)cls.newInstance();
+
 			System.out.println("loading class: "+getClass().getClassLoader().toString());
 
 			
@@ -165,6 +163,13 @@ public class DynamicLoader {
 		}		
 		
 		return game;
+	}
+	
+	private void initalizeClassLoader (String gameName){
+		String jarFile = PLUGINDIR+"/"+gameName+".jar";
+		DexClassLoader child = new DexClassLoader (
+				jarFile, GameEnvironment.path+"temp", null, getClass().getClassLoader());
+		ClassLoaderDelegate.getInstance().setClassLoader(child);
 	}
 	
 
