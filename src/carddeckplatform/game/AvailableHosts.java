@@ -21,6 +21,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -81,13 +82,17 @@ public class AvailableHosts implements Observer{
 	private int getId(){
 		return ids++;
 	}
+
 	public AvailableHosts(Context context, Dialog dialog){
 		this.context=context;		
 		this.dialog=dialog;
 		ids=0;
 		scrollView = new ScrollView(context);		
 		table= new TableLayout(context);
-		foundHostIds=new ArrayList<HostGameDetails>();	
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
+		scrollView.setBackgroundResource(R.drawable.availablehostbkgrnd);		
+		foundHostIds=new ArrayList<HostGameDetails>();
 		table.setColumnStretchable(0,true);
 		table.setColumnStretchable(10,true);
 		table.setShrinkAllColumns(true);

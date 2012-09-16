@@ -111,8 +111,7 @@ public class FreePlay extends Game{
 
 	@Override
 	public String instructions() {
-		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 //	public void loadProfile(){
 //		try {

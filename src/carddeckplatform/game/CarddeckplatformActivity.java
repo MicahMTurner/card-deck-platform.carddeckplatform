@@ -7,24 +7,7 @@ package carddeckplatform.game;
 import java.util.ArrayList;
 import java.util.Set;
 
-import org.newdawn.slick.geom.Circle;
-
-import communication.link.HostFinder;
-//import communication.link.HostId;
-import communication.link.ServerConnection;
-import communication.link.TcpHostFinder;
-import communication.link.TcpIdListener;
-import communication.messages.RestartMessage;
-
-import carddeckplatform.game.gameEnvironment.GameEnvironment;
-import carddeckplatform.game.gameEnvironment.GameEnvironment.ConnectionType;
-import carddeckplatform.game.tutorial.TutorialActivity;
-import client.controller.LivePosition;
-import client.dataBase.ClientDataBase;
-import client.dataBase.DynamicLoader;
-
-import logic.host.Host;
-
+import logic.client.Game;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -33,47 +16,54 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
-import android.content.pm.ActivityInfo;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.util.TypedValue;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.Toast;
-import android.widget.ViewFlipper;
+import android.widget.TextView;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
+import carddeckplatform.game.gameEnvironment.GameEnvironment.ConnectionType;
+import carddeckplatform.game.tutorial.TutorialActivity;
+import client.dataBase.ClientDataBase;
+
+import communication.link.HostFinder;
+import communication.link.HostGameDetails;
 
 
 public class CarddeckplatformActivity extends Activity {
 	private static Context context;
-	private ViewFlipper mFlipper;
+
 	private boolean livePosition;
 
 	// constatnts for request code
@@ -109,8 +99,7 @@ public class CarddeckplatformActivity extends Activity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(final Bundle savedInstanceState) {
-    	//tcpIdListener=null;
-    	//host=null;    	
+  	
         super.onCreate(savedInstanceState);
         
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -138,21 +127,9 @@ public class CarddeckplatformActivity extends Activity {
         		(ipAddress >> 24 & 0xff));
         
         
-        //GameStatus.localIp = ipStr;
+
         GameEnvironment.get().getTcpInfo().setLocalIp(ipStr);
-        //*********************************************
-        //making widgets
-        //*********************************************
-        
-//        //making the flipper
-//        mFlipper = ((ViewFlipper) this.findViewById(R.id.welcomeFlipper));
-//        mFlipper.startFlipping();
-//        mFlipper.setInAnimation(AnimationUtils.loadAnimation(this,
-//                R.anim.push_up_in));
-//        mFlipper.setOutAnimation(AnimationUtils.loadAnimation(this,
-//                R.anim.push_up_out));
-        
-        
+
         
         
         final EditText username = (EditText) findViewById(R.id.nickText);
@@ -166,25 +143,7 @@ public class CarddeckplatformActivity extends Activity {
         final Button hostBtn = (Button) findViewById(R.id.creategameButton);
        
         Button joinBtn = (Button) findViewById(R.id.joingamebutton);
-//        hostBtn.setOnTouchListener(new View.OnTouchListener() {
-//        	
-//			
-//			@Override
-//			public boolean onTouch(View v, MotionEvent event) {
-//				if (event.getActionMasked()==MotionEvent.ACTION_DOWN 
-//						|| event.getActionMasked()==MotionEvent.ACTION_MOVE){
-//					((Button)v).setBackgroundResource(R.drawable.hostpressed);
-//					return true;
-//				}else if (event.getActionMasked()==MotionEvent.ACTION_UP){
-//					v.performClick();
-//				}else{						
-//					((Button)v).setBackgroundResource(R.drawable.hosticon);
-//				}
-//				
-//				
-//				return true;
-//			}
-//			});
+
         hostBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
             	
@@ -192,41 +151,46 @@ public class CarddeckplatformActivity extends Activity {
             	GameEnvironment.get().getPlayerInfo().setServer(true);							
 				GameEnvironment.get().getTcpInfo().setHostIp("127.0.0.1");			
 				GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
-				
-            	dialog.setContentView(R.layout.gamelistdialog);
+				InstalledGamesTable installedGames = new InstalledGamesTable(dialog);
+            	//dialog.setContentView(new InstalledGamesTable(dialog).getView());
             	// gets user prefs.
                 getPrefs();
-            	dialog.setTitle("Please choose a game");
+            	//dialog.setTitle("Installed Games");
             	Set<String> games = ClientDataBase.getDataBase().getGamesNames();
             	
             	LinearLayout ll = (LinearLayout)dialog.findViewById(R.id.gameListLayout);
+            	Game game;
             	for(final String gameName : games){
-            		Button gameBtn = new Button(getApplicationContext());
-            		gameBtn.setBackgroundDrawable( getResources().getDrawable( R.drawable.graybutton));
-            		gameBtn.setText(gameName);
-            		gameBtn.setOnClickListener(new OnClickListener() {
-						
-						@Override
-						public void onClick(View v) {							
-							
-							
-							Intent i;
-							if(gameName.equals("free play"))
-								i = new Intent(CarddeckplatformActivity.this, ProfileCatalogActivity.class);
-							else
-								i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
-							// always use the tcp server socket since we always need it to connect the hosting player.
-			                GameEnvironment.get().getTcpInfo().initServerSocket();
-			                
-			                i.putExtra("gameName", gameName);			                
-			                i.putExtra("livePosition", livePosition);			               
-			                startActivity(i);
-			                
-			                dialog.dismiss();
-						}
-					});
-            		ll.addView(gameBtn);
+            		 game = ClientDataBase.getDataBase().getGame(gameName);
+            		installedGames.addRow(game);
+            		
+//           		Button gameBtn = new Button(getApplicationContext());
+//           		gameBtn.setBackgroundDrawable( getResources().getDrawable( R.drawable.graybutton));
+//           		gameBtn.setText(gameName);
+//            		gameBtn.setOnClickListener(new OnClickListener() {
+//						
+//						@Override
+//						public void onClick(View v) {							
+//							
+//							
+//							Intent i;
+//							if(gameName.equals("free play"))
+//								i = new Intent(CarddeckplatformActivity.this, ProfileCatalogActivity.class);
+//							else
+//								i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
+//							// always use the tcp server socket since we always need it to connect the hosting player.
+//			                GameEnvironment.get().getTcpInfo().initServerSocket();
+//			                
+//			                i.putExtra("gameName", gameName);			                
+//			                i.putExtra("livePosition", livePosition);			               
+//			                startActivity(i);
+//			                
+//			                dialog.dismiss();
+//						}
+//					});
+//            		ll.addView(gameBtn);
             	}
+            	dialog.setContentView(installedGames.getView());
             	dialog.show();
                 } 
              });       
@@ -270,7 +234,7 @@ public class CarddeckplatformActivity extends Activity {
            	             // Add the name and address to an array adapter to show in a ListView
            	             System.out.println("found");
            	             String name = device.getName();
-           	             String Address = device.getAddress(); 
+           	            // String Address = device.getAddress(); 
            	             Button hostBtn = new Button(getApplicationContext());
            	             hostBtn.setText(name);
            	             hostBtn.setOnClickListener(new OnClickListener(){
@@ -494,6 +458,207 @@ public class CarddeckplatformActivity extends Activity {
     	
     	}
 
-    } 
+    }
+    public class InstalledGamesTable{
+    	private TableLayout table;
+     	private ScrollView scrollView;
+    	private int ids;
+    	private Dialog dialog;
+    	
+    	private class enterGameClickListener implements OnClickListener{
+
+    		@Override
+    		public void onClick(View v) {    						
+    			Intent i;
+    			TableRow row = (TableRow)v;
+    			String gameName=((TextView)row.getChildAt(0)).getText().toString().trim();
+				if(gameName.equals("free play"))
+					i = new Intent(CarddeckplatformActivity.this, ProfileCatalogActivity.class);
+				else
+					i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
+				// always use the tcp server socket since we always need it to connect the hosting player.
+                GameEnvironment.get().getTcpInfo().initServerSocket();
+                
+                i.putExtra("gameName", gameName);			                
+                i.putExtra("livePosition", livePosition);			               
+                startActivity(i);
+                
+                dialog.dismiss();
+    			
+    		}
+    		
+    	}
+    	
+    	public View getView(){
+    		return scrollView;
+    	}
+    	private int getId(){
+    		return ids++;
+    	}
+    	private View getTextView(String text) {		
+    		TextView textView = new TextView(context);
+    		textView.setText(text);
+    		textView.setGravity(Gravity.CENTER);
+    		textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12); 		
+    		textView.setTypeface(Typeface.SERIF, Typeface.BOLD);  
+    		return textView;
+    	}
+    	public InstalledGamesTable(Dialog dialog) {
+    	
+    		ids=0;
+    		scrollView = new ScrollView(context);		
+    		table= new TableLayout(context);
+    		this.dialog=dialog;
+    		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+    		
+    		scrollView.setBackgroundResource(R.drawable.availablegamesbkgrnd);    		
+    		table.setColumnStretchable(0,true);
+    		table.setColumnStretchable(10,true);
+    		table.setShrinkAllColumns(true);
+    		
+    		//make title row
+    		TableRow rowTitle = new TableRow(context);	
+    		rowTitle.setId(getId());
+    		rowTitle.setGravity(Gravity.CENTER);
+    		rowTitle.setPadding(0, 0, 0, 10);
+    		rowTitle.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT,TableRow.LayoutParams.WRAP_CONTENT));
+    		TextView title= new TextView(context);
+    		title.setText("Installed Games");
+    		title.setGravity(Gravity.CENTER);		
+    		title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);  
+    	    title.setTypeface(Typeface.SERIF, Typeface.BOLD); 
+    	    TableRow.LayoutParams params = new TableRow.LayoutParams();  
+    	    params.span = 11;  
+    	  	rowTitle.addView(title,params);
+    	  	table.addView(rowTitle);
+    	  	
+    	  	//make mapping row
+    	  	TableRow mappingRow = new TableRow(context);	  	
+    	  	mappingRow.setPadding(0, 0, 0, 10);	  	
+    	    params.span = 4; 
+    	    mappingRow.setId(getId());
+    	  	mappingRow.addView(getTextView("Game Name"));
+    	  	mappingRow.addView(getTextView("Min player"),params);
+    	  	mappingRow.addView(getTextView(""));
+    	  	mappingRow.addView(getTextView("Max player"),params);
+    	  	mappingRow.addView(getTextView("Rules"));	  	
+    	  	table.addView(mappingRow);
+
+    		scrollView.setSmoothScrollingEnabled(true);
+    		scrollView.setScrollbarFadingEnabled(true);
+    		scrollView.addView(table);		
+
+		}
+    	public void addRow(Game game){
+    		TableRow installedGame=new TableRow(context);					
+			installedGame.setId(getId());
+			installedGame.setLayoutParams(new LayoutParams(TableRow.LayoutParams.FILL_PARENT,TableRow.LayoutParams.WRAP_CONTENT));
+			installedGame.setOnClickListener(new enterGameClickListener());
+			installedGame.setPadding(0, 0, 0, 0);
+			installedGame.setBackgroundDrawable(context.getResources().getDrawable(android.R.drawable.list_selector_background));
+			installedGame.setGravity(Gravity.CENTER);
+			//make game name
+			TextView gameId=new TextView(context);
+			gameId.setText(game.toString());
+			gameId.setGravity(Gravity.CENTER);
+			
+			gameId.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);  
+			gameId.setTypeface(Typeface.SERIF, Typeface.BOLD);
+			installedGame.addView(gameId);
+			
+			//make min players
+			addPlayersDetails(game.minPlayers(),installedGame);
+		
+			
+			//make separator
+			ImageView separator=new ImageView(context);
+			separator.setImageResource(R.drawable.separator);
+			separator.setPadding(5, 0, 5, 0);					
+			installedGame.addView(separator);
+			
+			//make max players
+			addPlayersDetails(game.minPlayers(),installedGame);
+		
+			//make instructionIcon
+			ImageView instructionIcon = new ImageView(context);
+			instructionIcon.setOnClickListener(new showInstructionsClickListener(game.instructions()));
+			instructionIcon.setImageResource(R.drawable.info);
+			instructionIcon.setPadding(40, 0, 40, 0);
+			instructionIcon.setId(installedGame.getId());
+			//change color when pressed
+			
+			instructionIcon.setOnTouchListener(new View.OnTouchListener(){
+			
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					if (event.getActionMasked()==MotionEvent.ACTION_DOWN 
+							|| event.getActionMasked()==MotionEvent.ACTION_MOVE){
+						((ImageView)v).setImageResource(R.drawable.pressedinfo);
+						return true;
+					}else if (event.getActionMasked()==MotionEvent.ACTION_UP){
+						v.performClick();
+					}else{						
+						((ImageView)v).setImageResource(R.drawable.info);
+					}
+					
+					
+					return true;
+				}
+				
+			});
+			
+			installedGame.addView(instructionIcon);	
+
+			table.addView(installedGame);
+		}
+		
+	
+
+    	private void addPlayersDetails(int players,	TableRow availableGame) {
+    		int i=0;
+    		for (;i<players;i++){
+    			ImageView playerImage=new ImageView(context);
+    			playerImage.setImageResource(R.drawable.man);					
+    			availableGame.addView(playerImage);
+    		}
+    		for (;i<4;i++){
+    			availableGame.addView(new ImageView(context));
+    		}
+		
+    	}
+    	
+    	private class showInstructionsClickListener implements OnClickListener{
+    		String explanation=null;
+    		public showInstructionsClickListener(String explanation) {
+    			this.explanation=explanation;
+			}
+    		@Override
+    		public void onClick(View v) {
+    			((ImageView)v).setImageResource(R.drawable.info);
+    			final Dialog dialog=new Dialog(context);
+    			dialog.setContentView(R.layout.instructionsdialog);
+    			dialog.setTitle("Instructions");
+    			
+    			TextView instructions=(TextView) dialog.findViewById(R.id.instructionsText);
+    			instructions.setText(this.explanation);
+    			Button closeButton = (Button) dialog.findViewById(R.id.closingButton);    			
+    			closeButton.setGravity(Gravity.CENTER);
+    			closeButton.setOnClickListener(new OnClickListener() {
+    				
+    				@Override
+    				public void onClick(View arg0) {
+    					dialog.dismiss();
+    				}
+    			});
+
+    			dialog.show();
+    			
+    			
+    		}
+    		
+    	}
+
+
+    }
 }
 
