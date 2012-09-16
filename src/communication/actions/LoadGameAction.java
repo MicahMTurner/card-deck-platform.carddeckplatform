@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import utils.Player;
 import utils.Position;
 import logic.client.Game;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.controller.ClientController;
 import client.dataBase.ClientDataBase;
 import freeplay.customization.FreePlayProfile;
@@ -20,12 +21,14 @@ public class LoadGameAction implements Action{
 	@Override
 	public void execute() {
 		
-		Game game=ClientDataBase.getDataBase().getGame(gameId);		
-		if(freePlayProfile!=null)
-			game.setFreePlayProfile(freePlayProfile);
-		game.setLayouts();
-	
-	
-		ClientController.get().setGame(game);
+		//if (!GameEnvironment.get().getPlayerInfo().isServer()){
+			Game game=ClientDataBase.getDataBase().getGame(gameId);
+			ClientController.get().setGame(game);
+			if(freePlayProfile!=null){
+				game.setFreePlayProfile(freePlayProfile);
+			}
+			game.setLayouts();
+		//}
+		//ClientController.get().setLayouts(freePlayProfile);	
 	}
 }
