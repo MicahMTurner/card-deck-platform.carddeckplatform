@@ -29,7 +29,7 @@ public class Public extends Droppable{
 	public Public(PublicEventsHandler handler,Position.Public position,DroppableLayout.LayoutType layoutType) {
 		super(position.getId(),position, layoutType);
 		this.handler=handler;			
-		this.image = "freepublic";
+		this.image = "drop";
 		
 	}
 	
