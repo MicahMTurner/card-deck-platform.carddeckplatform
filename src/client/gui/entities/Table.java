@@ -42,7 +42,7 @@ public class Table {
 	
 	//private Matrix matrix;
 	
-	static public ArrayList<Card> animatedCards = new ArrayList<Card>();
+	static public ArrayList<Card> animatedCards;
 	
 	public Table(Context context){
 		//this.matrix=new Matrix();		
@@ -51,6 +51,7 @@ public class Table {
 		this.droppables= new ArrayBlockingQueue<Droppable>(20);
 		this.mappedDraggables= new Hashtable<Integer,Draggable>();
 		this.buttons = new ArrayBlockingQueue<Button>(4);
+		this.animatedCards = new ArrayList<Card>();
 	}
 
 	

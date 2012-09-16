@@ -28,7 +28,7 @@ public abstract class Game {
 	
 //	public static GamePrefs receivedGamePrefs=null;
 	protected static ArrayList<Player> staticPlayers;
-	protected ArrayList<Player> players = new ArrayList<Player>();
+	protected ArrayList<Player> players;
 	protected Queue<utils.Position.Player> turnsQueue=new LinkedList<utils.Position.Player>();
 	protected ArrayList<Droppable> droppables=new ArrayList<Droppable>();
 	//The number of players the host would accept before starting the game.  
@@ -95,7 +95,7 @@ public abstract class Game {
 	public Game() {
 
 		//Position.Player x=Position.Player.BOTTOM;
-		
+		 this.players= new ArrayList<Player>();
 		//clearEmptyPositions();	
 		staticPlayers = players;
 		roundNumber=0;
@@ -215,13 +215,14 @@ public abstract class Game {
 					break;
 				}
 			}
-			Position.Player next=turnsQueue.poll();	
+			Position.Player next=turnsQueue.peek();	
 			if (next!=null){
 				while (!next.equals(startingPlayer)){
+					turnsQueue.poll();
 					turnsQueue.add(next);
-					next=turnsQueue.poll();
+					next=turnsQueue.peek();
 				}
-				turnsQueue.add(next);
+				//turnsQueue.add(next);
 			}
 		}
 		

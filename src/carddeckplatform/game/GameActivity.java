@@ -145,8 +145,6 @@ public class GameActivity extends Activity {
     	GameEnvironment.get().getHandler().post(new Runnable() {
 			@Override
 			public void run() {
-				//host=new Host(ClientDataBase.getDataBase().getGame(gameName));
-				//HostGameDetails gameDetails=host.getDetails();
 				if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP){
 		    		  //if in tcp mode start id listener.
 		   			 // tcpIdListener = new TcpIdListener(host.getHostGameDetails());//new TcpIdListener(GameEnvironment.get().getPlayerInfo().getUsername() , gameName);
@@ -161,10 +159,10 @@ public class GameActivity extends Activity {
 				if(gameName.equals("free play")){
 					game.setFreePlayProfile((FreePlayProfile)getIntent().getSerializableExtra("profile"));
 				}
-				//ClientController.get().setGame(game);
+
 		    	host=new Host(game);
 		    	new Thread(host).start();
-		    	//cdl.countDown();
+
 			}
 			
 		});

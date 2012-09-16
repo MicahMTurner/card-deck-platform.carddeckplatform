@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import logic.client.Game;
+import logic.host.Host;
 import utils.Button;
 import utils.Card;
 import utils.Pair;
@@ -28,6 +29,7 @@ import communication.actions.EndRoundAction;
 import communication.actions.EndTurnAction;
 import communication.actions.SetRulerCardAction;
 import communication.link.ServerConnection;
+import communication.messages.EndRoundMessage;
 import communication.messages.EndTurnMessage;
 import communication.messages.Message;
 import communication.messages.RequestCardMessage;
@@ -83,10 +85,8 @@ public class ClientController {//implements Observer {
 	 * set the game instance
 	 * @param game the game instance
 	 */
-	public void setGame(Game game) {
-		//if (this.game==null){
+	public void setGame(Game game) {		
 			this.game = game;
-		//}
 	}
 	/**
 	 * set the gui instance
@@ -114,9 +114,9 @@ public class ClientController {//implements Observer {
 		 * send End Turn message
 		 * @param playerId player's turn that just ended
 		 */
-		public void endTurn(int playerId){
+		public void endTurn(){
 			gui.setUiEnabled(false);
-			ServerConnection.getConnection().send(new EndTurnMessage(new EndTurnAction(playerId)));
+			ServerConnection.getConnection().send(new EndTurnMessage(null));
 		}
 		
 		/**
@@ -231,13 +231,7 @@ public class ClientController {//implements Observer {
 	public Pair<ArrayList<Droppable>,ArrayList<Button>>getLayouts() {
 		return game.getLayouts();	
 	}
-	public void setLayouts(FreePlayProfile profile){
-		if (profile!=null){
-			game.setFreePlayProfile(profile);
-		}else{
-			game.setLayouts();
-		}
-	}
+
 	/**
 	 * notify to gui that card was moved from droppable A to droppable B(usually called when incoming card move message)
 	 * @param card the card that was moved
@@ -348,9 +342,11 @@ public class ClientController {//implements Observer {
 		//get the player that starts next round
 		Integer nextPlayerId=game.endRound();
 		getMe().setMyTurn(false);
-		if (nextPlayerId!=null){			
-			game.reArrangeQueue(nextPlayerId);
-			playerTurn(nextPlayerId);
+		if (nextPlayerId!=null && GameEnvironment.get().getPlayerInfo().isServer()){			
+			Host.reArrangeQueue(nextPlayerId);
+			sendAPI().endTurn();
+//			game.reArrangeQueue(nextPlayerId);
+//			playerTurn(nextPlayerId);
 		}
 	}
 	/**
@@ -381,22 +377,6 @@ public class ClientController {//implements Observer {
 		gui.dealCards(cards, to);
 	}
 	 
-//	@Override
-//	public void update(Observable arg0, Object arg1) {
-//		if (arg1!=null){
-//			boolean myTurn=(Boolean)arg1;
-//			if (myTurn){
-//				gui.setUiEnabled(true);
-//				gui.popToast("Your Move");
-//			}
-//			else{
-//				gui.setUiEnabled(false);
-//				send.endTurn(getMe().getId());								
-//			}
-//		}
-//		//if(arg0 instanceof Player)
-//		
-//	}
 
 	
 

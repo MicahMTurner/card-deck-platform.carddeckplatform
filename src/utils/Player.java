@@ -128,7 +128,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 			handler.onTurnEnd(this);
 		
 			myTurn=false;
-			ClientController.sendAPI().endTurn(id);
+			ClientController.sendAPI().endTurn();
 		}
 	}
 	/**

@@ -40,16 +40,8 @@ public class InitialConnectionAction implements Action{
 
 	@Override
 	public void execute() {
-		//if(gamePrefs!=null)
-//		Game.receivedGamePrefs = gamePrefs;
 
-//		Game game=ClientDataBase.getDataBase().getGame(gameId);
-//		if(freePlayProfile!=null)
-//			game.setFreePlayProfile(freePlayProfile);
-//		game.setLayouts();
-//		
-//		
-//		ClientController.get().setGame(game);
+
 		
 		//create my instance
 
@@ -82,7 +74,7 @@ public class InitialConnectionAction implements Action{
 				
 		
 		
-		
+		//add all players
 		for (Player newPlayer : newPlayers){			
 			ClientController.get().addPlayer(newPlayer);
 		}		
