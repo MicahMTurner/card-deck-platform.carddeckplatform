@@ -33,7 +33,13 @@ import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import carddeckplatform.game.BitmapHolder;
+import carddeckplatform.game.R;
 import client.controller.ClientController;
 /**
  * this class represents an area where cards can be placed at
@@ -300,19 +306,29 @@ public abstract class Droppable implements Serializable {
 	public void draw(Canvas canvas, Context context) {
 		
 		Bitmap img = BitmapHolder.get().getBitmap(image);
+		
 		if (img!=null){
+			Path clipPath = new Path();
+			float radius = 10f;
+		    float padding = radius / 2;
+			
 			Matrix matrix = new Matrix();
 		
 			Point absScale = MetricsConvertion.pointRelativeToPx(getScale());
-
+			Shape s = getShape();
+			clipPath.addRoundRect(new RectF(new Rect((int)s.getMinX(), (int)s.getMinY(),(int)s.getMaxX(), (int)s.getMaxY())), radius, radius, Path.Direction.CW);
 			matrix.postScale((float) absScale.getX() / (float) img.getWidth(),(float) absScale.getY() / (float) img.getHeight());
 			matrix.postTranslate(getX() - absScale.getX() / 2, getY() - absScale.getY() / 2);
-		
-			canvas.drawBitmap(img, matrix, null);
+			//canvas.clipPath(clipPath);
+			//canvas.drawBitmap(img, matrix, null);
 			initiatePaintForGlow();
 			ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE,glowColor);
 			mPaintForGlow.setColorFilter(colorFilterTint);
-			canvas.drawBitmap(img, matrix, mPaintForGlow);		
+			mPaintForGlow.setAlpha(50);
+			//mPaintForGlow.setARGB(50, 0, 250, 0);
+			//canvas.drawBitmap(img, matrix, mPaintForGlow);	
+			canvas.drawRoundRect(new RectF(new Rect((int)s.getMinX(), (int)s.getMinY(),(int)s.getMaxX(), (int)s.getMaxY())), radius, radius, mPaintForGlow);
+			
 		}
 	}
 

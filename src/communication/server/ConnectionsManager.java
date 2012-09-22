@@ -187,6 +187,9 @@ public class ConnectionsManager {
 		for (Connection connection : connections){
 			connection.cancelConnection();
 		}
+		
+		GameEnvironment.get().getBluetoothInfo().resetSockets();
+		
 		//close server socket
 		ServerSocket ss=GameEnvironment.get().getTcpInfo().getServerSocket();
 		if (ss!=null){

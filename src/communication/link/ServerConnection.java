@@ -65,7 +65,7 @@ public class ServerConnection implements Runnable{
 				if(GameEnvironment.get().getConnectionType()==ConnectionType.TCP || GameEnvironment.get().getPlayerInfo().isServer())
 					connector = new TcpConnector(GameEnvironment.get().getTcpInfo().getHostIp(),GameEnvironment.get().getTcpInfo().getHostPort());
 				else if(GameEnvironment.get().getConnectionType()==ConnectionType.BLUETOOTH)
-					connector = new BlueToothConnector(GameEnvironment.get().getBluetoothInfo().getHostDevice(), GameEnvironment.get().getBluetoothInfo().getUUID());
+					connector = new BlueToothConnector(GameEnvironment.get().getBluetoothInfo().getHostDevice());
 				Streams stream = connector.connect();
 				if (stream!=null){
 					ObjectOutputStream out = stream.getOut();

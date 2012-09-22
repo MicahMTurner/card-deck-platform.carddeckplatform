@@ -9,24 +9,60 @@ import android.bluetooth.BluetoothServerSocket;
 
 public class BluetoothInfo {
 	private UUID appUUID;
+	private UUID appUUIDs[] = new UUID[4];
 	private BluetoothDevice hostDevice;
 	private BluetoothServerSocket bluetoothServerSocket;
+	private BluetoothServerSocket bluetoothServerSockets[] = new BluetoothServerSocket[4];
+	private int currentServerSocketIndex;
+	
 	
 	public void initServerSocket(){
 		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		try {
-			bluetoothServerSocket = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("bebe", appUUID);
-		} catch (IOException e) {
-			e.printStackTrace();
+		
+		resetSockets();
+		
+		//while(true){
+			try {
+				//bluetoothServerSocket = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("bebe", appUUID);
+				
+				bluetoothServerSockets[0] = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("bebe", appUUIDs[0]);
+				bluetoothServerSockets[1] = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("bebe", appUUIDs[1]);
+				bluetoothServerSockets[2] = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("bebe", appUUIDs[2]);
+				bluetoothServerSockets[3] = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("bebe", appUUIDs[3]);
+				
+				currentServerSocketIndex=0;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		//}
+	}
+	
+	public void resetSockets(){
+		
+		for(BluetoothServerSocket bss : bluetoothServerSockets){
+			try {
+				bss.close();
+			} catch (Exception e) {}
+			bss=null;
 		}
 	}
 	
-	public BluetoothServerSocket getServerSocket(){
-		return bluetoothServerSocket;
+	public void increaseCurrentServerSocketIndex(){
+		currentServerSocketIndex++;
 	}
 	
-	public UUID getUUID(){
-		return appUUID;
+	public int getCurrentServerSocketIndex() {
+		return currentServerSocketIndex;
+	}
+	
+	public BluetoothServerSocket getServerSocket(int index){
+		//return bluetoothServerSocket;
+		return bluetoothServerSockets[index];
+	}
+	
+	public UUID getUUID(int index){
+		//return appUUID;
+		return appUUIDs[index];
 	}
 	
 	public BluetoothDevice getHostDevice() {
@@ -38,7 +74,11 @@ public class BluetoothInfo {
 	}
 	
 	public BluetoothInfo(){
-		appUUID = new UUID(0x0000110100001000L,0x800000805F9B34FBL);
+		appUUID = new     UUID(0x0000110100001000L,0x800000805F9B34FBL);
+		appUUIDs[0] = new UUID(0x0000110100001000L,0x80000000000000FBL);
+		appUUIDs[1] = new UUID(0x0000110100001000L,0x80000000000001FBL);
+		appUUIDs[2] = new UUID(0x0000110100001000L,0x80000000000002FBL);
+		appUUIDs[3] = new UUID(0x0000110100001000L,0x80000000000003FBL);
 	}
 
 }

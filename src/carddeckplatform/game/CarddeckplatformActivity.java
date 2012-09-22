@@ -218,8 +218,14 @@ public class CarddeckplatformActivity extends Activity {
             		hostFinder.addObserver(availableHosts);
             		setDialogListeners(dialog, hostFinder);
                 	hostFinder.findHosts();
-
+                	dialog.show();
             	}else if(GameEnvironment.get().getConnectionType()==ConnectionType.BLUETOOTH){
+            		final Dialog dialog2 = new Dialog(CarddeckplatformActivity.this);
+                    dialog2.setContentView(R.layout.hostlist);
+                	LinearLayout ll2 = (LinearLayout)dialog2.findViewById(R.id.hostListLayout);
+                	// gets user prefs.
+                    getPrefs();
+
             		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             		if (mBluetoothAdapter == null) {
                         // Device does not support Bluetooth
@@ -248,15 +254,16 @@ public class CarddeckplatformActivity extends Activity {
 	    		            	
 	    		                Intent i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
 	    		                startActivity(i);
-	    		                dialog.dismiss();
+	    		                dialog2.dismiss();
 	    					}                		
 	                	});
-	            		ll.addView(hostBtn);
+	            		ll2.addView(hostBtn);
            	         }
            	     }
+            		dialog2.show();
             	}
             	
-            	dialog.show();
+            	
 
                 }
 

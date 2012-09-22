@@ -158,6 +158,10 @@ public class Durak extends Game{
 		}
 		
 		initActiveNumbers();
+		
+		for (utils.Player player : getPlayers())
+			player.setMyTurn(false);
+		
 		return answer;
 	}
 

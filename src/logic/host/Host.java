@@ -53,20 +53,17 @@ public class Host implements Runnable{
 //		}
 	}
 	public Host(Game game) {	
-		setPositions();
+
 		shutDown=false;
 		Host.game=game;
+		setPositions();
 		tcpIdListener=new TcpIdListener(getHostGameDetails());
 		//this.playersInfo=new ArrayList<Host.PlayersInfo>();
 		
 	}
 	
 	private void setPositions(){
-		availablePositions=new Stack<Position.Player>();
-		availablePositions.add(Position.Player.RIGHT);
-		availablePositions.add(Position.Player.LEFT);
-		availablePositions.add(Position.Player.TOP);
-		availablePositions.add(Position.Player.BOTTOM);
+		availablePositions=game.getPositions();
 	}
 	
 	public static void addPlayer(Player playerInfo){
