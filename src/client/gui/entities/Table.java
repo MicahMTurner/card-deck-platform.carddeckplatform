@@ -184,11 +184,11 @@ public class Table {
 //				}
 //			}
 			
-			if(this.line!=null){
-				Paint paint= new Paint();
-				paint.setColor(Color.RED);
-				canvas.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2(), paint);
-			}
+//			if(this.line!=null){
+//				Paint paint= new Paint();
+//				paint.setColor(Color.RED);
+//				canvas.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2(), paint);
+//			}
 		}
 	}
 

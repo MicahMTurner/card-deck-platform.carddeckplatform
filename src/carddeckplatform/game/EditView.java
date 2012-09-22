@@ -15,6 +15,7 @@ import utils.Point;
 import utils.Position;
 import utils.Position.Player;
 import utils.Public;
+import utils.StandardSizes;
 import utils.droppableLayouts.DroppableLayout;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -116,19 +117,19 @@ TouchHandler {
 	}
 	
 	public void addManySmall(){
-		table.addDroppable(new CustomizationPublic(null, Position.Public.BOT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.BOTMID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.BOTMIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.BOTMIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.LEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.MID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.MIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.MIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.RIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.TOP,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.TOPMID,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.TOPMIDLEFT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
-		table.addDroppable(new CustomizationPublic(null, Position.Public.TOPMIDRIGHT,DroppableLayout.LayoutType.HEAP , new Point(10,11)));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.BOT,DroppableLayout.LayoutType.HEAP , StandardSizes.HEAP_AREA));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.BOTMID,DroppableLayout.LayoutType.HEAP , StandardSizes.HEAP_AREA));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.BOTMIDLEFT,DroppableLayout.LayoutType.HEAP , StandardSizes.HEAP_AREA));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.BOTMIDRIGHT,DroppableLayout.LayoutType.HEAP , StandardSizes.HEAP_AREA));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.LEFT,DroppableLayout.LayoutType.HEAP , StandardSizes.HEAP_AREA));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.MID,DroppableLayout.LayoutType.HEAP , StandardSizes.HEAP_AREA));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.MIDLEFT,DroppableLayout.LayoutType.HEAP , StandardSizes.HEAP_AREA));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.MIDRIGHT,DroppableLayout.LayoutType.HEAP , StandardSizes.HEAP_AREA));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.RIGHT,DroppableLayout.LayoutType.HEAP , StandardSizes.HEAP_AREA));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.TOP,DroppableLayout.LayoutType.HEAP , StandardSizes.HEAP_AREA));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.TOPMID,DroppableLayout.LayoutType.HEAP , StandardSizes.HEAP_AREA));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.TOPMIDLEFT,DroppableLayout.LayoutType.HEAP , StandardSizes.HEAP_AREA));
+		table.addDroppable(new CustomizationPublic(null, Position.Public.TOPMIDRIGHT,DroppableLayout.LayoutType.HEAP , StandardSizes.HEAP_AREA));
 	}
 	
 	public void addOneBig(){

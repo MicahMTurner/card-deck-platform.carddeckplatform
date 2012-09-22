@@ -337,7 +337,8 @@ public class ClientController {//implements Observer {
 	/**
 	 * end current round
 	 */
-	public void endRound() {		
+	public void endRound() {	
+
 		disableUi();
 		//get the player that starts next round
 		Integer nextPlayerId=game.endRound();

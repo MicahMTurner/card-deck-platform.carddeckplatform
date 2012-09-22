@@ -3,6 +3,7 @@ package logic.client;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 import communication.messages.RequestCardMessage;
 import communication.server.ConnectionsManager;
@@ -257,6 +258,19 @@ public abstract class Game {
 	public abstract String instructions();
 	
 	
+	/**
+	 * get the player positions available in the game.
+	 * @return
+	 */
+	public Stack<Position.Player> getPositions(){
+		Stack<Position.Player> availablePositions=new Stack<Position.Player>();
+		availablePositions.add(Position.Player.RIGHT);
+		availablePositions.add(Position.Player.LEFT);
+		availablePositions.add(Position.Player.TOP);
+		availablePositions.add(Position.Player.BOTTOM);
+		
+		return availablePositions;
+	}
 
 	protected void dealCardAnimation(int deckId, ArrayList<Card> deckCards, int cardsToEachPlayer){
 		int numOfPlayers=players.size();

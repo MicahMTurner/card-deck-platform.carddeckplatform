@@ -32,9 +32,11 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	private boolean revealed;	
 	private Position owner;
 	private Point coord;
+	private Point shadowOffset;
 	protected float angle = 0;
 	protected Point handScale;
-	
+	private transient Paint cardPaint = new Paint();
+	private transient Paint cardPaintInHand = new Paint();
 	private int backAd;
 	
 
@@ -50,7 +52,13 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		Random rand = new Random();
 		
 		this.backAd = rand.nextInt(3);
+		shadowOffset = new Point(1.5f,1.5f);
+		shadowOffset = MetricsConvertion.pointRelativeToPx(shadowOffset);
 		
+		cardPaintInHand.setAlpha(180);
+		cardPaintInHand.setAntiAlias(true);
+		
+		cardPaint.setAntiAlias(true);
 	}
 	
 	@Override
@@ -237,7 +245,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		if(!isInHand()){
 			p = scale;
 		}else{
-			p = new Point((float)(scale.getX() * 1.5) , (float)(scale.getY() * 1.5));
+			p = new Point((float)(scale.getX() * 2.5) , (float)(scale.getY() * 2.5));
 		}
 		
 		p = MetricsConvertion.pointRelativeToPx(p);
@@ -266,8 +274,37 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		matrix.postTranslate(coord.getX()-p.getX()/2, coord.getY()-p.getY()/2);
 		matrix.postRotate(angle , getX(), getY());
 		
-		canvas.drawBitmap(img, matrix, null);
 		
+		
+		if(getAnimationFlags().isAnimated()){
+			
+			Point offset = new Point(shadowOffset);
+			
+			if(isInHand()){
+				offset.x = offset.x * 2f;
+				offset.y = offset.y * 2f;
+			}
+			
+			Bitmap shadow;
+			shadow = BitmapHolder.get().getBitmap("cardshadow");
+			Matrix matrix2 = new Matrix();
+			
+			matrix2.postScale((float)p.getX()/(float)shadow.getWidth(), (float)p.getY()/(float)shadow.getHeight());
+			matrix2.postTranslate((coord.getX()-p.getX()/2)+offset.getX(), (coord.getY()-p.getY()/2)+offset.getY());
+			matrix2.postRotate(angle , getX()+offset.getX(), getY()+offset.getY());
+			
+			
+			canvas.drawBitmap(shadow, matrix2, null);
+		}
+		cardPaint = new Paint();
+		cardPaint.setAntiAlias(true);
+		if(isInHand())
+			cardPaint.setAlpha(180);
+
+		
+		canvas.drawBitmap(img, matrix, cardPaint);
+		
+			
 //		if(getAnimationFlags().isAnimated())
 //			canvas.drawText("Animated",getX() / 2, getY(), GameEnvironment.get().getPaint());
 		// if the card is being carried by another player a hand and the name of the carrier would be drawn near the card's image.

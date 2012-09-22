@@ -6,6 +6,8 @@ import handlers.PlayerEventsHandler;
 
 import java.util.ArrayList;
 import java.util.Queue;
+import java.util.Set;
+import java.util.Stack;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -146,6 +148,27 @@ public class FreePlay extends Game{
 //		// TODO Auto-generated method stub
 //		return new GamePrefs(publicLayout, playerCardsVisible, publicCardsVisible);
 //	}
+	
+	@Override
+	public Stack<Position.Player> getPositions(){
+		Stack<Position.Player> availablePositions = super.getPositions();
+		Stack<Position.Player> toRemove = new Stack<Position.Player>();
+		
+		Set<Player> players = freePlayProfile.getPlayerHandlers().keySet();
+		
+		for(Position.Player pp :  availablePositions){
+			if(!players.contains(pp)){
+				toRemove.add(pp);
+			}
+		}
+		
+		// remove if there is unnecessary items
+		if(toRemove.size()>0)
+			availablePositions.removeAll(toRemove);
+		
+		return availablePositions;
+		
+	}
 
 
 }

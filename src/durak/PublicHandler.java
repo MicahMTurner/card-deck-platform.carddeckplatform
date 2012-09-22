@@ -9,25 +9,46 @@ import handlers.PublicEventsHandler;
 
 public class PublicHandler implements PublicEventsHandler {
 
+//	@Override
+//	public boolean onCardAdded(Public publicZone, Player player, Card card) {
+//		boolean answer=false; 
+//		// first move.
+//		if((player.isMyTurn() && !Durak.hasActiveNumber()) || 
+//		   (!Durak.isAttacked(player) && Durak.getActiveNumber(((StandartCard)card).getValue()) && publicZone.cardsHolding()==1)){
+//			
+//			Durak.addActiveNumber(((StandartCard)card).getValue());
+//			ClientController.get().enableUi();
+//			answer = true;
+//		}	
+//		else if(Durak.isAttacked(player) && (publicZone.isEmpty() || publicZone.cardsHolding()==3)){
+//			answer = false;
+//		}		
+//		else if(Durak.isAttacked(player)){
+//			if(((StandartCard)publicZone.peek()).getValue() < ((StandartCard)card).getValue() && (((StandartCard)publicZone.peek()).getColor() != Durak.rulerColor && ((StandartCard)card).getColor() != Durak.rulerColor || ((StandartCard)publicZone.peek()).getColor() == Durak.rulerColor && ((StandartCard)card).getColor() == Durak.rulerColor))
+//				answer = true;
+//			if(((StandartCard)card).getColor() == Durak.rulerColor && ((StandartCard)publicZone.peek()).getColor()!=Durak.rulerColor)
+//				answer = true;
+//		}
+//		
+//		if(answer)
+//			card.reveal();
+//		
+//		//ClientController.get().getMe().endTurn();
+//		return answer;
+//	}
+	
+	
 	@Override
 	public boolean onCardAdded(Public publicZone, Player player, Card card) {
-		boolean answer=false; 
+		boolean answer=true; 
 		// first move.
-		if((player.isMyTurn() && !Durak.hasActiveNumber()) || 
-		   (!Durak.isAttacked(player) && Durak.getActiveNumber(((StandartCard)card).getValue()) && publicZone.cardsHolding()==1)){
-			
-			Durak.addActiveNumber(((StandartCard)card).getValue());
-			ClientController.get().enableUi();
-			answer = true;
-		}	
-		else if(Durak.isAttacked(player) && (publicZone.isEmpty() || publicZone.cardsHolding()==3)){
+		
+		if(Durak.isAttacked(player) && (publicZone.isEmpty() || publicZone.cardsHolding()==3)){
 			answer = false;
 		}		
-		else if(Durak.isAttacked(player)){
-			if(((StandartCard)publicZone.peek()).getValue() < ((StandartCard)card).getValue() && (((StandartCard)publicZone.peek()).getColor() != Durak.rulerColor && ((StandartCard)card).getColor() != Durak.rulerColor || ((StandartCard)publicZone.peek()).getColor() == Durak.rulerColor && ((StandartCard)card).getColor() == Durak.rulerColor))
-				answer = true;
-			if(((StandartCard)card).getColor() == Durak.rulerColor && ((StandartCard)publicZone.peek()).getColor()!=Durak.rulerColor)
-				answer = true;
+		else{
+			Durak.addActiveNumber(((StandartCard)card).getValue());
+			ClientController.get().enableUi();
 		}
 		
 		if(answer)
@@ -36,6 +57,7 @@ public class PublicHandler implements PublicEventsHandler {
 		//ClientController.get().getMe().endTurn();
 		return answer;
 	}
+
 
 	@Override
 	public boolean onCardRemoved(Public publicZone, Player player, Card card) {
