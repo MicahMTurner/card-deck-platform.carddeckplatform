@@ -220,21 +220,45 @@ public class MarketActivity extends Activity {
 	public void addListenerOnButton(Button btnStartProgress,
 			final PluginDetails url) {
 		btnStartProgress.setOnClickListener(new OnClickListener() {
-
+			boolean downloaded=false;
 			@Override
 			public void onClick(View v) {
-				// instantiate it within the onCreate method
-				mProgressDialog = new ProgressDialog(MarketActivity.this);
-				mProgressDialog.setMessage("Downloading File");
-				mProgressDialog.setIndeterminate(false);
-				mProgressDialog.setMax(100);
-				mProgressDialog
-						.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-				mProgressDialog.setCancelable(true);
+				if(!downloaded){
+					// instantiate it within the onCreate method
+					mProgressDialog = new ProgressDialog(MarketActivity.this);
+					mProgressDialog.setMessage("Downloading File");
+					mProgressDialog.setIndeterminate(false);
+					mProgressDialog.setMax(100);
+					mProgressDialog
+							.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+					mProgressDialog.setCancelable(true);
+	
+					// execute this when the downloader must be fired
+					DownloadFile downloadFile = new DownloadFile();
+					downloadFile.execute(url);
+				}else{
+					GameEnvironment.get().getHandler().post(new Runnable() {
+						
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							final Dialog dialog = new Dialog(MarketActivity.this);
+							dialog.setTitle("Error");
+							dialog.setContentView(R.layout.alreadydownloaded);
+							Button button = (Button) dialog.findViewById(R.id.rankedCloseBtn);
+							button.setOnClickListener(new OnClickListener() {
 
-				// execute this when the downloader must be fired
-				DownloadFile downloadFile = new DownloadFile();
-				downloadFile.execute(url);
+								@Override
+								public void onClick(View v) {
+									dialog.dismiss();
+								}
+							});
+							dialog.show();
+						}
+					});
+					
+					
+				}
 			}
 		});
 
