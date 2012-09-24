@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -119,6 +120,7 @@ public class ScoringActivity extends Activity {
 		b = new Button(this);
 		b.setText("Players :");
 		tr.addView(b);
+		int fontSize=20;
 //		tl.addView(tr);
 		for (int i = 0; i < games.length; i++) {
 			final Game game2 = games[i];
@@ -126,16 +128,19 @@ public class ScoringActivity extends Activity {
 			tr.setLayoutParams(tableRowParams);
 			// type
 			TextView tv = new TextView(this);
+			tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 			tv.setText(game2.getGameType());
 			tv.setLayoutParams(tableRowparams);
 			tr.addView(tv);
 			// date
 			tv = new TextView(this);
+			tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 			tv.setText(game2.getDate());
 			tv.setLayoutParams(tableRowparams);
 			tr.addView(tv);
 			// players
 			tv = new TextView(this);
+			tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 			tv.setText(game2.getPlayersInfo());
 			tv.setLayoutParams(tableRowparams);
 			tr.addView(tv);

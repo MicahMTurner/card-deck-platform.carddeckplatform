@@ -19,8 +19,10 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.R.bool;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -49,6 +51,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -60,7 +64,30 @@ public class MarketActivity extends Activity {
 	private int progressBarStatus = 0;
 	private Handler progressBarHandler = new Handler();
 	int fileSize;
+	TableLayout tl;
+	
+	private  void cannotMakeConnection(){
+		GameEnvironment.get().getHandler().post(new Runnable() {
+			
+			@Override
+			public void run() {
+				final Dialog dialog = new Dialog(MarketActivity.this);
+				dialog.setTitle("Error");
+				dialog.setContentView(R.layout.connectionerror);
+				Button button = (Button) dialog.findViewById(R.id.rankedCloseBtn);
+				button.setOnClickListener(new OnClickListener() {
 
+					@Override
+					public void onClick(View v) {
+						dialog.dismiss();
+					}
+				});
+				dialog.show();
+			}
+		});
+		
+		
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -69,7 +96,7 @@ public class MarketActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         
 		setContentView(R.layout.downloadplugin);
-		TableLayout tl = (TableLayout) findViewById(R.id.markettable);
+		tl = (TableLayout) findViewById(R.id.markettable);
 		Thread thread = new Thread(new Runnable() {
 
 			@Override
@@ -77,36 +104,36 @@ public class MarketActivity extends Activity {
 				try {
 					executeHttpGet();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					cannotMakeConnection();
 					e.printStackTrace();
 				}
 			}
 		});
 		thread.start();
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// START setting layout animation
-		AnimationSet set = new AnimationSet(true);
-
-		Animation animation = new AlphaAnimation(0.0f, 1.0f);
-		animation.setDuration(300);
-		set.addAnimation(animation);
-		animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
-				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-				-1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
-		animation.setDuration(700);
-		set.addAnimation(animation);
-
-		LayoutAnimationController controller = new LayoutAnimationController(
-				set, 0.25f);
-
-		tl.setLayoutAnimation(controller);
-
-		// END setting layout animation
+//		try {
+//			thread.join();
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		// START setting layout animation
+//		AnimationSet set = new AnimationSet(true);
+//
+//		Animation animation = new AlphaAnimation(0.0f, 1.0f);
+//		animation.setDuration(300);
+//		set.addAnimation(animation);
+//		animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
+//				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
+//				-1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
+//		animation.setDuration(700);
+//		set.addAnimation(animation);
+//
+//		LayoutAnimationController controller = new LayoutAnimationController(
+//				set, 0.25f);
+//
+//		tl.setLayoutAnimation(controller);
+//
+//		// END setting layout animation
 		TableRow tr = new TableRow(this);
 		tr.setGravity(Gravity.CENTER);
 
@@ -120,28 +147,41 @@ public class MarketActivity extends Activity {
 		textView2.setTypeface(null, Typeface.BOLD_ITALIC);
 		tr.addView(textView2);
 		
-		for (Iterator iter = plugins.iterator(); iter.hasNext();) {
-			PluginDetails pd = (PluginDetails) iter.next();
-			if(getIntent().getStringExtra("game name")!= null && pd.getFilename().compareTo(getIntent().getStringExtra("game name"))!=0)
-				continue;
-			tr = new TableRow(this);
-			tr.setGravity(Gravity.CENTER);
-
-			Button button = new Button(this);
-			button.setText(pd.getName());
-			button.setGravity(Gravity.CENTER);
-			addListenerOnButton(button, pd);
-			tr.addView(button);
-
-			// add his rank
-
-			RatingBar rb = new RatingBar(this);
-			rb.setEnabled(false);
-			rb.setRating((float) ((float) pd.rank * 0.5));
-			tr.addView(rb);
-			tl.addView(tr);
-		}
+		
 	}
+	
+	public void addElementsToTableLayout(){
+		GameEnvironment.get().getHandler().post(new Runnable() {
+			
+			@Override
+			public void run() {
+				for (Iterator iter = plugins.iterator(); iter.hasNext();) {
+					PluginDetails pd = (PluginDetails) iter.next();
+					if(getIntent().getStringExtra("game name")!= null && pd.getFilename().compareTo(getIntent().getStringExtra("game name"))!=0)
+						continue;
+					TableRow tr = new TableRow(MarketActivity.this);
+					tr.setGravity(Gravity.CENTER);
+
+					Button button = new Button(MarketActivity.this);
+					button.setText(pd.getName());
+					button.setGravity(Gravity.CENTER);
+					addListenerOnButton(button, pd);
+					tr.addView(button);
+
+					// add his rank
+
+					RatingBar rb = new RatingBar(MarketActivity.this);
+					rb.setEnabled(false);
+					rb.setRating((float) ((float) pd.rank * 0.5));
+					tr.addView(rb);
+					tl.addView(tr);
+				}
+			}
+		});
+		
+		
+	}
+	
 
 	public void executeHttpGet() throws Exception {
 
@@ -167,6 +207,13 @@ public class MarketActivity extends Activity {
 			Type collectionType = new TypeToken<Collection<PluginDetails>>() {
 			}.getType();
 			this.plugins = gson.fromJson(json, collectionType);
+			GameEnvironment.get().getHandler().post(new Runnable() {
+				
+				@Override
+				public void run() {
+					addElementsToTableLayout();					
+				}
+			});
 		} finally {
 			if (in != null) {
 				try {
@@ -181,30 +228,58 @@ public class MarketActivity extends Activity {
 	public void addListenerOnButton(Button btnStartProgress,
 			final PluginDetails url) {
 		btnStartProgress.setOnClickListener(new OnClickListener() {
-
+			MyBoolean downloaded=new MyBoolean(false);
 			@Override
 			public void onClick(View v) {
-				// instantiate it within the onCreate method
-				mProgressDialog = new ProgressDialog(MarketActivity.this);
-				mProgressDialog.setMessage("Downloading File");
-				mProgressDialog.setIndeterminate(false);
-				mProgressDialog.setMax(100);
-				mProgressDialog
-						.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-				mProgressDialog.setCancelable(true);
+				if(!downloaded.isFlag()){
+					// instantiate it within the onCreate method
+					mProgressDialog = new ProgressDialog(MarketActivity.this);
+					mProgressDialog.setMessage("Downloading File");
+					mProgressDialog.setIndeterminate(false);
+					mProgressDialog.setMax(100);
+					mProgressDialog
+							.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+					mProgressDialog.setCancelable(true);
+	
+					// execute this when the downloader must be fired
+					DownloadFile downloadFile = new DownloadFile(downloaded);
+					downloadFile.execute(url);
+				}else{
+					GameEnvironment.get().getHandler().post(new Runnable() {
+						
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							final Dialog dialog = new Dialog(MarketActivity.this);
+							dialog.setTitle("Error");
+							dialog.setContentView(R.layout.alreadydownloaded);
+							Button button = (Button) dialog.findViewById(R.id.rankedCloseBtn);
+							button.setOnClickListener(new OnClickListener() {
 
-				// execute this when the downloader must be fired
-				DownloadFile downloadFile = new DownloadFile();
-				downloadFile.execute(url);
+								@Override
+								public void onClick(View v) {
+									dialog.dismiss();
+								}
+							});
+							dialog.show();
+						}
+					});
+					
+					
+				}
 			}
 		});
 
 	}
 
 	private class DownloadFile extends
-			AsyncTask<PluginDetails, Integer, String> {
+			AsyncTask<PluginDetails, Integer, MyBoolean> {
+		MyBoolean downloaded;
+		public DownloadFile(MyBoolean downloaded) {
+			this.downloaded=downloaded;
+		}
 		@Override
-		protected String doInBackground(PluginDetails... pluginDetail) {
+		protected MyBoolean doInBackground(PluginDetails... pluginDetail) {
 			try {
 
 				URL url = new URL("http://cardsplatform.appspot.com"
@@ -234,7 +309,9 @@ public class MarketActivity extends Activity {
 				output.flush();
 				output.close();
 				input.close();
+				downloaded.setFlag(true);
 			} catch (Exception e) {
+				cannotMakeConnection();
 				e.printStackTrace();
 			}
 			return null;
@@ -251,10 +328,25 @@ public class MarketActivity extends Activity {
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(MyBoolean result) {
 			mProgressDialog.dismiss();
 		}
 
+	}
+	public class MyBoolean{
+		boolean flag;
+		public MyBoolean(boolean flag) {
+			this.flag=flag;
+		}
+		public boolean isFlag() {
+			return flag;
+		}
+
+		public void setFlag(boolean flag) {
+			this.flag = flag;
+		}
+		
+		
 	}
 
 }
