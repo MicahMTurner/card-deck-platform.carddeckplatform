@@ -49,6 +49,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -83,30 +85,30 @@ public class MarketActivity extends Activity {
 			}
 		});
 		thread.start();
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// START setting layout animation
-		AnimationSet set = new AnimationSet(true);
-
-		Animation animation = new AlphaAnimation(0.0f, 1.0f);
-		animation.setDuration(300);
-		set.addAnimation(animation);
-		animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
-				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-				-1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
-		animation.setDuration(700);
-		set.addAnimation(animation);
-
-		LayoutAnimationController controller = new LayoutAnimationController(
-				set, 0.25f);
-
-		tl.setLayoutAnimation(controller);
-
-		// END setting layout animation
+//		try {
+//			thread.join();
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		// START setting layout animation
+//		AnimationSet set = new AnimationSet(true);
+//
+//		Animation animation = new AlphaAnimation(0.0f, 1.0f);
+//		animation.setDuration(300);
+//		set.addAnimation(animation);
+//		animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
+//				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
+//				-1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
+//		animation.setDuration(700);
+//		set.addAnimation(animation);
+//
+//		LayoutAnimationController controller = new LayoutAnimationController(
+//				set, 0.25f);
+//
+//		tl.setLayoutAnimation(controller);
+//
+//		// END setting layout animation
 		TableRow tr = new TableRow(this);
 		tr.setGravity(Gravity.CENTER);
 
@@ -120,11 +122,16 @@ public class MarketActivity extends Activity {
 		textView2.setTypeface(null, Typeface.BOLD_ITALIC);
 		tr.addView(textView2);
 		
+		
+	}
+	
+	public void addElementsToTableLayout(){
+		TableLayout tl = (TableLayout) findViewById(R.id.markettable);
 		for (Iterator iter = plugins.iterator(); iter.hasNext();) {
 			PluginDetails pd = (PluginDetails) iter.next();
 			if(getIntent().getStringExtra("game name")!= null && pd.getFilename().compareTo(getIntent().getStringExtra("game name"))!=0)
 				continue;
-			tr = new TableRow(this);
+			TableRow tr = new TableRow(this);
 			tr.setGravity(Gravity.CENTER);
 
 			Button button = new Button(this);
@@ -141,7 +148,9 @@ public class MarketActivity extends Activity {
 			tr.addView(rb);
 			tl.addView(tr);
 		}
+		
 	}
+	
 
 	public void executeHttpGet() throws Exception {
 
@@ -167,6 +176,13 @@ public class MarketActivity extends Activity {
 			Type collectionType = new TypeToken<Collection<PluginDetails>>() {
 			}.getType();
 			this.plugins = gson.fromJson(json, collectionType);
+			GameEnvironment.get().getHandler().post(new Runnable() {
+				
+				@Override
+				public void run() {
+					addElementsToTableLayout();					
+				}
+			});
 		} finally {
 			if (in != null) {
 				try {
