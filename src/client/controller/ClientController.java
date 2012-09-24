@@ -342,13 +342,24 @@ public class ClientController {//implements Observer {
 		disableUi();
 		//get the player that starts next round
 		Integer nextPlayerId=game.endRound();
-		getMe().setMyTurn(false);
+//		getMe().setMyTurn(false);
+		
+		for(Player player : game.getPlayers()){
+			player.setMyTurn(false);
+		}
+		
 		if (nextPlayerId!=null && GameEnvironment.get().getPlayerInfo().isServer()){			
 			Host.reArrangeQueue(nextPlayerId);
-			sendAPI().endTurn();
+			Host.nextInTurn();
+		}
+		if(nextPlayerId!=null){
+			
+			playerTurn(nextPlayerId);
+		}
+		//	sendAPI().endTurn();
 //			game.reArrangeQueue(nextPlayerId);
 //			playerTurn(nextPlayerId);
-		}
+		//}
 	}
 	/**
 	 * request a card from deck, call this method when logic wants to take card from deck/player 
@@ -470,6 +481,12 @@ public class ClientController {//implements Observer {
 		gui.endDraggableMotion(cardId);
 		
 	}
+	
+	
+	public void flipCard(int cardId) {
+		gui.flipCard(cardId);
+		
+	}
 
 	/**
 	 * add instance of player that holds the device (used when game starts)
@@ -483,6 +500,9 @@ public class ClientController {//implements Observer {
 		gui.addPlayer(game.getMe());
 		
 	}
+
+
+	
 	
 	//---------------------------------------------------------------------//	
 

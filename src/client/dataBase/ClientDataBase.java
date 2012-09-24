@@ -6,6 +6,7 @@ import java.util.Set;
 
 import logic.client.Game;
 import president.President;
+import war.War;
 import durak.Durak;
 
 import freeplay.FreePlay;
@@ -41,12 +42,17 @@ public class ClientDataBase {
 	 * factory
 	 */
 	public Game getGame(String gameName){
-	if (gameName.equals("free play")){
+		
+		if (gameName.equals("free play")){
 			return new FreePlay();
 		}
-	if (gameName.equals("Durak")){
-		return new Durak();
-	}
+		if (gameName.equals("Durak")){
+			return new Durak();
+		}
+		if(gameName.equals("war")){
+			return new War();
+		}
+		
 		return loader.LoadPlugin(gameName);	
 	}
 	
@@ -55,6 +61,7 @@ public class ClientDataBase {
 		Set<String>gameNames=loader.getGameNames();
 		gameNames.add("free play");
 		gameNames.add("Durak");
+		gameNames.add("war");
 		return gameNames;
 	}	
 }

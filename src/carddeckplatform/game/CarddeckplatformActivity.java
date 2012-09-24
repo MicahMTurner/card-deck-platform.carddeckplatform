@@ -4,7 +4,11 @@ package carddeckplatform.game;
 
 
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Set;
 
 import logic.client.Game;
@@ -95,6 +99,23 @@ public class CarddeckplatformActivity extends Activity {
 	}
 	
 	
+	public String getLocalIpAddress() {
+	    try {
+	        for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+	            NetworkInterface intf = en.nextElement();
+	            for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+	                InetAddress inetAddress = enumIpAddr.nextElement();
+	                if (!inetAddress.isLoopbackAddress()) {
+	                    return inetAddress.getHostAddress().toString();
+	                }
+	            }
+	        }
+	    } catch (SocketException ex) {
+	        
+	    }
+	    return null;
+	}
+	
 
     /** Called when the activity is first created. */
     @Override
@@ -115,22 +136,8 @@ public class CarddeckplatformActivity extends Activity {
         
         context = CarddeckplatformActivity.this;
         
-        //making some wifi
-        WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        int ipAddress = wifiInfo.getIpAddress();
-        
-        String ipStr = String.format("%d.%d.%d.%d",
-        		(ipAddress & 0xff),
-        		(ipAddress >> 8 & 0xff),
-        		(ipAddress >> 16 & 0xff),
-        		(ipAddress >> 24 & 0xff));
-        
-        
-
+        String ipStr=getLocalIpAddress();       
         GameEnvironment.get().getTcpInfo().setLocalIp(ipStr);
-
-        
         
         final EditText username = (EditText) findViewById(R.id.nickText);
 

@@ -32,5 +32,8 @@
     <string name="rankedSuccessfully">Ranked successfully!</string>
     <string name="freePlayCardsToDeal">Cards to deal to each player</string>
      <string name="search">Search :</string>
+     <string name="delete">Delete</string>
+     <string name="edit">Edit</string>
+     <string name="catalogTitle">Choose a profile</string>
 
 </resources>

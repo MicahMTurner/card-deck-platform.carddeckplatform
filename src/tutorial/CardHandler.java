@@ -20,4 +20,9 @@ public class CardHandler implements CardEventsHandler{
 			Tutorial.nextStage();
 		}		
 	}
+
+	@Override
+	public boolean onFlipCard(Card card) {
+		return true;
+	}
 }

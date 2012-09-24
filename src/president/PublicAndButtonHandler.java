@@ -115,4 +115,10 @@ public class PublicAndButtonHandler implements PublicEventsHandler,ButtonEventsH
 		this.playerCounter=0;
 	}
 
+	@Override
+	public boolean onFlipCard(Card card) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

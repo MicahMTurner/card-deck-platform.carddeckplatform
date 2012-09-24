@@ -65,4 +65,10 @@ public class PlayerHandler implements PlayerEventsHandler{
 		return false;
 	}
 
+	@Override
+	public boolean onFlipCard(Card card) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

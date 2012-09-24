@@ -17,4 +17,10 @@ public class CardHandler implements CardEventsHandler {
 		
 	}
 
+	@Override
+	public boolean onFlipCard(Card card) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

@@ -15,6 +15,7 @@ import android.graphics.Typeface;
 import handlers.CardEventsHandler;
 import utils.Card;
 import utils.Point;
+import utils.StandardSizes;
 
 public class GuideCard extends Card {
 	private static String[] WELCOMEMSG= {"Hello,","welcome to","Card deck platform"};
@@ -27,7 +28,7 @@ public class GuideCard extends Card {
 	private static String[] HUGEPUBLICMSG={"Wow!!!","what a huge public area!","Take me there!"};
 	private static String[] FLIPMSG={"Double click to","flip me over."};
 	private static String[] ENDMSG={"Now you","know everything you","need to start beating your","friends in card games."};
-	private static String[] FLIPAGAINMSG={"I'm uncomfortable, Flip me again please"};
+	private static String[] FLIPAGAINMSG={"I'm uncomfortable,","Flip me again please"};
 	private static String[] AUTOHIDEMSG={"Tilt the device","so it is horizontal","and the screen is faced up"};
 	private static String[] CANCELAUTOHIDEMSG={"now tilt back the device"};
 	
@@ -46,7 +47,7 @@ public class GuideCard extends Card {
 	
 	public GuideCard(CardEventsHandler handler,boolean speech) {
 		super(handler, "happycard", "back");
-		this.scale = new Point(10,20);
+		this.scale = StandardSizes.CARD;
 		paint = new Paint();
 		
 		Point textMetrics = new Point(2.8f,0);

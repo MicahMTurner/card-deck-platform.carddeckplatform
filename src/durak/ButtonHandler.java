@@ -1,5 +1,6 @@
 package durak;
 
+import utils.Card;
 import handlers.ButtonEventsHandler;
 import client.controller.ClientController;
 
@@ -21,6 +22,12 @@ public class ButtonHandler implements ButtonEventsHandler {
 		}
 			
 		
+	}
+
+	@Override
+	public boolean onFlipCard(Card card) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

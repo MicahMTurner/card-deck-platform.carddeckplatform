@@ -37,7 +37,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 	 * @see DroppableLayout
 	 */
 	public Player(PlayerInfo playerInfo,Position.Player globalPosition,int uniqueId, PlayerEventsHandler handler,DroppableLayout.LayoutType layoutType) {
-		super(uniqueId,Position.Player.BOTTOM, layoutType);
+		super(uniqueId,Position.Player.BOTTOM, layoutType,handler);
 		this.playerInfo=playerInfo;		
 		this.globalPosition=globalPosition;
 		this.position=Position.Player.BOTTOM;	
