@@ -14,6 +14,7 @@ import android.app.Dialog;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -31,8 +32,10 @@ import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.controller.ClientController;
 import client.dataBase.DynamicLoader;
+import client.ranking.db.Game;
 
 public class RankingActivity extends Activity {
 
@@ -118,14 +121,57 @@ public class RankingActivity extends Activity {
 			rate = 5;
 			this.pair = pair;
 		}
+		private  void cannotMakeConnection(){
+			GameEnvironment.get().getHandler().post(new Runnable() {
+				
+				@Override
+				public void run() {
+					final Dialog dialog = new Dialog(RankingActivity.this);
+					dialog.setTitle("Error");
+					dialog.setContentView(R.layout.connectionerror);
+					Button button = (Button) dialog.findViewById(R.id.rankedCloseBtn);
+					button.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							dialog.dismiss();
+						}
+					});
+					dialog.show();
+				}
+			});
+			
+			
+		}
 
 		@Override
 		public void onClick(View v) {
 			// sending just once
 			if (sentFlag == true) {
+				GameEnvironment.get().getHandler().post(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						final Dialog dialog = new Dialog(RankingActivity.this);
+						dialog.setTitle("Error");
+						dialog.setContentView(R.layout.alreadyranked);
+						Button button = (Button) dialog.findViewById(R.id.rankedCloseBtn);
+						button.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								dialog.dismiss();
+							}
+						});
+						dialog.show();
+					}
+				});
+				
+				
 				return;
 			}
-			sentFlag = true;
+			
 			final Dialog dialog = new Dialog(RankingActivity.this);
 			dialog.setTitle("Done");
 			dialog.setContentView(R.layout.ranked);
@@ -137,7 +183,7 @@ public class RankingActivity extends Activity {
 					dialog.dismiss();
 				}
 			});
-			dialog.show();
+			
 
 			Thread thread = new Thread(new Runnable() {
 
@@ -158,9 +204,20 @@ public class RankingActivity extends Activity {
 
 						 InputStream in = new
 						 BufferedInputStream(urlConnection.getInputStream());
+						 
+						 GameEnvironment.get().getHandler().post(new Runnable() {
+							
+							@Override
+							public void run() {
+								dialog.show();								
+							}
+						});
+						 sentFlag = true;
 					} catch (MalformedURLException e2) {
+						cannotMakeConnection();
 						e2.printStackTrace();
 					} catch (IOException e1) {
+						cannotMakeConnection();
 						e1.printStackTrace();
 					} finally {
 						urlConnection.disconnect();

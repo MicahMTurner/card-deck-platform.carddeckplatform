@@ -126,7 +126,7 @@ public class MarketActivity extends Activity {
 	}
 	
 	public void addElementsToTableLayout(){
-		TableLayout tl = (TableLayout) findViewById(R.id.markettable);
+		TableLayout tl = (TableLayout) findViewById(R.id.rankTable);
 		for (Iterator iter = plugins.iterator(); iter.hasNext();) {
 			PluginDetails pd = (PluginDetails) iter.next();
 			if(getIntent().getStringExtra("game name")!= null && pd.getFilename().compareTo(getIntent().getStringExtra("game name"))!=0)
