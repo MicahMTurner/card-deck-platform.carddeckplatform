@@ -229,6 +229,13 @@ public class StaticFunctions {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void deleteFile(String path){
+		String appPath = GameEnvironment.path;
+		File myFile=new File(appPath + path);
+		myFile.delete();
+		myFile = null;
+	}
 
 
 	public static FileOutputStream getPluginOutputStream(String filename) throws FileNotFoundException {

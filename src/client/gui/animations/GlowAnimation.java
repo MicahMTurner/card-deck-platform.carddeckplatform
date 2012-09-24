@@ -12,10 +12,12 @@ public class GlowAnimation extends Animation {
 	long duration;
 	boolean running=true;
 	boolean pause=false;
+	int colorArbg;
 
-	public GlowAnimation(Droppable droppable, long duration) {
+	public GlowAnimation(Droppable droppable, long duration, int colorArbg) {
 		this.duration = duration;
 		this.droppable = droppable;
+		this.colorArbg = colorArbg;
 	}
 
 	public boolean isRunning() {
@@ -44,7 +46,7 @@ public class GlowAnimation extends Animation {
 	protected void animate() {
 		System.out.println("GLOW Animation Activated");
 		ColorInterpolator colorinterpolator = new ColorInterpolator(
-				Color.TRANSPARENT, Color.argb(255, 255, 255, 255));
+				Color.TRANSPARENT, colorArbg);
 		Interpolator animateInterpolator = new LinearInterpolator();
 		long startTime = System.currentTimeMillis();
 		long endTime = startTime + duration;
@@ -68,6 +70,7 @@ public class GlowAnimation extends Animation {
 			percentDistance = animateInterpolator.getInterpolation(percentTime);
 			percentDistance=(float) (Math.cos(percentDistance*degree)+1)/2;
 			glowColor = colorinterpolator.getInterpolatedColor(percentDistance);
+			//glowColor+=255;
 			droppable.setGlowColor(glowColor);
 			System.out.println(curTime+","+glowColor);
 			try {
@@ -77,7 +80,7 @@ public class GlowAnimation extends Animation {
 			}
 
 		}
-		droppable.setGlowColor(Color.TRANSPARENT);
+		droppable.setGlowColor(droppable.originalDroppableColor);
 		
 	}
 

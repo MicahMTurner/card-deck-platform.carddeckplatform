@@ -35,5 +35,8 @@
      <string name="connectonError">Connection Failed</string>
      <string name="alreadyranked">Plugin has already been ranked.</string>
      <string name="alreadydownloaded">The plugin already downloaded</string>
+     <string name="delete">Delete</string>
+     <string name="edit">Edit</string>
+     <string name="catalogTitle">Choose a profile</string>
 
 </resources>

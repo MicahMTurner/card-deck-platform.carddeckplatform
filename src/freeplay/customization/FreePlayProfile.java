@@ -103,4 +103,9 @@ public class FreePlayProfile implements Serializable {
 				res.put((Position.Player)d.getPosition(), (PlayerEventsHandler)((CustomizationItem)d).createHandler());
 		return res;
 	}
+
+	public void deleteProfile() {
+		StaticFunctions.deleteFile(profileDir + "/" + profileName + ".fpp");
+		
+	}
 }

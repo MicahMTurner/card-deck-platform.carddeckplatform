@@ -35,7 +35,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	private Point shadowOffset;
 	protected float angle = 0;
 	protected Point handScale;
-	private transient Paint cardPaint = new Paint();
+	private transient Paint cardPaint;
 	private transient Paint cardPaintInHand = new Paint();
 	private int backAd;
 	
@@ -57,8 +57,6 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 		
 		cardPaintInHand.setAlpha(180);
 		cardPaintInHand.setAntiAlias(true);
-		
-		cardPaint.setAntiAlias(true);
 	}
 	
 	@Override
@@ -296,11 +294,14 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 			
 			canvas.drawBitmap(shadow, matrix2, null);
 		}
-		cardPaint = new Paint();
+		if(cardPaint==null){
+			cardPaint = new Paint();
+		}
 		cardPaint.setAntiAlias(true);
 		if(isInHand())
 			cardPaint.setAlpha(180);
-
+		else
+			cardPaint.setAlpha(255);
 		
 		canvas.drawBitmap(img, matrix, cardPaint);
 		

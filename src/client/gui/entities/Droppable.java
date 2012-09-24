@@ -1,5 +1,7 @@
 package client.gui.entities;
 
+import handlers.Handler;
+
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -48,12 +50,13 @@ import client.controller.ClientController;
  */
 public abstract class Droppable implements Serializable {
 	public int getGlowColor() {
-		return glowColor;
+		return droppableColor;
 	}
 
 	public void setGlowColor(int glowColor) {
-		this.glowColor = glowColor;
+		this.droppableColor = glowColor;
 	}
+	
 	
 
 	private DroppableLayout.LayoutType layoutType;
@@ -65,9 +68,9 @@ public abstract class Droppable implements Serializable {
 	protected transient DroppableLayout droppableLayout=null;
 	protected transient Paint mPaintForGlow;
 	protected int alpha=255;
-	protected int glowColor=0;
-
-	
+	protected int droppableColor=0;
+	public final int originalDroppableColor=0;
+	private Handler handler;
 	
 	/**
 	 * constructor 
@@ -75,15 +78,22 @@ public abstract class Droppable implements Serializable {
 	 * @param position droppable's position
 	 * @param layoutType droppable's layout
 	 */
-	public Droppable(int id, Position position ,DroppableLayout.LayoutType layoutType) {
+	public Droppable(int id, Position position ,DroppableLayout.LayoutType layoutType,Handler handler) {
 		this.id = id;
 		this.position = position;
 		this.layoutType = layoutType;
 		this.scale = layoutType.getScale();
+		this.handler=handler;
 	}
 	
 	
-	
+	public boolean onFlipCard(Card card){
+		boolean answer=false;
+		if (handler!=null && (answer=handler.onFlipCard(card))){
+			card.flip();
+		}
+		return answer;
+	}
 	protected DroppableLayout getDroppableLayout() {
 		if(droppableLayout==null)
 			this.droppableLayout=layoutType.getLayout(this);
@@ -322,7 +332,7 @@ public abstract class Droppable implements Serializable {
 			//canvas.clipPath(clipPath);
 			//canvas.drawBitmap(img, matrix, null);
 			initiatePaintForGlow();
-			ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE,glowColor);
+			ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE,droppableColor);
 			mPaintForGlow.setColorFilter(colorFilterTint);
 			mPaintForGlow.setAlpha(50);
 			//mPaintForGlow.setARGB(50, 0, 250, 0);
@@ -337,7 +347,7 @@ public abstract class Droppable implements Serializable {
 			mPaintForGlow=new Paint();			
 			mPaintForGlow.setDither(true);
 			mPaintForGlow.setAntiAlias(true);
-			mPaintForGlow.setFilterBitmap(true);  			ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE,glowColor);
+			mPaintForGlow.setFilterBitmap(true);  			ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE,droppableColor);
 			mPaintForGlow.setColorFilter(colorFilterTint);	
 		}				
 	}

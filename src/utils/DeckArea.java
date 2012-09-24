@@ -18,7 +18,8 @@ import client.gui.entities.Droppable;
  */
 public class DeckArea extends Droppable{
 	
-	
+	boolean hide=true;
+	boolean putOnTop=false;
 	
 
 	public LinkedList<Card> cards = new LinkedList<Card>();
@@ -27,10 +28,23 @@ public class DeckArea extends Droppable{
 	 * @param position deck area's position
 	 */
 	public DeckArea(Position.Button position) {
-		super(position.getId(),position, DroppableLayout.LayoutType.DECK);
+		super(position.getId(),position, DroppableLayout.LayoutType.DECK,null);
 		this.image = "playerarea";
 	}
 
+	/**
+	 * constructor
+	 * @param position deck area's position
+	 * @param hide whether to hide or reveal the cards when they are added to the deck area.
+	 * @param putOnTop whether to put the card on top or bottom.
+	 */
+	public DeckArea(Position.Button position, boolean hide, boolean putOnTop){
+		super(position.getId(),position, DroppableLayout.LayoutType.DECK,null);
+		this.image = "playerarea";
+		this.hide = hide;
+		this.putOnTop = putOnTop;
+		
+	}
 	
 	@Override
 	public void AddInPlace(Card card,int place) {
@@ -61,10 +75,16 @@ public class DeckArea extends Droppable{
 	 */
 	@Override
 	public boolean onCardAdded(Player player, Card card) {
-
-		card.hide();
-		cards.addLast(card);
-
+		if(hide)
+			card.hide();
+		else
+			card.reveal();
+		
+		if(!putOnTop)
+			cards.addLast(card);
+		else
+			cards.add(card);
+		
 		return true;
 		
 	}

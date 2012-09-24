@@ -32,4 +32,10 @@ public class PublicHandler implements PublicEventsHandler {
 		return false;
 	}
 
+	@Override
+	public boolean onFlipCard(Card card) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 }

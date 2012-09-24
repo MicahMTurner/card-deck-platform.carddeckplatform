@@ -15,6 +15,7 @@ import utils.Public;
 import utils.droppableLayouts.DroppableLayout;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import carddeckplatform.game.DrawThread;
@@ -41,20 +42,25 @@ public class TutorialView extends TableView  {
 	private Context context;
 	private Player me;
 	private Tutorial game;
+	Public p;
 	
 	
 	public void addManySmall(){
 		for (Position.Public position : Position.Public.values()){
-			Public publicZone=new Public(new BigPublicHandler(), position,DroppableLayout.LayoutType.HEAP);
-			table.addDroppable(publicZone);
-			new GlowAnimation(publicZone, 2000).execute();			
+			if (!position.equals(Position.Public.LEFT)){
+				Public publicZone=new Public(new BigPublicHandler(), position,DroppableLayout.LayoutType.HEAP);
+				table.addDroppable(publicZone);
+				new GlowAnimation(publicZone, 2000, Color.argb(255, 255, 255, 255)).execute();
+			}else{
+				new GlowAnimation(p, 2000, Color.argb(255, 255, 255, 255)).execute();
+			}
 		}		
 	}
 	
 	public void addOneBig(){
 		CustomizationPublic bigPublic=new CustomizationPublic(new PublicHandler(), Position.Public.MID,DroppableLayout.LayoutType.NONE , new Point(65,65));
 		table.addDroppable(bigPublic);
-		new GlowAnimation(bigPublic, 2000).execute();
+		new GlowAnimation(bigPublic, 2000, Color.argb(255, 255, 255, 255)).execute();
 	}
 	
 	
@@ -77,7 +83,7 @@ public class TutorialView extends TableView  {
 		// making the UI thread
 		getHolder().addCallback(this);
 		
-		Public p = new Public(new PublicHandler(), Position.Public.LEFT,DroppableLayout.LayoutType.HEAP);
+		p = new Public(new PublicHandler(), Position.Public.LEFT,DroppableLayout.LayoutType.HEAP);
 		ClientController.get().setGame(game);
 		game.addPlayer(me);
 		
@@ -273,9 +279,9 @@ public class TutorialView extends TableView  {
 					break;
 				}
 				case DECK:{
-					DeckArea deckArea=new DeckArea(Position.Button.TOPRIGHT);
+					DeckArea deckArea=new DeckArea(Position.Button.TOPRIGHT, false, false);
 					table.addDroppable(deckArea);
-					new GlowAnimation(deckArea, 2000).execute();
+					new GlowAnimation(deckArea, 2000, Color.argb(255, 255, 255, 255)).execute();
 					break;
 				}				
 				default:{}
@@ -287,6 +293,7 @@ public class TutorialView extends TableView  {
 	}
 
 	private void addAllPlayers(boolean addGuiCard) {
+		table.clearDroppables();
 		for (Position.Player position: Position.Player.values()){
 			//add new players if they aren't bottom player
 			if (position!=Position.Player.BOTTOM){
@@ -299,14 +306,15 @@ public class TutorialView extends TableView  {
 				if (addGuiCard){
 					player.addCard(null,new GuideCard(new CardHandler(),false));
 				}
-			}else{
-				//add me (I'm bottom player)
-				table.addDroppable(me);
 			}
 			
 			
 			
 		}	
+		//add me (I'm bottom player)
+		table.addDroppable(me);
+		if(addGuiCard)
+			table.addDroppable(p);
 	}
 
 	private void removeSmallPublics() {

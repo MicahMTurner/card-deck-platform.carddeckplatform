@@ -9,9 +9,12 @@ public class JunkHandler  implements PublicEventsHandler {
 
 	@Override
 	public boolean onCardAdded(Public publicZone, Player player, Card card) {
-		// TODO Auto-generated method stub
-		card.hide();
-		return true;
+		if(player==null){
+			card.hide();
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	@Override
@@ -28,6 +31,12 @@ public class JunkHandler  implements PublicEventsHandler {
 
 	@Override
 	public boolean onRoundEnd(Public publicZone, Player player) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onFlipCard(Card card) {
 		// TODO Auto-generated method stub
 		return false;
 	}
