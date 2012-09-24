@@ -21,6 +21,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -62,7 +63,29 @@ public class MarketActivity extends Activity {
 	private int progressBarStatus = 0;
 	private Handler progressBarHandler = new Handler();
 	int fileSize;
+	
+	private  void cannotMakeConnection(){
+		GameEnvironment.get().getHandler().post(new Runnable() {
+			
+			@Override
+			public void run() {
+				final Dialog dialog = new Dialog(MarketActivity.this);
+				dialog.setTitle("Error");
+				dialog.setContentView(R.layout.connectionerror);
+				Button button = (Button) dialog.findViewById(R.id.rankedCloseBtn);
+				button.setOnClickListener(new OnClickListener() {
 
+					@Override
+					public void onClick(View v) {
+						dialog.dismiss();
+					}
+				});
+				dialog.show();
+			}
+		});
+		
+		
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -79,7 +102,7 @@ public class MarketActivity extends Activity {
 				try {
 					executeHttpGet();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					cannotMakeConnection();
 					e.printStackTrace();
 				}
 			}
