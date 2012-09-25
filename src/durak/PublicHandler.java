@@ -21,22 +21,23 @@ public class PublicHandler implements PublicEventsHandler {
 			Durak.addActiveNumber(((StandartCard) card).getValue());
 			ClientController.get().enableUi();
 			answer = true;
-		} else if (Durak.isAttacked(player)
-				&& (publicZone.isEmpty() || publicZone.cardsHolding() == 3)) {
+		} else if (Durak.isAttacked(player)	&& (publicZone.isEmpty() || publicZone.cardsHolding() == 3)) { // attacked player tries to put a card on an empty space.	
 			answer = false;
-		} else if (Durak.isAttacked(player)) {
-			if (((StandartCard) publicZone.peek()).getValue() < ((StandartCard) card)
-					.getValue()
-					&& (((StandartCard) publicZone.peek()).getColor() != Durak.rulerColor
-							&& ((StandartCard) card).getColor() != Durak.rulerColor || ((StandartCard) publicZone
-							.peek()).getColor() == Durak.rulerColor
-							&& ((StandartCard) card).getColor() == Durak.rulerColor))
+		} else if (Durak.isAttacked(player)) {	
+			if (((StandartCard) publicZone.peek()).getValue() < ((StandartCard) card).getValue()
+					&& (((StandartCard) publicZone.peek()).getColor() != Durak.getRulerColor()
+							&& ((StandartCard) card).getColor() != Durak.getRulerColor() || ((StandartCard) publicZone.peek()).getColor() == Durak.getRulerColor()
+							&& ((StandartCard) card).getColor() == Durak.getRulerColor()))
 				answer = true;
-			if (((StandartCard) card).getColor() == Durak.rulerColor
-					&& ((StandartCard) publicZone.peek()).getColor() != Durak.rulerColor)
+			if (((StandartCard) card).getColor() == Durak.getRulerColor()
+					&& ((StandartCard) publicZone.peek()).getColor() != Durak.getRulerColor())
 				answer = true;
 		}
-
+		else if(!Durak.isAttacked(player) && (publicZone.isEmpty() || publicZone.cardsHolding() == 3)){
+			answer = true;
+		}
+		
+		
 		if (answer)
 			card.reveal();
 

@@ -377,15 +377,20 @@ public abstract class Droppable implements Serializable {
 	 * @param index should be 0
 	 */
 	public void rearrange(int index) {
-		if(cardsHolding()==0)
-			return;
-		Point droppableSize = MetricsConvertion.pointRelativeToPx(getScale());
-		Point card=MetricsConvertion.pointRelativeToPx(getCards().get(0).getScale());
+		try {
+			if(cardsHolding()==0)
+				return;
+			Point droppableSize = MetricsConvertion.pointRelativeToPx(getScale());
+			Point card=MetricsConvertion.pointRelativeToPx(getCards().get(0).getScale());
+			
+			
+			
+			if (getDroppableLayout() != null)
+				getDroppableLayout().rearrange(index, droppableSize.getX()-card.getX(), droppableSize.getY()-card.getY());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		
-		
-		
-		if (getDroppableLayout() != null)
-			getDroppableLayout().rearrange(index, droppableSize.getX()-card.getX(), droppableSize.getY()-card.getY());
 
 	}
 	/**

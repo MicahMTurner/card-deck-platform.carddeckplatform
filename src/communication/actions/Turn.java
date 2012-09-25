@@ -15,8 +15,12 @@ public class Turn implements Action{
 	}
 	@Override
 	public void execute() {
-		ClientController.get().playerTurn(playerId);
 		
+		for(Player player : ClientController.get().getPlayers()){
+			player.setMyTurn(false);
+		}
+		
+		ClientController.get().playerTurn(playerId);
 	}
 
 }
