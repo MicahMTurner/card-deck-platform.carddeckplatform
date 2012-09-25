@@ -58,7 +58,7 @@ public class OvershootAnimation extends Animation {
 			this.duration=250;
 //			return ;
 		}
-		System.out.println("OvershootAnimation.doInBackground()");
+		//System.out.println("OvershootAnimation.doInBackground()");
 		Interpolator animateInterpolator = new OvershootInterpolator();
 		long startTime = System.currentTimeMillis();
 		long endTime = startTime + duration;
@@ -101,7 +101,7 @@ public class OvershootAnimation extends Animation {
 		}
 		card.getAnimationFlags().fling = false;
 		card.setLocation(destX, destY);
-		System.out.println("END");
+		//System.out.println("END");
 		
 	}
 	@Override

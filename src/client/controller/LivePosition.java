@@ -183,7 +183,7 @@ public class LivePosition implements SensorEventListener{
 		cdl=new CountDownLatch(1);		
 		//setPosition=new SetPosition();
 		//initiate matrixes for rotation and azimuth calculations
-		timer=new Timer();
+		
 		rotationMatrix=new float[9];
 		inclinationMatrix=new float[9];
 		outRotationMatrix=new float[9];
@@ -204,6 +204,7 @@ public class LivePosition implements SensorEventListener{
 				try {
 					//System.out.println("waiting: "+System.currentTimeMillis());
 					//tasks=execService.scheduleAtFixedRate(new SetPosition(), 1, 2, TimeUnit.SECONDS);
+					timer=new Timer();
 					timer.schedule(new SetPosition(),1000,4000);
 					//System.out.println("locking thread.");
 					cdl.await();
@@ -223,7 +224,8 @@ public class LivePosition implements SensorEventListener{
 		//if (tasks!=null){
 		//	tasks.cancel(true);
 		//}
-		timer.cancel();	
+		timer.cancel();
+		this.azimut=null;
 	}
 	public boolean isRunning(){
 		return running;
