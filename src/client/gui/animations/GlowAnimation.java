@@ -44,7 +44,7 @@ public class GlowAnimation extends Animation {
 
 	@Override
 	protected void animate() {
-		System.out.println("GLOW Animation Activated");
+		//System.out.println("GLOW Animation Activated");
 		ColorInterpolator colorinterpolator = new ColorInterpolator(
 				Color.TRANSPARENT, colorArbg);
 		Interpolator animateInterpolator = new LinearInterpolator();
@@ -72,7 +72,7 @@ public class GlowAnimation extends Animation {
 			glowColor = colorinterpolator.getInterpolatedColor(percentDistance);
 			//glowColor+=255;
 			droppable.setGlowColor(glowColor);
-			System.out.println(curTime+","+glowColor);
+			//System.out.println(curTime+","+glowColor);
 			try {
 				Thread.sleep(4);
 			} catch (InterruptedException e) {				

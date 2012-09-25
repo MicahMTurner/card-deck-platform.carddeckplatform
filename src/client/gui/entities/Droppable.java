@@ -119,7 +119,12 @@ public abstract class Droppable implements Serializable {
 	public void setAlpha(int alpha) {
 		this.alpha = alpha;
 	}
-
+	
+	public void locationChangedNotify(){
+		Point size = MetricsConvertion.pointRelativeToPx(getScale());
+		shape = new Rectangle(getX() - (size.getX() / 2), getY()
+				- (size.getY() / 2), size.getX(), size.getY());
+	}
 	public Shape getShape() {
 		if (shape == null) {
 			Point size = MetricsConvertion.pointRelativeToPx(getScale());
