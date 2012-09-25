@@ -72,7 +72,7 @@ public class GlowAnimation extends Animation {
 			glowColor = colorinterpolator.getInterpolatedColor(percentDistance);
 			//glowColor+=255;
 			droppable.setGlowColor(glowColor);
-			System.out.println(curTime+","+glowColor);
+			//System.out.println(curTime+","+glowColor);
 			try {
 				Thread.sleep(4);
 			} catch (InterruptedException e) {				
