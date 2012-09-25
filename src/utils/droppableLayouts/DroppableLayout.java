@@ -165,7 +165,7 @@ public abstract class DroppableLayout implements Serializable {
 		public void run() {
 			// save the initial value
 			Interpolator animateInterpolator = new AccelerateDecelerateInterpolator();
-			System.out.println("rearrange:" + animationArgs[0].length);
+			//System.out.println("rearrange:" + animationArgs[0].length);
 			float[] totalDx = new float[animationArgs[0].length];
 			float[] totalDy = new float[animationArgs[0].length];
 			float[] totalDAngle = new float[animationArgs[0].length];

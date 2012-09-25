@@ -44,7 +44,7 @@ public class GlowAnimation extends Animation {
 
 	@Override
 	protected void animate() {
-		System.out.println("GLOW Animation Activated");
+		//System.out.println("GLOW Animation Activated");
 		ColorInterpolator colorinterpolator = new ColorInterpolator(
 				Color.TRANSPARENT, colorArbg);
 		Interpolator animateInterpolator = new LinearInterpolator();
