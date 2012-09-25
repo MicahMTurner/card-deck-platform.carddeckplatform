@@ -33,7 +33,12 @@ public class Durak extends Game{
 	Card rulerCard;
 	utils.Player startingPlayer;
 
-	static public StandartCard.Color rulerColor=null;
+	//static private StandartCard.Color rulerColor=null;
+	
+	static public StandartCard.Color getRulerColor(){
+		Card ruler = ((DeckArea)(ClientController.get().getZone(deckId))).getRulerCard();
+		return ((StandartCard)ruler).getColor();
+	}
 	
 	public Durak(){
 		initActiveNumbers();
@@ -65,12 +70,14 @@ public class Durak extends Game{
 	}
 	
 	static boolean isAttacked(utils.Player player){
+		boolean answer = false;
 		for(int i=0; i<staticPlayers.size() ; i++){
 			if(staticPlayers.get(i).isMyTurn() && staticPlayers.get( (i + 1) % staticPlayers.size()).equals(player)){
-				return true;
+				answer = true;
+				break;
 			}
 		}
-		return false;
+		return answer;
 	}
 	
 	public utils.Player getAttackedPlayer(){
@@ -176,7 +183,7 @@ public class Durak extends Game{
 	@Override
 	public int minPlayers() {
 		// TODO Auto-generated method stub
-		return 2;
+		return 3;
 	}
 
 	
@@ -227,7 +234,7 @@ public class Durak extends Game{
 		rulerCard = findRulerCard(deckCards, numOfPlayers);
 		startingPlayer = findStartingPlayer(deckCards, rulerCard, numOfPlayers);
 		
-		rulerColor = ((StandartCard)rulerCard).getColor();
+		//rulerColor = ((StandartCard)rulerCard).getColor();
 		
 //		for (int i=0;i<players.size();i++){
 //			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(playersCards.get(i),players.get(i).getId())));

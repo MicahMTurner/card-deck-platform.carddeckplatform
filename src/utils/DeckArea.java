@@ -145,4 +145,8 @@ public class DeckArea extends Droppable{
 		rearrange(0);
 
 	}
+	
+	public Card getRulerCard(){
+		return ((DeckLayout)getDroppableLayout()).getRulerCard();
+	}
 }

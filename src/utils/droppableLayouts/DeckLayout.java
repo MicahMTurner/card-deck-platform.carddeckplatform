@@ -87,4 +87,8 @@ public class DeckLayout extends DroppableLayout  {
 			return true;
 		return false;
 	}
+	
+	public Card getRulerCard(){
+		return rulerCard;
+	}
 }
