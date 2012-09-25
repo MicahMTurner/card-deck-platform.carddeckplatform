@@ -188,6 +188,7 @@ public abstract class Game {
 					for (Droppable droppalbe : droppables){
 			    		//set public zone according to my position
 						droppalbe.setPosition(droppalbe.getPosition().reArrangeRelativePosition(oldPosition, getMe().getGlobalPosition()));
+						droppalbe.locationChangedNotify();
 					}
 				}else{
 					//other person moved

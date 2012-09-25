@@ -20,15 +20,11 @@ public class LoadGameAction implements Action{
 	}
 	@Override
 	public void execute() {
-		
-		//if (!GameEnvironment.get().getPlayerInfo().isServer()){
 			Game game=ClientDataBase.getDataBase().getGame(gameId);
 			ClientController.get().setGame(game);
 			if(freePlayProfile!=null){
 				game.setFreePlayProfile(freePlayProfile);
 			}
 			game.setLayouts();
-		//}
-		//ClientController.get().setLayouts(freePlayProfile);	
 	}
 }
