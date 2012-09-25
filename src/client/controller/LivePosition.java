@@ -219,13 +219,15 @@ public class LivePosition implements SensorEventListener{
 		
 	}
 	public void stop(){
-		mSensorManager.unregisterListener(this);
-		running=false;
-		//if (tasks!=null){
-		//	tasks.cancel(true);
-		//}
-		timer.cancel();
-		this.azimut=null;
+		if (running){
+			mSensorManager.unregisterListener(this);
+			running=false;
+			//if (tasks!=null){
+			//	tasks.cancel(true);
+			//}
+			timer.cancel();
+			this.azimut=null;
+		}
 	}
 	public boolean isRunning(){
 		return running;
