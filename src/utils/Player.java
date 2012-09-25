@@ -267,11 +267,18 @@ public class Player extends Droppable implements  Comparable<Player>{
 	@Override
 	public void draw(Canvas canvas, Context context) {
 		super.draw(canvas, context);
-		getTextPaint().setTextSize(20);
-		float x=0,y=0;
-		Shape s = getShape();
-		x = s.getMinX();
-		y = s.getMinY();
-		canvas.drawText(getUserName(), (int)x, (int)y, getTextPaint());
+		
+		try {
+			getTextPaint().setTextSize(20);
+			float x=0,y=0;
+			Shape s = getShape();
+			x = s.getMinX();
+			y = s.getMinY();
+			canvas.drawText(getUserName(), (int)x, (int)y, getTextPaint());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		
 	}
 }
