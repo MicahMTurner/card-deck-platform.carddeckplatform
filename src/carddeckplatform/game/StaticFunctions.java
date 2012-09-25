@@ -34,24 +34,24 @@ public class StaticFunctions {
 			if(y0<y1)
 				for(int y = y0; y<=y1; y++ ){
 					points.add(new Point(x0,y));
-					System.out.println("(" + x0 + "," + y + ")");
+					//System.out.println("(" + x0 + "," + y + ")");
 				}
 			else{
 				for(int y = y0; y>=y1; y-- ){
 					points.add(new Point(x0,y));
-					System.out.println("(" + x0 + "," + y + ")");
+					//System.out.println("(" + x0 + "," + y + ")");
 				}
 			}
 		}else if(y0==y1){
 			if(x0<x1)
 				for(int x = x0; x<=x1; x++ ){
 					points.add(new Point(x,y0));
-					System.out.println("(" + x + "," + y0 + ")");
+					//System.out.println("(" + x + "," + y0 + ")");
 				}
 			else{
 				for(int x = x0; x>=x1; x-- ){
 					points.add(new Point(x,y0));
-					System.out.println("(" + x + "," + y0 + ")");
+					//System.out.println("(" + x + "," + y0 + ")");
 				}
 			}
 		}
@@ -62,7 +62,7 @@ public class StaticFunctions {
 			int y=y0;
 			for (int x=x0; x <=x1; x++){
 				points.add(new Point(x,y));
-				System.out.println("(" + x + "," + y + ")");	
+				//System.out.println("(" + x + "," + y + ")");	
 				if(p > 0) {
 					y++;
 					p += dy-dx;
@@ -79,7 +79,7 @@ public class StaticFunctions {
 			int x=x0;
 			for (int y=y0; y <=y1; y++){
 				points.add(new Point(x,y));
-				System.out.println("(" + x + "," + y + ")");	
+				//System.out.println("(" + x + "," + y + ")");	
 				if(p > 0) {
 					x++;
 					p += dx-dy;
@@ -95,7 +95,7 @@ public class StaticFunctions {
 			int x=x0;
 			for (int y=y0; y >=y1; y--){
 				points.add(new Point(x,y));
-				System.out.println("(" + x + "," + y + ")");	
+				//System.out.println("(" + x + "," + y + ")");	
 				if(p > 0) {
 					x++;
 					p += dx-dy;
@@ -111,7 +111,7 @@ public class StaticFunctions {
 			int y=y0;
 			for (int x=x0; x <=x1; x++){
 				points.add(new Point(x,y));
-				System.out.println("(" + x + "," + y + ")");	
+				//System.out.println("(" + x + "," + y + ")");	
 				if(p > 0) {
 					y--;
 					p += dy-dx;
@@ -127,7 +127,7 @@ public class StaticFunctions {
 			int y=y0;
 			for (int x=x0; x >=x1; x--){
 				points.add(new Point(x,y));
-				System.out.println("(" + x + "," + y + ")");	
+				//System.out.println("(" + x + "," + y + ")");	
 				if(p > 0) {
 					y--;
 					p += dy-dx;
@@ -143,7 +143,7 @@ public class StaticFunctions {
 			int x=x0;
 			for (int y=y0; y >=y1; y--){
 				points.add(new Point(x,y));
-				System.out.println("(" + x + "," + y + ")");	
+				//System.out.println("(" + x + "," + y + ")");	
 				if(p > 0) {
 					x--;
 					p += dx-dy;
@@ -159,7 +159,7 @@ public class StaticFunctions {
 			int x=x0;
 			for (int y=y0; y <=y1; y++){
 				points.add(new Point(x,y));
-				System.out.println("(" + x + "," + y + ")");	
+				//System.out.println("(" + x + "," + y + ")");	
 				if(p > 0) {
 					x--;
 					p += dx-dy;
@@ -176,7 +176,7 @@ public class StaticFunctions {
 			int y=y0;
 			for (int x=x0; x >=x1; x--){
 				points.add(new Point(x,y));
-				System.out.println("(" + x + "," + y + ")");	
+				//System.out.println("(" + x + "," + y + ")");	
 				if(p > 0) {
 					y++;
 					p += dy-dx;
