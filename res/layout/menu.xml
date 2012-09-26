@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/woodtexture"
+    android:orientation="vertical"
+    android:stretchColumns="1" 
+    android:gravity="center">
+
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" 
+        android:padding="5dp">
+		
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/nickLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nickname:  "
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/White" 
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/nickText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10" >
+
+                <requestFocus />
+            </EditText>
+        </TableRow>
+		</TableLayout>
+		<TableLayout
+		    android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+       		android:layout_gravity="center_horizontal" >
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/joingamebutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/joinbutton"
+                android:padding="3dip"
+                android:textColor="@color/TransparentGrey" />
+
+            <Button
+                android:id="@+id/creategameButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/hostbutton"
+                android:padding="3dip" >
+                
+			</Button>
+
+            <Button
+                android:id="@+id/optionsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/opstionsbutton"
+                android:padding="3dip" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/marketButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/marketbutton"
+                android:padding="3dip" />
+
+            <Button
+                android:id="@+id/rateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ratebutton"
+                android:padding="3dip" />
+
+            <Button
+                android:id="@+id/scoreButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/scoresbutton"
+                android:padding="3dip" />
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>

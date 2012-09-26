@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/startGameDialogLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    android:gravity="center"
+    >
+	<TextView
+	    android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+	    android:text="Minimum Players achieved" 
+	    android:textStyle="bold"
+	    
+	    android:textSize="24dp"
+	   	android:paddingBottom="25dp"
+	    />
+<LinearLayout 
+   
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:gravity="center_horizontal"
+    
+    >
+	
+    <Button
+    	android:id="@+id/startGameButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/playbutton"
+        android:layout_marginRight="10dp"
+    	           
+        >
+                
+	</Button>
+
+
+    <Button
+        android:id="@+id/startGameHideButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/hidebutton"        
+        android:layout_marginLeft="10dp" 
+        />
+
+</LinearLayout>
+</LinearLayout>
