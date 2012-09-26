@@ -146,16 +146,22 @@ public abstract class Droppable implements Serializable {
 	public boolean onDrop(Player player, Droppable from, Card card) {               
         boolean answer=false;           
         ClientController.sendAPI().cardAdded(card, from.getId(), id, player.getId());   
-        int placeOfCard=from.getCards().indexOf(card);
-        if (from.removeCard(player, card) && !addCard(player, card)){
-                from.AddInPlace(card,placeOfCard);                      
-        }else{
-                answer=true;
-        }
-        
-        return answer;
+        int placeOfCard=from.getCards().indexOf(card);        
 
-}
+        //check if remove is legal move
+        if (from.removeCard(player, card)){
+        	if (addCard(player, card)){
+        		//remove and add are legal moves
+        		answer=true;
+        	}else{
+        		//add is not legal, return removed card back to its place
+        		from.AddInPlace(card,placeOfCard); 
+                rearrange(0);
+        	}
+        }        
+        return answer;
+	}
+	
 	/**
 	 * add given card in given place in this droppable
 	 * @param card given card

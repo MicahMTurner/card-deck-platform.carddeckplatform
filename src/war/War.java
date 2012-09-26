@@ -41,8 +41,7 @@ public class War extends Game{
 	}
 	
 	@Override
-	public void dealCards() {
-		//TODO add "default deal" or "deal all cards"
+	public void dealCards() {		
 		int deckSize=deck.getSize();
 		
 		int numOfPlayers=players.size();
@@ -54,7 +53,6 @@ public class War extends Game{
 
 		for (int i=0;i<deckSize;i++){			
 			Card card=deck.drawCard();			
-			//card.setOwner(players.get(i%players.size()).getPosition());
 			playersCards.get(i%players.size()).add(card);			
 			
 		}

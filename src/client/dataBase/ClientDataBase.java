@@ -52,6 +52,9 @@ public class ClientDataBase {
 		if(gameName.equals("war")){
 			return new War();
 		}
+		if(gameName.equals("president")){
+			return new President();
+		}
 		
 		return loader.LoadPlugin(gameName);	
 	}
@@ -62,6 +65,7 @@ public class ClientDataBase {
 		gameNames.add("free play");
 		gameNames.add("Durak");
 		gameNames.add("war");
+		gameNames.add("president");
 		return gameNames;
 	}	
 }

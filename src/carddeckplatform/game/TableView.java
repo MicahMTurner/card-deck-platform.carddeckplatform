@@ -188,10 +188,18 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
         Droppable source = table.getDroppableById(from);
         for (Card card : cards) {
                 int cardPlace=source.getCards().indexOf(card);
-                if (source.removeCard(byWhom, card) && !destination.addCard(byWhom, card)){                             
-                        source.AddInPlace(card,cardPlace);
-                        card.invalidMove();
+
+                //check if remove is legal move
+                if (source.removeCard(byWhom, card)){
+                	if (destination.addCard(byWhom, card)){
+                		//remove and add are legal moves
+                		continue;
+                	}else{
+                		//add is not legal, return removed card back to its place
+                		source.AddInPlace(card,cardPlace);                       
+                	}
                 }
+                card.invalidMove();             
         }
 	}
 	
@@ -208,7 +216,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	public void dealCards(ArrayList<Card> cards, int to) {
 		Droppable destination = table.getDroppableById(to);
 		for (Card card : cards) {
-			card.setOwner(destination.getPosition());
+			card.setOwner(destination.getId());
 			addNewDraggable(card, destination);
 		}
 	}

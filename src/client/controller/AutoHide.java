@@ -57,11 +57,11 @@ public class AutoHide implements SensorEventListener {
 	}
 	
 	public void start(Context context){
-		initiate(context);
-		sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 
-                SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), 
-        		SensorManager.SENSOR_DELAY_NORMAL);
+//		initiate(context);
+//		sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 
+//                SensorManager.SENSOR_DELAY_NORMAL);
+//        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), 
+//        		SensorManager.SENSOR_DELAY_NORMAL);
 	}
 	
 	public void stop(){
@@ -94,7 +94,7 @@ public class AutoHide implements SensorEventListener {
      //calculate angle plus convert from radians to degrees
      double angle;
      if (GameEnvironment.get().getDeviceInfo().getRotationAngle()==Surface.ROTATION_90){
-    	 angle=-(mValuesOrientation[2]*(180/Math.PI));
+    	 angle=-(mValuesOrientation[2]*(180/Math.PI));    	
      }else{
     	 angle=-(mValuesOrientation[1]*(180/Math.PI));
      }

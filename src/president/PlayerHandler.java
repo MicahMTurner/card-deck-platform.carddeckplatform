@@ -5,6 +5,7 @@ import utils.Card;
 import utils.Player;
 import utils.Position;
 import utils.Public;
+import utils.StandartCard;
 import handlers.PlayerEventsHandler;
 
 public class PlayerHandler implements PlayerEventsHandler{
@@ -17,7 +18,7 @@ public class PlayerHandler implements PlayerEventsHandler{
 //		}else{
 			Card topCard=(ClientController.get().getZone(Position.Public.MID)).peek();
 			//check if no one placed any cards during the entire round
-			if (topCard!=null && topCard.getOwner().equals(ClientController.get().getMe().getPosition())){
+			if (topCard!=null && topCard.getOwner()==(ClientController.get().getMe().getId())){
 //				Integer nextPlayerId=ClientController.get().endRound();
 //				ClientController.sendAPI().endRound(nextPlayerId);
 				
@@ -47,7 +48,14 @@ public class PlayerHandler implements PlayerEventsHandler{
 
 	@Override
 	public boolean onCardRemoved(Player player, Card card) {
-		if (card.getOwner().getId()==player.getId()){
+		
+		if (card.getOwner()==player.getId()){
+			for (Card standartCard : player.getCards()){
+				if (((StandartCard)standartCard).getValue()==3 
+						&& ((StandartCard)standartCard).getColor().equals(StandartCard.Color.CLUB) && !card.equals(standartCard)){
+					return false;	
+				}
+			}
 			return true;
 		}
 		return true;
