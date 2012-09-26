@@ -1,33 +1,25 @@
 package logic.host;
 
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.util.ArrayList;
 import java.util.Stack;
 
+import logic.client.Game;
+import utils.Player;
+import utils.Position;
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-
-import carddeckplatform.game.CarddeckplatformActivity;
 import carddeckplatform.game.GameActivity;
 import carddeckplatform.game.R;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
-import utils.Player;
-import utils.Position;
 import communication.actions.Turn;
 import communication.link.HostGameDetails;
-import communication.link.Streams;
 import communication.link.TcpIdListener;
 import communication.messages.Message;
 import communication.server.ConnectionsManager;
-import logic.client.Game;
 
 
 
@@ -81,7 +73,9 @@ public class Host implements Runnable{
 	public static void playerLost(int id){
 		game.playerLost(id);
 	}
+	
 	private void popDialogIfMinPlayers(){
+		
 		if (ConnectionsManager.getConnectionsManager().getNumberOfConnections()==game.minPlayers()
 				&& game.minPlayers()<game.maxPlayers() && !hostStartedGame){
 			//pop start game dialog
@@ -89,16 +83,15 @@ public class Host implements Runnable{
 				@Override
 				public void run() {
 					final Dialog dialog=  new Dialog((Context)GameActivity.getContext(),R.style.startGameDialogTheme);
-					//dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-					
-					//dialog.getWindow().setBackgroundDrawableResource(Color.TRANSPARENT);
 					
 					dialog.setContentView(R.layout.startgamedialog);
 					Button button = (Button)dialog.findViewById(R.id.startGameButton);
+					//start game button click listener 
 					button.setOnClickListener(new OnClickListener() {
 						
 						@Override
 						public void onClick(View v) {
+							
 							hostStartedGame=true;
 							GameActivity.enableStartButton=false;
 							ConnectionsManager.getConnectionsManager().stopListening();						
@@ -107,6 +100,7 @@ public class Host implements Runnable{
 						}
 					});
 					button =  (Button)dialog.findViewById(R.id.startGameHideButton);
+					//minimize button click listener
 					button.setOnClickListener(new OnClickListener() {
 						
 						@Override
@@ -144,7 +138,6 @@ public class Host implements Runnable{
 			tcpIdListener.stop();
 			startGame();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
