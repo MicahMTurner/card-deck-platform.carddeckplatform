@@ -7,6 +7,8 @@ import java.util.Queue;
 
 import javax.tools.StandardLocation;
 
+import android.graphics.Color;
+
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
 
@@ -55,6 +57,8 @@ public class Durak extends Game{
 
 				
 	}
+	
+	static private PlayerComp playerComp = new PlayerComp();
 	
 	private static utils.Player getNextPlayer(utils.Player player){
 		ArrayList<utils.Player> sortedPlayers = new ArrayList<utils.Player>(staticPlayers);
@@ -121,7 +125,7 @@ public class Durak extends Game{
 		ArrayList<utils.Player> sortedPlayers = new ArrayList<utils.Player>(staticPlayers);
 		
 		// sort the players by their position.
-		Collections.sort(sortedPlayers, new PlayerComp());
+		Collections.sort(sortedPlayers, playerComp);
 		
 		for(int i=0; i<sortedPlayers.size(); i++){
 			if(sortedPlayers.get(i).equals(attacker) && sortedPlayers.get( (i + 1) % sortedPlayers.size()).equals(player))
@@ -130,6 +134,8 @@ public class Durak extends Game{
 		
 		return false;
 	}
+	
+	
 	
 	public utils.Player getAttackedPlayer(){
 		for(utils.Player player : players){
@@ -159,6 +165,25 @@ public class Durak extends Game{
 			}
 		}
 		return null;
+	}
+	
+	public static boolean hasOpenCards(){
+		utils.Player me = ClientController.get().getMe();
+		
+		Public public1 =  (Public)ClientController.get().getZone(Position.Public.BOTMID.getRelativePosition(me.getGlobalPosition()));
+		Public public2 =  (Public)ClientController.get().getZone(Position.Public.BOTMIDLEFT.getRelativePosition(me.getGlobalPosition()));
+		Public public3 =  (Public)ClientController.get().getZone(Position.Public.BOTMIDRIGHT.getRelativePosition(me.getGlobalPosition()));
+		Public public4 =  (Public)ClientController.get().getZone(Position.Public.TOPMID.getRelativePosition(me.getGlobalPosition()));
+		Public public5 =  (Public)ClientController.get().getZone(Position.Public.TOPMIDLEFT.getRelativePosition(me.getGlobalPosition()));
+		Public public6 =  (Public)ClientController.get().getZone(Position.Public.TOPMIDRIGHT.getRelativePosition(me.getGlobalPosition()));
+		
+		
+		return !(public1.cardsHolding()%2==0 &&
+				public2.cardsHolding()%2==0 &&
+				public3.cardsHolding()%2==0 &&
+				public4.cardsHolding()%2==0 &&
+				public5.cardsHolding()%2==0 &&
+				public6.cardsHolding()%2==0);
 	}
 
 	@Override
@@ -221,6 +246,9 @@ public class Durak extends Game{
 		
 		for (utils.Player player : getPlayers())
 			player.setMyTurn(false);
+		
+		
+		//ClientController.get().getZone(answer).setGlowColor(glowColor);
 		
 		return answer;
 	}
@@ -357,6 +385,16 @@ public class Durak extends Game{
 	@Override
 	public String instructions() {		
 		return "Durak is a card game that is popular throughout most of the post-Soviet states. The object of the game is to get rid of all one's cards. At the end of the game, the last player with cards in their hand is referred to as the fool (durak).";
+	}
+	
+	@Override
+	public void newTurn(utils.Player player) {
+		for(utils.Player p : staticPlayers)
+			p.setTextColor(Color.BLACK);
+		
+		player.setTextColor(Color.RED);
+		getNextPlayer(player).setTextColor(Color.BLUE);
+
 	}
 
 }

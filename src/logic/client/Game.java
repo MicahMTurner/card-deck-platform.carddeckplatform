@@ -285,4 +285,8 @@ public abstract class Game {
 			}
 		}
 	}
+	
+	public void newTurn(Player player){
+		
+	}
 }

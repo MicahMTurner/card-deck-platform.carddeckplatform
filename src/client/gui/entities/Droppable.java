@@ -26,6 +26,7 @@ import utils.Point;
 import utils.Position;
 import utils.StandardSizes;
 import utils.droppableLayouts.DroppableLayout;
+import utils.droppableLayouts.LineLayout;
 import utils.droppableLayouts.DroppableLayout.LayoutType;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -186,11 +187,11 @@ public abstract class Droppable implements Serializable {
 		return position;
 	}
 	
-//	public int indexOfDraggabale(Draggable draggable) {
-//
-//		return getCards().indexOf(draggable);
-//
-//	}
+	public int indexOfDraggabale(Draggable draggable) {
+
+		return getCards().indexOf(draggable);
+
+	}
 	
 	@Override
 	public boolean equals(Object other) {
@@ -247,8 +248,8 @@ public abstract class Droppable implements Serializable {
 	}
 	
 	public void sort(){
-		//Arrays.sort(getMyCards().toArray());
-		//Collections.sort();
+		if(getDroppableLayout().getClass().isInstance(LineLayout.class));
+			Collections.sort(getMyCards());
 	}
 	
 	public void sort(Comparator comperator){
