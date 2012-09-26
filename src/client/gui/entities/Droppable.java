@@ -26,6 +26,7 @@ import utils.Point;
 import utils.Position;
 import utils.StandardSizes;
 import utils.droppableLayouts.DroppableLayout;
+import utils.droppableLayouts.LineLayout;
 import utils.droppableLayouts.DroppableLayout.LayoutType;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -186,11 +187,11 @@ public abstract class Droppable implements Serializable {
 		return position;
 	}
 	
-//	public int indexOfDraggabale(Draggable draggable) {
-//
-//		return getCards().indexOf(draggable);
-//
-//	}
+	public int indexOfDraggabale(Draggable draggable) {
+
+		return getCards().indexOf(draggable);
+
+	}
 	
 	@Override
 	public boolean equals(Object other) {
@@ -247,8 +248,8 @@ public abstract class Droppable implements Serializable {
 	}
 	
 	public void sort(){
-		//Arrays.sort(getMyCards().toArray());
-		//Collections.sort();
+		if(getDroppableLayout().getClass().isInstance(LineLayout.class));
+			Collections.sort(getMyCards());
 	}
 	
 	public void sort(Comparator comperator){
@@ -377,15 +378,20 @@ public abstract class Droppable implements Serializable {
 	 * @param index should be 0
 	 */
 	public void rearrange(int index) {
-		if(cardsHolding()==0)
-			return;
-		Point droppableSize = MetricsConvertion.pointRelativeToPx(getScale());
-		Point card=MetricsConvertion.pointRelativeToPx(getCards().get(0).getScale());
+		try {
+			if(cardsHolding()==0)
+				return;
+			Point droppableSize = MetricsConvertion.pointRelativeToPx(getScale());
+			Point card=MetricsConvertion.pointRelativeToPx(getCards().get(0).getScale());
+			
+			
+			
+			if (getDroppableLayout() != null)
+				getDroppableLayout().rearrange(index, droppableSize.getX()-card.getX(), droppableSize.getY()-card.getY());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		
-		
-		
-		if (getDroppableLayout() != null)
-			getDroppableLayout().rearrange(index, droppableSize.getX()-card.getX(), droppableSize.getY()-card.getY());
 
 	}
 	/**

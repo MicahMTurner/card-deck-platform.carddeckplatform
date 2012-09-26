@@ -294,7 +294,9 @@ public class ClientController {//implements Observer {
 				}
 			}
 		}
+		
 		//glow player icon/name
+		game.newTurn((Player)getZone(playerId));
 		gui.setPlayerTurn(gui.getDroppableById(playerId));
 	}
 	/**
@@ -360,6 +362,14 @@ public class ClientController {//implements Observer {
 //			game.reArrangeQueue(nextPlayerId);
 //			playerTurn(nextPlayerId);
 		//}
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 	/**
 	 * request a card from deck, call this method when logic wants to take card from deck/player 
@@ -502,7 +512,9 @@ public class ClientController {//implements Observer {
 	}
 
 
-	
+	public ArrayList<Player> getPlayers(){
+		return game.getPlayers();
+	}
 	
 	//---------------------------------------------------------------------//	
 

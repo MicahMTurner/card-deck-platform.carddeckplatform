@@ -1,5 +1,6 @@
 package durak;
 
+import android.graphics.Color;
 import client.controller.ClientController;
 import utils.Card;
 import utils.Player;
@@ -10,6 +11,8 @@ public class PlayerHandler implements PlayerEventsHandler {
 	@Override
 	public boolean onMyTurn(Player player) {
 		// TODO Auto-generated method stub
+
+		
 		return false;
 	}
 

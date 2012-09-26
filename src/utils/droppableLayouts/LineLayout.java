@@ -85,7 +85,7 @@ public class LineLayout extends DroppableLayout {
 				animationArgs[1][0] = 0;
 				animationArgs[2][0] = 0;
 				for(int i=1;i<index;i++){
-					System.out.println(i+"::"+(index-1)+"::"+((float)i/(index-1)));
+					//System.out.println(i+"::"+(index-1)+"::"+((float)i/(index-1)));
 					animationArgs[0][i]=leftSize*interpolator.getInterpolation((float)i/(index-1));
 					animationArgs[1][i] = 0;
 					animationArgs[2][i] = 0;
@@ -209,7 +209,7 @@ public class LineLayout extends DroppableLayout {
 //		Collections.sort(droppable.getCards());
 //		AbstractList<Card> cards = droppable.getCards();
 //		Collections.sort(cards);
-//		droppable.sort();
+		droppable.sort();
 		rearranger.rearrange(index, width, height, droppable.getCards());
 	}
 
