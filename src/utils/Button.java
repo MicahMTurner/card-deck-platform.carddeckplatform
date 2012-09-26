@@ -75,6 +75,10 @@ public class Button{
 			handler.onClick();
 	}
 	
+	public void setText(String text) {
+		this.text = text;
+	}
+	
 	public void draw(Canvas canvas, Context context){
 		Bitmap buttonBitmap=BitmapHolder.get().getBitmap(image);
 		Matrix matrix = new Matrix();		 
