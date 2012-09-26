@@ -151,7 +151,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 	 */
 	@Override
 	public void deltCard(Card card) {
-		card.setOwner((Position.Player)position);
+		card.setOwner(id);
 		hand.add(card);
 		handler.onCardAdded(this, this, card);
 		card.setLocation(getX(), getY());
@@ -209,7 +209,7 @@ public class Player extends Droppable implements  Comparable<Player>{
 			hand.add(card);
 		boolean answer=handler.onCardAdded(this, player , card);
 		if (answer || player==null){
-			card.setOwner((Position.Player)position);		
+			card.setOwner(id);		
 			
 		}else{
 			hand.remove(card);

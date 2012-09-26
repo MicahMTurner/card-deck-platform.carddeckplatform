@@ -20,7 +20,10 @@ public class Turns {
 				nextPlayer=(nextPlayer+1)%(positions.length);
 			}
 			else{
-				nextPlayer-=(nextPlayer+1)%(positions.length);
+				nextPlayer=(nextPlayer-1)%(positions.length);
+				if (nextPlayer<0){
+					nextPlayer+=positions.length;
+				}
 			}
 		}
 		return turns;

@@ -35,7 +35,7 @@ public class President extends Game{
 		Integer answer=null;
 		passed=false;
 		Public publicZone=(Public) ClientController.get().getZone(Position.Public.MID);
-		//answer=publicZone.peek().getOwner();
+		answer=publicZone.first().getOwner();
 		publicZone.clear();
 		for (Droppable droppable : droppables){
 			droppable.onRoundEnd(null);
@@ -47,7 +47,7 @@ public class President extends Game{
 	}
 	@Override
 	public Queue<Player> setTurns() {		
-		return utils.Turns.clockWise(startingPlayer);
+		return utils.Turns.counterClockWise(startingPlayer);
 	}
 
 	@Override
@@ -92,12 +92,12 @@ public class President extends Game{
 	@Override
 	public void setLayouts() {
 		droppables.add(new Public(new PublicAndButtonHandler(), Position.Public.MID, DroppableLayout.LayoutType.HEAP));
-		buttons.add(new Button(new ButtonHandler(),Position.Button.BOTLEFT,"Pass"));
+		buttons.add(new Button(new PublicAndButtonHandler(),Position.Button.BOTLEFT,"Pass"));
 	}
 
 	@Override
 	public String toString() {		
-		return "President";
+		return "president";
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class President extends Game{
 	@Override
 	public int maxPlayers() {
 		// TODO Auto-generated method stub
-		return 0;
+		return 4;
 	}
 	
 

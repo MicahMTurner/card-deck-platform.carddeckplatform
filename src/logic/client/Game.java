@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 
+import communication.actions.DealCardAction;
+import communication.messages.Message;
 import communication.messages.RequestCardMessage;
 import communication.server.ConnectionsManager;
 
@@ -103,7 +105,30 @@ public abstract class Game {
 		roundNumber=0;
 		//loadPrefs();
 	}
-	
+	/**
+	 * deal given cards for each player
+	 * @param cardsForEachPlayer number of cards to deal for each player
+	 */
+	protected void dealCards(int cardsForEachPlayer){
+		int deckSize=deck.getSize();
+		
+		int numOfPlayers=players.size();
+		
+		ArrayList<ArrayList<Card>> playersCards= new ArrayList<ArrayList<Card>>();
+		for (int i=0;i<numOfPlayers;i++){
+			playersCards.add(new ArrayList<Card>());
+		}
+
+		for (int i=0;i<cardsForEachPlayer && i<deckSize ;i++){			
+			Card card=deck.drawCard();			
+			playersCards.get(i%players.size()).add(card);			
+			
+		}
+		for (int i=0;i<players.size();i++){
+			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(playersCards.get(i),players.get(i).getId())));
+		}
+	}
+
 	private void clearEmptyPositions() {
 		if (turnsQueue!=null){
 			ArrayList<Position.Player> availablePos=new ArrayList<Position.Player>();
@@ -274,6 +299,12 @@ public abstract class Game {
 		return availablePositions;
 	}
 
+	/**
+	 * use only when deck instance is available
+	 * @param deckId deck's instance id
+	 * @param deckCards deck's cards
+	 * @param cardsToEachPlayer number of cards for each player
+	 */
 	protected void dealCardAnimation(int deckId, ArrayList<Card> deckCards, int cardsToEachPlayer){
 		int numOfPlayers=players.size();
 		for(int i=0 ; i<numOfPlayers * cardsToEachPlayer ; i++){
@@ -281,7 +312,6 @@ public abstract class Game {
 			try {
 				Thread.sleep(400);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

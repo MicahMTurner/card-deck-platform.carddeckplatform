@@ -5,6 +5,7 @@ package carddeckplatform.game;
 
 
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -103,10 +104,19 @@ public class CarddeckplatformActivity extends Activity {
 	    try {
 	        for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
 	            NetworkInterface intf = en.nextElement();
+	            if (intf.isLoopback() || !intf.isUp()){
+					//skip  loop-back interfaces or interfaces that are down
+					continue;
+				}
 	            for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+	            	
 	                InetAddress inetAddress = enumIpAddr.nextElement();
-	                if (!inetAddress.isLoopbackAddress()) {
-	                    return inetAddress.getHostAddress().toString();
+	                //get last element which is IPV4 
+	                while (enumIpAddr.hasMoreElements()){
+	                	inetAddress=enumIpAddr.nextElement();
+	                }
+	                if (!inetAddress.isLoopbackAddress()) {	                	
+	                	return inetAddress.getHostAddress().toString();
 	                }
 	            }
 	        }

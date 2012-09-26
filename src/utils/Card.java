@@ -30,7 +30,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	
 	private CardEventsHandler eventsHandler;
 	private boolean revealed;	
-	private Position owner;
+	private int owner;
 	private Point coord;
 	private Point shadowOffset;
 	protected float angle = 0;
@@ -196,10 +196,10 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	}
 	
 	/**
-	 * gets the owner card.
-	 * @return
+	 * gets the owner of the card.
+	 * @return the id of the owner
 	 */
-	public Position getOwner() {
+	public int getOwner() {
 		return owner;
 	}
 	
@@ -207,7 +207,7 @@ public abstract class Card extends Draggable implements Comparable<Card>{
 	 * set the owner.
 	 * @param owner
 	 */
-	public void setOwner(Position owner) {
+	public void setOwner(int owner) {
 		this.owner = owner;
 	}	
 	

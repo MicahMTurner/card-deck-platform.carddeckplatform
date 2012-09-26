@@ -92,6 +92,7 @@ public class Public extends Droppable{
 	}
 	/**
 	 * get first/top card in this droppable (not removing it from the droppable)
+	 * if public has more than 1 card, returns the 2nd one (for use in handlers - card is added before handler is called)
 	 */
 	public Card peek(){
 		if (cards.size()>1){
@@ -99,7 +100,9 @@ public class Public extends Droppable{
 		}
 		return cards.peek();
 	}
-
+	public Card first(){		
+		return cards.peek();
+	}
 	@Override
 	public void onRoundEnd(Player player) {
 		handler.onRoundEnd(this,player);

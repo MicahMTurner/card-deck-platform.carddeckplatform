@@ -8,6 +8,7 @@ import utils.Player;
 import utils.Position;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -27,13 +28,10 @@ import communication.server.ConnectionsManager;
 public class Host implements Runnable{
 	private TcpIdListener tcpIdListener;
 
-	//public static ArrayList<Player> playersInfo = new ArrayList<Player>();	
 	public static boolean hostStartedGame;
 	private Stack<Position.Player> availablePositions;
-	//private ArrayList<PlayersInfo> playersInfo;
 	private static Game game;
 	private volatile boolean shutDown;
-	//synchronized private boolean startGameFlag=false;
 
 	
 	
@@ -55,7 +53,6 @@ public class Host implements Runnable{
 		Host.game=game;
 		setPositions();
 		tcpIdListener=new TcpIdListener(getHostGameDetails());
-		//this.playersInfo=new ArrayList<Host.PlayersInfo>();
 		
 	}
 	
@@ -83,6 +80,7 @@ public class Host implements Runnable{
 				@Override
 				public void run() {
 					final Dialog dialog=  new Dialog((Context)GameActivity.getContext(),R.style.startGameDialogTheme);
+					dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
 					
 					dialog.setContentView(R.layout.startgamedialog);
 					Button button = (Button)dialog.findViewById(R.id.startGameButton);
