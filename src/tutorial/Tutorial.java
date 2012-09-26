@@ -80,5 +80,10 @@ public class Tutorial extends Game {
 		}
 		}
 	}
+	@Override
+	public int maxPlayers() {
+		// TODO Auto-generated method stub
+		return 1;
+	}
 
 }

@@ -83,7 +83,7 @@ public class War extends Game{
 
 	@Override
 	public int minPlayers() {		
-		return 2;
+		return 1;
 	}
 	
 	@Override
@@ -182,6 +182,12 @@ public class War extends Game{
 		return "Each player puts one card on a public area, the player with the biggest card wins and start the next turn, in case" +
 				"of tie, both players put 3 cards on the same public area and the highest third card wins, its owner starts" +
 				"the next turn. loser: no cards left in hand. ";
+	}
+
+	@Override
+	public int maxPlayers() {
+		// TODO Auto-generated method stub
+		return 2;
 	}
 	
 }

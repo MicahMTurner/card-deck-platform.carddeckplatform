@@ -453,7 +453,7 @@ public class CarddeckplatformActivity extends Activity {
 	
 	@Override
     public boolean onCreateOptionsMenu(Menu menu){
-    	menu.add(0, Menu.FIRST, Menu.NONE, "Tutorial").setIcon(R.drawable.info);	
+    	menu.add(0, Menu.FIRST, Menu.NONE, "Tutorial").setIcon(R.drawable.tutorial);	
     	return true;
     }
     
@@ -591,7 +591,7 @@ public class CarddeckplatformActivity extends Activity {
 			installedGame.addView(separator);
 			
 			//make max players
-			addPlayersDetails(game.minPlayers(),installedGame);
+			addPlayersDetails(game.maxPlayers(),installedGame);
 		
 			//make instructionIcon
 			ImageView instructionIcon = new ImageView(context);

@@ -44,15 +44,17 @@ import communication.link.HostGameDetails;
 import communication.link.ServerConnection;
 import communication.link.TcpIdListener;
 import communication.messages.RestartMessage;
+import communication.server.ConnectionsManager;
 import freeplay.customization.FreePlayProfile;
 
 public class GameActivity extends Activity {
 	private final int SPINNERPROGBAR=0;
 	private static Context context;
 	private static Intent intent;
-	public static Activity thisActivity;
+	//public static Activity thisActivity;
 	private ProgressDialog progDialog;
 	private TableView tableview;
+	public static boolean enableStartButton;
 	//private TcpIdListener tcpIdListener;
 	private Host host;
 	//private boolean disableLivePosition;
@@ -85,6 +87,7 @@ public class GameActivity extends Activity {
 			host.shutDown();
 			host=null;
 		}
+		enableStartButton=false;
 		//if (tcpIdListener!=null){
 		//	tcpIdListener.stop();
 		//}
@@ -92,7 +95,7 @@ public class GameActivity extends Activity {
 	
 	@Override
 	protected void onResume() {	
-		super.onResume();
+		super.onResume();		
 		//posByComp.start();
 		//AutoHide.get().start();
 		
@@ -103,6 +106,7 @@ public class GameActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); 
         host=null;
+        enableStartButton=false;
         //tcpIdListener=null;       
         //disableLivePosition=false;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -110,9 +114,9 @@ public class GameActivity extends Activity {
 
         //gravity = new AutoHide(getApplicationContext());
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        context=getApplicationContext();
+        context=(Context)this;
         intent=getIntent();
-        thisActivity=this;
+        //thisActivity=this;
         
         
         //GameStatus.metrics = getApplicationContext().getResources().getDisplayMetrics();
@@ -132,13 +136,7 @@ public class GameActivity extends Activity {
         
     }
     
-//    public static void restart(){
-//    	Intent intent = getMyIntent();
-//    	intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//    	
-//    	context.startActivity(intent);
-//    	thisActivity.finish();
-//    }
+
     
     private void initialServer(final String gameName) {    	
     	// added by Michael: bluetooth throws exception if the server socket isn't instantiated from main thread or handler.
@@ -218,8 +216,6 @@ public class GameActivity extends Activity {
       //insert public areas into publics array
       Pair<ArrayList<Droppable>,ArrayList<Button>> publicsAndButtons=ClientController.get().getLayouts();
       
-      //ArrayList<Button>buttons=new ArrayList<Public>();
-      
       //build the layout
       buildLayout(publicsAndButtons);      
   }
@@ -231,8 +227,6 @@ public class GameActivity extends Activity {
 		if (GameEnvironment.get().getPlayerInfo().isServer()){
 	        initialServer(params[0]);
 	    }
-		//ClientDataBase.getDataBase().getGame("war");
-		//ClassLoaderDelegate.getInstance().setClassLoader(this.getClass().getClassLoader());
 		return setupGame();
 	}
 	
@@ -293,36 +287,15 @@ public class GameActivity extends Activity {
 
 
 
-	@Override
-	public void onWindowFocusChanged(boolean hasWindowFocus){
-//    	if(!GameStatus.isServer)
-//    		return;
-//    	//making the ip dialog in case its the first time that we entered
-//    	final Dialog dialog = new Dialog(GameActivity.this);
-//    	dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
-//                WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-//    	dialog.setContentView(R.layout.showmyip);
-//    	dialog.setTitle("Host IP Dialog");
-//    	TextView myIP=(TextView)dialog.findViewById(R.id.myipnumbertext);
-//    	Button contin= (Button) dialog.findViewById(R.id.myipbutton);
-//    	System.out.println("Your ip address is:\n "+GameStatus.localIp);
-//		myIP.setText(GameStatus.localIp);
-//		contin.setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {	
-//				dialog.dismiss();
-//			}
-//		});
-//    	//dialog.show();
-	}
+
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
     	menu.add(0, Menu.FIRST, Menu.NONE, "Restart").setIcon(R.drawable.restart);
     	menu.add(0, Menu.FIRST+1, Menu.NONE, "Ranking").setIcon(R.drawable.rank);
-    	menu.add(0, Menu.FIRST+2, Menu.NONE, "Main Menu").setIcon(R.drawable.exit);
-    	if (GameEnvironment.get().getPlayerInfo().isServer()){
-    		menu.add(0, Menu.FIRST+3, Menu.NONE, "Stop Live Position").setIcon(R.drawable.exit);
+    	menu.add(0, Menu.FIRST+2, Menu.NONE, "start").setEnabled(enableStartButton).setIcon(R.drawable.start);
+    	if (GameEnvironment.get().getPlayerInfo().isServer() && LivePosition.get().isRunning()){
+    		menu.add(0, Menu.FIRST+3, Menu.NONE, "Stop Live Position").setIcon(R.drawable.stop);
     	}    	
     	
     	return true;
@@ -340,28 +313,23 @@ public class GameActivity extends Activity {
     			Toast.makeText(this, "Ranking", 2000).show();
     			return true;
     		case Menu.FIRST+2:
-    			Toast.makeText(this, "Main Menu", 2000).show();
-    			ServerConnection.getConnection().closeConnection();
-    			//add new message - shut down server
-    			
-    			finish();
+    			item.setEnabled(false);
+    			Host.hostStartedGame=true;
+				GameActivity.enableStartButton=false;
+				ConnectionsManager.getConnectionsManager().stopListening();	    			
     			return true;
     		case Menu.FIRST+3:{    			
     			LivePosition.get().stop();
-    			
-    			item.setTitle("Start Live Position");
-    			item.setIcon(R.drawable.rank);
+    			Toast.makeText(this,"Live-Position stopped", 2000).show();
+    			item.setTitle("Live-Position stopped");  
+    			item.setEnabled(false);
     			return true;
     		}
     		
     		
-    		default:
-    			Toast.makeText(this, "NOthing", 2000).show();
-    			System.out.println(item.getItemId());
+    		default:{    			 			
+    		}
     			return true;
-    		
-    	
-    	
     	}
 
     } 

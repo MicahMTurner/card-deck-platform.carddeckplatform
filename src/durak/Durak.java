@@ -299,4 +299,10 @@ public class Durak extends Game{
 		return "Durak is a card game that is popular throughout most of the post-Soviet states. The object of the game is to get rid of all one's cards. At the end of the game, the last player with cards in their hand is referred to as the fool (durak).";
 	}
 
+	@Override
+	public int maxPlayers() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

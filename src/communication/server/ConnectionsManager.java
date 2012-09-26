@@ -183,22 +183,29 @@ public class ConnectionsManager {
 		connections.remove(connection);		
 		sendToAllExcptMe(new Message(new PlayerLeftAction()), connection.getId());		
 	}
+	public void stopListening(){
+		closeServerSocket();
+	}
+	
+	private void closeServerSocket(){
+		//close server socket
+				ServerSocket ss=GameEnvironment.get().getTcpInfo().getServerSocket();
+				if (ss!=null){
+					try {
+						ss.close();
+					} catch (IOException e) {				
+						e.printStackTrace();
+					}
+				}
+	}
+	
 	public void shutDown(){
 		for (Connection connection : connections){
 			connection.cancelConnection();
 		}
 		
 		GameEnvironment.get().getBluetoothInfo().resetSockets();
-		
-		//close server socket
-		ServerSocket ss=GameEnvironment.get().getTcpInfo().getServerSocket();
-		if (ss!=null){
-			try {
-				ss.close();
-			} catch (IOException e) {				
-				e.printStackTrace();
-			}
-		}
+		closeServerSocket();
 	}
 	
 }

@@ -6,6 +6,17 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.view.View;
+import android.view.Window;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+
+import carddeckplatform.game.CarddeckplatformActivity;
+import carddeckplatform.game.GameActivity;
+import carddeckplatform.game.R;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
 import utils.Player;
@@ -23,15 +34,15 @@ import logic.client.Game;
 
 public class Host implements Runnable{
 	private TcpIdListener tcpIdListener;
-	private final int maxPlayers=4;
+
 	//public static ArrayList<Player> playersInfo = new ArrayList<Player>();	
-	
+	public static boolean hostStartedGame;
 	private Stack<Position.Player> availablePositions;
 	//private ArrayList<PlayersInfo> playersInfo;
 	private static Game game;
 	private volatile boolean shutDown;
 	//synchronized private boolean startGameFlag=false;
-	
+
 	
 	
 	int playersRdy=0;
@@ -43,18 +54,12 @@ public class Host implements Runnable{
 		availablePositions.clear();
 		ConnectionsManager.getConnectionsManager().shutDown();
 		tcpIdListener.stop();
-//		ServerSocket ss=GameEnvironment.get().getTcpInfo().getServerSocket();
-//		if (ss!=null){
-//			try {
-//				ss.close();
-//			} catch (IOException e) {				
-//				e.printStackTrace();
-//			}
-//		}
 	}
+	
 	public Host(Game game) {	
 
 		shutDown=false;
+		Host.hostStartedGame=false;
 		Host.game=game;
 		setPositions();
 		tcpIdListener=new TcpIdListener(getHostGameDetails());
@@ -76,11 +81,54 @@ public class Host implements Runnable{
 	public static void playerLost(int id){
 		game.playerLost(id);
 	}
-	
+	private void popDialogIfMinPlayers(){
+		if (ConnectionsManager.getConnectionsManager().getNumberOfConnections()==game.minPlayers()
+				&& game.minPlayers()<game.maxPlayers() && !hostStartedGame){
+			//pop start game dialog
+			GameEnvironment.get().getHandler().post(new Runnable() {				
+				@Override
+				public void run() {
+					final Dialog dialog=  new Dialog((Context)GameActivity.getContext(),R.style.startGameDialogTheme);
+					//dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+					
+					//dialog.getWindow().setBackgroundDrawableResource(Color.TRANSPARENT);
+					
+					dialog.setContentView(R.layout.startgamedialog);
+					Button button = (Button)dialog.findViewById(R.id.startGameButton);
+					button.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							hostStartedGame=true;
+							GameActivity.enableStartButton=false;
+							ConnectionsManager.getConnectionsManager().stopListening();						
+							dialog.dismiss();						
+							
+						}
+					});
+					button =  (Button)dialog.findViewById(R.id.startGameHideButton);
+					button.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {		
+							dialog.dismiss();						
+							
+						}
+					});
+					dialog.show();
+					GameActivity.enableStartButton=true;
+					
+				}
+			});			
+		}		
+	}
 	public void waitForPlayers() throws Exception{
+		//boolean hostStartedGame=false;
 		ConnectionsManager.getConnectionsManager().connectHostingPlayer(availablePositions.pop(),game.toString(),game.getPlayers(), game.getFreePlayProfile());
-		while(ConnectionsManager.getConnectionsManager().getNumberOfConnections()<game.getNumberOfParticipants()){
+		popDialogIfMinPlayers();
+		while(ConnectionsManager.getConnectionsManager().getNumberOfConnections()<game.getNumberOfParticipants() && !hostStartedGame){
 			ConnectionsManager.getConnectionsManager().connectPlayer(availablePositions.pop(),game.toString(),game.getPlayers(), game.getFreePlayProfile());
+			popDialogIfMinPlayers();
 			if (shutDown){
 				throw new Exception("server shutting down");
 			}
@@ -129,7 +177,7 @@ public class Host implements Runnable{
 	}
 	private HostGameDetails getHostGameDetails() {
 		return new HostGameDetails(GameEnvironment.get().getPlayerInfo().getUsername()
-		 				 , game.toString(), game.minPlayers(), game.minPlayers(), game.instructions());
+		 				 , game.toString(), game.minPlayers(), game.maxPlayers(), game.instructions());
 		
 	}
 

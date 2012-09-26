@@ -49,7 +49,8 @@ public abstract class Game {
 	protected abstract Queue<utils.Position.Player> setTurns();
 	//the minimal players count
 	public abstract int minPlayers();
-	
+	//the maximum players count
+	public abstract int maxPlayers();
 	//the game split cards on the begginng of the game
 	public abstract void dealCards();	
 	
@@ -83,7 +84,7 @@ public abstract class Game {
 	
 	public int getNumberOfParticipants() {
 		if(numberOfParticipants==0)
-			return minPlayers();
+			return maxPlayers();
 		return numberOfParticipants;
 	}
 	public int getRoundNumber() {

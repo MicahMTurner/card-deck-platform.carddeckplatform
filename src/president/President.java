@@ -111,6 +111,12 @@ public class President extends Game{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public int maxPlayers() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 
 }
