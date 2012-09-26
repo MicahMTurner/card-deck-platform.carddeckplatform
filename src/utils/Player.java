@@ -9,6 +9,7 @@ import org.newdawn.slick.geom.Shape;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 
 import utils.droppableLayouts.DroppableLayout;
@@ -35,6 +36,10 @@ public class Player extends Droppable implements  Comparable<Player>{
 		if(textPaint==null)
 			textPaint = new Paint();
 		return textPaint;
+	}
+	
+	public void setTextColor(int color){
+		getTextPaint().setColor(color);
 	}
 	
 	/**

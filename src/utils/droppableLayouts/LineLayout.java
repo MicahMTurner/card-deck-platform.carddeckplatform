@@ -209,7 +209,7 @@ public class LineLayout extends DroppableLayout {
 //		Collections.sort(droppable.getCards());
 //		AbstractList<Card> cards = droppable.getCards();
 //		Collections.sort(cards);
-//		droppable.sort();
+		droppable.sort();
 		rearranger.rearrange(index, width, height, droppable.getCards());
 	}
 

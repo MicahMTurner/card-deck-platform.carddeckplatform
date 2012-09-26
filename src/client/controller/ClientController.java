@@ -294,7 +294,9 @@ public class ClientController {//implements Observer {
 				}
 			}
 		}
+		
 		//glow player icon/name
+		game.newTurn((Player)getZone(playerId));
 		gui.setPlayerTurn(gui.getDroppableById(playerId));
 	}
 	/**
@@ -339,47 +341,35 @@ public class ClientController {//implements Observer {
 	 */
 	public void endRound() {	
 
-//		disableUi();
-//		//get the player that starts next round
-//		Integer nextPlayerId=game.endRound();
-////		getMe().setMyTurn(false);
-//		
-//		for(Player player : game.getPlayers()){
-//			player.setMyTurn(false);
-//		}
-//		
-//		if (nextPlayerId!=null && GameEnvironment.get().getPlayerInfo().isServer()){			
-//			Host.reArrangeQueue(nextPlayerId);
-//			Host.nextInTurn();
-//		}
-//		if(nextPlayerId!=null){
-//			
-//			playerTurn(nextPlayerId);
-//		}
-//		//	sendAPI().endTurn();
-////			game.reArrangeQueue(nextPlayerId);
-////			playerTurn(nextPlayerId);
-//		//}
-		
-		
-		
-		
-		
-		
-		
 		disableUi();
-        //get the player that starts next round
-        Integer nextPlayerId=game.endRound();
-        getMe().setMyTurn(false);
-        if (nextPlayerId!=null && GameEnvironment.get().getPlayerInfo().isServer()){    
-        	for(Player player : game.getPlayers()){
-    			player.setMyTurn(false);
-    		}
-            Host.reArrangeQueue(nextPlayerId);
-            sendAPI().endTurn();
-//              game.reArrangeQueue(nextPlayerId);
-//              playerTurn(nextPlayerId);
-        }
+		//get the player that starts next round
+		Integer nextPlayerId=game.endRound();
+//		getMe().setMyTurn(false);
+		
+		for(Player player : game.getPlayers()){
+			player.setMyTurn(false);
+		}
+		
+		if (nextPlayerId!=null && GameEnvironment.get().getPlayerInfo().isServer()){			
+			Host.reArrangeQueue(nextPlayerId);
+			Host.nextInTurn();
+		}
+		if(nextPlayerId!=null){
+			
+			playerTurn(nextPlayerId);
+		}
+		//	sendAPI().endTurn();
+//			game.reArrangeQueue(nextPlayerId);
+//			playerTurn(nextPlayerId);
+		//}
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 	/**
 	 * request a card from deck, call this method when logic wants to take card from deck/player 
