@@ -36,9 +36,19 @@ import logic.client.Game;
 public class Durak extends Game{
 	Card rulerCard;
 	utils.Player startingPlayer;
-
-	//static private StandartCard.Color rulerColor=null;
+	Button button;
+	static private StandartCard.Color rulerColor=null;
+	static private ArrayList<utils.Player> winners=new ArrayList<utils.Player>();
 	
+	static private ArrayList<utils.Player> getSortedPlayers(){
+		ArrayList<utils.Player> sortedPlayers = new ArrayList<utils.Player>(staticPlayers);
+		
+		sortedPlayers.removeAll(winners);
+		// sort the players by their position.
+		Collections.sort(sortedPlayers, new PlayerComp());
+		
+		return sortedPlayers;
+	}
 	
 	private static class PlayerComp implements Comparator<utils.Player>{
 
@@ -61,10 +71,7 @@ public class Durak extends Game{
 	static private PlayerComp playerComp = new PlayerComp();
 	
 	private static utils.Player getNextPlayer(utils.Player player){
-		ArrayList<utils.Player> sortedPlayers = new ArrayList<utils.Player>(staticPlayers);
-		
-		// sort the players by their position.
-		Collections.sort(sortedPlayers, new PlayerComp());
+		ArrayList<utils.Player> sortedPlayers = getSortedPlayers();
 		
 		for(int i=0; i<sortedPlayers.size(); i++){
 			if(sortedPlayers.get(i).equals(player))
@@ -74,8 +81,11 @@ public class Durak extends Game{
 	}
 	
 	static public StandartCard.Color getRulerColor(){
-		Card ruler = ((DeckArea)(ClientController.get().getZone(deckId))).getRulerCard();
-		return ((StandartCard)ruler).getColor();
+		if(rulerColor==null){
+			Card ruler = ((DeckArea)(ClientController.get().getZone(deckId))).getRulerCard();
+			rulerColor = ((StandartCard)ruler).getColor();
+		}
+		return rulerColor;
 	}
 	
 	public Durak(){
@@ -122,10 +132,7 @@ public class Durak extends Game{
 		Position.Player attackerPos = attacker.getGlobalPosition();
 		
 		// create a new instance of players.
-		ArrayList<utils.Player> sortedPlayers = new ArrayList<utils.Player>(staticPlayers);
-		
-		// sort the players by their position.
-		Collections.sort(sortedPlayers, playerComp);
+		ArrayList<utils.Player> sortedPlayers = getSortedPlayers();
 		
 		for(int i=0; i<sortedPlayers.size(); i++){
 			if(sortedPlayers.get(i).equals(attacker) && sortedPlayers.get( (i + 1) % sortedPlayers.size()).equals(player))
@@ -188,8 +195,11 @@ public class Durak extends Game{
 
 	@Override
 	public Integer onRoundEnd() {
+		boolean bito=false;
+		
 		utils.Player me = ClientController.get().getMe();
 		
+		DeckArea deck = (DeckArea)ClientController.get().getZone(Position.Button.TOPRIGHT.getRelativePosition(me.getGlobalPosition()));
 		
 		Public public1 =  (Public)ClientController.get().getZone(Position.Public.BOTMID.getRelativePosition(me.getGlobalPosition()));
 		Public public2 =  (Public)ClientController.get().getZone(Position.Public.BOTMIDLEFT.getRelativePosition(me.getGlobalPosition()));
@@ -219,7 +229,8 @@ public class Durak extends Game{
 			pairs.add(new Pair(public5, junk));
 			pairs.add(new Pair(public6, junk));
 			Card.moveTo(pairs);	
-			answer=getNextPlayer(getCurrentAttacker()).getId();
+			//answer=getNextPlayer(getCurrentAttacker()).getId();
+			bito=true;
 		}else{
 			utils.Player attacktedPlayer = getAttackedPlayer();	
 			ArrayList<Pair<Droppable , Droppable>> pairs = new ArrayList<Pair<Droppable , Droppable>>();		
@@ -230,9 +241,20 @@ public class Durak extends Game{
 			pairs.add(new Pair(public5, attacktedPlayer));
 			pairs.add(new Pair(public6, attacktedPlayer));		
 			Card.moveTo(pairs);
-			answer=getCurrentAttacker().getId();
+			//answer=getCurrentAttacker().getId();
+			bito=false;
+			
+		}
+		for (utils.Player player : getPlayers()){
+			if(deck.cardsHolding()==0 && player.cardsHolding()==0)
+				winners.add(player);
 		}
 		
+		if(bito){
+			answer=getNextPlayer(getCurrentAttacker()).getId();
+		}else{
+			answer=getCurrentAttacker().getId();
+		}
 		
 		// calculating the number of cards that I need to add in order to reach at least 6 cards in hand.
 		int numberOfCardsInHand = ClientController.get().getMe().getCards().size();
@@ -244,11 +266,12 @@ public class Durak extends Game{
 		
 		initActiveNumbers();
 		
-		for (utils.Player player : getPlayers())
+		for (utils.Player player : getPlayers()){
 			player.setMyTurn(false);
-		
-		
+		}
 		//ClientController.get().getZone(answer).setGlowColor(glowColor);
+		
+		
 		
 		return answer;
 	}
@@ -264,7 +287,7 @@ public class Durak extends Game{
 	@Override
 	public int minPlayers() {
 		// TODO Auto-generated method stub
-		return 3;
+		return 4;
 	}
 
 	
@@ -361,7 +384,10 @@ public class Durak extends Game{
 		droppables.add(new Public(junkHandler, Position.Public.RIGHT,DroppableLayout.LayoutType.HEAP));
 		
 		// the pass button.
-		buttons.add(new Button(new ButtonHandler(), Position.Button.BOTRIGHT, "Pass"));
+		button = new Button(new ButtonHandler(), Position.Button.BOTRIGHT, "");
+		buttons.add(button);
+		
+		
 		DeckArea da = new DeckArea(Position.Button.TOPRIGHT);
 		droppables.add(da);
 		
@@ -394,6 +420,14 @@ public class Durak extends Game{
 		
 		player.setTextColor(Color.RED);
 		getNextPlayer(player).setTextColor(Color.BLUE);
+		
+		if(player.equals(ClientController.get().getMe())){
+			button.setText("Bito");
+		}else if(getNextPlayer(player).equals(ClientController.get().getMe())){
+			button.setText("Take");
+		}else{
+			button.setText("");
+		}
 
 	}
 
