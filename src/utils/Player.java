@@ -5,6 +5,13 @@ import handlers.PlayerEventsHandler;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.newdawn.slick.geom.Shape;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+
 import utils.droppableLayouts.DroppableLayout;
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
@@ -23,9 +30,17 @@ public class Player extends Droppable implements  Comparable<Player>{
 	boolean myTurn;
 	private PlayerInfo playerInfo;
 	private Position.Player globalPosition;
+	private transient Paint textPaint=null;
 	
+	public Paint getTextPaint() {
+		if(textPaint==null)
+			textPaint = new Paint();
+		return textPaint;
+	}
 	
-	
+	public void setTextColor(int color){
+		getTextPaint().setColor(color);
+	}
 	
 	/**
 	 * player constructor
@@ -252,5 +267,23 @@ public class Player extends Droppable implements  Comparable<Player>{
 	@Override
 	public void putCardOnTop(Card card){
 	
+	}
+	
+	@Override
+	public void draw(Canvas canvas, Context context) {
+		super.draw(canvas, context);
+		
+		try {
+			getTextPaint().setTextSize(20);
+			float x=0,y=0;
+			Shape s = getShape();
+			x = s.getMinX();
+			y = s.getMinY();
+			canvas.drawText(getUserName(), (int)x, (int)y, getTextPaint());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		
 	}
 }

@@ -1,9 +1,13 @@
 package durak;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Queue;
 
 import javax.tools.StandardLocation;
+
+import android.graphics.Color;
 
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
@@ -33,7 +37,46 @@ public class Durak extends Game{
 	Card rulerCard;
 	utils.Player startingPlayer;
 
-	static public StandartCard.Color rulerColor=null;
+	//static private StandartCard.Color rulerColor=null;
+	
+	
+	private static class PlayerComp implements Comparator<utils.Player>{
+
+		@Override
+		public int compare(utils.Player player1, utils.Player player2) {
+			int answer = -1;
+			if(player1.getGlobalPosition()==Player.BOTTOM)
+				answer=1;
+			else if(player1.getGlobalPosition()==Player.LEFT && player2.getGlobalPosition()!=Player.BOTTOM)
+				answer=1;
+			else if(player1.getGlobalPosition()==Player.TOP && player2.getGlobalPosition()==Player.RIGHT)	
+				answer=1;
+				
+			return answer;
+		}
+
+				
+	}
+	
+	static private PlayerComp playerComp = new PlayerComp();
+	
+	private static utils.Player getNextPlayer(utils.Player player){
+		ArrayList<utils.Player> sortedPlayers = new ArrayList<utils.Player>(staticPlayers);
+		
+		// sort the players by their position.
+		Collections.sort(sortedPlayers, new PlayerComp());
+		
+		for(int i=0; i<sortedPlayers.size(); i++){
+			if(sortedPlayers.get(i).equals(player))
+				return sortedPlayers.get( (i + 1) % sortedPlayers.size());
+		}
+		return null;
+	}
+	
+	static public StandartCard.Color getRulerColor(){
+		Card ruler = ((DeckArea)(ClientController.get().getZone(deckId))).getRulerCard();
+		return ((StandartCard)ruler).getColor();
+	}
 	
 	public Durak(){
 		initActiveNumbers();
@@ -65,13 +108,34 @@ public class Durak extends Game{
 	}
 	
 	static boolean isAttacked(utils.Player player){
-		for(int i=0; i<staticPlayers.size() ; i++){
-			if(staticPlayers.get(i).isMyTurn() && staticPlayers.get( (i + 1) % staticPlayers.size()).equals(player)){
+//		boolean answer = false;
+//		for(int i=0; i<staticPlayers.size() ; i++){
+//			if(staticPlayers.get(i).isMyTurn() && staticPlayers.get( (i + 1) % staticPlayers.size()).equals(player)){
+//				answer = true;
+//				break;
+//			}
+//		}
+//		return answer;
+		
+		
+		utils.Player attacker = getCurrentAttacker();
+		Position.Player attackerPos = attacker.getGlobalPosition();
+		
+		// create a new instance of players.
+		ArrayList<utils.Player> sortedPlayers = new ArrayList<utils.Player>(staticPlayers);
+		
+		// sort the players by their position.
+		Collections.sort(sortedPlayers, playerComp);
+		
+		for(int i=0; i<sortedPlayers.size(); i++){
+			if(sortedPlayers.get(i).equals(attacker) && sortedPlayers.get( (i + 1) % sortedPlayers.size()).equals(player))
 				return true;
-			}
 		}
+		
 		return false;
 	}
+	
+	
 	
 	public utils.Player getAttackedPlayer(){
 		for(utils.Player player : players){
@@ -94,29 +158,50 @@ public class Durak extends Game{
 	}
 	
 	
-	public utils.Player getCurrentAttacker(){
-		for(int i=0; i<players.size() ; i++){
-			if(players.get(i).isMyTurn()){
-				return players.get(i);
+	public static utils.Player getCurrentAttacker(){
+		for(int i=0; i<staticPlayers.size() ; i++){
+			if(staticPlayers.get(i).isMyTurn()){
+				return staticPlayers.get(i);
 			}
 		}
 		return null;
 	}
+	
+	public static boolean hasOpenCards(){
+		utils.Player me = ClientController.get().getMe();
+		
+		Public public1 =  (Public)ClientController.get().getZone(Position.Public.BOTMID.getRelativePosition(me.getGlobalPosition()));
+		Public public2 =  (Public)ClientController.get().getZone(Position.Public.BOTMIDLEFT.getRelativePosition(me.getGlobalPosition()));
+		Public public3 =  (Public)ClientController.get().getZone(Position.Public.BOTMIDRIGHT.getRelativePosition(me.getGlobalPosition()));
+		Public public4 =  (Public)ClientController.get().getZone(Position.Public.TOPMID.getRelativePosition(me.getGlobalPosition()));
+		Public public5 =  (Public)ClientController.get().getZone(Position.Public.TOPMIDLEFT.getRelativePosition(me.getGlobalPosition()));
+		Public public6 =  (Public)ClientController.get().getZone(Position.Public.TOPMIDRIGHT.getRelativePosition(me.getGlobalPosition()));
+		
+		
+		return !(public1.cardsHolding()%2==0 &&
+				public2.cardsHolding()%2==0 &&
+				public3.cardsHolding()%2==0 &&
+				public4.cardsHolding()%2==0 &&
+				public5.cardsHolding()%2==0 &&
+				public6.cardsHolding()%2==0);
+	}
 
 	@Override
 	public Integer onRoundEnd() {
+		utils.Player me = ClientController.get().getMe();
 		
-		Public public1 =  (Public)ClientController.get().getZone(Position.Public.BOTMID);
-		Public public2 =  (Public)ClientController.get().getZone(Position.Public.BOTMIDLEFT);
-		Public public3 =  (Public)ClientController.get().getZone(Position.Public.BOTMIDRIGHT);
-		Public public4 =  (Public)ClientController.get().getZone(Position.Public.TOPMID);
-		Public public5 =  (Public)ClientController.get().getZone(Position.Public.TOPMIDLEFT);
-		Public public6 =  (Public)ClientController.get().getZone(Position.Public.TOPMIDRIGHT);
+		
+		Public public1 =  (Public)ClientController.get().getZone(Position.Public.BOTMID.getRelativePosition(me.getGlobalPosition()));
+		Public public2 =  (Public)ClientController.get().getZone(Position.Public.BOTMIDLEFT.getRelativePosition(me.getGlobalPosition()));
+		Public public3 =  (Public)ClientController.get().getZone(Position.Public.BOTMIDRIGHT.getRelativePosition(me.getGlobalPosition()));
+		Public public4 =  (Public)ClientController.get().getZone(Position.Public.TOPMID.getRelativePosition(me.getGlobalPosition()));
+		Public public5 =  (Public)ClientController.get().getZone(Position.Public.TOPMIDLEFT.getRelativePosition(me.getGlobalPosition()));
+		Public public6 =  (Public)ClientController.get().getZone(Position.Public.TOPMIDRIGHT.getRelativePosition(me.getGlobalPosition()));
 		
 		Public junk = (Public)ClientController.get().getZone(Position.Public.RIGHT.getRelativePosition(ClientController.get().getMe().getGlobalPosition()));
 		
 		Integer answer=-1;
-		
+
 		// The attacked player managed to beat all cards.
 		if(		public1.cardsHolding()%2==0 &&
 				public2.cardsHolding()%2==0 &&
@@ -134,7 +219,7 @@ public class Durak extends Game{
 			pairs.add(new Pair(public5, junk));
 			pairs.add(new Pair(public6, junk));
 			Card.moveTo(pairs);	
-			answer=getAttackedPlayer().getId();
+			answer=getNextPlayer(getCurrentAttacker()).getId();
 		}else{
 			utils.Player attacktedPlayer = getAttackedPlayer();	
 			ArrayList<Pair<Droppable , Droppable>> pairs = new ArrayList<Pair<Droppable , Droppable>>();		
@@ -162,6 +247,9 @@ public class Durak extends Game{
 		for (utils.Player player : getPlayers())
 			player.setMyTurn(false);
 		
+		
+		//ClientController.get().getZone(answer).setGlowColor(glowColor);
+		
 		return answer;
 	}
 
@@ -176,7 +264,7 @@ public class Durak extends Game{
 	@Override
 	public int minPlayers() {
 		// TODO Auto-generated method stub
-		return 2;
+		return 3;
 	}
 
 	
@@ -227,7 +315,7 @@ public class Durak extends Game{
 		rulerCard = findRulerCard(deckCards, numOfPlayers);
 		startingPlayer = findStartingPlayer(deckCards, rulerCard, numOfPlayers);
 		
-		rulerColor = ((StandartCard)rulerCard).getColor();
+		//rulerColor = ((StandartCard)rulerCard).getColor();
 		
 //		for (int i=0;i<players.size();i++){
 //			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(playersCards.get(i),players.get(i).getId())));
@@ -297,6 +385,16 @@ public class Durak extends Game{
 	@Override
 	public String instructions() {		
 		return "Durak is a card game that is popular throughout most of the post-Soviet states. The object of the game is to get rid of all one's cards. At the end of the game, the last player with cards in their hand is referred to as the fool (durak).";
+	}
+	
+	@Override
+	public void newTurn(utils.Player player) {
+		for(utils.Player p : staticPlayers)
+			p.setTextColor(Color.BLACK);
+		
+		player.setTextColor(Color.RED);
+		getNextPlayer(player).setTextColor(Color.BLUE);
+
 	}
 
 	@Override
