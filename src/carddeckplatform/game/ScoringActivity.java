@@ -201,7 +201,7 @@ public class ScoringActivity extends Activity {
 					//making headers
 					TableRow tr= new TableRow(ScoringActivity.this);
 					TextView tv= new TextView(ScoringActivity.this);
-					tv.setText("Row Number");
+					tv.setText("Round");
 					tr.addView(tv);
 					tr.addView(makeBlankView());
 					for(int i=0;i<rounds[0].getRoundResult().size();i++){
@@ -239,6 +239,7 @@ public class ScoringActivity extends Activity {
 					
 				}
 			});
+			
 			tl.addView(tr, new TableRow.LayoutParams(LayoutParams.FILL_PARENT,
 					LayoutParams.WRAP_CONTENT));
 			//seperator
