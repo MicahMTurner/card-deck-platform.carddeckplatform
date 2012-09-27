@@ -1,6 +1,7 @@
 package client.ranking.db;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Game {
 	long gameId;
@@ -8,6 +9,7 @@ public class Game {
 	ArrayList<Player> players;
 	String date;
 	String gameType;
+	HashMap<Long, Long> playerMap;
 	
 public String getGameType() {
 		return gameType;
@@ -15,17 +17,6 @@ public String getGameType() {
 	public void setGameType(String gameType) {
 		this.gameType = gameType;
 	}
-	//	public Game(long gameId,long lastRoundId,ArrayList<Player> players) {
-//		// TODO Auto-generated constructor stub
-//		this.lastRoundId=lastRoundId;
-//		this.gameId=gameId;
-//		this.players=players;
-//	}
-//	public Game(long gameId,String date) {
-//		this.gameId=gameId;
-//		this.date=date;
-//	
-//	}
 	public Game(long gameId, long roundId, ArrayList<Player> players,
 			String date,String gameType) {
 		this.lastRoundId=roundId;
@@ -33,7 +24,14 @@ public String getGameType() {
 		this.players=players;
 		this.date=date;
 		this.gameType=gameType;
+		initialMap();
 	}
+	public void initialMap(){
+		playerMap=new HashMap<Long, Long>();
+		for(Player player:players)
+			playerMap.put(player.getUserGameID(), (long) 0);
+	}
+	
 	public long getGameId() {
 		return gameId;
 	}
@@ -61,6 +59,7 @@ public String getGameType() {
 	public void setDate(String date) {
 		this.date = date;
 	}
+	
 	public String getPlayersInfo() {
 		StringBuilder stringBuilder= new StringBuilder();
 		if(players.size()!=0){
@@ -80,5 +79,38 @@ public String getGameType() {
 		}
 		return stringBuilder.toString();
 	}
+	
+	boolean addPointsToPlayer(long id,long score) throws Exception{
+		Long playerScore=playerMap.get(id);
+		if(playerScore==null)
+			throw new Exception("Player ID Doesn't Exist");
+		playerMap.put(id, playerScore+score);
+		return true;
+	}
+	boolean setPointsOfPlayer(long id,long score) throws Exception{
+		Long playerScore=playerMap.get(id);
+		if(playerScore==null)
+			throw new Exception("Player ID Doesn't Exist");
+		playerMap.put(id, score);
+		return true;
+	}
+	
+	
+	Long getPointsOfPlayer(long id) throws Exception{
+		Long playerScore=playerMap.get(id);
+		if(playerScore==null)
+			throw new Exception("Player ID Doesn't Exist");
+		return playerScore;
+	}
+	
+	boolean makeTransaction(ScoringManager manager) throws Exception{
+		ArrayList<Long> newScores= new ArrayList<Long>();
+		for (Player player : this.players) {
+			newScores.add(playerMap.get(player.getUserGameID()));
+		}
+		manager.makeNewRound(this, newScores);
+		return true;
+	}
+	
 	
 }

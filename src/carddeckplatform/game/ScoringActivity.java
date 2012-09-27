@@ -29,6 +29,7 @@ import client.ranking.db.ScoringManager;
 public class ScoringActivity extends Activity {
 	static String DBNAME = "scoring";
 	ScoringManager scoringManager;
+	
 	Game[] games;
 
 	@Override
@@ -94,7 +95,7 @@ public class ScoringActivity extends Activity {
 		TableLayout.LayoutParams tableRowParams = new TableLayout.LayoutParams(
 				TableLayout.LayoutParams.FILL_PARENT,
 				TableLayout.LayoutParams.WRAP_CONTENT);
-
+		
 		int leftMargin = 10;
 		int topMargin = 2;
 		int rightMargin = 10;
@@ -102,6 +103,8 @@ public class ScoringActivity extends Activity {
 
 		tableRowParams.setMargins(leftMargin, topMargin, rightMargin,
 				bottomMargin);
+		int headerFontSize=23;
+		int fontSize=20;
 		//tablerow params
 		final android.widget.TableRow.LayoutParams tableRowparams = new android.widget.TableRow.LayoutParams();
 		tableRowparams.rightMargin = dpToPixel(10, ScoringActivity.this); // right-margin = 10dp
@@ -109,25 +112,28 @@ public class ScoringActivity extends Activity {
 		TableRow tr = new TableRow(this);
 		tr.setLayoutParams(tableRowParams);
 				// Type
-		Button b = new Button(this);
-		b.setText("Type :");
-		tr.addView(b);
+		TextView tv = new TextView(this);
+		tv.setText("Type :");
+		tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerFontSize);
+		tr.addView(tv);
 		// Date
-		b = new Button(this);
-		b.setText("Date :");
-		tr.addView(b);
+		tv = new TextView(this);
+		tv.setText("Date :");
+		tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerFontSize);
+		tr.addView(tv);
 		// Players
-		b = new Button(this);
-		b.setText("Players :");
-		tr.addView(b);
-		int fontSize=20;
-//		tl.addView(tr);
+		tv = new TextView(this);
+		tv.setText("Players :");
+		tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerFontSize);
+		tr.addView(tv);
+		
+		tl.addView(tr);
 		for (int i = 0; i < games.length; i++) {
 			final Game game2 = games[i];
 			tr = new TableRow(tl.getContext());
 			tr.setLayoutParams(tableRowParams);
 			// type
-			TextView tv = new TextView(this);
+			tv = new TextView(this);
 			tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 			tv.setText(game2.getGameType());
 			tv.setLayoutParams(tableRowparams);
@@ -224,4 +230,6 @@ public class ScoringActivity extends Activity {
 		super.onStop();
 		scoringManager.close();
 	}
+	
+	
 }
