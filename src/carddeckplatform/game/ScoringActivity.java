@@ -27,7 +27,7 @@ import client.ranking.db.Round;
 import client.ranking.db.ScoringManager;
 
 public class ScoringActivity extends Activity {
-	static String DBNAME = "scoring";
+	static public String DBNAME = "scoring";
 	ScoringManager scoringManager;
 	
 	Game[] games;
