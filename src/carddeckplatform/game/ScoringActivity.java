@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
@@ -56,8 +57,8 @@ public class ScoringActivity extends Activity {
 		// making the database manager
 		scoringManager = new ScoringManager(ScoringActivity.this, DBNAME);
 		scoringManager.open();
-		// games=scoringManager.showAllGamesAndLastRounds();
-		games = makeFictiveGames();
+		 games=scoringManager.showAllGamesAndLastRounds();
+//		games = makeFictiveGames();
 		scoringManager.close();
 
 		initScoringTable(games, tl);
@@ -154,45 +155,88 @@ public class ScoringActivity extends Activity {
 
 				@Override
 				public void onClick(View arg0) {
-					Dialog dialog = new Dialog(ScoringActivity.this);
-					ScrollView scrollView = new ScrollView(ScoringActivity.this);
-					TableLayout table = new TableLayout(ScoringActivity.this);
-					scrollView.addView(table);
-					table.setColumnStretchable(0, true);
-					table.setColumnStretchable(10, true);
-					table.setShrinkAllColumns(true);
-					LayoutParams params = new LayoutParams(700, 500);
-					dialog.setContentView(scrollView, params);
+					Dialog dialog = new Dialog(ScoringActivity.this,R.style.startGameDialogTheme);
+					dialog.setContentView(R.layout.scoredialog);
+					dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+					TableLayout table=(TableLayout) dialog.findViewById(R.id.dialogscoringtable);
+//					ScrollView scrollView = new ScrollView(ScoringActivity.this);
+//					TableLayout table = new TableLayout(ScoringActivity.this);
+//					scrollView.addView(table);
+//					table.setColumnStretchable(0, true);
+//					table.setColumnStretchable(10, true);
+//					table.setShrinkAllColumns(true);
+//					LayoutParams params = new LayoutParams(700, 500);
+//					dialog.setContentView(scrollView, params);
 					// Round []
-					// rounds=scoringManager.showAllRoundsRounds(game2);
-					Round[] rounds = getFictiveRounds();
-					for (int i = 0; i < rounds.length; i++) {
-						TableRow tr = new TableRow(ScoringActivity.this);
-						TextView tv = new TextView(ScoringActivity.this);
-						tv.setText(rounds[i].getDate());
-						tv.setLayoutParams(tableRowparams);
+					Round[] rounds=scoringManager.showAllRoundsRounds(game2);
+//					Round[] rounds = getFictiveRounds();
+//					for (int i = 0; i < rounds.length; i++) {
+//						TableRow tr = new TableRow(ScoringActivity.this);
+//						TextView tv = new TextView(ScoringActivity.this);
+//						tv.setText(rounds[i].getDate());
+//						tv.setLayoutParams(tableRowparams);
+//						tr.addView(tv);
+//						for (int j = 0; j < rounds[i].getRoundResult().size(); j++) {
+//							tv = new TextView(ScoringActivity.this);
+//							tv.setLayoutParams(tableRowparams);
+//							StringBuilder sb = new StringBuilder();
+//							sb.append(rounds[i].getRoundResult().get(j)
+//									.getUserName());
+//							sb.append("(");
+//							sb.append(rounds[i].getRoundResult().get(j)
+//									.getScore());
+//							sb.append(")");
+//							tv.setText(sb.toString());
+//							tr.addView(tv);
+//						}
+//						table.addView(tr);
+//						//seperator
+//						View lineseperator = new View(ScoringActivity.this);
+//						lineseperator.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, 1));
+//						lineseperator.setBackgroundColor(Color.rgb(51, 51, 51));
+//						table.addView(lineseperator);
+//					}
+//					dialog.show();
+					
+					//making headers
+					TableRow tr= new TableRow(ScoringActivity.this);
+					TextView tv= new TextView(ScoringActivity.this);
+					tv.setText("Row Number");
+					tr.addView(tv);
+					tr.addView(makeBlankView());
+					for(int i=0;i<rounds[0].getRoundResult().size();i++){
+						tv= new TextView(ScoringActivity.this);
+						tv.setText(rounds[0].getRoundResult().get(i).getUserName());
 						tr.addView(tv);
-						for (int j = 0; j < rounds[i].getRoundResult().size(); j++) {
-							tv = new TextView(ScoringActivity.this);
-							tv.setLayoutParams(tableRowparams);
-							StringBuilder sb = new StringBuilder();
-							sb.append(rounds[i].getRoundResult().get(j)
-									.getUserName());
-							sb.append("(");
-							sb.append(rounds[i].getRoundResult().get(j)
-									.getScore());
-							sb.append(")");
-							tv.setText(sb.toString());
+						tr.addView(makeBlankView());
+					}
+					table.addView(tr);
+					View lineseperator = new View(ScoringActivity.this);
+					lineseperator.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, 1));
+					lineseperator.setBackgroundColor(Color.rgb(100, 100, 100));
+					table.addView(lineseperator);
+					//making the table
+					for(int i=0;i<rounds.length;i++){
+						tr= new TableRow(ScoringActivity.this);
+						tv= new TextView(ScoringActivity.this);
+						tv.setText(i+"");
+						tr.addView(tv);
+						tr.addView(makeBlankView());
+						Round round=rounds[i];
+						for(int j=0;j<round.getRoundResult().size();j++){
+							tv= new TextView(ScoringActivity.this);
+							tv.setText(round.getRoundResult().get(j).getScore()+"");
 							tr.addView(tv);
+							tr.addView(makeBlankView());
 						}
-						table.addView(tr);
-						//seperator
-						View lineseperator = new View(ScoringActivity.this);
+						lineseperator = new View(ScoringActivity.this);
 						lineseperator.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, 1));
 						lineseperator.setBackgroundColor(Color.rgb(51, 51, 51));
+						table.addView(tr);
 						table.addView(lineseperator);
 					}
 					dialog.show();
+					
 				}
 			});
 			tl.addView(tr, new TableRow.LayoutParams(LayoutParams.FILL_PARENT,
@@ -231,5 +275,10 @@ public class ScoringActivity extends Activity {
 		scoringManager.close();
 	}
 	
-	
+	public View makeBlankView(){
+		View view= new View(ScoringActivity.this);
+		view.setLayoutParams(new TableRow.LayoutParams(10, 10));
+
+		return view;
+	}
 }

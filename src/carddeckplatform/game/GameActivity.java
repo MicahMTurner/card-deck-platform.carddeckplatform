@@ -17,11 +17,14 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
@@ -343,42 +346,59 @@ public class GameActivity extends Activity {
 			Toast.makeText(this, "Game is not rankable", 2000).show();;
 			return;
 		}
-		
-		Dialog dialog = new Dialog(GameActivity.this);
-		ScrollView scrollView = new ScrollView(GameActivity.this);
-		TableLayout table = new TableLayout(GameActivity.this);
-		scrollView.addView(table);
-		table.setColumnStretchable(0, true);
-		table.setColumnStretchable(10, true);
-		table.setShrinkAllColumns(true);
-		LayoutParams params = new LayoutParams(700, 500);
-		dialog.setContentView(scrollView, params);
-		if(rounds.length==0)
+		if(rounds.length==0){
 			Toast.makeText(this, "No points added", 2000).show();
+			return;
+		}
+		Dialog dialog = new Dialog(GameActivity.this,R.style.startGameDialogTheme);
+		dialog.setContentView(R.layout.scoredialog);
+		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+		TableLayout table =(TableLayout) dialog.findViewById(R.id.dialogscoringtable);
+		
 		//making headers
 		TableRow tr= new TableRow(GameActivity.this);
 		TextView tv= new TextView(GameActivity.this);
-		tv.setText("");
+		tv.setText("Row Number");
 		tr.addView(tv);
+		tr.addView(makeBlankView());
 		for(int i=0;i<rounds[0].getRoundResult().size();i++){
 			tv= new TextView(GameActivity.this);
 			tv.setText(rounds[0].getRoundResult().get(i).getUserName());
 			tr.addView(tv);
+			tr.addView(makeBlankView());
 		}
 		table.addView(tr);
+		View lineseperator = new View(GameActivity.this);
+		lineseperator.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, 1));
+		lineseperator.setBackgroundColor(Color.rgb(100, 100, 100));
+		table.addView(lineseperator);
+		//making the table
 		for(int i=0;i<rounds.length;i++){
 			tr= new TableRow(GameActivity.this);
 			tv= new TextView(GameActivity.this);
-			tv.setText(i);
+			tv.setText(i+"");
 			tr.addView(tv);
+			tr.addView(makeBlankView());
 			Round round=rounds[i];
 			for(int j=0;j<round.getRoundResult().size();j++){
 				tv= new TextView(GameActivity.this);
 				tv.setText(round.getRoundResult().get(j).getScore()+"");
 				tr.addView(tv);
+				tr.addView(makeBlankView());
 			}
+			lineseperator = new View(GameActivity.this);
+			lineseperator.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, 1));
+			lineseperator.setBackgroundColor(Color.rgb(51, 51, 51));
+			table.addView(tr);
+			table.addView(lineseperator);
 		}
 		dialog.show();
-	} 
+	}
+	public View makeBlankView(){
+		View view= new View(GameActivity.this);
+		view.setLayoutParams(new TableRow.LayoutParams(10, 10));
+
+		return view;
+	}
 }
 
