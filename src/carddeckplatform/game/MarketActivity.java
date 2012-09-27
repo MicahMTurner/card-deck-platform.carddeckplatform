@@ -97,12 +97,21 @@ public class MarketActivity extends Activity {
         
 		setContentView(R.layout.downloadplugin);
 		tl = (TableLayout) findViewById(R.id.markettable);
+		final ProgressDialog dialog = ProgressDialog.show(MarketActivity.this, "", 
+                "Loading. Please wait...", true);
 		Thread thread = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				try {
 					executeHttpGet();
+					GameEnvironment.get().getHandler().post(new Runnable() {
+						
+						@Override
+						public void run() {
+							dialog.dismiss();
+						}
+					});
 				} catch (Exception e) {
 					cannotMakeConnection();
 					e.printStackTrace();
@@ -110,6 +119,7 @@ public class MarketActivity extends Activity {
 			}
 		});
 		thread.start();
+		
 //		try {
 //			thread.join();
 //		} catch (InterruptedException e) {

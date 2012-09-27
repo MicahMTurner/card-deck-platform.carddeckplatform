@@ -4,24 +4,35 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
+import logic.host.Host;
+
+import communication.actions.StopLivePositionAction;
+import communication.link.ServerConnection;
+import communication.messages.Message;
+import communication.messages.RestartMessage;
+import communication.server.ConnectionsManager;
+
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
-import android.widget.ScrollView;
-import android.widget.TabHost;
-import android.widget.TabHost.TabSpec;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import client.gui.screens.GameScreen;
+import android.widget.Toast;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
+import client.controller.LivePosition;
 import client.ranking.db.Game;
 import client.ranking.db.Player;
 import client.ranking.db.Round;
@@ -30,7 +41,7 @@ import client.ranking.db.ScoringManager;
 public class ScoringActivity extends Activity {
 	public static String DBNAME = "scoring";
 	ScoringManager scoringManager;
-	
+	TableLayout tl;
 	Game[] games;
 
 	@Override
@@ -52,7 +63,7 @@ public class ScoringActivity extends Activity {
 		// tabHost.addTab(spec1);
 		// tabHost.addTab(spec2);
 
-		TableLayout tl = (TableLayout) findViewById(R.id.scoringtable);
+		tl = (TableLayout) findViewById(R.id.scoringtable);
 
 		// making the database manager
 		scoringManager = new ScoringManager(ScoringActivity.this, DBNAME);
@@ -91,7 +102,7 @@ public class ScoringActivity extends Activity {
 	    return (int) ((float) dp * scale);
 	}
 	
-	public void initScoringTable(Game[] games, TableLayout tl) {
+	public void initScoringTable(Game[] games, final TableLayout tl) {
 		//layout params
 		TableLayout.LayoutParams tableRowParams = new TableLayout.LayoutParams(
 				TableLayout.LayoutParams.FILL_PARENT,
@@ -117,40 +128,45 @@ public class ScoringActivity extends Activity {
 		tv.setText("Type :");
 		tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerFontSize);
 		tr.addView(tv);
+		tr.addView(makeBlankView());
 		// Date
 		tv = new TextView(this);
 		tv.setText("Date :");
 		tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerFontSize);
 		tr.addView(tv);
+		tr.addView(makeBlankView());
 		// Players
 		tv = new TextView(this);
 		tv.setText("Players :");
 		tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerFontSize);
 		tr.addView(tv);
-		
+		tr.addView(makeBlankView());
 		tl.addView(tr);
 		for (int i = 0; i < games.length; i++) {
 			final Game game2 = games[i];
 			tr = new TableRow(tl.getContext());
-			tr.setLayoutParams(tableRowParams);
+//			tr.setLayoutParams(tableRowParams);
 			// type
 			tv = new TextView(this);
 			tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 			tv.setText(game2.getGameType());
-			tv.setLayoutParams(tableRowparams);
+//			tv.setLayoutParams(tableRowparams);
 			tr.addView(tv);
+			tr.addView(makeBlankView());
 			// date
 			tv = new TextView(this);
-			tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+			tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize-3);
 			tv.setText(game2.getDate());
-			tv.setLayoutParams(tableRowparams);
+//			tv.setLayoutParams(tableRowparams);
 			tr.addView(tv);
+			tr.addView(makeBlankView());
 			// players
 			tv = new TextView(this);
 			tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 			tv.setText(game2.getPlayersInfo());
-			tv.setLayoutParams(tableRowparams);
+//			tv.setLayoutParams(tableRowparams);
 			tr.addView(tv);
+			tr.addView(makeBlankView());
 			tr.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -159,49 +175,12 @@ public class ScoringActivity extends Activity {
 					dialog.setContentView(R.layout.scoredialog);
 					dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
 					TableLayout table=(TableLayout) dialog.findViewById(R.id.dialogscoringtable);
-//					ScrollView scrollView = new ScrollView(ScoringActivity.this);
-//					TableLayout table = new TableLayout(ScoringActivity.this);
-//					scrollView.addView(table);
-//					table.setColumnStretchable(0, true);
-//					table.setColumnStretchable(10, true);
-//					table.setShrinkAllColumns(true);
-//					LayoutParams params = new LayoutParams(700, 500);
-//					dialog.setContentView(scrollView, params);
-					// Round []
 					Round[] rounds=scoringManager.showAllRoundsRounds(game2);
-//					Round[] rounds = getFictiveRounds();
-//					for (int i = 0; i < rounds.length; i++) {
-//						TableRow tr = new TableRow(ScoringActivity.this);
-//						TextView tv = new TextView(ScoringActivity.this);
-//						tv.setText(rounds[i].getDate());
-//						tv.setLayoutParams(tableRowparams);
-//						tr.addView(tv);
-//						for (int j = 0; j < rounds[i].getRoundResult().size(); j++) {
-//							tv = new TextView(ScoringActivity.this);
-//							tv.setLayoutParams(tableRowparams);
-//							StringBuilder sb = new StringBuilder();
-//							sb.append(rounds[i].getRoundResult().get(j)
-//									.getUserName());
-//							sb.append("(");
-//							sb.append(rounds[i].getRoundResult().get(j)
-//									.getScore());
-//							sb.append(")");
-//							tv.setText(sb.toString());
-//							tr.addView(tv);
-//						}
-//						table.addView(tr);
-//						//seperator
-//						View lineseperator = new View(ScoringActivity.this);
-//						lineseperator.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, 1));
-//						lineseperator.setBackgroundColor(Color.rgb(51, 51, 51));
-//						table.addView(lineseperator);
-//					}
-//					dialog.show();
 					
 					//making headers
 					TableRow tr= new TableRow(ScoringActivity.this);
 					TextView tv= new TextView(ScoringActivity.this);
-					tv.setText("Row Number");
+					tv.setText("Round");
 					tr.addView(tv);
 					tr.addView(makeBlankView());
 					for(int i=0;i<rounds[0].getRoundResult().size();i++){
@@ -239,6 +218,33 @@ public class ScoringActivity extends Activity {
 					
 				}
 			});
+			
+			final TableRow tr2=tr;
+			tr.setOnLongClickListener(new OnLongClickListener() {
+				
+				@Override
+				public boolean onLongClick(View v) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(ScoringActivity.this);
+					builder.setMessage("Are you sure you want to delete?")
+					       .setCancelable(false)
+					       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					           public void onClick(DialogInterface dialog, int id) {
+					        	   scoringManager.removeGame(game2);
+					        	   tl.removeView(tr2);
+					        	   dialog.dismiss();
+					           }
+					       })
+					       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+					           public void onClick(DialogInterface dialog, int id) {
+					                dialog.cancel();
+					           }
+					       });
+					AlertDialog alert = builder.create();
+					alert.show();
+					return true;
+				}
+			});
+			
 			tl.addView(tr, new TableRow.LayoutParams(LayoutParams.FILL_PARENT,
 					LayoutParams.WRAP_CONTENT));
 			//seperator
@@ -280,5 +286,67 @@ public class ScoringActivity extends Activity {
 		view.setLayoutParams(new TableRow.LayoutParams(10, 10));
 
 		return view;
+	}
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu){
+    	menu.add(0, Menu.FIRST, Menu.NONE, "Delete All").setIcon(R.drawable.exit);
+    	return true;
+    }
+	
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {    	
+    	switch(item.getItemId()){
+    		case Menu.FIRST:
+    			Toast.makeText(this, "Delete All", 2000).show();
+    			if(this.games!=null){
+    				for(Game game:games){
+    					scoringManager.removeGame(game);
+    				}
+    				this.tl.removeAllViews();
+    				TableLayout.LayoutParams tableRowParams = new TableLayout.LayoutParams(
+    						TableLayout.LayoutParams.FILL_PARENT,
+    						TableLayout.LayoutParams.WRAP_CONTENT);
+    				
+    				int leftMargin = 10;
+    				int topMargin = 2;
+    				int rightMargin = 10;
+    				int bottomMargin = 2;
+
+    				tableRowParams.setMargins(leftMargin, topMargin, rightMargin,
+    						bottomMargin);
+    				android.widget.TableRow.LayoutParams tableRowparams = new android.widget.TableRow.LayoutParams();
+    				tableRowparams.rightMargin = dpToPixel(10, ScoringActivity.this); // right-margin = 10dp
+    				
+    				TableRow tr = new TableRow(this);
+    				tr.setLayoutParams(tableRowParams);
+    						// Type
+    				TextView tv = new TextView(this);
+    				tv.setText("Type :");
+    				int headerFontSize=20;
+    				tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerFontSize);
+    				tr.addView(tv);
+    				// Date
+    				tv = new TextView(this);
+    				tv.setText("Date :");
+    				tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerFontSize);
+    				tr.addView(tv);
+    				// Players
+    				tv = new TextView(this);
+    				tv.setText("Players :");
+    				tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerFontSize);
+    				tr.addView(tv);
+    				tl.addView(tr);
+    			}
+    			return true;
+    		
+    		
+    		
+    		
+    		default:{    			 			
+    		}
+    			return true;
+    	}
 	}
 }

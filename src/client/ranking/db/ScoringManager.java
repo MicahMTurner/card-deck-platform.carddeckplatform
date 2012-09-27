@@ -172,7 +172,9 @@ public class ScoringManager {
 		while (!cursor.isAfterLast()) {
 			long roundId=cursor.getLong(0);
 			if(rounds.containsKey(roundId)){
-				rounds.get(roundsId).addUserResult(new Player(cursor.getString(2), cursor.getInt(3)));
+				Round round=rounds.get(roundId);
+				round.addUserResult(new Player(cursor.getString(2), cursor.getInt(3)));
+				rounds.put(roundId, round);
 			}
 			else{
 				Round round=new Round(cursor.getString(1));
