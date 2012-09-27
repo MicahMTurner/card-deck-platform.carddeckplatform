@@ -122,9 +122,17 @@ public abstract class Droppable implements Serializable {
 	}
 	
 	public void locationChangedNotify(){
+		
 		Point size = MetricsConvertion.pointRelativeToPx(getScale());
 		shape = new Rectangle(getX() - (size.getX() / 2), getY()
 				- (size.getY() / 2), size.getX(), size.getY());
+		
+		if(droppableLayout!=null){
+			droppableLayout.locationChangedNotify();
+			rearrange(0);
+		}
+		
+		
 	}
 	public Shape getShape() {
 		if (shape == null) {

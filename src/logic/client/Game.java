@@ -208,6 +208,8 @@ public abstract class Game {
 	}
 	private void setRelativePositions(Player player,Player swappedWith, Position.Player oldPosition){
 		//check if I moved
+			Position.Player myGlobalPosition= getMe().getGlobalPosition();
+			Position.Player playerGlobalPos=player.getGlobalPosition();
 				if (player.equals(getMe()) || (swappedWith!=null && swappedWith.equals(getMe()))){
 					
 					for (int i=1;i<players.size();i++){				
@@ -217,8 +219,11 @@ public abstract class Game {
 					//re arrange droppables
 					for (Droppable droppalbe : droppables){
 			    		//set public zone according to my position
-						droppalbe.setPosition(droppalbe.getPosition().reArrangeRelativePosition(oldPosition, getMe().getGlobalPosition()));
+						droppalbe.setPosition(droppalbe.getPosition().reArrangeRelativePosition(oldPosition,getMe().getGlobalPosition()));
 						droppalbe.locationChangedNotify();
+					}
+					for (Button button : buttons){
+						button.setPosition(button.getPosition().reArrangeRelativePosition(oldPosition, getMe().getGlobalPosition()));
 					}
 				}else{
 					//other person moved
