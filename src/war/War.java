@@ -173,12 +173,12 @@ public class War extends Game{
 	}	
 
 	private Player getWinner(Public public1,Public public2){
-		int comparisonAnswer=((StandartCard)public1.peek()).compareTo((StandartCard)public2.peek());
+		int comparisonAnswer=((StandartCard)public1.first()).compareTo((StandartCard)public2.first());
 		if (comparisonAnswer>0){
-			return (Player)(ClientController.get().getZone(public1.peek().getOwner()));			
+			return (Player)(ClientController.get().getZone(public1.first().getOwner()));			
 		}
 		else if (comparisonAnswer<0){			
-			return (Player)(ClientController.get().getZone(public2.peek().getOwner()));
+			return (Player)(ClientController.get().getZone(public2.first().getOwner()));
 		}else{
 			//tie
 			War.tie=true;

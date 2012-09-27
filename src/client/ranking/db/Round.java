@@ -16,6 +16,11 @@ public class Round {
 	}
 
 
+	@Override
+	public String toString() {
+		return "Round [roundResult=" + roundResult + ", date=" + date + "]";
+	}
+
 	public void setDate(String date) {
 		this.date = date;
 	}
