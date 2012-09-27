@@ -94,8 +94,11 @@ public abstract class Game {
 	}
 	
 	public void setupTurns(){
-		for (Position p : setTurns()){
-			turnsQueue.add(p.getId());
+		Queue<Position.Player> turns=setTurns();
+		if (turns!=null){
+			for (Position p : turns){
+				turnsQueue.add(p.getId());
+			}
 		}
 	}
 	
@@ -150,7 +153,7 @@ public abstract class Game {
 	public Integer nextInTurn(){
 		Integer next=null;
 		Integer answer=null;
-		if (turnsQueue!=null){
+		if (turnsQueue!=null && !turnsQueue.isEmpty()){
 			ArrayList<Integer> availableIds=new ArrayList<Integer>();
 			for (Player player : players){
 				availableIds.add(player.getId());

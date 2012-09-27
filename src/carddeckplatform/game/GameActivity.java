@@ -101,7 +101,7 @@ public class GameActivity extends Activity {
 	protected void onResume() {	
 		super.onResume();		
 		//posByComp.start();
-		//AutoHide.get().start();
+		AutoHide.get().start(GameActivity.context);
 		
 	}
 	
@@ -274,7 +274,7 @@ public class GameActivity extends Activity {
 			   
 		    //setup all layout prefs
 		    setupLayout();		          
-		    AutoHide.get().start(GameActivity.context);
+		   // AutoHide.get().start(GameActivity.context);
 		} catch (IOException e) {
 			return e.getMessage();
 		}

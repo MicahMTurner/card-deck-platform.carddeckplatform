@@ -173,7 +173,7 @@ public class FreePlay extends Game{
 	@Override
 	public int maxPlayers() {
 		// TODO Auto-generated method stub
-		return 3;
+		return 4;
 	}
 
 

@@ -51,7 +51,7 @@ public class LivePosition implements SensorEventListener{
 		@Override
 		public void run() {			
 			GameEnvironment.get().getPlayerInfo().setAzimute(azimut);
-			System.out.println("releasing thread with azimute: "+ azimut);
+			//System.out.println("releasing thread with azimute: "+ azimut);
 			cdl.countDown();
 		}	
 	}
@@ -268,7 +268,7 @@ public class LivePosition implements SensorEventListener{
 		        if (azimut<0){
 		        	azimut+=360;
 		        }
-		        System.out.println("azimut: "+azimut);
+		        //System.out.println("azimut: "+azimut);
 		      }
 		      
 		    }
