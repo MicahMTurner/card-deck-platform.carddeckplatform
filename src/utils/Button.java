@@ -64,8 +64,8 @@ public class Button{
 	 * set button's position
 	 * @param position new button's position
 	 */
-	public void setPosition(Position.Button position) {
-		this.position = position;
+	public void setPosition(Position position) {
+		this.position = (Position.Button)position;
 	}
 	/**
 	 * perform click action, calling onClick function in handler
