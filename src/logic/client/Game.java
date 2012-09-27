@@ -209,6 +209,7 @@ public abstract class Game {
 					
 					for (int i=1;i<players.size();i++){				
 						players.get(i).setRelativePosition(player.getGlobalPosition());
+						players.get(i).locationChangedNotify();
 					}
 					//re arrange droppables
 					for (Droppable droppalbe : droppables){
@@ -219,6 +220,7 @@ public abstract class Game {
 				}else{
 					//other person moved
 					player.setRelativePosition(getMe().getGlobalPosition());
+					player.locationChangedNotify();
 					//check if swapped with existing player
 					if (swappedWith!=null){
 						//true, set existing player relative position

@@ -36,13 +36,13 @@ public class Public extends Droppable{
 	@Override	
 	public boolean onCardAdded(Player player,Card card){
 		boolean answer;
-		synchronized (cards) {
+		//synchronized (cards) {
 			cards.addFirst(card);
 			answer=handler.onCardAdded(this,player, card);
 			if (!answer){
 				cards.removeFirst();
 			}
-		}
+		//}
 		
 		
 		return answer; 
@@ -51,12 +51,12 @@ public class Public extends Droppable{
 	@Override
 	public boolean onCardRemoved(Player player,Card card){
 		boolean answer;
-		synchronized (cards) {
+		//synchronized (cards) {
 			answer=handler.onCardRemoved(this,player, card);
 			if (answer || player==null){
 				cards.remove(card);
 			}		
-		}
+		//}
 		return answer;
 	}
 	/**

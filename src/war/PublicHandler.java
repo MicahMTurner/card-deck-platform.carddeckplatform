@@ -75,6 +75,7 @@ public class PublicHandler implements PublicEventsHandler{
 
 	@Override
 	public boolean onCardRemoved(Public publicZone, Player player, Card card) {
+		
 		return false;
 	}
 	@Override
