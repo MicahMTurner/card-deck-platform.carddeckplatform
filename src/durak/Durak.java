@@ -174,7 +174,7 @@ public class Durak extends Game{
 		ArrayList<Card> cardsToRemove = new ArrayList<Card>();
 		Deck deck = new Deck(new CardHandler(),true);	
 		for(Card card : deck.getCards())
-			if( ((StandartCard) card).getValue() < 10)
+			if( ((StandartCard) card).getValue() < 6)
 				cardsToRemove.add(card);
 		deck.getCards().removeAll(cardsToRemove);
 		return deck;
