@@ -3,17 +3,11 @@ package carddeckplatform.game;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.CountDownLatch;
-
-import javax.annotation.PostConstruct;
-
-import president.PublicAndButtonHandler;
-
-import utils.Button;
-import utils.Pair;
 
 import logic.client.Game;
 import logic.host.Host;
+import utils.Button;
+import utils.Pair;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -26,11 +20,15 @@ import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import carddeckplatform.game.gameEnvironment.GameEnvironment.ConnectionType;
@@ -39,12 +37,13 @@ import client.controller.ClientController;
 import client.controller.LivePosition;
 import client.dataBase.ClientDataBase;
 import client.gui.entities.Droppable;
+import client.ranking.db.Round;
+import client.ranking.db.ScoringSystem;
 
-import communication.link.HostGameDetails;
 import communication.link.ServerConnection;
-import communication.link.TcpIdListener;
 import communication.messages.RestartMessage;
 import communication.server.ConnectionsManager;
+
 import freeplay.customization.FreePlayProfile;
 
 public class GameActivity extends Activity {
@@ -310,6 +309,7 @@ public class GameActivity extends Activity {
     			ServerConnection.getConnection().send(new RestartMessage());
     			return true;
     		case Menu.FIRST+1:
+    			showScores();
     			Toast.makeText(this, "Ranking", 2000).show();
     			return true;
     		case Menu.FIRST+2:
@@ -332,6 +332,50 @@ public class GameActivity extends Activity {
     			return true;
     	}
 
-    } 
+    }
+
+	private void showScores() {
+		Round[] rounds=ScoringSystem.getInstance().showAllRoundsRounds();
+		if(rounds==null){
+			Toast.makeText(this, "Game is not rankable", 2000).show();;
+			return;
+		}
+		
+		Dialog dialog = new Dialog(GameActivity.this);
+		ScrollView scrollView = new ScrollView(GameActivity.this);
+		TableLayout table = new TableLayout(GameActivity.this);
+		scrollView.addView(table);
+		table.setColumnStretchable(0, true);
+		table.setColumnStretchable(10, true);
+		table.setShrinkAllColumns(true);
+		LayoutParams params = new LayoutParams(700, 500);
+		dialog.setContentView(scrollView, params);
+		if(rounds.length==0)
+			Toast.makeText(this, "No points added", 2000).show();
+		//making headers
+		TableRow tr= new TableRow(GameActivity.this);
+		TextView tv= new TextView(GameActivity.this);
+		tv.setText("");
+		tr.addView(tv);
+		for(int i=0;i<rounds[0].getRoundResult().size();i++){
+			tv= new TextView(GameActivity.this);
+			tv.setText(rounds[0].getRoundResult().get(i).getUserName());
+			tr.addView(tv);
+		}
+		table.addView(tr);
+		for(int i=0;i<rounds.length;i++){
+			tr= new TableRow(GameActivity.this);
+			tv= new TextView(GameActivity.this);
+			tv.setText(i);
+			tr.addView(tv);
+			Round round=rounds[i];
+			for(int j=0;j<round.getRoundResult().size();j++){
+				tv= new TextView(GameActivity.this);
+				tv.setText(round.getRoundResult().get(j).getScore()+"");
+				tr.addView(tv);
+			}
+		}
+		dialog.show();
+	} 
 }
 
