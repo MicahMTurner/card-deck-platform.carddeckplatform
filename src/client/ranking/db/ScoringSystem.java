@@ -3,6 +3,7 @@ package client.ranking.db;
 import java.util.ArrayList;
 
 import android.database.SQLException;
+import carddeckplatform.game.CarddeckplatformActivity;
 import carddeckplatform.game.GameActivity;
 import carddeckplatform.game.ScoringActivity;
 
@@ -25,7 +26,7 @@ public class ScoringSystem {
 		public static ScoringSystem instance= new ScoringSystem();
 	}
 	private ScoringSystem() {
-		scoringManager = new ScoringManager(GameActivity.getContext(), ScoringActivity.DBNAME);
+		scoringManager = new ScoringManager(CarddeckplatformActivity.getContext(), ScoringActivity.DBNAME);
 	}
 	public static ScoringSystem getInstance(){
 		return Holder.instance;
@@ -36,8 +37,8 @@ public class ScoringSystem {
 	public void close() {
 		scoringManager.close();
 	}
-	public Game createNewGame(ArrayList<Player> players, String gameType) {
-		return scoringManager.createNewGame(players, gameType);
+	public void createNewGame(ArrayList<Player> players, String gameType) {
+		this.game= scoringManager.createNewGame(players, gameType);
 	}
 	public void makeNewRound(ArrayList<Long> newScores)
 			throws Exception {
