@@ -80,14 +80,14 @@ public String getGameType() {
 		return stringBuilder.toString();
 	}
 	
-	boolean addPointsToPlayer(long id,long score) throws Exception{
+	public boolean addPointsToPlayer(long id,long score) throws Exception{
 		Long playerScore=playerMap.get(id);
 		if(playerScore==null)
 			throw new Exception("Player ID Doesn't Exist");
 		playerMap.put(id, playerScore+score);
 		return true;
 	}
-	boolean setPointsOfPlayer(long id,long score) throws Exception{
+	public boolean setPointsOfPlayer(long id,long score) throws Exception{
 		Long playerScore=playerMap.get(id);
 		if(playerScore==null)
 			throw new Exception("Player ID Doesn't Exist");
@@ -96,14 +96,14 @@ public String getGameType() {
 	}
 	
 	
-	Long getPointsOfPlayer(long id) throws Exception{
+	public Long getPointsOfPlayer(long id) throws Exception{
 		Long playerScore=playerMap.get(id);
 		if(playerScore==null)
 			throw new Exception("Player ID Doesn't Exist");
 		return playerScore;
 	}
 	
-	boolean makeTransaction(ScoringManager manager) throws Exception{
+	public boolean makeTransaction(ScoringManager manager) throws Exception{
 		ArrayList<Long> newScores= new ArrayList<Long>();
 		for (Player player : this.players) {
 			newScores.add(playerMap.get(player.getUserGameID()));
