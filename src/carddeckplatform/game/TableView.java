@@ -193,6 +193,9 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
                 if (source.removeCard(byWhom, card)){
                 	if (destination.addCard(byWhom, card)){
                 		//remove and add are legal moves
+                		
+                		source.rearrange(0);	
+                		
                 		continue;
                 	}else{
                 		//add is not legal, return removed card back to its place
@@ -216,7 +219,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 	public void dealCards(ArrayList<Card> cards, int to) {
 		Droppable destination = table.getDroppableById(to);
 		for (Card card : cards) {
-			card.setOwner(destination.getId());
+			card.setOwner(to);
 			addNewDraggable(card, destination);
 		}
 	}

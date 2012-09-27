@@ -51,7 +51,7 @@ public class PlayerHandler implements PlayerEventsHandler{
 
 	@Override
 	public boolean onCardRemoved(Player player, Card card) {	
-		if (player.getPosition().equals(card.getOwner())){
+		if (player.getId()==(card.getOwner())){
 			return true;
 		}else{
 			return false;

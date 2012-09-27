@@ -152,11 +152,15 @@ public abstract class Droppable implements Serializable {
         if (from.removeCard(player, card)){
         	if (addCard(player, card)){
         		//remove and add are legal moves
+        		
         		answer=true;
+        		if (from.getDroppableLayout() != null && answer){
+        			from.rearrange(0);	
+        		}
         	}else{
         		//add is not legal, return removed card back to its place
         		from.AddInPlace(card,placeOfCard); 
-                rearrange(0);
+                
         	}
         }        
         return answer;
@@ -247,9 +251,7 @@ public abstract class Droppable implements Serializable {
 	public boolean removeCard(Player player, Card card){
 		boolean answer;
 		answer = onCardRemoved(player, card);
-		if (getDroppableLayout() != null && answer){
-			rearrange(0);
-		}
+		
 		return answer;
 	}
 	

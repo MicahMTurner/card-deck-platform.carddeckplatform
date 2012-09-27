@@ -32,7 +32,7 @@ public abstract class Game {
 //	public static GamePrefs receivedGamePrefs=null;
 	protected static ArrayList<Player> staticPlayers;
 	protected ArrayList<Player> players;
-	protected Queue<utils.Position.Player> turnsQueue=new LinkedList<utils.Position.Player>();
+	protected Queue<Integer> turnsQueue=new LinkedList<Integer>();
 	protected ArrayList<Droppable> droppables=new ArrayList<Droppable>();
 	//The number of players the host would accept before starting the game.  
 	protected int numberOfParticipants=0; 
@@ -94,8 +94,11 @@ public abstract class Game {
 	}
 	
 	public void setupTurns(){
-		turnsQueue=setTurns();
+		for (Position p : setTurns()){
+			turnsQueue.add(p.getId());
+		}
 	}
+	
 	public Game() {
 
 		//Position.Player x=Position.Player.BOTTOM;
@@ -131,13 +134,13 @@ public abstract class Game {
 
 	private void clearEmptyPositions() {
 		if (turnsQueue!=null){
-			ArrayList<Position.Player> availablePos=new ArrayList<Position.Player>();
+			ArrayList<Integer> availableIds=new ArrayList<Integer>();
 			for (Player player : players){
-				availablePos.add(player.getGlobalPosition());
+				availableIds.add(player.getId());
 			}
-			for (Position.Player position : turnsQueue){
-				if (!availablePos.contains(position)){
-					turnsQueue.remove(position);
+			for (int id : turnsQueue){
+				if (!availableIds.contains(id)){
+					turnsQueue.remove(id);
 				}
 			}
 		}		
@@ -145,22 +148,22 @@ public abstract class Game {
 	
 	//return the next player
 	public Integer nextInTurn(){
-		utils.Position.Player next=null;
+		Integer next=null;
 		Integer answer=null;
 		if (turnsQueue!=null){
-			ArrayList<Position.Player> availablePos=new ArrayList<Position.Player>();
+			ArrayList<Integer> availableIds=new ArrayList<Integer>();
 			for (Player player : players){
-				availablePos.add(player.getGlobalPosition());
+				availableIds.add(player.getId());
 			}
 			next=turnsQueue.poll();
-			while (!availablePos.contains(next)){
+			while (!availableIds.contains(next)){
 				next=turnsQueue.poll();
 			}	
 			
 			turnsQueue.add(next);
 			if (next!=null){
 				for (Player player : players){
-					if (player.getGlobalPosition().equals(next)){
+					if (player.getId()==next){
 						answer=player.getId();
 					}
 				}
@@ -209,6 +212,7 @@ public abstract class Game {
 					
 					for (int i=1;i<players.size();i++){				
 						players.get(i).setRelativePosition(player.getGlobalPosition());
+						players.get(i).locationChangedNotify();
 					}
 					//re arrange droppables
 					for (Droppable droppalbe : droppables){
@@ -219,6 +223,7 @@ public abstract class Game {
 				}else{
 					//other person moved
 					player.setRelativePosition(getMe().getGlobalPosition());
+					player.locationChangedNotify();
 					//check if swapped with existing player
 					if (swappedWith!=null){
 						//true, set existing player relative position
@@ -236,16 +241,16 @@ public abstract class Game {
 	}
 	public void reArrangeQueue(Integer nextPlayerId) {
 		if (nextPlayerId!=null){
-			Position.Player startingPlayer=null;
-			for (Position.Player pos : Position.Player.values()){
-				if (pos.getId()==nextPlayerId){
-					startingPlayer=pos;
-					break;
-				}
-			}
-			Position.Player next=turnsQueue.peek();	
+//			Position.Player startingPlayer=null;
+//			for (Position.Player pos : Position.Player.values()){
+//				if (pos.getId()==nextPlayerId){
+//					startingPlayer=pos;
+//					break;
+//				}
+//			}
+			Integer next=turnsQueue.peek();	
 			if (next!=null){
-				while (!next.equals(startingPlayer)){
+				while (next!=nextPlayerId){
 					turnsQueue.poll();
 					turnsQueue.add(next);
 					next=turnsQueue.peek();
