@@ -406,7 +406,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 			float arg3) {
 		float x = e2.getX();
 		float y = e2.getY();
-		System.out.println("TableView.onScroll()");
+		//System.out.println("TableView.onScroll()");
 		if (uiEnabled) {
 			if (draggableInHand != null) {
 				Droppable droppable = table.getNearestDroppable(x, y);
