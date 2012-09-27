@@ -22,7 +22,7 @@ public class AutoHide implements SensorEventListener {
 	private final float[] mValuesOrientation = new float[3];
 	private final float[] mRotationMatrix    = new float[9];	
 	private ArrayList<Card>revealedCards;
-
+	private boolean running;
 	private int cardsInHand;
 	
 	//-------Singleton implementation--------//
@@ -44,6 +44,7 @@ public class AutoHide implements SensorEventListener {
 	
 	private AutoHide(){
 		sensorManager=null;
+		running=false;
 	}
 	
 	private void initiate(Context context){
@@ -57,16 +58,22 @@ public class AutoHide implements SensorEventListener {
 	}
 	
 	public void start(Context context){
-//		initiate(context);
-//		sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 
-//                SensorManager.SENSOR_DELAY_NORMAL);
-//        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), 
-//        		SensorManager.SENSOR_DELAY_NORMAL);
+		if (!running){
+			running=true;
+			//		initiate(context);
+			//		sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 
+			//                SensorManager.SENSOR_DELAY_NORMAL);
+			//        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), 
+			//        		SensorManager.SENSOR_DELAY_NORMAL);
+		}
 	}
 	
 	public void stop(){
-		if (sensorManager!=null){
-			sensorManager.unregisterListener(this);
+		if (running){
+			running=false;
+			if (sensorManager!=null){
+				sensorManager.unregisterListener(this);
+			}
 		}
 	}
 	

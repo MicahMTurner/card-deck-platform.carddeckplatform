@@ -2,6 +2,7 @@ package logic.host;
 
 
 import java.util.Stack;
+import java.util.concurrent.CountDownLatch;
 
 import logic.client.Game;
 import utils.Player;
@@ -33,7 +34,7 @@ public class Host implements Runnable{
 	private static Game game;
 	private Dialog minPlayerAchievedDialog;
 	private volatile boolean shutDown;
-
+	private CountDownLatch cdl;
 	
 	
 	int playersRdy=0;
@@ -55,6 +56,7 @@ public class Host implements Runnable{
 		setPositions();
 		tcpIdListener=new TcpIdListener(getHostGameDetails());
 		minPlayerAchievedDialog=null;
+		cdl=new CountDownLatch(1);
 		
 	}
 	
@@ -111,6 +113,7 @@ public class Host implements Runnable{
 						}
 					});
 					dialog.show();
+					cdl.countDown();
 					GameActivity.enableStartButton=true;
 					
 				}
@@ -128,6 +131,7 @@ public class Host implements Runnable{
 				throw new Exception("server shutting down");
 			}
 	    }
+		cdl.await();
 		if (minPlayerAchievedDialog!=null && ConnectionsManager.getConnectionsManager().getNumberOfConnections()==game.getNumberOfParticipants()){
 			minPlayerAchievedDialog.dismiss();
 		}

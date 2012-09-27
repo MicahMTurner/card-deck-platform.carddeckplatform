@@ -94,6 +94,8 @@ public class CarddeckplatformActivity extends Activity {
         }
         if (useLivePosition){
         	livePosition=true;
+        }else{
+        	livePosition=false;
         }
         
         
