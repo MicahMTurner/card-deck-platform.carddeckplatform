@@ -353,7 +353,6 @@ public class ScoringManager {
 		String GAMES = "Games";
 		String ROUNDS = "Rounds";
 		String ROUNDS_DETAILS = "RoundsDetails";
-
 	}
 
 	interface UsersColumns {
