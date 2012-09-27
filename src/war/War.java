@@ -9,6 +9,7 @@ import java.util.Queue;
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
+import client.ranking.db.ScoringSystem;
 
 import communication.actions.DealCardAction;
 import communication.messages.Message;
@@ -35,9 +36,14 @@ import logic.client.Game;
 
 public class War extends Game{
 	static public boolean tie=false;
-
+	private boolean firstTurn=true;
+	
 	public War() {
+		ScoringSystem.getInstance().open();
 		tie=false;
+		
+		
+		
 	}
 	
 	@Override
@@ -118,6 +124,14 @@ public class War extends Game{
 			pairs.add(new Pair<Droppable , Droppable>(public2, winner));
 			
 			Card.moveTo(pairs);
+			
+			try {
+				ScoringSystem.getInstance().addPointsToPlayer(winner.getId(), 1);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			answer=winner.getId();
 		}else{
 			ClientController.get().enableUi();	
@@ -186,6 +200,18 @@ public class War extends Game{
 	public int maxPlayers() {
 		// TODO Auto-generated method stub
 		return 2;
+	}
+	
+	@Override
+	public void newTurn(Player player) {
+		if(getRoundNumber()==0){
+			ArrayList<client.ranking.db.Player> rankPlayers = new ArrayList<client.ranking.db.Player>();
+			
+			for(utils.Player p : players){
+				rankPlayers.add(new client.ranking.db.Player(p.getUserName(), 0 , p.getId()));
+			}
+			ScoringSystem.getInstance().createNewGame(rankPlayers, this.toString());
+		}
 	}
 	
 }
