@@ -159,10 +159,11 @@ public class ScoringManager {
 				"join "+
 				"( "+
 				"select RD.userId,U.userName,RD.roundId,RD.point point "+
-				"from RoundsDetails RD join Users U on RD.userId=U.userId "+
+				"from RoundsDetails RD join Users U " +
+				"on RD.userId=U.userId "+
 				") "+
 				"UD "+
-				"UD.roundId=R.roundId "+
+				"on UD.roundId=R.roundId "+
 				"Order By R.dateUpdated"
 				,null);
 		HashMap<Long, Round> rounds=new HashMap<Long, Round>();
