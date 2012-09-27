@@ -23,6 +23,27 @@ public class LineLayout extends DroppableLayout {
 	
 	private Rearranger rearranger;
 	
+	@Override
+	public void locationChangedNotify(){
+		Position.Player playerPos = (Position.Player)(this.droppable).getPosition();
+		switch (playerPos) {
+		case BOTTOM:
+			rearranger = new BottomRearranger();
+			break;
+		case TOP:
+			rearranger = new TopRearranger();
+			break;
+		case LEFT:
+			rearranger = new LeftRearranger();
+			break;
+		case RIGHT:
+			rearranger = new RightRearranger();
+			break;
+		default:
+			break;
+		}
+		
+	}
 	
 	public LineLayout(Droppable droppable) {
 		super(droppable);

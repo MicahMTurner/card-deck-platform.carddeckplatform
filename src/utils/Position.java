@@ -131,34 +131,16 @@ public interface Position extends Serializable{
 			return point;
 		}
 		public Position reArrangeRelativePosition(Player oldPlayerPos,	Player newPlayerPos) {
-			if (!this.equals(MID)){
-				int different= this.ordinal()-getDeviation(oldPlayerPos);
-				if (different<0){
-					different=ELEMENTSINCYCLE+different;
-				}			
-				return Public.values()[(different%ELEMENTSINCYCLE)].getRelativePosition(newPlayerPos);
-			}else{
-				return this;
+			Public answer=this;
+			int diff = oldPlayerPos.ordinal() - newPlayerPos.ordinal();
+			if(diff<0){
+				diff=4+diff;
 			}
-		}
-		private int getDeviation(Player oldPlayerPos) {
-			int deviation=0;
-			switch (oldPlayerPos){
-				case TOP:{
-					deviation=TOPDEVIATION;
-					break;
-				}
-				case RIGHT:{
-					deviation=RIGHTDEVIATION;
-					break;
-				}
-				case LEFT:{
-					deviation=LEFTDEVIATION;
-					break;
-				}
-				default:{}
-			}
-			return deviation;
+			answer=Public.values()[((this.ordinal()+diff)%
+					ELEMENTSINCYCLE)+(ELEMENTSINCYCLE*(int)(this.ordinal()/ROWS))];
+			
+			
+			return answer;
 		}
 	 }  
 	  

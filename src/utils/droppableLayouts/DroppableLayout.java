@@ -283,4 +283,8 @@ public abstract class DroppableLayout implements Serializable {
 		
 		
 	}
+
+	public void locationChangedNotify() {
+
+	}
 }
