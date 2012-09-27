@@ -150,6 +150,7 @@ public class ScoringManager {
 	public Round[] showAllRoundsRounds(Game game){
 		Cursor cursor=database.rawQuery(
 				"select R.roundId,R.dateUpdated,UD.userName,UD.point "+
+				" from "+
 				"( "+
 				"select roundId,dateUpdated "+
 				"from Rounds "+
@@ -162,7 +163,7 @@ public class ScoringManager {
 				"from RoundsDetails RD join Users U on RD.userId=U.userId "+
 				") "+
 				"UD "+
-				"UD.roundId=R.roundId "+
+				"on UD.roundId=R.roundId "+
 				"Order By R.dateUpdated"
 				,null);
 		HashMap<Long, Round> rounds=new HashMap<Long, Round>();
@@ -176,6 +177,7 @@ public class ScoringManager {
 			else{
 				Round round=new Round(cursor.getString(1));
 				round.addUserResult(new Player(cursor.getString(2), cursor.getInt(3)));
+				rounds.put(roundId, round);
 				roundsId.add(roundId);
 			}
 			cursor.moveToNext();
@@ -183,7 +185,7 @@ public class ScoringManager {
 		
 		Round [] roundsArr=new Round[roundsId.size()] ;
 		for(int i=0;i<roundsId.size();i++)
-			roundsArr[i]=rounds.get(rounds.get(i));
+			roundsArr[i]=rounds.get(roundsId.get(i));
 		
 		return roundsArr;
 	}
@@ -262,8 +264,8 @@ public class ScoringManager {
 			
 			cursor.moveToNext();
 		}
-		
-		Game [] gameArray=(Game[]) games.values().toArray();
+		Game [] gameArray=new Game[games.values().size()];
+		games.values().toArray(gameArray);
 		return gameArray;
 	}
 	
