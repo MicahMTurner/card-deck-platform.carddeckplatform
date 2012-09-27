@@ -67,11 +67,11 @@ public class Durak extends Game{
 		@Override
 		public int compare(utils.Player player1, utils.Player player2) {
 			int answer = -1;
-			if(player1.getGlobalPosition()==Player.BOTTOM)
+			if(player1.getId()==1)
 				answer=1;
-			else if(player1.getGlobalPosition()==Player.LEFT && player2.getGlobalPosition()!=Player.BOTTOM)
+			else if(player1.getId()==2 && player2.getId()!=1)
 				answer=1;
-			else if(player1.getGlobalPosition()==Player.TOP && player2.getGlobalPosition()==Player.RIGHT)	
+			else if(player1.getId()==3 && player2.getId()==4)	
 				answer=1;
 				
 			return answer;

@@ -94,7 +94,7 @@ public class Host implements Runnable{
 						public void onClick(View v) {
 							
 							hostStartedGame=true;
-							GameActivity.enableStartButton=false;
+							//GameActivity.enableStartButton=false;
 							ConnectionsManager.getConnectionsManager().stopListening();						
 							dialog.dismiss();						
 							
@@ -128,7 +128,7 @@ public class Host implements Runnable{
 				throw new Exception("server shutting down");
 			}
 	    }
-		if (minPlayerAchievedDialog!=null){
+		if (minPlayerAchievedDialog!=null && ConnectionsManager.getConnectionsManager().getNumberOfConnections()==game.getNumberOfParticipants()){
 			minPlayerAchievedDialog.dismiss();
 		}
 		GameActivity.enableStartButton=false;
