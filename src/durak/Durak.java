@@ -50,6 +50,18 @@ public class Durak extends Game{
 		return sortedPlayers;
 	}
 	
+	
+	static private ArrayList<utils.Player> getAllSortedPlayers(){
+		ArrayList<utils.Player> sortedPlayers = new ArrayList<utils.Player>(staticPlayers);
+		
+		// sort the players by their position.
+		Collections.sort(sortedPlayers, new PlayerComp());
+		
+		return sortedPlayers;
+	}
+	
+	
+	
 	private static class PlayerComp implements Comparator<utils.Player>{
 
 		@Override
@@ -71,12 +83,16 @@ public class Durak extends Game{
 	static private PlayerComp playerComp = new PlayerComp();
 	
 	private static utils.Player getNextPlayer(utils.Player player){
-		ArrayList<utils.Player> sortedPlayers = getSortedPlayers();
+		ArrayList<utils.Player> sortedPlayers = getAllSortedPlayers();
 		
-		for(int i=0; i<sortedPlayers.size(); i++){
-			if(sortedPlayers.get(i).equals(player))
-				return sortedPlayers.get( (i + 1) % sortedPlayers.size());
+		int index = sortedPlayers.indexOf(player);
+		
+		for(int i=0; i<sortedPlayers.size()-1; i++){
+			int newIndex = (index+i+1)%sortedPlayers.size();
+			if( !winners.contains( sortedPlayers.get( newIndex ) ) )
+				return sortedPlayers.get( newIndex );
 		}
+		
 		return null;
 	}
 	
@@ -158,7 +174,7 @@ public class Durak extends Game{
 		ArrayList<Card> cardsToRemove = new ArrayList<Card>();
 		Deck deck = new Deck(new CardHandler(),true);	
 		for(Card card : deck.getCards())
-			if( ((StandartCard) card).getValue() < 6)
+			if( ((StandartCard) card).getValue() < 10)
 				cardsToRemove.add(card);
 		deck.getCards().removeAll(cardsToRemove);
 		return deck;
@@ -250,10 +266,25 @@ public class Durak extends Game{
 				winners.add(player);
 		}
 		
+		if(winners.size() == staticPlayers.size()){
+			ClientController.get().popMessage("Draw");
+			return -1;
+		}else if(winners.size() == staticPlayers.size()-1){
+			ArrayList<utils.Player> p = new ArrayList<utils.Player>(staticPlayers);
+			p.removeAll(winners);
+			ClientController.get().popMessage(p.get(0).getUserName() + " is the Durak :)");
+			return -1;
+		}
+			
+		
 		if(bito){
 			answer=getNextPlayer(getCurrentAttacker()).getId();
 		}else{
-			answer=getCurrentAttacker().getId();
+			if(winners.contains(getCurrentAttacker())){
+				answer=getNextPlayer(getCurrentAttacker()).getId();
+			}else{
+				answer=getCurrentAttacker().getId();
+			}
 		}
 		
 		// calculating the number of cards that I need to add in order to reach at least 6 cards in hand.
@@ -266,9 +297,9 @@ public class Durak extends Game{
 		
 		initActiveNumbers();
 		
-		for (utils.Player player : getPlayers()){
-			player.setMyTurn(false);
-		}
+//		for (utils.Player player : getPlayers()){
+//			player.setMyTurn(false);
+//		}
 		//ClientController.get().getZone(answer).setGlowColor(glowColor);
 		
 		
@@ -287,7 +318,7 @@ public class Durak extends Game{
 	@Override
 	public int minPlayers() {
 		// TODO Auto-generated method stub
-		return 4;
+		return 2;
 	}
 
 	
@@ -415,26 +446,32 @@ public class Durak extends Game{
 	
 	@Override
 	public void newTurn(utils.Player player) {
-		for(utils.Player p : staticPlayers)
-			p.setTextColor(Color.BLACK);
 		
-		player.setTextColor(Color.RED);
-		getNextPlayer(player).setTextColor(Color.BLUE);
-		
-		if(player.equals(ClientController.get().getMe())){
-			button.setText("Bito");
-		}else if(getNextPlayer(player).equals(ClientController.get().getMe())){
-			button.setText("Take");
-		}else{
-			button.setText("");
-		}
+		try {
+			for(utils.Player p : staticPlayers)
+				p.setTextColor(Color.BLACK);
+			
+			player.setTextColor(Color.RED);
+			getNextPlayer(player).setTextColor(Color.BLUE);
+			
+			if(player.equals(ClientController.get().getMe())){
+				button.setText("Bito");
+			}else if(getNextPlayer(player).equals(ClientController.get().getMe())){
+				button.setText("Take");
+			}else{
+				button.setText("");
+			}
 
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 	}
 
 	@Override
 	public int maxPlayers() {
 		// TODO Auto-generated method stub
-		return 0;
+		return 4;
 	}
 
 }

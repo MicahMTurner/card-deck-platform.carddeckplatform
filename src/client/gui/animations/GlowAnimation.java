@@ -44,6 +44,8 @@ public class GlowAnimation extends Animation {
 
 	@Override
 	protected void animate() {
+		if(droppable==null)
+			return;
 		//System.out.println("GLOW Animation Activated");
 		ColorInterpolator colorinterpolator = new ColorInterpolator(
 				Color.TRANSPARENT, colorArbg);
