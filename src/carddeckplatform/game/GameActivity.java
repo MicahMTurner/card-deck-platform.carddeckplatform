@@ -40,9 +40,11 @@ import client.controller.LivePosition;
 import client.dataBase.ClientDataBase;
 import client.gui.entities.Droppable;
 
+import communication.actions.StopLivePositionAction;
 import communication.link.HostGameDetails;
 import communication.link.ServerConnection;
 import communication.link.TcpIdListener;
+import communication.messages.Message;
 import communication.messages.RestartMessage;
 import communication.server.ConnectionsManager;
 import freeplay.customization.FreePlayProfile;
@@ -320,6 +322,7 @@ public class GameActivity extends Activity {
     			return true;
     		case Menu.FIRST+3:{    			
     			LivePosition.get().stop();
+    			ServerConnection.getConnection().send(new Message(new StopLivePositionAction()));
     			Toast.makeText(this,"Live-Position stopped", 2000).show();
     			item.setTitle("Live-Position stopped");  
     			item.setEnabled(false);
