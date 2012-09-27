@@ -31,6 +31,7 @@ public class Host implements Runnable{
 	public static boolean hostStartedGame;
 	private Stack<Position.Player> availablePositions;
 	private static Game game;
+	private Dialog minPlayerAchievedDialog;
 	private volatile boolean shutDown;
 
 	
@@ -53,6 +54,7 @@ public class Host implements Runnable{
 		Host.game=game;
 		setPositions();
 		tcpIdListener=new TcpIdListener(getHostGameDetails());
+		minPlayerAchievedDialog=null;
 		
 	}
 	
@@ -80,6 +82,7 @@ public class Host implements Runnable{
 				@Override
 				public void run() {
 					final Dialog dialog=  new Dialog((Context)GameActivity.getContext(),R.style.startGameDialogTheme);
+					minPlayerAchievedDialog=dialog;
 					dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
 					
 					dialog.setContentView(R.layout.startgamedialog);
@@ -115,7 +118,7 @@ public class Host implements Runnable{
 		}		
 	}
 	public void waitForPlayers() throws Exception{
-		//boolean hostStartedGame=false;
+
 		ConnectionsManager.getConnectionsManager().connectHostingPlayer(availablePositions.pop(),game.toString(),game.getPlayers(), game.getFreePlayProfile());
 		popDialogIfMinPlayers();
 		while(ConnectionsManager.getConnectionsManager().getNumberOfConnections()<game.getNumberOfParticipants() && !hostStartedGame){
@@ -125,6 +128,10 @@ public class Host implements Runnable{
 				throw new Exception("server shutting down");
 			}
 	    }
+		if (minPlayerAchievedDialog!=null){
+			minPlayerAchievedDialog.dismiss();
+		}
+		GameActivity.enableStartButton=false;
 	}
 	
 	@Override
