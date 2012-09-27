@@ -4,20 +4,21 @@ public class Player {
 	long score;
 	String userName;
 	long userId;
+	long userGameID=1;
 	
+	
+	public Player(String userName,int score,long userGameID) {
+		this.score=score;
+		this.userName=userName;
+		this.userGameID=userGameID;
+	}
 	public Player(String userName,int score) {
-		// TODO Auto-generated constructor stub
 		this.score=score;
 		this.userName=userName;
 	}
-	
-	
-	public Player(long id, int score) {
-		this.userId=id;
-		this.score=score;
+	public long getUserGameID() {
+		return userGameID;
 	}
-
-
 	public long getScore() {
 		return score;
 	}
