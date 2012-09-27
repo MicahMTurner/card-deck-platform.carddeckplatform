@@ -75,16 +75,17 @@ public class DeckArea extends Droppable{
 	 */
 	@Override
 	public boolean onCardAdded(Player player, Card card) {
-		if(hide)
-			card.hide();
-		else
-			card.reveal();
-		
-		if(!putOnTop)
-			cards.addLast(card);
-		else
-			cards.add(card);
-		
+		synchronized (cards) {
+			if(hide)
+				card.hide();
+			else
+				card.reveal();
+			
+			if(!putOnTop)
+				cards.addLast(card);
+			else
+				cards.add(card);
+		}
 		return true;
 		
 	}
@@ -93,7 +94,10 @@ public class DeckArea extends Droppable{
 	 */
 	@Override
 	public boolean onCardRemoved(Player player, Card card) {
-		cards.remove(card);
+		synchronized (cards) {
+			cards.remove(card);
+		}
+		
 		return true;
 	}
 	

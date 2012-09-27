@@ -35,20 +35,28 @@ public class Public extends Droppable{
 	
 	@Override	
 	public boolean onCardAdded(Player player,Card card){
-		cards.addFirst(card);
-		boolean answer=handler.onCardAdded(this,player, card);
-		if (!answer){
-			cards.removeFirst();
+		boolean answer;
+		synchronized (cards) {
+			cards.addFirst(card);
+			answer=handler.onCardAdded(this,player, card);
+			if (!answer){
+				cards.removeFirst();
+			}
 		}
+		
+		
 		return answer; 
 	}
 	
 	@Override
 	public boolean onCardRemoved(Player player,Card card){
-		boolean answer=handler.onCardRemoved(this,player, card);
-		if (answer || player==null){
-			cards.remove(card);
-		}		
+		boolean answer;
+		synchronized (cards) {
+			answer=handler.onCardRemoved(this,player, card);
+			if (answer || player==null){
+				cards.remove(card);
+			}		
+		}
 		return answer;
 	}
 	/**

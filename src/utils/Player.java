@@ -11,6 +11,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 
 import utils.droppableLayouts.DroppableLayout;
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
@@ -205,15 +207,17 @@ public class Player extends Droppable implements  Comparable<Player>{
 	 */
 	@Override
 	public boolean onCardAdded(Player player, Card card) {
+		boolean answer;
 		if(!getCards().contains(card))	// if from some reason the card is already in the the player area.
 			hand.add(card);
-		boolean answer=handler.onCardAdded(this, player , card);
+		answer=handler.onCardAdded(this, player , card);
 		if (answer || player==null){
 			card.setOwner((Position.Player)position);		
 			
 		}else{
 			hand.remove(card);
 		}
+	
 		return answer;
 	}
 
@@ -274,7 +278,9 @@ public class Player extends Droppable implements  Comparable<Player>{
 		super.draw(canvas, context);
 		
 		try {
+			//drawName(canvas, context);
 			getTextPaint().setTextSize(20);
+			
 			float x=0,y=0;
 			Shape s = getShape();
 			x = s.getMinX();
@@ -284,6 +290,33 @@ public class Player extends Droppable implements  Comparable<Player>{
 			// TODO: handle exception
 		}
 		
+		
+	}
+	
+	private void drawName(Canvas canvas, Context context){
+		float radius = 10f;
+		Shape s = getShape();
+		
+		Paint p1 = new Paint();
+		Paint p2 = new Paint();
+		
+		p1.setColor(Color.WHITE);
+		p2.setColor(Color.BLUE);
+		
+		switch(getPosition()){
+		case BOTTOM:
+			canvas.drawRoundRect(new RectF(new Rect((int)s.getMinX(), (int)s.getMinY()-25,(int)s.getMinX()+50, (int)s.getMinY())), radius, radius, p1);
+			canvas.drawRoundRect(new RectF(new Rect((int)s.getMinX()+1, (int)s.getMinY()-25+1,(int)s.getMinX()+50-1, (int)s.getMinY()-1)), radius, radius, p2);
+			break;
+		case LEFT:
+			
+			break;		
+		case RIGHT:
+			
+			break;		
+		case TOP:
+			break;
+		}
 		
 	}
 }

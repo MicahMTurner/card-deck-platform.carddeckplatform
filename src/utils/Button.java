@@ -11,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import carddeckplatform.game.BitmapHolder;
 import client.gui.entities.MetricsConvertion;
 /**
@@ -46,7 +47,7 @@ public class Button{
 		this.text=text;
 		this.image="button";
 		this.position=position;
-		this.scale=new Point(10, 10);
+		this.scale=new Point(20, 20);
 		this.paint=new Paint();
 		paint.setTextSize(20);
 		paint.setColor(Color.argb(170, 0, 0, 0));
@@ -86,11 +87,15 @@ public class Button{
 		float x=MetricsConvertion.pointRelativeToPx(position.getPoint()).getX();
 		float y=MetricsConvertion.pointRelativeToPx(position.getPoint()).getY();
 		
+		float ratio = (float)buttonBitmap.getHeight() / (float)buttonBitmap.getWidth();
+		
 		// transformations.		
-		matrix.postScale((float)p.getX()/(float)buttonBitmap.getWidth(), (float)p.getY()/(float)buttonBitmap.getHeight());
+		matrix.postScale((float)p.getX()/(float)buttonBitmap.getWidth(), ((float)p.getX() * ratio)/(float)buttonBitmap.getHeight());
 		matrix.postTranslate(x-p.getX()/2, y-p.getY()/2);
 		
 		canvas.drawBitmap(buttonBitmap, matrix, null);
+		paint.setTextAlign(Align.CENTER);
+		paint.setColor(Color.WHITE);
 		canvas.drawText(text,x,y, paint);
 	}
 
