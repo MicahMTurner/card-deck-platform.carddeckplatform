@@ -41,17 +41,11 @@ import client.ranking.db.Round;
 import client.ranking.db.ScoringSystem;
 
 import communication.actions.StopLivePositionAction;
-import communication.link.HostGameDetails;
-
 import communication.link.ServerConnection;
 import communication.messages.Message;
 import communication.messages.RestartMessage;
 import communication.server.ConnectionsManager;
 
-import freeplay.customization.FreePlayProfile;
-import communication.messages.Message;
-import communication.messages.RestartMessage;
-import communication.server.ConnectionsManager;
 import freeplay.customization.FreePlayProfile;
 
 public class GameActivity extends Activity {

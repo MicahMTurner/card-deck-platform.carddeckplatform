@@ -150,7 +150,6 @@ public class ScoringManager {
 	public Round[] showAllRoundsRounds(Game game){
 		Cursor cursor=database.rawQuery(
 				"select R.roundId,R.dateUpdated,UD.userName,UD.point "+
-				"from "+
 				"( "+
 				"select roundId,dateUpdated "+
 				"from Rounds "+
@@ -160,11 +159,10 @@ public class ScoringManager {
 				"join "+
 				"( "+
 				"select RD.userId,U.userName,RD.roundId,RD.point point "+
-				"from RoundsDetails RD join Users U " +
-				"on RD.userId=U.userId "+
+				"from RoundsDetails RD join Users U on RD.userId=U.userId "+
 				") "+
 				"UD "+
-				"on UD.roundId=R.roundId "+
+				"UD.roundId=R.roundId "+
 				"Order By R.dateUpdated"
 				,null);
 		HashMap<Long, Round> rounds=new HashMap<Long, Round>();

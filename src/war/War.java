@@ -57,23 +57,23 @@ public class War extends Game{
 			playersCards.add(new ArrayList<Card>());
 		}
 
-//		for (int i=0;i<deckSize;i++){			
-//			Card card=deck.drawCard();			
-//			playersCards.get(i%players.size()).add(card);			
-//			
-//		}
+		for (int i=0;i<deckSize;i++){			
+			Card card=deck.drawCard();			
+			playersCards.get(i%players.size()).add(card);			
+			
+		}
 		
-	playersCards.get(1).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+8,"back",8,Color.SPADE));
-	playersCards.get(0).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+9,"back",9,Color.SPADE));	
-	
-    playersCards.get(0).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+2,"back",2,Color.CLUB));
-    playersCards.get(0).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+3,"back",3,Color.CLUB));
-    playersCards.get(0).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+4,"back",4,Color.CLUB));
-    playersCards.get(0).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+5,"back",5,Color.CLUB));
-    playersCards.get(1).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+2,"back",2,Color.CLUB));
-    playersCards.get(1).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+7,"back",7,Color.CLUB));
-    playersCards.get(1).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+8,"back",8,Color.CLUB));
-    playersCards.get(1).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+9,"back",9,Color.CLUB));
+//	playersCards.get(1).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+8,"back",8,Color.SPADE));
+//	playersCards.get(0).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+9,"back",9,Color.SPADE));	
+//	
+//    playersCards.get(0).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+2,"back",2,Color.CLUB));
+//    playersCards.get(0).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+3,"back",3,Color.CLUB));
+//    playersCards.get(0).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+4,"back",4,Color.CLUB));
+//    playersCards.get(0).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+5,"back",5,Color.CLUB));
+//    playersCards.get(1).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+2,"back",2,Color.CLUB));
+//    playersCards.get(1).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+7,"back",7,Color.CLUB));
+//    playersCards.get(1).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+8,"back",8,Color.CLUB));
+//    playersCards.get(1).add(new StandartCard(new CardHandler(),Color.CLUB.getCode()+9,"back",9,Color.CLUB));
 		for (int i=0;i<players.size();i++){
 			ConnectionsManager.getConnectionsManager().sendToAll(new Message(new DealCardAction(playersCards.get(i),players.get(i).getId())));
 		}
@@ -88,8 +88,6 @@ public class War extends Game{
 	public Queue<Position.Player> setTurns() {
 		return utils.Turns.clockWise(Position.Player.BOTTOM);
 	}
-
-
 
 	@Override
 	public int minPlayers() {		

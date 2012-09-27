@@ -10,13 +10,6 @@ import carddeckplatform.game.ScoringActivity;
 public class ScoringSystem {
 	Game game=null;
 	private ScoringManager scoringManager;
-	public static class Holder{
-		public static ScoringSystem instance= new ScoringSystem();
-	}
-	public static ScoringSystem getInstance(){
-		return Holder.instance;
-	}
-	
 	public boolean addPointsToPlayer(long id, long score) throws Exception {
 		return game.addPointsToPlayer(id, score);
 	}
@@ -29,19 +22,23 @@ public class ScoringSystem {
 	public boolean makeTransaction() throws Exception {
 		return game.makeTransaction(scoringManager);
 	}
-	
+	public static class Holder{
+		public static ScoringSystem instance= new ScoringSystem();
+	}
 	private ScoringSystem() {
 		scoringManager = new ScoringManager(CarddeckplatformActivity.getContext(), ScoringActivity.DBNAME);
 	}
-	
+	public static ScoringSystem getInstance(){
+		return Holder.instance;
+	}
 	public void open() throws SQLException {
 		scoringManager.open();
 	}
 	public void close() {
 		scoringManager.close();
 	}
-	public Game createNewGame(ArrayList<Player> players, String gameType) {
-		return scoringManager.createNewGame(players, gameType);
+	public void createNewGame(ArrayList<Player> players, String gameType) {
+		this.game= scoringManager.createNewGame(players, gameType);
 	}
 	public void makeNewRound(ArrayList<Long> newScores)
 			throws Exception {
