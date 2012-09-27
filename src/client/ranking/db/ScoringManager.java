@@ -150,6 +150,7 @@ public class ScoringManager {
 	public Round[] showAllRoundsRounds(Game game){
 		Cursor cursor=database.rawQuery(
 				"select R.roundId,R.dateUpdated,UD.userName,UD.point "+
+				"from "+
 				"( "+
 				"select roundId,dateUpdated "+
 				"from Rounds "+
