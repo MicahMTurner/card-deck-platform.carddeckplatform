@@ -358,7 +358,7 @@ public class GameActivity extends Activity {
 		//making headers
 		TableRow tr= new TableRow(GameActivity.this);
 		TextView tv= new TextView(GameActivity.this);
-		tv.setText("Row Number");
+		tv.setText("Round");
 		tr.addView(tv);
 		tr.addView(makeBlankView());
 		for(int i=0;i<rounds[0].getRoundResult().size();i++){

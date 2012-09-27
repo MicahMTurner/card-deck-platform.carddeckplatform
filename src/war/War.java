@@ -131,6 +131,7 @@ public class War extends Game{
 			
 			try {
 				ScoringSystem.getInstance().addPointsToPlayer(winner.getId(), 1);
+				ScoringSystem.getInstance().makeTransaction();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
