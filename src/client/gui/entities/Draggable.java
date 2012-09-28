@@ -35,7 +35,7 @@ import android.graphics.Canvas;
 public abstract class Draggable implements Serializable{	
 	
 	private String carrier = "";
-	private boolean moveable;
+	private boolean moveable=true;
 	protected Point prevCoord;
 	protected int id;
 	protected Point scale;
@@ -282,7 +282,7 @@ public abstract class Draggable implements Serializable{
 	 * @return
 	 */
 	public boolean isMoveable() {
-		return true;
+		return moveable;
 	}
 	
 	/**

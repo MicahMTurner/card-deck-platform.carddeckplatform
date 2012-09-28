@@ -24,11 +24,20 @@ public class PlayerHandler implements PlayerEventsHandler {
 
 	@Override
 	public boolean onCardAdded(Player target, Player player, Card card) {
+		
+		if(player!=null)
+			return false;
+		
 		// TODO Auto-generated method stub
-		if(ClientController.get().getMe().equals(target))
+		if(ClientController.get().getMe().equals(target)){
 			card.setRevealed(true);
-		else
+			card.setMoveable(true);
+		}else{
 			card.setRevealed(false);
+			card.setMoveable(false);
+		}
+
+		
 		return true;
 	}
 
