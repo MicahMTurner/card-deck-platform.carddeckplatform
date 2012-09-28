@@ -25,7 +25,9 @@ public class BluetoothAcceptor implements Acceptor {
 			ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
 			GameEnvironment.get().getBluetoothInfo().increaseCurrentServerSocketIndex();
+			
 			return new Streams(out, in);
+			
 		} catch (IOException e) {
 			// TODO: handle exception
 		}

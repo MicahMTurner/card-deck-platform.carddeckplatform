@@ -11,6 +11,7 @@ public class JunkHandler  implements PublicEventsHandler {
 	public boolean onCardAdded(Public publicZone, Player player, Card card) {
 		if(player==null){
 			card.hide();
+			card.setMoveable(false);
 			return true;
 		}else{
 			return false;

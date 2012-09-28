@@ -38,7 +38,7 @@ public class Durak extends Game{
 	utils.Player startingPlayer;
 	Button button;
 	static private StandartCard.Color rulerColor=null;
-	static private ArrayList<utils.Player> winners=new ArrayList<utils.Player>();
+	static private ArrayList<utils.Player> winners=null;
 	
 	static private ArrayList<utils.Player> getSortedPlayers(){
 		ArrayList<utils.Player> sortedPlayers = new ArrayList<utils.Player>(staticPlayers);
@@ -80,7 +80,7 @@ public class Durak extends Game{
 				
 	}
 	
-	static private PlayerComp playerComp = new PlayerComp();
+	static final private PlayerComp playerComp = new PlayerComp();
 	
 	private static utils.Player getNextPlayer(utils.Player player){
 		ArrayList<utils.Player> sortedPlayers = getAllSortedPlayers();
@@ -106,6 +106,7 @@ public class Durak extends Game{
 	
 	public Durak(){
 		initActiveNumbers();
+		winners=new ArrayList<utils.Player>();
 	}
 
 	static private boolean activeNumbers[] = {false,false,false,false,false,false,false,false,false};
@@ -174,7 +175,7 @@ public class Durak extends Game{
 		ArrayList<Card> cardsToRemove = new ArrayList<Card>();
 		Deck deck = new Deck(new CardHandler(),true);	
 		for(Card card : deck.getCards())
-			if( ((StandartCard) card).getValue() < 6)
+			if( ((StandartCard) card).getValue() < 10)
 				cardsToRemove.add(card);
 		deck.getCards().removeAll(cardsToRemove);
 		return deck;
@@ -261,7 +262,7 @@ public class Durak extends Game{
 			bito=false;
 			
 		}
-		for (utils.Player player : getPlayers()){
+		for (utils.Player player : getSortedPlayers()){
 			if(deck.cardsHolding()==0 && player.cardsHolding()==0)
 				winners.add(player);
 		}
@@ -273,7 +274,7 @@ public class Durak extends Game{
 			ArrayList<utils.Player> p = new ArrayList<utils.Player>(staticPlayers);
 			p.removeAll(winners);
 			ClientController.get().popMessage(p.get(0).getUserName() + " is the Durak :)");
-			return -1;
+			return p.get(0).getId();
 		}
 			
 		
@@ -381,6 +382,7 @@ public class Durak extends Game{
 		dealCardAnimation(deckId, deckCards, 6);
 		
 		
+		
 		ConnectionsManager.getConnectionsManager().sendToAll(new Message(new SetRulerCardAction(rulerCard, Position.Button.TOPRIGHT.getId())));
 		
 //		for(int i=0 ; i<numOfPlayers * 6 ; i++){
@@ -419,7 +421,7 @@ public class Durak extends Game{
 		buttons.add(button);
 		
 		
-		DeckArea da = new DeckArea(Position.Button.TOPRIGHT);
+		DeckArea da = new DeckArea(Position.Button.TOPRIGHT,true, false, false);
 		droppables.add(da);
 		
 		deckId = da.getId();

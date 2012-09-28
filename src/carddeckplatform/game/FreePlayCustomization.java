@@ -122,11 +122,13 @@ public class FreePlayCustomization extends Activity {
     			return true;
     		}
     		case Menu.FIRST+2:{
-    			final Dialog dialog = new Dialog(FreePlayCustomization.this);
-    			dialog.setTitle("Help");
-    			dialog.setContentView(R.layout.textlayout);
-    			dialog.show();
-    			Toast.makeText(this, "Help", 2000).show();
+//    			final Dialog dialog = new Dialog(FreePlayCustomization.this);
+//    			dialog.setTitle("Help");
+//    			dialog.setContentView(R.layout.textlayout);
+//    			dialog.show();
+//    			Toast.makeText(this, "Help", 2000).show();
+    			
+    			editView.toggleHelp();
     			return true;
     		}
     		default:{
