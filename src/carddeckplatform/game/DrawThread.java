@@ -5,11 +5,11 @@ import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
 public class DrawThread extends Thread {
-	private SurfaceHolder surfaceHolder;
+	protected SurfaceHolder surfaceHolder;
 
-	private boolean running = false;
+	protected boolean running = false;
 
-	private Table table;
+	protected Table table;
 
 	public void setRunning(boolean value) {
 		running = value;

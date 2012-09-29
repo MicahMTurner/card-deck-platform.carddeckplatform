@@ -18,13 +18,16 @@ import utils.Public;
 import utils.StandardSizes;
 import utils.droppableLayouts.DroppableLayout;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import client.gui.entities.Droppable;
+import client.gui.entities.MetricsConvertion;
 import client.gui.entities.Table;
 import client.gui.entities.TouchHandler;
 import client.gui.entities.TouchManager;
@@ -40,7 +43,7 @@ import freeplay.customization.ToggleModeButton;
 
 public class EditView extends SurfaceView implements SurfaceHolder.Callback,
 TouchHandler {
-
+	private boolean showHelp=false;
 	public enum Mode{ONE_BIG, MANY_SMALL}
 	
 	Mode mode = Mode.ONE_BIG;
@@ -66,6 +69,10 @@ TouchHandler {
 	
 	public int getCardsToDeal() {
 		return cardsToDeal;
+	}
+	
+	public void toggleHelp(){
+		showHelp = !showHelp;
 	}
 	
 	public EditView(Context context, AttributeSet attrs) {
@@ -227,7 +234,7 @@ TouchHandler {
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		drawThread = new DrawThread(holder, table);
+		drawThread = new EditDrawThread(holder, table);
 		drawThread.setName("drawThread");
 		drawThread.setRunning(true);
 		drawThread.start();
@@ -279,6 +286,143 @@ TouchHandler {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight());
 		table.setDimentions(getMeasuredWidth(), getMeasuredHeight());
+	}
+	
+	
+	private class EditDrawThread extends DrawThread {
+		public void setRunning(boolean value) {
+			running = value;
+		}
+
+		public EditDrawThread(SurfaceHolder surfaceHolder, Table table) {
+			super(surfaceHolder, table);
+		}
+		
+		
+		private void drawPlayerHelp(Canvas c){
+			Bitmap playerHelp=BitmapHolder.get().getBitmap("playerhelp");
+			Matrix matrix = new Matrix();
+			
+			
+			Point p= new Point(70,30);
+			Point scale = new Point(40,30);
+			
+			scale = MetricsConvertion.pointRelativeToPx(scale);
+			p = MetricsConvertion.pointRelativeToPx(p);
+			
+			
+			float x=MetricsConvertion.pointRelativeToPx(p).getX();
+			float y=MetricsConvertion.pointRelativeToPx(p).getY();
+			
+			
+			
+			// transformations.		
+			//matrix.postScale((float)p.getX()/(float)buttonBitmap.getWidth(), ((float)p.getX() * ratio)/(float)buttonBitmap.getHeight());
+			float ratio = (float)playerHelp.getHeight() / (float)playerHelp.getWidth();
+			matrix.postScale((float)scale.getX()/(float)playerHelp.getWidth(), ((float)scale.getX() * ratio)/(float)playerHelp.getHeight());
+			matrix.postTranslate(p.getX()-scale.getX()/2, p.getY()-scale.getY()/2);
+			
+			
+			
+			c.drawBitmap(playerHelp, matrix, null);
+		}
+		
+		
+		
+		private void drawPublicHelp(Canvas c){
+			Bitmap publicHelp=BitmapHolder.get().getBitmap("publichelp");
+			Matrix matrix = new Matrix();
+			
+			
+			Point p= new Point(30,60);
+			Point scale = new Point(40,30);
+			
+			scale = MetricsConvertion.pointRelativeToPx(scale);
+			p = MetricsConvertion.pointRelativeToPx(p);
+			
+			
+			float x=MetricsConvertion.pointRelativeToPx(p).getX();
+			float y=MetricsConvertion.pointRelativeToPx(p).getY();
+			
+			
+			
+			// transformations.		
+			//matrix.postScale((float)p.getX()/(float)buttonBitmap.getWidth(), ((float)p.getX() * ratio)/(float)buttonBitmap.getHeight());
+			float ratio = (float)publicHelp.getHeight() / (float)publicHelp.getWidth();
+			matrix.postScale((float)scale.getX()/(float)publicHelp.getWidth(), ((float)scale.getX() * ratio)/(float)publicHelp.getHeight());
+			matrix.postTranslate(p.getX()-scale.getX()/2, p.getY()-scale.getY()/2);
+			
+			
+			
+			c.drawBitmap(publicHelp, matrix, null);
+		}
+		
+		
+		private void drawButtonHelp(Canvas c){
+			Bitmap publicHelp=BitmapHolder.get().getBitmap("buttonhelp");
+			Matrix matrix = new Matrix();
+			
+			
+			Point p= new Point(30,10);
+			Point scale = new Point(40,30);
+			
+			scale = MetricsConvertion.pointRelativeToPx(scale);
+			p = MetricsConvertion.pointRelativeToPx(p);
+			
+			
+			float x=MetricsConvertion.pointRelativeToPx(p).getX();
+			float y=MetricsConvertion.pointRelativeToPx(p).getY();
+			
+			
+			
+			// transformations.		
+			//matrix.postScale((float)p.getX()/(float)buttonBitmap.getWidth(), ((float)p.getX() * ratio)/(float)buttonBitmap.getHeight());
+			float ratio = (float)publicHelp.getHeight() / (float)publicHelp.getWidth();
+			matrix.postScale((float)scale.getX()/(float)publicHelp.getWidth(), ((float)scale.getX() * ratio)/(float)publicHelp.getHeight());
+			matrix.postTranslate(p.getX()-scale.getX()/2, p.getY()-scale.getY()/2);
+			
+			
+			
+			c.drawBitmap(publicHelp, matrix, null);
+		}
+
+
+		@Override
+		public void run() {
+			Canvas c;
+			while (running) {
+				try {
+					// Don't hog the entire CPU
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+				}
+				c = null;
+				try {
+
+					c = surfaceHolder.lockCanvas(null);
+					synchronized (surfaceHolder) {
+						// System.out.println(c.getDensity());
+						try {
+							table.draw(c);// draw it
+							
+							if(showHelp){
+								drawPlayerHelp(c);
+								drawPublicHelp(c);
+								drawButtonHelp(c);
+							}
+							
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						
+					}
+				} finally {
+					if (c != null) {
+						surfaceHolder.unlockCanvasAndPost(c);
+					}
+				}
+			}
+		}
 	}
 	
 	

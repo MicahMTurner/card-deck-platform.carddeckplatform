@@ -20,7 +20,7 @@ public class DeckArea extends Droppable{
 	
 	boolean hide=true;
 	boolean putOnTop=false;
-	
+	boolean isTouchable=true;
 
 	public LinkedList<Card> cards = new LinkedList<Card>();
 	/**
@@ -38,12 +38,12 @@ public class DeckArea extends Droppable{
 	 * @param hide whether to hide or reveal the cards when they are added to the deck area.
 	 * @param putOnTop whether to put the card on top or bottom.
 	 */
-	public DeckArea(Position.Button position, boolean hide, boolean putOnTop){
+	public DeckArea(Position.Button position, boolean hide, boolean putOnTop, boolean isTouchable){
 		super(position.getId(),position, DroppableLayout.LayoutType.DECK,null);
 		this.image = "playerarea";
 		this.hide = hide;
 		this.putOnTop = putOnTop;
-		
+		this.isTouchable = isTouchable;
 	}
 	
 	@Override
@@ -69,6 +69,7 @@ public class DeckArea extends Droppable{
 		cards.push(card);
 		card.setLocation(getX(), getY());
 		
+		card.setMoveable(isTouchable);
 	}
 	/**
 	 * happens when a card is being added to this deck area
@@ -85,6 +86,8 @@ public class DeckArea extends Droppable{
 				cards.addLast(card);
 			else
 				cards.add(card);
+			
+			card.setMoveable(isTouchable);
 		}
 		return true;
 		

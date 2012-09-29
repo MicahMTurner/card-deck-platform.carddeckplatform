@@ -35,7 +35,7 @@
         android:id="@+id/customizationSeekBar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:max="14"
+        android:max="13"
         android:progress="0"
         android:secondaryProgress="0"
 	/>
