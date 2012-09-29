@@ -19,39 +19,25 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.R.bool;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.Settings;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.LayoutAnimationController;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
 import com.google.gson.Gson;
@@ -61,10 +47,6 @@ public class MarketActivity extends Activity {
 	Collection<PluginDetails> plugins = new ArrayList<PluginDetails>();
 
 	String ROOT = "data";
-	ProgressDialog mProgressDialog;
-	private int progressBarStatus = 0;
-	private Handler progressBarHandler = new Handler();
-	int fileSize;
 	TableLayout tl;
 	
 	
@@ -261,15 +243,6 @@ public class MarketActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				if(!downloaded.isFlag()){
-					// instantiate it within the onCreate method
-					mProgressDialog = new ProgressDialog(MarketActivity.this);
-					mProgressDialog.setMessage("Downloading File");
-					mProgressDialog.setIndeterminate(false);
-					mProgressDialog.setMax(100);
-					mProgressDialog
-							.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-					mProgressDialog.setCancelable(true);
-	
 					// execute this when the downloader must be fired
 					DownloadFile downloadFile = new DownloadFile(downloaded);
 					downloadFile.execute(url);
@@ -304,6 +277,8 @@ public class MarketActivity extends Activity {
 	private class DownloadFile extends
 			AsyncTask<PluginDetails, Integer, MyBoolean> {
 		MyBoolean downloaded;
+		ProgressDialog mProgressDialog;
+		boolean canceled=false;
 		public DownloadFile(MyBoolean downloaded) {
 			this.downloaded=downloaded;
 		}
@@ -328,7 +303,7 @@ public class MarketActivity extends Activity {
 				byte data[] = new byte[4096];
 				long total = 0;
 				int count;
-				while ((count = input.read(data)) != -1) {
+				while ((count = input.read(data)) != -1 && !canceled) {
 					total += count;
 					System.out.println((int) (total * 100 / fileLength));
 					// publishing the progress....
@@ -338,7 +313,16 @@ public class MarketActivity extends Activity {
 				output.flush();
 				output.close();
 				input.close();
-				downloaded.setFlag(true);
+				if(!canceled)
+					downloaded.setFlag(true);
+				else{
+					try{
+						StaticFunctions.deleteFile("plugins/"+pluginDetail[0].getFilename());
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
 			} catch (Exception e) {
 				cannotMakeConnection();
 				e.printStackTrace();
@@ -348,6 +332,22 @@ public class MarketActivity extends Activity {
 
 		@Override
 		protected void onPreExecute() {
+			// instantiate it within the onCreate method
+			mProgressDialog = new ProgressDialog(MarketActivity.this);
+			mProgressDialog.setMessage("Downloading File");
+			mProgressDialog.setIndeterminate(false);
+			mProgressDialog.setMax(100);
+			mProgressDialog
+					.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			mProgressDialog.setCancelable(true);
+			mProgressDialog.setButton("Cancel", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					canceled=true;
+					mProgressDialog.dismiss();
+				}
+			});
 			mProgressDialog.show();
 		}
 

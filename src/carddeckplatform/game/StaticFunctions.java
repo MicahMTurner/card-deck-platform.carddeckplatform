@@ -240,9 +240,6 @@ public class StaticFunctions {
 
 	public static FileOutputStream getPluginOutputStream(String filename) throws FileNotFoundException {
 		return new FileOutputStream(GameEnvironment.path+"plugins/"+filename);
-		
-		
-		
 	}
 	
 }
