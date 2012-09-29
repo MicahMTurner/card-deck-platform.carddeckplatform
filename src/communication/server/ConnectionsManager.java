@@ -172,7 +172,7 @@ public class ConnectionsManager {
 			Connection connection = new Connection(position.getId(),in, out);
 			connections.add(connection);
 			sendTo(new Message(new LoadGameAction(gameId, freePlayProfile)),connection.getId());
-			sendTo(new Message(new InitialConnectionAction(position,playersInfo)),connection.getId());
+			sendTo(new Message(new InitialConnectionAction(position,playersInfo,freePlayProfile)),connection.getId());
 			connection.getInitialMessage();			
 		    new Thread(connection).start();	
 			

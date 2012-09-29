@@ -50,7 +50,7 @@ public class FreePlayCustomization extends Activity {
 	@Override
     public boolean onCreateOptionsMenu(Menu menu){
     	menu.add(0, Menu.FIRST, Menu.NONE, "Save").setIcon(R.drawable.save);
-    	menu.add(0, Menu.FIRST+1, Menu.NONE, "More options").setIcon(R.drawable.rank);
+    	menu.add(0, Menu.FIRST+1, Menu.NONE, "Auto deal").setIcon(R.drawable.rank);
     	menu.add(0, Menu.FIRST+2, Menu.NONE, "Help").setIcon(R.drawable.info);    	
     	
     	return true;
