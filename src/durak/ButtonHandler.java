@@ -13,9 +13,7 @@ public class ButtonHandler implements ButtonEventsHandler {
 		//ClientController.get().getZone(Durak.deckId).peek().moveTo(ClientController.get().getZone(Durak.deckId), ClientController.get().getMe());
 		
 		
-				// if I am the attacked player then I may end the round
-		// TODO: add enable timer - enable the end round button only after several seconds after the last card was put in public.
-		if(Durak.isAttacked(ClientController.get().getMe()) && Durak.hasOpenCards() || Durak.getCurrentAttacker().equals(ClientController.get().getMe()) && !Durak.hasOpenCards()){
+		if(Durak.isAttacked(ClientController.get().getMe()) && Durak.hasOpenCards() || Durak.getCurrentAttacker().equals(ClientController.get().getMe()) && !Durak.hasOpenCards() && Durak.hasActiveNumber()){
 			ClientController.sendAPI().endRound();
 			ClientController.get().endRound();
 		}	

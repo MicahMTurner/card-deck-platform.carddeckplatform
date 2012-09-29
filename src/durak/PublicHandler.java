@@ -40,6 +40,7 @@ public class PublicHandler implements PublicEventsHandler {
 		
 		if (answer){
 			card.reveal();
+			card.setMoveable(true);
 			Durak.addActiveNumber(((StandartCard) card).getValue());
 		}
 			

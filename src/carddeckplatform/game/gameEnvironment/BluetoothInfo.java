@@ -12,7 +12,7 @@ public class BluetoothInfo {
 	private UUID appUUIDs[] = new UUID[4];
 	private BluetoothDevice hostDevice;
 	private BluetoothServerSocket bluetoothServerSocket;
-	private BluetoothServerSocket bluetoothServerSockets[] = new BluetoothServerSocket[4];
+	private final BluetoothServerSocket bluetoothServerSockets[] = new BluetoothServerSocket[4];
 	private int currentServerSocketIndex;
 	
 	

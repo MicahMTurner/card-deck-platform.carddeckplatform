@@ -279,7 +279,7 @@ public class TutorialView extends TableView  {
 					break;
 				}
 				case DECK:{
-					DeckArea deckArea=new DeckArea(Position.Button.TOPRIGHT, false, false);
+					DeckArea deckArea=new DeckArea(Position.Button.TOPRIGHT, false, false, true);
 					table.addDroppable(deckArea);
 					new GlowAnimation(deckArea, 2000, Color.argb(255, 255, 255, 255)).execute();
 					break;
