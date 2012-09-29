@@ -26,6 +26,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
@@ -66,6 +67,7 @@ public class MarketActivity extends Activity {
 	int fileSize;
 	TableLayout tl;
 	
+	
 	private  void cannotMakeConnection(){
 		GameEnvironment.get().getHandler().post(new Runnable() {
 			
@@ -96,9 +98,24 @@ public class MarketActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         
 		setContentView(R.layout.downloadplugin);
+		final MyBoolean myBoolean= new MyBoolean(true);
 		tl = (TableLayout) findViewById(R.id.markettable);
-		final ProgressDialog dialog = ProgressDialog.show(MarketActivity.this, "", 
-                "Loading. Please wait...", true);
+		final ProgressDialog loadingDialog = ProgressDialog.show(MarketActivity.this, "", 
+                "Loading. Please wait...", true,true,new OnCancelListener() {
+					
+					@Override
+					public void onCancel(DialogInterface dialog) {
+						myBoolean.setFlag(false);
+						MarketActivity.this.finish();
+					}
+				});
+//		loadingDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+//		    @Override
+//		    public void onClick(DialogInterface dialog, int which) {
+//		    	myBoolean.setFlag(false);
+//				MarketActivity.this.finish();
+//		    }
+//		});
 		Thread thread = new Thread(new Runnable() {
 
 			@Override
@@ -109,11 +126,13 @@ public class MarketActivity extends Activity {
 						
 						@Override
 						public void run() {
-							dialog.dismiss();
+							loadingDialog.dismiss();
 						}
 					});
 				} catch (Exception e) {
-					cannotMakeConnection();
+					loadingDialog.dismiss();
+					if(myBoolean.isFlag())
+						cannotMakeConnection();
 					e.printStackTrace();
 				}
 			}
