@@ -101,7 +101,9 @@ public class GameActivity extends Activity {
 	protected void onResume() {	
 		super.onResume();		
 		//posByComp.start();
-		AutoHide.get().start(GameActivity.context);
+		if (this.host!=null){
+			AutoHide.get().start(GameActivity.context);
+		}
 		
 	}
 	

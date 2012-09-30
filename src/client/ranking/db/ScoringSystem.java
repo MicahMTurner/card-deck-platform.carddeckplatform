@@ -2,6 +2,8 @@ package client.ranking.db;
 
 import java.util.ArrayList;
 
+import client.ranking.db.exception.SqlOpenException;
+
 import android.database.SQLException;
 import carddeckplatform.game.CarddeckplatformActivity;
 import carddeckplatform.game.GameActivity;
@@ -31,8 +33,15 @@ public class ScoringSystem {
 	public static ScoringSystem getInstance(){
 		return Holder.instance;
 	}
-	public void open() throws SQLException {
-		scoringManager.open();
+	public void open() throws SqlOpenException {
+		try {
+			scoringManager.open();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SqlOpenException(e.getMessage());
+		}
+		
 	}
 	public void close() {
 		scoringManager.close();
