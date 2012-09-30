@@ -161,7 +161,7 @@ public class Host implements Runnable{
 		
 		System.out.println("got all players");
 		game.initiate();		
-	
+		game.resetRoundNumber();
 		System.out.println("game initiated");
 		game.dealCards();		
 		game.setupTurns();

@@ -333,4 +333,7 @@ public abstract class Game {
 	public void newTurn(Player player){
 		
 	}
+	public void resetRoundNumber() {
+		this.roundNumber=0;
+	}
 }
