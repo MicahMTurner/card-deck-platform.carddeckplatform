@@ -180,7 +180,9 @@ public class ConnectionsManager {
 
 	}
 	public void connectionLost(Connection connection){
-		connections.remove(connection);		
+//		connection.cancelConnection();
+//		connections.remove(connection);		
+		
 		sendToAllExcptMe(new Message(new PlayerLeftAction()), connection.getId());		
 	}
 	public void stopListening(){
@@ -203,7 +205,7 @@ public class ConnectionsManager {
 		for (Connection connection : connections){
 			connection.cancelConnection();
 		}
-		
+		connections.clear();
 		GameEnvironment.get().getBluetoothInfo().resetSockets();
 		closeServerSocket();
 	}

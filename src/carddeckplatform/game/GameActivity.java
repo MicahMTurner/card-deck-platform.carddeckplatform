@@ -295,7 +295,7 @@ public class GameActivity extends Activity {
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-    	menu.add(0, Menu.FIRST, Menu.NONE, "Restart").setIcon(R.drawable.restart);
+    	menu.add(0, Menu.FIRST, Menu.NONE, "Restart").setEnabled(GameEnvironment.get().getPlayerInfo().isServer()).setIcon(R.drawable.restart);
     	menu.add(0, Menu.FIRST+1, Menu.NONE, "Ranking").setIcon(R.drawable.rank);
     	menu.add(0, Menu.FIRST+2, Menu.NONE, "start").setEnabled(enableStartButton).setIcon(R.drawable.start);
     	if (GameEnvironment.get().getPlayerInfo().isServer() && LivePosition.get().isRunning()){
