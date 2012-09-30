@@ -118,7 +118,11 @@ public class Host implements Runnable{
 					
 				}
 			});			
-		}		
+		}else{
+			if (ConnectionsManager.getConnectionsManager().getNumberOfConnections()==game.maxPlayers()){
+				cdl.countDown();
+			}
+		}
 	}
 	public void waitForPlayers() throws Exception{
 
@@ -133,7 +137,9 @@ public class Host implements Runnable{
 	    }
 		cdl.await();
 		if (minPlayerAchievedDialog!=null && ConnectionsManager.getConnectionsManager().getNumberOfConnections()==game.getNumberOfParticipants()){
-			minPlayerAchievedDialog.dismiss();
+			if (minPlayerAchievedDialog.isShowing()){
+				minPlayerAchievedDialog.dismiss();
+			}
 		}
 		GameActivity.enableStartButton=false;
 	}

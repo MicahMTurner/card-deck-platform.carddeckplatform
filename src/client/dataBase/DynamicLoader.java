@@ -240,9 +240,8 @@ public class DynamicLoader {
 		// go over mapping game names
 		for (String gameName : mapping.keySet()) {
 			// add game name ".jar" , create new file instance from plugin dir.
-			Pair<String, String> nameAndMD5 = new Pair<String, String>(gameName
-					+ ".jar", calcMd5(new File(PLUGINDIR + "/" + gameName
-					+ ".jar")));
+			Pair<String, String> nameAndMD5 = new Pair<String, String>(gameName, 
+					calcMd5(new File(PLUGINDIR + "/" + gameName	+ ".jar")));
 			namesAndMD5.add(nameAndMD5);
 		}
 		return namesAndMD5;

@@ -52,8 +52,7 @@ public class RankingActivity extends Activity {
 		setContentView(R.layout.rankinglayout);
 		DynamicLoader dl = new DynamicLoader();
 		TableLayout tl = (TableLayout) findViewById(R.id.rankTable);
-		ArrayList<Pair<String, String>> plugins = dl.getInstalledPlugins();
-		plugins = dl.getInstalledPlugins();
+		ArrayList<Pair<String, String>> plugins = dl.getInstalledPlugins();		
 		for (int i = 0; i < plugins.size(); i++) {
 			final Pair<String, String> pair = plugins.get(i);
 			TableRow tr = new TableRow(this);

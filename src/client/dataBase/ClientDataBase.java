@@ -1,16 +1,9 @@
 package client.dataBase;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 
 import logic.client.Game;
-import president.President;
-
 import freeplay.FreePlay;
-
-
-import logic.client.Game;
 
 
 public class ClientDataBase {
@@ -43,17 +36,7 @@ public class ClientDataBase {
 		
 		if (gameName.equals("free play")){
 			return new FreePlay();
-		}
-//		if (gameName.equals("Durak")){
-//			return new Durak();
-//		}
-//		if(gameName.equals("war")){
-//			return new War();
-//		}
-		if(gameName.equals("president")){
-			return new President();
-		}
-		
+		}		
 		return loader.LoadPlugin(gameName);	
 	}
 	
@@ -61,9 +44,6 @@ public class ClientDataBase {
 	public Set<String> getGamesNames(){
 		Set<String>gameNames=loader.getGameNames();
 		gameNames.add("free play");
-//		gameNames.add("Durak");
-//		gameNames.add("war");
-		gameNames.add("president");
 		return gameNames;
 	}	
 }
