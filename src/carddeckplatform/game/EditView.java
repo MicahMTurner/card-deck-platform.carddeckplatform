@@ -71,6 +71,10 @@ TouchHandler {
 		return cardsToDeal;
 	}
 	
+	public boolean isShowHelp() {
+		return showHelp;
+	}
+	
 	public void toggleHelp(){
 		showHelp = !showHelp;
 	}

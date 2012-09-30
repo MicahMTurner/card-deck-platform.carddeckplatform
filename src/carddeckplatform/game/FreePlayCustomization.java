@@ -14,6 +14,7 @@ import android.app.Dialog;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,6 +49,15 @@ public class FreePlayCustomization extends Activity {
 	}
 	
 	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK && editView.isShowHelp()) {
+	    	editView.toggleHelp();
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
     public boolean onCreateOptionsMenu(Menu menu){
     	menu.add(0, Menu.FIRST, Menu.NONE, "Save").setIcon(R.drawable.save);
     	menu.add(0, Menu.FIRST+1, Menu.NONE, "Auto deal").setIcon(R.drawable.rank);
@@ -56,6 +66,8 @@ public class FreePlayCustomization extends Activity {
     	return true;
     }
     
+	
+	
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {    	
