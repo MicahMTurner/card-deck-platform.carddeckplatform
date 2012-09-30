@@ -60,11 +60,11 @@ public class AutoHide implements SensorEventListener {
 	public void start(Context context){
 		if (!running){
 			running=true;
-			//		initiate(context);
-			//		sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 
-			//                SensorManager.SENSOR_DELAY_NORMAL);
-			//        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), 
-			//        		SensorManager.SENSOR_DELAY_NORMAL);
+					initiate(context);
+					sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 
+			                SensorManager.SENSOR_DELAY_NORMAL);
+			        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), 
+			        		SensorManager.SENSOR_DELAY_NORMAL);
 		}
 	}
 	
