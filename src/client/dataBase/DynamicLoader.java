@@ -54,7 +54,7 @@ public class DynamicLoader {
 	//add mapping between game instance and game name. 
 	//change host, so it is holding the same game instance as the client? or sending on end turn, who ended the turn
 	//and then see if he is last in queue... (or first and then remove him to end of line.. something like that...)
-//	private HashMap<String,Game> gameInstance;
+	//private HashMap<String,Game> gameInstance;
 	private Collection<PluginDetails> plugins = new ArrayList<PluginDetails>();
 	private CountDownLatch cdl;
 	public DynamicLoader() {
@@ -138,11 +138,14 @@ public class DynamicLoader {
 					mapPlugins();
 				}
 			}
-
-			initalizeClassLoader(gameName);
-
-			Class<?> cls =ClassLoaderDelegate.getDelegate().loadClass(mapping.get(gameName));
-			game=(Game)cls.newInstance();
+			//if (gameInstance.get(gameName)==null){
+				initalizeClassLoader(gameName);
+			
+				Class<?> cls =ClassLoaderDelegate.getDelegate().loadClass(mapping.get(gameName));
+				game=(Game)cls.newInstance();
+			//}else{
+				//game= gameInstance.get(gameName);
+			//}
 
 			System.out.println("loading class: "+getClass().getClassLoader().toString());
 
@@ -229,7 +232,7 @@ public class DynamicLoader {
 		}
 	}
 
-	// maybe if we return HASH-MAP , the performance would be better
+	
 	public ArrayList<Pair<String, String>> getInstalledPlugins() {
 
 		ArrayList<Pair<String, String>> namesAndMD5 = new ArrayList<Pair<String, String>>();

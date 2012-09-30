@@ -276,7 +276,7 @@ public class GameActivity extends Activity {
 			   
 		    //setup all layout prefs
 		    setupLayout();		          
-		   // AutoHide.get().start(GameActivity.context);
+		    AutoHide.get().start(GameActivity.context);
 		} catch (IOException e) {
 			return e.getMessage();
 		}
