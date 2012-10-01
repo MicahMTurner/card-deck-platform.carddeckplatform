@@ -193,6 +193,7 @@ public class ConnectionsManager {
 						e.printStackTrace();
 					}
 				}
+				GameEnvironment.get().getBluetoothInfo().resetSockets();
 	}
 	
 	public void shutDown(){
