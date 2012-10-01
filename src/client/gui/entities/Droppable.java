@@ -336,32 +336,19 @@ public abstract class Droppable implements Serializable {
 	 * @param context context instance
 	 */
 	public void draw(Canvas canvas, Context context) {
-		
-		Bitmap img = BitmapHolder.get().getBitmap(image);
-		
-		if (img!=null){
-			Path clipPath = new Path();
-			float radius = 10f;
-		    float padding = radius / 2;
+		float radius = 10f;
+		Shape s = getShape();
+		//canvas.clipPath(clipPath);
+		//canvas.drawBitmap(img, matrix, null);
+		initiatePaintForGlow();
+		ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE,droppableColor);
+		mPaintForGlow.setColorFilter(colorFilterTint);
+		mPaintForGlow.setAlpha(50);
+		//mPaintForGlow.setARGB(50, 0, 250, 0);
+		//canvas.drawBitmap(img, matrix, mPaintForGlow);	
+		canvas.drawRoundRect(new RectF(new Rect((int)s.getMinX(), (int)s.getMinY(),(int)s.getMaxX(), (int)s.getMaxY())), radius, radius, mPaintForGlow);
 			
-			Matrix matrix = new Matrix();
 		
-			Point absScale = MetricsConvertion.pointRelativeToPx(getScale());
-			Shape s = getShape();
-			clipPath.addRoundRect(new RectF(new Rect((int)s.getMinX(), (int)s.getMinY(),(int)s.getMaxX(), (int)s.getMaxY())), radius, radius, Path.Direction.CW);
-			matrix.postScale((float) absScale.getX() / (float) img.getWidth(),(float) absScale.getY() / (float) img.getHeight());
-			matrix.postTranslate(getX() - absScale.getX() / 2, getY() - absScale.getY() / 2);
-			//canvas.clipPath(clipPath);
-			//canvas.drawBitmap(img, matrix, null);
-			initiatePaintForGlow();
-			ColorFilter colorFilterTint = new LightingColorFilter(Color.WHITE,droppableColor);
-			mPaintForGlow.setColorFilter(colorFilterTint);
-			mPaintForGlow.setAlpha(50);
-			//mPaintForGlow.setARGB(50, 0, 250, 0);
-			//canvas.drawBitmap(img, matrix, mPaintForGlow);	
-			canvas.drawRoundRect(new RectF(new Rect((int)s.getMinX(), (int)s.getMinY(),(int)s.getMaxX(), (int)s.getMaxY())), radius, radius, mPaintForGlow);
-			
-		}
 	}
 
 	private void initiatePaintForGlow() {

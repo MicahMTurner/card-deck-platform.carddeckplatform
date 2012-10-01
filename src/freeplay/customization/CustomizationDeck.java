@@ -13,9 +13,9 @@ import utils.Position.Button;
 import utils.StandartCard;
 
 public class CustomizationDeck extends DeckArea implements CustomizationItem {	
-	boolean hasDomColor=false;
+	boolean hasDomColor=true;
 	
-	private StandartCard sc1 = new StandartCard(null, "h14", "back", 2, null);
+	private StandartCard sc1 = new StandartCard(null, "h14", "backdeck", 2, null);
 	private StandartCard sc2 = new StandartCard(null, "h14", "back", 2, null);
 	
 	public CustomizationDeck(Button position) {
@@ -47,14 +47,13 @@ public class CustomizationDeck extends DeckArea implements CustomizationItem {
 
 	@Override
 	public void onClick() {
-		// TODO Auto-generated method stub
-		if(hasDomColor){
-			hasDomColor=false;
-			removeCard(null,sc2);
-		}else{
-			hasDomColor=true;
-			addCard(null,sc2);
-		}
+//		if(hasDomColor){
+//			hasDomColor=false;
+//			removeCard(null,sc2);
+//		}else{
+//			hasDomColor=true;
+//			addCard(null,sc2);
+//		}
 		
 	}
 
