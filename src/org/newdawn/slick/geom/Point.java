@@ -1,7 +1,5 @@
 package org.newdawn.slick.geom;
 
-import org.newdawn.slick.geom.Shape; 
-import org.newdawn.slick.geom.Transform; 
 
 /**
  * A single point shape

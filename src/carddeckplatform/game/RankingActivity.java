@@ -14,13 +14,12 @@ import android.app.Dialog;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -33,9 +32,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
-import client.controller.ClientController;
 import client.dataBase.DynamicLoader;
-import client.ranking.db.Game;
 
 public class RankingActivity extends Activity {
 

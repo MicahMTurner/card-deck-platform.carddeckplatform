@@ -3,7 +3,6 @@ package communication.actions;
 import java.util.ArrayList;
 
 import utils.Card;
-
 import client.controller.ClientController;
 
 public class DealCardAction implements Action{

@@ -1,9 +1,5 @@
 package client.gui.screens;
 
-import java.net.InetAddress;
-import java.net.Socket;
-
-//import carddeckplatform.game.DrawView;
 import android.app.Activity;
 import android.os.Bundle;
 

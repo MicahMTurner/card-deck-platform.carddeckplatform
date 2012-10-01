@@ -1,19 +1,9 @@
 package carddeckplatform.game;
 
-import java.io.File;
-
-import client.controller.LivePosition;
-
-import communication.link.ServerConnection;
-import communication.messages.RestartMessage;
-
-import carddeckplatform.game.gameEnvironment.GameEnvironment;
-import freeplay.customization.FreePlayProfile;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +17,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import freeplay.customization.FreePlayProfile;
 
 public class FreePlayCustomization extends Activity {
 	

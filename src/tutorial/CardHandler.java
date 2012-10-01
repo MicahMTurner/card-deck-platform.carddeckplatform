@@ -1,8 +1,8 @@
 package tutorial;
 
-import client.controller.AutoHide;
-import utils.Card;
 import handlers.CardEventsHandler;
+import utils.Card;
+import client.controller.AutoHide;
 
 public class CardHandler implements CardEventsHandler{
 

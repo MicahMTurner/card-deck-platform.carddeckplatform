@@ -1,6 +1,5 @@
 package freeplay.customization;
 
-import client.gui.entities.Droppable;
 import freeplay.HiddenPublicHandler;
 import freeplay.RevealedPublicHandler;
 import handlers.Handler;
@@ -8,10 +7,8 @@ import handlers.PublicEventsHandler;
 import utils.Card;
 import utils.Player;
 import utils.Point;
-import utils.Position;
 import utils.Public;
 import utils.StandartCard;
-import utils.droppableLayouts.DroppableLayout;
 import utils.droppableLayouts.DroppableLayout.LayoutType;
 
 public class CustomizationPublic extends Public implements CustomizationItem {

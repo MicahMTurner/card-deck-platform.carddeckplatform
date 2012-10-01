@@ -1,7 +1,5 @@
 package communication.actions;
 
-import client.controller.ClientController;
-import utils.Position;
 
 
 public class EndTurnAction implements Action{

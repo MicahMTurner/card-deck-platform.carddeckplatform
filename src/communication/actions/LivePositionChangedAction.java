@@ -2,12 +2,10 @@ package communication.actions;
 
 import java.util.ArrayList;
 
-
 import utils.Pair;
 import utils.Position;
 import utils.Position.Player;
 import client.controller.ClientController;
-import client.controller.LivePosition;
 
 public class LivePositionChangedAction implements Action {
 	private int playerId;

@@ -7,14 +7,13 @@ import java.util.List;
 
 import org.newdawn.slick.geom.Shape;
 
+import utils.droppableLayouts.DroppableLayout;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
-
-import utils.droppableLayouts.DroppableLayout;
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
@@ -293,30 +292,30 @@ public class Player extends Droppable implements  Comparable<Player>{
 		
 	}
 	
-	private void drawName(Canvas canvas, Context context){
-		float radius = 10f;
-		Shape s = getShape();
-		
-		Paint p1 = new Paint();
-		Paint p2 = new Paint();
-		
-		p1.setColor(Color.WHITE);
-		p2.setColor(Color.BLUE);
-		
-		switch(getPosition()){
-		case BOTTOM:
-			canvas.drawRoundRect(new RectF(new Rect((int)s.getMinX(), (int)s.getMinY()-25,(int)s.getMinX()+50, (int)s.getMinY())), radius, radius, p1);
-			canvas.drawRoundRect(new RectF(new Rect((int)s.getMinX()+1, (int)s.getMinY()-25+1,(int)s.getMinX()+50-1, (int)s.getMinY()-1)), radius, radius, p2);
-			break;
-		case LEFT:
-			
-			break;		
-		case RIGHT:
-			
-			break;		
-		case TOP:
-			break;
-		}
-		
-	}
+//	private void drawName(Canvas canvas, Context context){
+//		float radius = 10f;
+//		Shape s = getShape();
+//		
+//		Paint p1 = new Paint();
+//		Paint p2 = new Paint();
+//		
+//		p1.setColor(Color.WHITE);
+//		p2.setColor(Color.BLUE);
+//		
+//		switch(getPosition()){
+//		case BOTTOM:
+//			canvas.drawRoundRect(new RectF(new Rect((int)s.getMinX(), (int)s.getMinY()-25,(int)s.getMinX()+50, (int)s.getMinY())), radius, radius, p1);
+//			canvas.drawRoundRect(new RectF(new Rect((int)s.getMinX()+1, (int)s.getMinY()-25+1,(int)s.getMinX()+50-1, (int)s.getMinY()-1)), radius, radius, p2);
+//			break;
+//		case LEFT:
+//			
+//			break;		
+//		case RIGHT:
+//			
+//			break;		
+//		case TOP:
+//			break;
+//		}
+//		
+//	}
 }

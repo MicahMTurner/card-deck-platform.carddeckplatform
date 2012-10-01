@@ -1,8 +1,6 @@
 package client.gui.animations;
 
 import android.graphics.Color;
-import android.os.AsyncTask;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import client.gui.entities.Droppable;

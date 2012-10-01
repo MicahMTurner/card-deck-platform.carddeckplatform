@@ -1,16 +1,13 @@
 package freeplay.customization;
 
-import client.gui.entities.Droppable;
-import client.gui.entities.MetricsConvertion;
-import handlers.CardEventsHandler;
 import handlers.Handler;
 import utils.Card;
-import utils.Deck;
 import utils.DeckArea;
 import utils.Player;
 import utils.Point;
 import utils.Position.Button;
 import utils.StandartCard;
+import client.gui.entities.MetricsConvertion;
 
 public class CustomizationDeck extends DeckArea implements CustomizationItem {	
 	boolean hasDomColor=true;

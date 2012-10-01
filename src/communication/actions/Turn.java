@@ -2,8 +2,6 @@ package communication.actions;
 
 
 import client.controller.ClientController;
-import utils.Player;
-import utils.Position;
 
 
 

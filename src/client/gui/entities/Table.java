@@ -2,28 +2,20 @@ package client.gui.entities;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Set;
-import java.util.Stack;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.newdawn.slick.geom.Line;
 
-
+import utils.Button;
 import utils.Card;
 import utils.Position;
-import utils.Button;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
 
 
 public class Table {
@@ -51,7 +43,7 @@ public class Table {
 		this.droppables= new ArrayBlockingQueue<Droppable>(20);
 		this.mappedDraggables= new Hashtable<Integer,Draggable>();
 		this.buttons = new ArrayBlockingQueue<Button>(4);
-		this.animatedCards = new ArrayList<Card>();
+		Table.animatedCards = new ArrayList<Card>();
 	}
 
 	

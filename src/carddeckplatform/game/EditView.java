@@ -1,27 +1,13 @@
 package carddeckplatform.game;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-
 import utils.Point;
 import utils.Position;
-import utils.Position.Player;
-import utils.Public;
 import utils.StandardSizes;
 import utils.droppableLayouts.DroppableLayout;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -31,8 +17,6 @@ import client.gui.entities.MetricsConvertion;
 import client.gui.entities.Table;
 import client.gui.entities.TouchHandler;
 import client.gui.entities.TouchManager;
-import carddeckplatform.game.R;
-import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import freeplay.customization.CustomizationDeck;
 import freeplay.customization.CustomizationItem;
 import freeplay.customization.CustomizationPlayer;
@@ -43,25 +27,53 @@ import freeplay.customization.ToggleModeButton;
 
 public class EditView extends SurfaceView implements SurfaceHolder.Callback,
 TouchHandler {
-	private boolean showHelp=false;
 	public enum Mode{ONE_BIG, MANY_SMALL}
 	
-	Mode mode = Mode.ONE_BIG;
-	
+	private boolean showHelp=false;
+	private Mode mode = Mode.ONE_BIG;
 	private DrawThread drawThread;
-	Table table;
+	private Table table;
 	private TouchManager touchmanager;
-	
-	private Context context;
-	
 	private CustomizationPlayer cp1 = new CustomizationPlayer(Position.Player.BOTTOM);
 	private CustomizationPlayer cp2 = new CustomizationPlayer(Position.Player.TOP);
 	private CustomizationPlayer cp3 = new CustomizationPlayer(Position.Player.LEFT);
-	private CustomizationPlayer cp4 = new CustomizationPlayer(Position.Player.RIGHT);
-	
-	private CustomizationDeck cd = new CustomizationDeck(Position.Button.TOPRIGHT);
-	
+	private CustomizationPlayer cp4 = new CustomizationPlayer(Position.Player.RIGHT);	
+	private CustomizationDeck cd = new CustomizationDeck(Position.Button.TOPRIGHT);	
 	private int cardsToDeal=0;
+	
+	
+	
+	public EditView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+				
+		table = new Table(context);
+		table.setTableImage(R.drawable.boardtest);
+		
+		touchmanager = new TouchManager(context, this, 2);	
+		
+		table.addButon(new ToggleModeButton(Position.Button.TOPLEFT, this));
+		
+		addOneBig();
+		addPlayers();
+		addDeck();
+		setFocusable(true); // necessary for getting the touch events.
+		// making the UI thread
+		getHolder().addCallback(this);		
+		
+	}
+	
+	public void toggleMode(){
+		table.clearDroppables();
+		addPlayers();		
+		addDeck();
+		if(mode == Mode.ONE_BIG){
+			mode = Mode.MANY_SMALL;
+			addManySmall();
+		}else{
+			mode = Mode.ONE_BIG;
+			addOneBig();
+		}		
+	}
 	
 	public void setCardsToDeal(int cardsToDeal) {
 		this.cardsToDeal = cardsToDeal;
@@ -77,43 +89,6 @@ TouchHandler {
 	
 	public void toggleHelp(){
 		showHelp = !showHelp;
-	}
-	
-	public EditView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		//setBackgroundResource(R.drawable.boardtest);
-		
-		this.context = context;
-				
-		table = new Table(context);
-		table.setTableImage(R.drawable.boardtest);
-		
-		touchmanager = new TouchManager(context, this, 2);	
-		
-		table.addButon(new ToggleModeButton(Position.Button.TOPLEFT, this));
-		
-		addOneBig();
-		addPlayers();
-		addDeck();
-		setFocusable(true); // necessary for getting the touch events.
-		// making the UI thread
-		getHolder().addCallback(this);
-		
-		//loadProfile("profile1");
-		
-	}
-	
-	public void toggleMode(){
-		table.clearDroppables();
-		addPlayers();		
-		addDeck();
-		if(mode == Mode.ONE_BIG){
-			mode = Mode.MANY_SMALL;
-			addManySmall();
-		}else{
-			mode = Mode.ONE_BIG;
-			addOneBig();
-		}		
 	}
 	
 	public void addDeck(){
@@ -156,25 +131,21 @@ TouchHandler {
 
 	@Override
 	public boolean onDoubleTap(MotionEvent arg0) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean onDoubleTapEvent(MotionEvent arg0) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean onSingleTapConfirmed(MotionEvent arg0) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean onDown(MotionEvent arg0) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -187,14 +158,12 @@ TouchHandler {
 
 	@Override
 	public void onLongPress(MotionEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public boolean onScroll(MotionEvent arg0, MotionEvent arg1, float arg2,
 			float arg3) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -205,13 +174,11 @@ TouchHandler {
 		try {
 			((CustomizationItem)table.getNearestDroppable(x, y)).onClick();
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 		
 		try {
 			table.getNearestButton(x, y).onClick();
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 		
 		return true;
@@ -219,20 +186,17 @@ TouchHandler {
 
 	@Override
 	public boolean onRotate(MotionEvent arg0, float angleRadians) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean onPinch(MotionEvent arg0, float currentDistance,
 			float previousDistance, float scale) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -246,8 +210,7 @@ TouchHandler {
 	}
 
 	@Override
-	public void surfaceDestroyed(SurfaceHolder arg0) {
-		// TODO Auto-generated method stub
+	public void surfaceDestroyed(SurfaceHolder arg0) {		
 		
 	}
 	
@@ -315,13 +278,10 @@ TouchHandler {
 			p = MetricsConvertion.pointRelativeToPx(p);
 			
 			
-			float x=MetricsConvertion.pointRelativeToPx(p).getX();
-			float y=MetricsConvertion.pointRelativeToPx(p).getY();
-			
-			
+
 			
 			// transformations.		
-			//matrix.postScale((float)p.getX()/(float)buttonBitmap.getWidth(), ((float)p.getX() * ratio)/(float)buttonBitmap.getHeight());
+			
 			float ratio = (float)playerHelp.getHeight() / (float)playerHelp.getWidth();
 			matrix.postScale((float)scale.getX()/(float)playerHelp.getWidth(), ((float)scale.getX() * ratio)/(float)playerHelp.getHeight());
 			matrix.postTranslate(p.getX()-scale.getX()/2, p.getY()-scale.getY()/2);
@@ -344,14 +304,8 @@ TouchHandler {
 			scale = MetricsConvertion.pointRelativeToPx(scale);
 			p = MetricsConvertion.pointRelativeToPx(p);
 			
-			
-			float x=MetricsConvertion.pointRelativeToPx(p).getX();
-			float y=MetricsConvertion.pointRelativeToPx(p).getY();
-			
-			
-			
 			// transformations.		
-			//matrix.postScale((float)p.getX()/(float)buttonBitmap.getWidth(), ((float)p.getX() * ratio)/(float)buttonBitmap.getHeight());
+			
 			float ratio = (float)publicHelp.getHeight() / (float)publicHelp.getWidth();
 			matrix.postScale((float)scale.getX()/(float)publicHelp.getWidth(), ((float)scale.getX() * ratio)/(float)publicHelp.getHeight());
 			matrix.postTranslate(p.getX()-scale.getX()/2, p.getY()-scale.getY()/2);
@@ -373,14 +327,8 @@ TouchHandler {
 			scale = MetricsConvertion.pointRelativeToPx(scale);
 			p = MetricsConvertion.pointRelativeToPx(p);
 			
-			
-			float x=MetricsConvertion.pointRelativeToPx(p).getX();
-			float y=MetricsConvertion.pointRelativeToPx(p).getY();
-			
-			
-			
 			// transformations.		
-			//matrix.postScale((float)p.getX()/(float)buttonBitmap.getWidth(), ((float)p.getX() * ratio)/(float)buttonBitmap.getHeight());
+			
 			float ratio = (float)publicHelp.getHeight() / (float)publicHelp.getWidth();
 			matrix.postScale((float)scale.getX()/(float)publicHelp.getWidth(), ((float)scale.getX() * ratio)/(float)publicHelp.getHeight());
 			matrix.postTranslate(p.getX()-scale.getX()/2, p.getY()-scale.getY()/2);

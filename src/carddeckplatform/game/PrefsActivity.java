@@ -1,12 +1,7 @@
 package carddeckplatform.game;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.*;
-import android.widget.Toast;
 
 public class PrefsActivity extends PreferenceActivity  {
 	 @Override

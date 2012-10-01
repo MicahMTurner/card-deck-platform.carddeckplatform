@@ -1,13 +1,9 @@
 package freeplay.customization;
 
-import client.gui.entities.Droppable;
 import freeplay.HiddenPlayerHandler;
 import freeplay.PrivatePlayerHandler;
 import freeplay.RevealedPlayerHandler;
-import freeplay.customization.CustomizationPublic.State;
 import handlers.Handler;
-import handlers.PlayerEventsHandler;
-import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import utils.Card;
 import utils.Player;
 import utils.Position;
