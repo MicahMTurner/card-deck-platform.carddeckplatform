@@ -43,7 +43,8 @@ public class BluetoothInfo {
 		
 		for(BluetoothServerSocket bss : bluetoothServerSockets){
 			try {
-				bss.close();
+				if(bss!=null)
+					bss.close();
 			} catch (Exception e) {}
 			bss=null;
 		}
