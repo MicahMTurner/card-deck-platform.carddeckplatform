@@ -100,28 +100,34 @@ public class BlueToothConnector implements Connector {
 	@Override
 	public void disconnect() {
 		try {
-			in.close();
-			in=null;
-			System.out.println("--------BLUETOOTH in disconnected----------");
+			if(in!=null){
+				in.close();
+				in=null;
+				System.out.println("--------BLUETOOTH in disconnected----------");
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("--------BLUETOOTH in didn't disconnected----------");
 		}
 		
 		try {
-			out.close();	
-			out=null;
-
-			System.out.println("--------BLUETOOTH out disconnected----------");
+			if(in!=null){
+				out.close();	
+				out=null;
+				System.out.println("--------BLUETOOTH out disconnected----------");
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("--------BLUETOOTH out didn't disconnected----------");
 		}
 		
 		try {
-			socket.close();
-			socket=null;
-			System.out.println("--------BLUETOOTH socket disconnected----------");
+			if(socket!=null){
+				socket.close();
+				socket=null;
+				System.out.println("--------BLUETOOTH socket disconnected----------");
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("--------BLUETOOTH socket didn't disconnected----------");
