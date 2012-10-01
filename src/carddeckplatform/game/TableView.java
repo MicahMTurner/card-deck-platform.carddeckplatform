@@ -334,7 +334,7 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 								+ totalDx, y + totalDy);
 
 				if (droppable != null && from != null && !from.equals(droppable)) {
-					if (droppable.isFlingabble() ) {
+					if (droppable.isFlingabble()) {
 						float totalAnimDx = droppable.getX()
 								- draggableInHand.getX();
 						float totalAnimDy = droppable.getY()
@@ -349,13 +349,16 @@ public class TableView extends SurfaceView implements SurfaceHolder.Callback,
 						// dont do anything cause rearrange is made at onSingleTapUp
 						// method
 
-					}else{
+					}else if( droppable.isContain(draggableInHand.getX(), draggableInHand.getY()) ){
 						draggableInHand.setLocation(x, y);
 						draggableInHand.onRelease();
 						if (!droppable.onDrop(ClientController.get().getMe(), from,
 								((Card) draggableInHand))){
 							draggableInHand.invalidMove();
 						}
+					}else{
+						draggableInHand.invalidMove();
+						ServerConnection.getConnection().send(new Message(new InvalidMoveAction(draggableInHand.getId(),from.getId())));
 					}
 					this.from = null;
 				} else {
