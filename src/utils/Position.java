@@ -132,12 +132,14 @@ public interface Position extends Serializable{
 		}
 		public Position reArrangeRelativePosition(Player oldPlayerPos,	Player newPlayerPos) {
 			Public answer=this;
-			int diff = oldPlayerPos.ordinal() - newPlayerPos.ordinal();
-			if(diff<0){
-				diff=4+diff;
+			if (!this.equals(Position.Public.MID)){
+				int diff = oldPlayerPos.ordinal() - newPlayerPos.ordinal();
+				if(diff<0){
+					diff=4+diff;
+				}
+				answer=Public.values()[((this.ordinal()+diff)%
+						ELEMENTSINCYCLE)+(ELEMENTSINCYCLE*(int)(this.ordinal()/ROWS))];
 			}
-			answer=Public.values()[((this.ordinal()+diff)%
-					ELEMENTSINCYCLE)+(ELEMENTSINCYCLE*(int)(this.ordinal()/ROWS))];
 			
 			
 			return answer;
