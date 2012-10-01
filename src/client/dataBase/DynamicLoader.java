@@ -2,16 +2,20 @@ package client.dataBase;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLConnection;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -248,13 +252,40 @@ public class DynamicLoader {
 	}
 
 	public String calcMd5(File file) {
-
+		String answer=null;
+		InputStream istream=null;
 		try {
-			return MD5.asHex(MD5.getHash(file));
+		MessageDigest digest = MessageDigest.getInstance("MD5");
+		istream = new FileInputStream(file);                
+		byte[] buffer = new byte[8192];
+		int read = 0;
+		
+		    while( (read = istream.read(buffer)) > 0) {
+		        digest.update(buffer, 0, read);
+		    }       
+		    byte[] md5sum = digest.digest();
+		    BigInteger bigInt = new BigInteger(1, md5sum);
+		    answer = bigInt.toString(16);
+		    // Now we need to zero pad it if you actually want the full 32 chars
+		    while(answer.length() < 32 ){
+		    	answer = "0"+answer;
+		    }
+		   // System.out.println("MD5: " + answer);
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {		
+			e.printStackTrace();
 		}
-		return null;
+		
+		finally {
+		        try {
+					istream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		}  
+		return answer;
+
 	}
 
 	private class DownloadFile extends
