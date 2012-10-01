@@ -16,6 +16,7 @@ import android.widget.Button;
 import carddeckplatform.game.GameActivity;
 import carddeckplatform.game.R;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
+import carddeckplatform.game.gameEnvironment.GameEnvironment.ConnectionType;
 
 import communication.actions.Turn;
 import communication.link.HostGameDetails;
@@ -45,7 +46,9 @@ public class Host implements Runnable{
 		game.getPlayers().clear();
 		availablePositions.clear();
 		ConnectionsManager.getConnectionsManager().shutDown();
-		tcpIdListener.stop();
+		if (GameEnvironment.get().getConnectionType().equals(ConnectionType.TCP)){
+			tcpIdListener.stop();
+		}
 	}
 	
 	public Host(Game game) {	
@@ -148,9 +151,13 @@ public class Host implements Runnable{
 	public void run() {
 
 		try {
-			tcpIdListener.start();
+			if (GameEnvironment.get().getConnectionType().equals(ConnectionType.TCP)){
+				tcpIdListener.start();
+			}
 			waitForPlayers();
-			tcpIdListener.stop();
+			if (GameEnvironment.get().getConnectionType().equals(ConnectionType.TCP)){
+				tcpIdListener.stop();
+			}
 			startGame();
 		} catch (Exception e) {
 			e.printStackTrace();
