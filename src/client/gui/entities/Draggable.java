@@ -1,30 +1,24 @@
 package client.gui.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
-import communication.actions.StartDraggableMotionAction;
-import communication.link.ServerConnection;
-import communication.messages.Message;
-
-
 import utils.Card;
-import utils.Player;
 import utils.Point;
-
-import carddeckplatform.game.StaticFunctions;
+import IDmaker.IDMaker;
+import android.content.Context;
+import android.graphics.Canvas;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.controller.ClientController;
 import client.gui.animations.Animation;
 import client.gui.animations.OvershootAnimation;
-import IDmaker.IDMaker;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
+
+import communication.actions.StartDraggableMotionAction;
+import communication.link.ServerConnection;
+import communication.messages.Message;
 	
 /**
  * 	

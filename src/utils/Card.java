@@ -3,25 +3,19 @@ package utils;
 
 import handlers.CardEventsHandler;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Random;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.view.animation.OvershootInterpolator;
 import carddeckplatform.game.BitmapHolder;
-import carddeckplatform.game.R;
-import carddeckplatform.game.StaticFunctions;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.gui.animations.Animation;
 import client.gui.animations.FlipAnimation;
-import client.gui.animations.OvershootAnimation;
 import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
 import client.gui.entities.MetricsConvertion;

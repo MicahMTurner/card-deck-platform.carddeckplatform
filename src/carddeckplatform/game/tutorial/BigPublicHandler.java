@@ -1,9 +1,9 @@
 package carddeckplatform.game.tutorial;
 
+import handlers.PublicEventsHandler;
 import utils.Card;
 import utils.Player;
 import utils.Public;
-import handlers.PublicEventsHandler;
 
 public class BigPublicHandler implements PublicEventsHandler {
 

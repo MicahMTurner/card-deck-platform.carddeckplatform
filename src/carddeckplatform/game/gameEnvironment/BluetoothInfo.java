@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.UUID;
 
-import carddeckplatform.game.CarddeckplatformActivity;
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;

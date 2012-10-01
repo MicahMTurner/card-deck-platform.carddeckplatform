@@ -2,28 +2,21 @@ package communication.link;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-import javax.sound.midi.ControllerEventListener;
-
-
-import carddeckplatform.game.gameEnvironment.GameEnvironment;
-import android.content.Context;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 import android.widget.TextView;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
 public class TcpHostFinder extends HostFinder{
 	private final String UDPSENDAUTHENTICATE="cardDeckPlatfromUDPBroadcast";

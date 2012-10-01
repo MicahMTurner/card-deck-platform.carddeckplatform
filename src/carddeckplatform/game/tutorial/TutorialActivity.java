@@ -1,14 +1,12 @@
 package carddeckplatform.game.tutorial;
 
-import tutorial.Tutorial;
-import client.controller.ClientController;
-import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
 public class TutorialActivity extends Activity  {
 	

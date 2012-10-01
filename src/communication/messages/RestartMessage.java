@@ -1,6 +1,7 @@
 package communication.messages;
 
 import logic.host.Host;
+
 import communication.actions.RestartAction;
 import communication.server.ConnectionsManager;
 

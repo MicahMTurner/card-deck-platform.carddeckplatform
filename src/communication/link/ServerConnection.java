@@ -4,18 +4,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
-import communication.messages.Message;
-
-//import communication.entities.Client;
-//import communication.entities.TcpClient;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import carddeckplatform.game.gameEnvironment.GameEnvironment.ConnectionType;
-import dalvik.system.DexClassLoader;
+
+import communication.messages.Message;
 
 
 public class ServerConnection implements Runnable{

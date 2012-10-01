@@ -1,10 +1,9 @@
 package freeplay;
 
-import client.controller.ClientController;
+import handlers.PlayerEventsHandler;
 import utils.Card;
 import utils.Player;
-import utils.Position;
-import handlers.PlayerEventsHandler;
+import client.controller.ClientController;
 
 public class PrivatePlayerHandler implements PlayerEventsHandler  {	
 	public PrivatePlayerHandler(){

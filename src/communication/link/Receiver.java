@@ -2,15 +2,8 @@ package communication.link;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.OptionalDataException;
-
-import org.apache.commons.io.input.ClassLoaderObjectInputStream;
-
-import carddeckplatform.game.gameEnvironment.GameEnvironment;
-import client.controller.ClientController;
 
 import communication.messages.Message;
-import dalvik.system.DexClassLoader;
 
 public class Receiver implements Runnable{
 	private volatile boolean stop;

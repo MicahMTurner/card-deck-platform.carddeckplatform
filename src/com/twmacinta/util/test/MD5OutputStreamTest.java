@@ -1,9 +1,16 @@
 package com.twmacinta.util.test;
 
-import java.io.*;
-import java.util.*;
-import com.twmacinta.io.*;
-import com.twmacinta.util.*;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.util.Random;
+import java.util.StringTokenizer;
+
+import com.twmacinta.io.NullOutputStream;
+import com.twmacinta.util.MD5;
+import com.twmacinta.util.MD5OutputStream;
 
 /**
  * Copyright (c) 2002 - 2010 by Timothy W Macinta, All Rights Reserved.<p>

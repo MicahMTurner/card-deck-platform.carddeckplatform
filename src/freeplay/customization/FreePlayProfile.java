@@ -1,6 +1,5 @@
 package freeplay.customization;
 
-import handlers.Handler;
 import handlers.PlayerEventsHandler;
 import handlers.PublicEventsHandler;
 
@@ -10,13 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import utils.Player;
 import utils.Position;
 import utils.Public;
 import utils.droppableLayouts.DroppableLayout;
-
-import carddeckplatform.game.StaticFunctions;
 import carddeckplatform.game.EditView.Mode;
+import carddeckplatform.game.StaticFunctions;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.gui.entities.Droppable;
 import freeplay.customization.CustomizationItem.Type;

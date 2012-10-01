@@ -1,8 +1,8 @@
 package communication.actions;
 
-import communication.link.ServerConnection;
-
 import client.controller.ClientController;
+
+import communication.link.ServerConnection;
 
 public class PlayerLeftAction implements Action{
 	

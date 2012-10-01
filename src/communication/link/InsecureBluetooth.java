@@ -15,7 +15,6 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.ParcelUuid;
-import android.os.RemoteException;
 import android.util.Log;
 
 public class InsecureBluetooth {

@@ -1,17 +1,10 @@
 package utils.droppableLayouts.line;
 
-import java.util.Random;
-
+import utils.Point;
+import utils.droppableLayouts.LineLayout;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
-import android.view.animation.LinearInterpolator;
-
-import utils.Card;
-import utils.Point;
-import utils.droppableLayouts.DroppableLayout;
-import utils.droppableLayouts.LineLayout;
-import utils.droppableLayouts.DroppableLayout.LayoutType;
 import client.gui.entities.Droppable;
 import client.gui.entities.MetricsConvertion;
 
@@ -27,7 +20,7 @@ public class BottomLineLayout extends LineLayout {
 
 		if (numberOfCards == 0)
 			return;
-		Point newLocation = null;
+		
 		Point location = new Point(droppable.getX(), droppable.getY());
 		float[][] animationArgs = new float[3][numberOfCards];
 		Point point=MetricsConvertion.pointRelativeToPx(droppable.getCards().get(0).getScale());

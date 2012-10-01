@@ -1,8 +1,7 @@
 package utils.droppableLayouts;
 
-import client.gui.entities.Droppable;
-import client.gui.entities.MetricsConvertion;
 import utils.Point;
+import client.gui.entities.Droppable;
 /**
  * 
  *	Arranges the cards in a heap formation.
@@ -37,7 +36,6 @@ public class HeapLayout extends DroppableLayout {
 
 	@Override
 	public LayoutType getType() {
-		// TODO Auto-generated method stub
 		return LayoutType.HEAP;
 	}
 

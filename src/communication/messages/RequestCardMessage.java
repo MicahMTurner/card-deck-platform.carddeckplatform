@@ -2,16 +2,11 @@ package communication.messages;
 
 import java.util.ArrayList;
 
-import client.controller.ClientController;
-import client.gui.entities.Droppable;
 import utils.Card;
 import utils.DeckArea;
-import utils.Player;
-import utils.Position;
-import utils.StandartCard;
-import logic.host.Host;
+import client.controller.ClientController;
+import client.gui.entities.Droppable;
 
-import communication.actions.RestartAction;
 import communication.server.ConnectionsManager;
 
 public class RequestCardMessage extends Message {

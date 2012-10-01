@@ -1,9 +1,5 @@
 package communication.messages;
 
-import java.io.Serializable;
-
-import utils.Position;
-
 import communication.actions.Action;
 import communication.server.ConnectionsManager;
 

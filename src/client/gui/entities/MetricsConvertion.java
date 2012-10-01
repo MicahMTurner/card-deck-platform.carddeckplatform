@@ -1,10 +1,7 @@
 package client.gui.entities;
 
-import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import utils.Point;
-import android.content.Context;
-import android.content.res.Resources;
-import android.util.DisplayMetrics;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
 /**
  * Performs metrics conversions.

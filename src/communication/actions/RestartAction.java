@@ -1,6 +1,5 @@
 package communication.actions;
 
-import carddeckplatform.game.GameActivity;
 import client.controller.ClientController;
 
 public class RestartAction implements Action {

@@ -2,13 +2,11 @@ package client.gui.animations;
 
 import java.util.ArrayList;
 
-import client.controller.ClientController;
-import client.gui.entities.Droppable;
-
 import utils.Card;
 import utils.Point;
 import carddeckplatform.game.StaticFunctions;
-import android.os.AsyncTask;
+import client.controller.ClientController;
+import client.gui.entities.Droppable;
 
 public class FlipAnimation extends Animation {
 

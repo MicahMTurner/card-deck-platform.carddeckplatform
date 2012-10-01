@@ -2,17 +2,12 @@ package carddeckplatform.game.gameEnvironment;
 
 import java.io.Serializable;
 
-import android.view.Surface;
-
 import utils.Player;
 import utils.Position;
-
 import client.controller.ClientController;
 import client.controller.LivePosition;
 
-import communication.actions.LivePositionChangedAction;
 import communication.link.ServerConnection;
-import communication.messages.Message;
 import communication.messages.SwapRequestMessage;
 
 public class PlayerInfo implements Serializable{	
