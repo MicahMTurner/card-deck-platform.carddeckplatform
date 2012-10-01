@@ -12,7 +12,7 @@ import communication.server.ConnectionsManager;
 public class RequestCardMessage extends Message {
 	
 	private utils.Player applicant;
-	private Integer targetID;
+	private int targetID;
 	private ArrayList<Card> cards = new ArrayList<Card>();
 	private int amount;
 	

@@ -86,7 +86,7 @@ public class BlueToothConnector implements Connector {
 				mBluetoothAdapter.cancelDiscovery();
 				socket.connect();
 				out = new ObjectOutputStream(socket.getOutputStream());
-				in = new ObjectInputStream(socket.getInputStream());
+				in = new ObjectInputStreamWithDelegateClassLoader(socket.getInputStream());
 				break;
 	        } catch (IOException e) {
 	        	e.printStackTrace();
