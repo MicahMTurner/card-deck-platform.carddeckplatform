@@ -317,7 +317,7 @@ public class GameActivity extends Activity {
     			return true;
     		case Menu.FIRST+1:
     			showScores();
-    			Toast.makeText(this, "Ranking", 2000).show();
+    			//Toast.makeText(this, "Ranking", 2000).show();
     			return true;
     		case Menu.FIRST+2:
     			item.setEnabled(false);
