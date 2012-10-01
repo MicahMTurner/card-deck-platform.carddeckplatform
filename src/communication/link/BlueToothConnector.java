@@ -56,26 +56,27 @@ public class BlueToothConnector implements Connector {
 		while(currentUUIDIndex<3){
 			try {
 	            // MY_UUID is the app's UUID string, also used by the server code
-//	            tmp = device.createRfcommSocketToServiceRecord(destinationId);
+	            tmp = device.createInsecureRfcommSocketToServiceRecord(destinationId);
 				
-				Method m = device.getClass().getMethod("createRfcommSocketToServiceRecord", new Class[] {int.class});
-		         tmp = (BluetoothSocket) m.invoke(device, destinationId);
-//	        } catch (IOException e) {} catch (SecurityException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
+//				Method m = device.getClass().getMethod("createRfcommSocketToServiceRecord", new Class[] {int.class});
+//		         tmp = (BluetoothSocket) m.invoke(device, destinationId);
+	        } catch (IOException ex) {} catch (SecurityException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+//			} catch (NoSuchMethodException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (IllegalArgumentException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (IllegalAccessException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (InvocationTargetException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 		
 			socket = tmp;
 			

@@ -81,7 +81,7 @@ public class Connection implements Runnable {
 				stop=true;			
 			}
 		}
-		
+		System.out.println("stoped");
 	}
 
 }

@@ -29,10 +29,10 @@ public class BluetoothInfo {
 			try {
 				//bluetoothServerSocket = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("bebe", appUUID);
 				
-				bluetoothServerSockets[0] = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("cdp" + String.valueOf(postfix), appUUIDs[0]);
-				bluetoothServerSockets[1] = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("cdp" + String.valueOf(postfix), appUUIDs[1]);
-				bluetoothServerSockets[2] = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("cdp" + String.valueOf(postfix), appUUIDs[2]);
-				bluetoothServerSockets[3] = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("cdp" + String.valueOf(postfix), appUUIDs[3]);
+				bluetoothServerSockets[0] = mBluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord("cdp" + String.valueOf(postfix), appUUIDs[0]);
+				bluetoothServerSockets[1] = mBluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord("cdp" + String.valueOf(postfix), appUUIDs[1]);
+				bluetoothServerSockets[2] = mBluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord("cdp" + String.valueOf(postfix), appUUIDs[2]);
+				bluetoothServerSockets[3] = mBluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord("cdp" + String.valueOf(postfix), appUUIDs[3]);
 				
 				currentServerSocketIndex=0;
 			} catch (IOException e) {
