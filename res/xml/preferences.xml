@@ -15,7 +15,7 @@
                     
                         android:title="Use bluetooth"
                         android:defaultValue="false"
-                        android:summary="If selected the application uses bluetooth. Otherwise uses wifi."
+                        android:summary="If selected the application uses bluetooth. Otherwise uses wifi. (not recommended: slower performance)."
                         android:key="useBluetooth" />
         </PreferenceCategory>
         
