@@ -1,7 +1,6 @@
 package freeplay;
 
 import freeplay.customization.FreePlayProfile;
-import handlers.Handler;
 import handlers.PlayerEventsHandler;
 
 import java.util.ArrayList;
@@ -9,31 +8,19 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import logic.client.Game;
+import utils.Card;
+import utils.Deck;
+import utils.DeckArea;
+import utils.Position;
+import utils.Position.Player;
+import utils.droppableLayouts.DroppableLayout;
+import carddeckplatform.game.gameEnvironment.PlayerInfo;
+import client.gui.entities.Droppable;
 
 import communication.actions.DealCardAction;
 import communication.messages.Message;
 import communication.server.ConnectionsManager;
-
-import carddeckplatform.game.CarddeckplatformActivity;
-import carddeckplatform.game.GameActivity;
-import carddeckplatform.game.StaticFunctions;
-import carddeckplatform.game.gameEnvironment.PlayerInfo;
-import client.controller.ClientController;
-import client.gui.entities.Droppable;
-
-import utils.Button;
-import utils.DeckArea;
-import utils.Card;
-import utils.Deck;
-import utils.GamePrefs;
-import utils.Point;
-import utils.Position;
-import utils.Position.Player;
-import utils.droppableLayouts.DroppableLayout;
-import utils.Public;
-import logic.client.Game;
 
 public class FreePlay extends Game{
 

@@ -7,12 +7,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
-import carddeckplatform.game.gameEnvironment.GameEnvironment;
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.os.SystemClock;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
 public class BlueToothConnector implements Connector {
 	

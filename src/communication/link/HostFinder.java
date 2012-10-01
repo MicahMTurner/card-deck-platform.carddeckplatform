@@ -15,11 +15,8 @@ import java.util.Enumeration;
 import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.CountDownLatch;
 
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
-
-import android.net.wifi.WifiManager;
 
 public class HostFinder extends Observable implements Runnable{
 	private final String UDPSENDAUTHENTICATE="cardDeckPlatfromUDPBroadcast";

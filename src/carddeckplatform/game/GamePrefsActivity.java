@@ -1,6 +1,5 @@
 package carddeckplatform.game;
 
-import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;

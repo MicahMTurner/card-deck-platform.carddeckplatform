@@ -1,8 +1,8 @@
 package freeplay;
 
+import handlers.PlayerEventsHandler;
 import utils.Card;
 import utils.Player;
-import handlers.PlayerEventsHandler;
 
 public class RevealedPlayerHandler implements PlayerEventsHandler  {
 

@@ -1,9 +1,9 @@
 package freeplay;
 
-import client.controller.ClientController;
+import handlers.PlayerEventsHandler;
 import utils.Card;
 import utils.Player;
-import handlers.PlayerEventsHandler;
+import client.controller.ClientController;
 
 public class PlayerHandler implements PlayerEventsHandler{
 

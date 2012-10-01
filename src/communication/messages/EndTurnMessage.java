@@ -1,11 +1,11 @@
 package communication.messages;
 
 
-import utils.Position;
+import logic.host.Host;
+
 import communication.actions.Action;
 import communication.actions.Turn;
 import communication.server.ConnectionsManager;
-import logic.host.Host;
 
 public class EndTurnMessage extends Message{
 	

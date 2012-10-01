@@ -1,11 +1,9 @@
 package communication.messages;
 
-import client.controller.LivePosition;
 import utils.Position;
-import utils.Position.Player;
+import client.controller.LivePosition;
 
 import communication.actions.Action;
-import communication.server.ConnectionsManager;
 
 public class SwapRequestMessage extends Message{
 	

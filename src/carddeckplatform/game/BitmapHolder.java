@@ -2,13 +2,12 @@ package carddeckplatform.game;
 
 import java.util.HashMap;
 
-import client.gui.entities.MetricsConvertion;
-
 import utils.Point;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import client.gui.entities.MetricsConvertion;
 
 public class BitmapHolder {
 	private HashMap<String, Bitmap> bitmaps;

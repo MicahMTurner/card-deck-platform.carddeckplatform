@@ -5,15 +5,12 @@ package carddeckplatform.game;
 
 
 import java.net.InetAddress;
-import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Set;
 
 import logic.client.Game;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -28,8 +25,6 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -63,7 +58,6 @@ import carddeckplatform.game.tutorial.TutorialActivity;
 import client.dataBase.ClientDataBase;
 
 import communication.link.HostFinder;
-import communication.link.HostGameDetails;
 
 
 public class CarddeckplatformActivity extends Activity {
@@ -171,43 +165,18 @@ public class CarddeckplatformActivity extends Activity {
 				GameEnvironment.get().getTcpInfo().setHostIp("127.0.0.1");			
 				GameEnvironment.get().getPlayerInfo().setUsername(username.getText().toString());
 				InstalledGamesTable installedGames = new InstalledGamesTable(dialog);
-            	//dialog.setContentView(new InstalledGamesTable(dialog).getView());
+
             	// gets user prefs.
                 getPrefs();
-            	//dialog.setTitle("Installed Games");
+
             	Set<String> games = ClientDataBase.getDataBase().getGamesNames();
             	
-            	LinearLayout ll = (LinearLayout)dialog.findViewById(R.id.gameListLayout);
+
             	Game game;
             	for(final String gameName : games){
             		 game = ClientDataBase.getDataBase().getGame(gameName);
-            		installedGames.addRow(game);
-            		
-//           		Button gameBtn = new Button(getApplicationContext());
-//           		gameBtn.setBackgroundDrawable( getResources().getDrawable( R.drawable.graybutton));
-//           		gameBtn.setText(gameName);
-//            		gameBtn.setOnClickListener(new OnClickListener() {
-//						
-//						@Override
-//						public void onClick(View v) {							
-//							
-//							
-//							Intent i;
-//							if(gameName.equals("free play"))
-//								i = new Intent(CarddeckplatformActivity.this, ProfileCatalogActivity.class);
-//							else
-//								i = new Intent(CarddeckplatformActivity.this, GameActivity.class);
-//							// always use the tcp server socket since we always need it to connect the hosting player.
-//			                GameEnvironment.get().getTcpInfo().initServerSocket();
-//			                
-//			                i.putExtra("gameName", gameName);			                
-//			                i.putExtra("livePosition", livePosition);			               
-//			                startActivity(i);
-//			                
-//			                dialog.dismiss();
-//						}
-//					});
-//            		ll.addView(gameBtn);
+            		installedGames.addRow(game);           		
+
             	}
             	dialog.setContentView(installedGames.getView());
             	dialog.show();
@@ -227,7 +196,7 @@ public class CarddeckplatformActivity extends Activity {
             	LayoutParams params=new LayoutParams(700, 500);
             	dialog.setContentView(availableHosts.getTable(),params);           	
             	
-            	LinearLayout ll = (LinearLayout)dialog.findViewById(R.id.gameListLayout);
+            	
             	// gets user prefs.
                 getPrefs();
 
@@ -307,8 +276,7 @@ public class CarddeckplatformActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				Intent i = new Intent(getBaseContext(), PrefsActivity.class);
-				//Intent i = new Intent(getBaseContext(), TutorialActivity.class);
+				Intent i = new Intent(getBaseContext(), PrefsActivity.class);			
 				startActivity(i);
 			}
 		});

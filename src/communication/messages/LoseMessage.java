@@ -1,6 +1,5 @@
 package communication.messages;
 
-import utils.Position;
 import logic.host.Host;
 
 

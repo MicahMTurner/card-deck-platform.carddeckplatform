@@ -3,10 +3,7 @@ package communication.server;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
-
-import org.apache.commons.io.input.ClassLoaderObjectInputStream;
 
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 

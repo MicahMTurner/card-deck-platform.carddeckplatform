@@ -1,21 +1,18 @@
 package tutorial;
 
-import client.gui.entities.MetricsConvertion;
-import carddeckplatform.game.BitmapHolder;
-import carddeckplatform.game.CarddeckplatformActivity;
-import carddeckplatform.game.gameEnvironment.GameEnvironment;
+import handlers.CardEventsHandler;
+import utils.Card;
+import utils.Point;
+import utils.StandardSizes;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.Typeface;
-import handlers.CardEventsHandler;
-import utils.Card;
-import utils.Point;
-import utils.StandardSizes;
+import carddeckplatform.game.BitmapHolder;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
+import client.gui.entities.MetricsConvertion;
 
 public class GuideCard extends Card {
 	private static String[] WELCOMEMSG= {"Hello,","welcome to","Card deck platform"};

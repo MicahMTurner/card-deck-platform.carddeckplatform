@@ -1,8 +1,8 @@
 package carddeckplatform.game;
 
-import client.gui.entities.Table;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
+import client.gui.entities.Table;
 
 public class DrawThread extends Thread {
 	protected SurfaceHolder surfaceHolder;

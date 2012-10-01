@@ -5,58 +5,38 @@ import handlers.Handler;
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.ConcurrentModificationException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 import utils.Card;
-import utils.Pair;
 import utils.Player;
 import utils.Point;
 import utils.Position;
-import utils.StandardSizes;
 import utils.droppableLayouts.DroppableLayout;
-import utils.droppableLayouts.LineLayout;
 import utils.droppableLayouts.DroppableLayout.LayoutType;
+import utils.droppableLayouts.LineLayout;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import carddeckplatform.game.BitmapHolder;
-import carddeckplatform.game.R;
 import client.controller.ClientController;
+
 /**
  * this class represents an area where cards can be placed at
- * @author Yoav
  *
  */
 public abstract class Droppable implements Serializable {
-	public int getGlowColor() {
-		return droppableColor;
-	}
 
-	public void setGlowColor(int glowColor) {
-		this.droppableColor = glowColor;
-	}
 	
 	
 
@@ -391,8 +371,7 @@ public abstract class Droppable implements Serializable {
 			
 			if (getDroppableLayout() != null)
 				getDroppableLayout().rearrange(index, droppableSize.getX()-card.getX(), droppableSize.getY()-card.getY());
-		} catch (Exception e) {
-			// TODO: handle exception
+		} catch (Exception e) {			
 		}
 		
 
@@ -432,7 +411,15 @@ public abstract class Droppable implements Serializable {
 			rearrange(0);
 		}
 	}
+	
+	public int getGlowColor() {
+		return droppableColor;
+	}
 
+	public void setGlowColor(int glowColor) {
+		this.droppableColor = glowColor;
+	}
+	
 	
 	public boolean onLongPress(Draggable draggable, Droppable from){
 		return false;

@@ -1,11 +1,7 @@
 package communication.actions;
 
-import java.util.ArrayList;
-
-import client.controller.ClientController;
-
 import utils.Card;
-import utils.Player;
+import client.controller.ClientController;
 
 public class CardAdded implements Action{
 	//private ArrayList<Card> cards=new ArrayList<Card>();

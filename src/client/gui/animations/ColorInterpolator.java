@@ -1,7 +1,6 @@
 package client.gui.animations;
 
 import android.graphics.Color;
-import android.view.animation.Interpolator;
 
 public class ColorInterpolator {
 	

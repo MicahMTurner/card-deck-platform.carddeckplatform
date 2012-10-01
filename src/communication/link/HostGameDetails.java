@@ -1,9 +1,6 @@
 package communication.link;
 
 import java.io.Serializable;
-import java.net.InetAddress;
-
-import client.gui.entities.Droppable;
 
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 

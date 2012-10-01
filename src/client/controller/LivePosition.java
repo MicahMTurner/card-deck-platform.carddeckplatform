@@ -5,25 +5,22 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import carddeckplatform.game.GameActivity;
-import carddeckplatform.game.gameEnvironment.GameEnvironment;
+
 import utils.Pair;
 import utils.Position;
 import utils.Position.Player;
-import communication.actions.LivePositionChangedAction;
-import communication.link.ServerConnection;
-import communication.messages.Message;
-import communication.server.ConnectionsManager;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.view.Surface;
+import carddeckplatform.game.GameActivity;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
+
+import communication.actions.LivePositionChangedAction;
+import communication.messages.Message;
+import communication.server.ConnectionsManager;
 
 public class LivePosition implements SensorEventListener{
 	public static final int SAFETYDISTANCE=20;

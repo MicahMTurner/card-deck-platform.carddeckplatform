@@ -1,8 +1,8 @@
 package communication.actions;
 
-import client.controller.ClientController;
 import utils.Card;
 import utils.DeckArea;
+import client.controller.ClientController;
 
 public class SetRulerCardAction implements Action {
 	private Card card;

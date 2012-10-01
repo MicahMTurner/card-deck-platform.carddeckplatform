@@ -2,8 +2,6 @@ package client.controller;
 
 
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
 import logic.client.Game;
 import logic.host.Host;
@@ -26,14 +24,11 @@ import communication.actions.CardAdded;
 import communication.actions.DraggableMotionAction;
 import communication.actions.EndDraggableMotionAction;
 import communication.actions.EndRoundAction;
-import communication.actions.EndTurnAction;
 import communication.actions.SetRulerCardAction;
 import communication.link.ServerConnection;
-import communication.messages.EndRoundMessage;
 import communication.messages.EndTurnMessage;
 import communication.messages.Message;
 import communication.messages.RequestCardMessage;
-import freeplay.customization.FreePlayProfile;
 
 /**
  * this is a singleton class that provides an API for the card deck platform

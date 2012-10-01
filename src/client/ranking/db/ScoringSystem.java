@@ -2,12 +2,9 @@ package client.ranking.db;
 
 import java.util.ArrayList;
 
-import client.ranking.db.exception.SqlOpenException;
-
-import android.database.SQLException;
 import carddeckplatform.game.CarddeckplatformActivity;
-import carddeckplatform.game.GameActivity;
 import carddeckplatform.game.ScoringActivity;
+import client.ranking.db.exception.SqlOpenException;
 
 public class ScoringSystem {
 	Game game=null;
