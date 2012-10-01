@@ -1,8 +1,7 @@
 package freeplay.customization;
 
-import carddeckplatform.game.EditView;
-import handlers.ButtonEventsHandler;
 import utils.Button;
+import carddeckplatform.game.EditView;
 
 public class ToggleModeButton extends Button {
 	private EditView editView;

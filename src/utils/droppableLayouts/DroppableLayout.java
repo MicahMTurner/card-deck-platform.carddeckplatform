@@ -2,7 +2,6 @@ package utils.droppableLayouts;
 
 import java.io.Serializable;
 import java.util.AbstractList;
-import java.util.ArrayList;
 
 import utils.Card;
 import utils.Point;
@@ -231,7 +230,7 @@ public abstract class DroppableLayout implements Serializable {
 					}
 				}
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 			}
 			
 			

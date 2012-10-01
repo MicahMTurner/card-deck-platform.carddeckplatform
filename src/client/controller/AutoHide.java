@@ -2,18 +2,14 @@ package client.controller;
 
 import java.util.ArrayList;
 
-import carddeckplatform.game.GameActivity;
-import carddeckplatform.game.gameEnvironment.GameEnvironment;
-
 import utils.Card;
-
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.view.Display;
 import android.view.Surface;
+import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
 public class AutoHide implements SensorEventListener {
 	private SensorManager sensorManager;

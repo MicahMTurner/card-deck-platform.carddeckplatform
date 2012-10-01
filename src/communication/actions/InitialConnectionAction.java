@@ -2,18 +2,12 @@ package communication.actions;
 
 import java.util.ArrayList;
 
-import utils.GamePrefs;
 import utils.Player;
 import utils.Position;
-
-
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import client.controller.ClientController;
 import client.controller.LivePosition;
-import client.dataBase.ClientDataBase;
-import freeplay.FreePlayPrefs;
 import freeplay.customization.FreePlayProfile;
-import logic.client.Game;
 
 
 public class InitialConnectionAction implements Action{

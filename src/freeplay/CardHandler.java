@@ -1,7 +1,7 @@
 package freeplay;
 
-import utils.Card;
 import handlers.CardEventsHandler;
+import utils.Card;
 
 public class CardHandler implements CardEventsHandler{
 

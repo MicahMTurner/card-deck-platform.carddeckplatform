@@ -5,21 +5,21 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 
-import communication.actions.DealCardAction;
-import communication.messages.Message;
-import communication.messages.RequestCardMessage;
-import communication.server.ConnectionsManager;
-
 import utils.Button;
 import utils.Card;
 import utils.Deck;
-import utils.GamePrefs;
 import utils.Pair;
 import utils.Player;
 import utils.Position;
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
 import client.controller.ClientController;
 import client.gui.entities.Droppable;
+
+import communication.actions.DealCardAction;
+import communication.messages.Message;
+import communication.messages.RequestCardMessage;
+import communication.server.ConnectionsManager;
+
 import freeplay.customization.FreePlayProfile;
 
 
@@ -135,19 +135,19 @@ public abstract class Game {
 		}
 	}
 
-	private void clearEmptyPositions() {
-		if (turnsQueue!=null){
-			ArrayList<Integer> availableIds=new ArrayList<Integer>();
-			for (Player player : players){
-				availableIds.add(player.getId());
-			}
-			for (int id : turnsQueue){
-				if (!availableIds.contains(id)){
-					turnsQueue.remove(id);
-				}
-			}
-		}		
-	}
+//	private void clearEmptyPositions() {
+//		if (turnsQueue!=null){
+//			ArrayList<Integer> availableIds=new ArrayList<Integer>();
+//			for (Player player : players){
+//				availableIds.add(player.getId());
+//			}
+//			for (int id : turnsQueue){
+//				if (!availableIds.contains(id)){
+//					turnsQueue.remove(id);
+//				}
+//			}
+//		}		
+//	}
 	
 	//return the next player
 	public Integer nextInTurn(){
@@ -211,8 +211,8 @@ public abstract class Game {
 	}
 	private void setRelativePositions(Player player,Player swappedWith, Position.Player oldPosition){
 		//check if I moved
-			Position.Player myGlobalPosition= getMe().getGlobalPosition();
-			Position.Player playerGlobalPos=player.getGlobalPosition();
+//			Position.Player myGlobalPosition= getMe().getGlobalPosition();
+//			Position.Player playerGlobalPos=player.getGlobalPosition();
 				if (player.equals(getMe()) || (swappedWith!=null && swappedWith.equals(getMe()))){
 					
 					for (int i=1;i<players.size();i++){				

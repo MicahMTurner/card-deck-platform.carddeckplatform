@@ -1,15 +1,10 @@
 package client.gui.animations;
 
-import communication.actions.DraggableMotionAction;
-import communication.link.ServerConnection;
-
 import utils.Card;
 import utils.Point;
-import android.os.AsyncTask;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 import client.controller.ClientController;
-import client.gui.entities.Draggable;
 import client.gui.entities.Droppable;
 import client.gui.entities.MetricsConvertion;
 

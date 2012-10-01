@@ -1,9 +1,9 @@
 package communication.messages;
 
 
-import utils.Player;
-import utils.Position;
 import logic.host.Host;
+import utils.Player;
+
 import communication.actions.Action;
 import communication.actions.AddPlayerAction;
 import communication.server.ConnectionsManager;

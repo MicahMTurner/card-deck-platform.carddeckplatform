@@ -8,9 +8,6 @@ import utils.Point;
 import utils.Position;
 import utils.droppableLayouts.DroppableLayout.LayoutType;
 import client.gui.entities.Droppable;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 public class CustomizationDroppable extends Droppable {
 

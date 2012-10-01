@@ -6,27 +6,21 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import org.apache.commons.io.input.ClassLoaderObjectInputStream;
-
-import android.bluetooth.BluetoothAdapter;
+import utils.Player;
+import utils.Position;
 import android.bluetooth.BluetoothServerSocket;
-
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 import carddeckplatform.game.gameEnvironment.GameEnvironment.ConnectionType;
 
-import utils.GamePrefs;
-import utils.Player;
-import utils.Position;
 import communication.actions.InitialConnectionAction;
 import communication.actions.LoadGameAction;
 import communication.actions.PlayerLeftAction;
 import communication.link.Streams;
-import communication.messages.InitialMessage;
 import communication.messages.Message;
+
 import freeplay.customization.FreePlayProfile;
 
 public class ConnectionsManager {

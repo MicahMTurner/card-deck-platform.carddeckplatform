@@ -1,21 +1,11 @@
 package carddeckplatform.game.gameEnvironment;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.ServerSocket;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
-
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothServerSocket;
 import android.graphics.Paint;
 import android.os.Handler;
-import android.view.SurfaceView;
 
 public class GameEnvironment {
 	

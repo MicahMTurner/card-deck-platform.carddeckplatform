@@ -4,7 +4,6 @@ import java.util.AbstractList;
 
 import utils.Card;
 import utils.Point;
-import utils.droppableLayouts.DroppableLayout.LayoutType;
 import client.gui.entities.Droppable;
 import client.gui.entities.MetricsConvertion;
 
@@ -20,13 +19,11 @@ public class DeckLayout extends DroppableLayout  {
 	
 	public DeckLayout(Droppable droppable) {
 		super(droppable);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
 	public void rearrange(int index, float width, float height) {
 		int numberOfCards = droppable.cardsHolding();
-		//Point step = new MetricsConvertion().pointRelativeToPx(new Point(1,1));
 		if (numberOfCards == 0)
 			return;
 		
@@ -69,8 +66,7 @@ public class DeckLayout extends DroppableLayout  {
 	}
 
 	@Override
-	public LayoutType getType() {
-		// TODO Auto-generated method stub
+	public LayoutType getType() {		
 		return LayoutType.HEAP;
 	}
 

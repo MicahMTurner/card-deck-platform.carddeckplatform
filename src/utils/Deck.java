@@ -2,11 +2,11 @@ package utils;
 
 
 
+import handlers.CardEventsHandler;
+
 import java.util.Collections;
 import java.util.Random;
 import java.util.Stack;
-
-import handlers.CardEventsHandler;
 
 /**
  * represents a logic instance of a deck

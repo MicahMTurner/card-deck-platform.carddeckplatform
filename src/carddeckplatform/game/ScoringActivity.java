@@ -4,14 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
-import logic.host.Host;
-
-import communication.actions.StopLivePositionAction;
-import communication.link.ServerConnection;
-import communication.messages.Message;
-import communication.messages.RestartMessage;
-import communication.server.ConnectionsManager;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -24,16 +16,14 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-import carddeckplatform.game.gameEnvironment.GameEnvironment;
-import client.controller.LivePosition;
 import client.ranking.db.Game;
 import client.ranking.db.Player;
 import client.ranking.db.Round;

@@ -2,11 +2,10 @@ package tutorial;
 
 import java.util.Queue;
 
-import tutorial.Tutorial.Stages;
+import logic.client.Game;
 import utils.Deck;
 import utils.Position.Player;
 import carddeckplatform.game.gameEnvironment.PlayerInfo;
-import logic.client.Game;
 
 public class Tutorial extends Game {
 	public static Stages currentStage=Stages.WELCOME;

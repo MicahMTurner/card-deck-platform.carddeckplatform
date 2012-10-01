@@ -1,7 +1,6 @@
 package freeplay.customization;
 
 import handlers.Handler;
-import client.gui.entities.Droppable;
 
 public interface CustomizationItem {
 	

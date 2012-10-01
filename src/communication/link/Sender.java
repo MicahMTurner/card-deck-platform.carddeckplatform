@@ -3,10 +3,7 @@ package communication.link;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-
 import client.controller.ClientController;
-
-//import com.google.gson.Gson;
 
 import communication.messages.InitialMessage;
 import communication.messages.Message;

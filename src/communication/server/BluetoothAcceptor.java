@@ -3,12 +3,10 @@ package communication.server;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 
+import android.bluetooth.BluetoothSocket;
 import carddeckplatform.game.gameEnvironment.GameEnvironment;
 
-import android.bluetooth.BluetoothServerSocket;
-import android.bluetooth.BluetoothSocket;
 import communication.link.Streams;
 
 public class BluetoothAcceptor implements Acceptor {

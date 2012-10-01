@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import logic.host.Host;
-
-import utils.Position;
 import communication.messages.Message;
 
 

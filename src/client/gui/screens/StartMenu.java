@@ -1,19 +1,6 @@
 package client.gui.screens;
 
-import java.io.IOException;
-
-import carddeckplatform.game.CarddeckplatformActivity;
-import carddeckplatform.game.GameActivity;
-import carddeckplatform.game.R;
 import android.app.Activity;
-import android.content.Intent;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 public class StartMenu extends Activity{
 	/** Called when the activity is first created. */
 //    @Override
