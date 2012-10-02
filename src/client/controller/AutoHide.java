@@ -17,7 +17,7 @@ public class AutoHide implements SensorEventListener {
 	private final float[] mValuesAccel       = new float[3];
 	private final float[] mValuesOrientation = new float[3];
 	private final float[] mRotationMatrix    = new float[9];	
-	private ArrayList<Card>revealedCards;
+	private ArrayList<Card>revealedCards=null;
 	private boolean running;
 	private int cardsInHand;
 	
@@ -49,8 +49,11 @@ public class AutoHide implements SensorEventListener {
 //      if (sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY) != null){
 //      	gravitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
 //      }
-      this.revealedCards=new ArrayList<Card>();
-      this.cardsInHand=0;
+		if (revealedCards==null){
+			this.revealedCards=new ArrayList<Card>();
+			this.cardsInHand=0;
+		}
+		
 	}
 	
 	public void start(Context context){
