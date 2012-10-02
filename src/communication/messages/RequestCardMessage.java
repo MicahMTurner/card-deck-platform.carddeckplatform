@@ -38,7 +38,8 @@ public class RequestCardMessage extends Message {
 		Droppable target = ClientController.get().getZone(targetID);
 		synchronized (lock) {
 			// gets the card from the target.
-			for(int i=0; i<Math.min(amount, target.getCards().size()) ; i++){	
+			int targSize = target.getCards().size();
+			for(int i=0; i<Math.min(amount, targSize) ; i++){	
 				Card card = target.peek();
 				cards.add(card);
 				
