@@ -1,0 +1,353 @@
+<class-diagram version="1.0.10" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="communication.messages.RestartMessage" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/messages/RestartMessage.java" binary="false">    
+    <position height="-1" width="-1" x="768" y="245"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" name="communication.messages.RequestCardMessage" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/messages/RequestCardMessage.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1027" y="68"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="communication.messages.Message" project="carddeckplatform" 
+    file="/carddeckplatform/src/communication/messages/Message.java" binary="false">    
+    <position height="-1" width="-1" x="1794" y="208"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="communication.messages.EndTurnMessage" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/messages/EndTurnMessage.java" binary="false">    
+    <position height="-1" width="-1" x="1551" y="26"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="communication.messages.EndRoundMessage" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/messages/EndRoundMessage.java" binary="false">    
+    <position height="-1" width="-1" x="1314" y="34"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="6" corner="BOTTOM_RIGHT" language="java" name="communication.messages.MessageInterface" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/messages/MessageInterface.java" binary="false">    
+    <position height="-1" width="-1" x="1756" y="9"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="communication.messages.LoseMessage" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/messages/LoseMessage.java" binary="false">    
+    <position height="-1" width="-1" x="1956" y="17"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="communication.messages.SwapRequestMessage" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/messages/SwapRequestMessage.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="2397" y="51"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="9" corner="BOTTOM_RIGHT" language="java" name="communication.messages.InitialMessage" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/messages/InitialMessage.java" binary="false">    
+    <position height="-1" width="-1" x="2156" y="43"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="10" corner="BOTTOM_RIGHT" language="java" name="communication.actions.PlayerLeftAction" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/actions/PlayerLeftAction.java" binary="false">    
+    <position height="-1" width="-1" x="100" y="469"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="11" corner="BOTTOM_RIGHT" language="java" name="communication.actions.EndRoundAction" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/actions/EndRoundAction.java" binary="false">    
+    <position height="-1" width="-1" x="170" y="608"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="12" corner="BOTTOM_RIGHT" language="java" name="communication.actions.DealCardAction" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/actions/DealCardAction.java" binary="false">    
+    <position height="-1" width="-1" x="350" y="749"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="13" corner="BOTTOM_RIGHT" language="java" name="communication.actions.EndDraggableMotionAction" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/actions/EndDraggableMotionAction.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="601" y="787"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="14" corner="BOTTOM_RIGHT" language="java" name="communication.actions.StopLivePositionAction" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/actions/StopLivePositionAction.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="869" y="798"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="15" corner="BOTTOM_RIGHT" language="java" name="communication.actions.StartDraggableMotionAction" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/actions/StartDraggableMotionAction.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1182" y="832"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="16" corner="BOTTOM_RIGHT" language="java" name="communication.actions.InitialConnectionAction" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/actions/InitialConnectionAction.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1604" y="833"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="17" corner="BOTTOM_RIGHT" language="java" name="communication.actions.InvalidMoveAction" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/actions/InvalidMoveAction.java" binary="false">    
+    <position height="-1" width="-1" x="1972" y="820"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="18" corner="BOTTOM_RIGHT" language="java" name="communication.actions.Turn" project="carddeckplatform" 
+    file="/carddeckplatform/src/communication/actions/Turn.java" binary="false">    
+    <position height="-1" width="-1" x="2151" y="812"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="19" corner="BOTTOM_RIGHT" language="java" name="communication.actions.FlipCardAction" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/actions/FlipCardAction.java" binary="false">    
+    <position height="-1" width="-1" x="2304" y="803"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="20" corner="BOTTOM_RIGHT" language="java" name="communication.actions.RestartAction" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/actions/RestartAction.java" binary="false">    
+    <position height="-1" width="-1" x="2451" y="799"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="21" corner="BOTTOM_RIGHT" language="java" name="communication.actions.Action" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/actions/Action.java" binary="false">    
+    <position height="-1" width="-1" x="2165" y="361"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="22" corner="BOTTOM_RIGHT" language="java" name="communication.actions.AddPlayerAction" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/actions/AddPlayerAction.java" binary="false">    
+    <position height="-1" width="-1" x="2608" y="779"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="23" corner="BOTTOM_RIGHT" language="java" name="communication.actions.LivePositionChangedAction" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/actions/LivePositionChangedAction.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="2895" y="745"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="24" corner="BOTTOM_RIGHT" language="java" name="communication.actions.SetRulerCardAction" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/actions/SetRulerCardAction.java" binary="false">    
+    <position height="-1" width="-1" x="3220" y="652"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="25" corner="BOTTOM_RIGHT" language="java" name="communication.actions.LoadGameAction" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/actions/LoadGameAction.java" binary="false">    
+    <position height="-1" width="-1" x="3459" y="598"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="26" corner="BOTTOM_RIGHT" language="java" name="communication.actions.DraggableMotionAction" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/actions/DraggableMotionAction.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="3749" y="537"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="27" corner="BOTTOM_RIGHT" language="java" name="communication.actions.CardAdded" project="carddeckplatform" 
+    file="/carddeckplatform/src/communication/actions/CardAdded.java" binary="false">    
+    <position height="-1" width="-1" x="3473" y="297"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="28" corner="BOTTOM_RIGHT" language="java" name="communication.actions.EndTurnAction" 
+    project="carddeckplatform" file="/carddeckplatform/src/communication/actions/EndTurnAction.java" binary="false">    
+    <position height="-1" width="-1" x="3687" y="374"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <realization id="29">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <realization id="30">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <association id="31">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="32" name="action"/>      
+      <multiplicity id="33" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="34">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <generalization id="35">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <realization id="36">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <realization id="37">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <realization id="38">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <generalization id="39">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <generalization id="40">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <realization id="41">    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <generalization id="42">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <realization id="43">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <realization id="44">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <generalization id="45">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <realization id="46">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="6"/>  
+  </realization>  
+  <realization id="47">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <realization id="48">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <realization id="49">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <realization id="50">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <realization id="51">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <generalization id="52">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <realization id="53">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <realization id="54">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <realization id="55">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <generalization id="56">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <realization id="57">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="21"/>  
+  </realization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
