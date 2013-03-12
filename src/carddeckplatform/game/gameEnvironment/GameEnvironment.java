@@ -5,6 +5,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import android.graphics.Paint;
+import android.os.Environment;
 import android.os.Handler;
 
 public class GameEnvironment {
@@ -19,15 +20,14 @@ public class GameEnvironment {
 	private Handler handler;
 	private Paint paint;
 	private ExecutorService executor;
-	public final static String path="/sdcard/carddeckplatform/";
+	public final static String path=Environment.getExternalStoragePublicDirectory("carddeckplatform").getAbsolutePath()+"/";
 	
 	
 	static{
 		try {
-			new File(path).mkdir();		
-			new File(path + "profiles/").mkdir();
-			new File(path + "plugins/").mkdir();
-			new File(path + "temp").mkdir();
+			new File(path).mkdirs();		
+			new File(path + "profiles/").mkdirs();
+			new File(path + "plugins/").mkdirs();			
 		} catch (Exception e) {
 			
 		}

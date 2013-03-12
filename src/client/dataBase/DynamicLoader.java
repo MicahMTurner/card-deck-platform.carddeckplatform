@@ -93,7 +93,7 @@ public class DynamicLoader {
 
 	private void mapPlugins() {
 		try {
-			File folder = new File(PLUGINDIR);
+			File folder = new File(PLUGINDIR);			
 			for (File file : folder.listFiles()) {
 				URL url = file.toURI().toURL();
 				URL[] urls = new URL[] { url };
@@ -172,10 +172,10 @@ public class DynamicLoader {
 		return game;
 	}
 	
-	private void initalizeClassLoader (String gameName){
+	private void initalizeClassLoader (String gameName){		
 		String jarFile = PLUGINDIR+"/"+gameName+".jar";
 		DexClassLoader child = new DexClassLoader (
-				jarFile, GameEnvironment.path+"temp", null, getClass().getClassLoader());
+				jarFile, CarddeckplatformActivity.getContext().getFilesDir().getAbsolutePath(), null, getClass().getClassLoader());
 		ClassLoaderDelegate.getInstance().setClassLoader(child);
 	}
 	
